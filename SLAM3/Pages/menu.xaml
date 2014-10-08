@@ -1,0 +1,73 @@
+﻿<UserControl x:Name="Menu" x:Class="SLAM3.Pages.amortissements"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300" SizeChanged="UserControl_SizeChanged">
+    <Grid Style="{StaticResource ContentRoot}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="119*"/>
+            <RowDefinition Height="137*"/>
+        </Grid.RowDefinitions>
+        <ScrollViewer Grid.RowSpan="2" Margin="0,0,-94,0">
+            <StackPanel x:Name="Panel" MinWidth="150">
+                <TextBlock Margin="0,0,0,8"
+                           Style="{StaticResource Heading2}"
+                           Text="Creer un devis" />
+
+                <ListBox Margin="0,0,0,16"
+                         ItemsSource="{Binding AccentColors}"
+                         SelectedItem="{Binding SelectedAccentColor,
+                                                Mode=TwoWay}">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel MaxWidth="{Binding ActualWidth, ElementName=Panel}" />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Rectangle Width="40"
+                                       Height="40"
+                                       Margin="2">
+                                <Rectangle.Fill>
+                                    <SolidColorBrush x:Name="Brush" Color="{Binding}" />
+                                </Rectangle.Fill>
+                            </Rectangle>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <Grid HorizontalAlignment="Left">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="93" />
+                        <ColumnDefinition Width="17" />
+                        <ColumnDefinition Width="110" />
+                        <ColumnDefinition Width="0*"/>
+                        <ColumnDefinition Width="0*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Margin="0,3,101,7" 
+                               VerticalAlignment="Center"
+                               Text="Ajouter un produit :" Height="16" Grid.ColumnSpan="3" />
+                    <Button x:Name="BTNAddProduit" Content="Add" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" Margin="58,32,-23,-36" Width="75" Click="BTNAddFeed_click" Height="26" VerticalAlignment="Top" Grid.ColumnSpan="3"/>
+                    <TextBox x:Name="TextBoxDevisDesc" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="108" Grid.ColumnSpan="3" Margin="25,0,-23,0"/>
+                    <TextBlock Grid.Row="1" Margin="0,68,101,-67"
+                           Style="{StaticResource Heading2}" TextWrapping="Wrap" Text="Le client" Grid.ColumnSpan="3"
+                               Grid.Column="0" />
+                    <TextBlock Margin="0,10,101,-4" 
+                    	VerticalAlignment="Center"
+                    	Text="Quantité :" Height="16" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1" />
+                    <TextBox x:Name="TextBoxDevisQte" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="108" Grid.ColumnSpan="3" Margin="25,3,-23,-4"/>
+
+                </Grid>
+                <Border x:Name="BorderBlack" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="399" Margin="360,-80,-177,0" VerticalAlignment="Top" Width="405"/>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

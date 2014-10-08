@@ -1,0 +1,22 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/FirstFloor.ModernUI;component/Assets/ModernUI.Light.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <Color x:Key="AccentColor">#f472d0</Color>
+
+    <Rectangle x:Key="WindowBackgroundContent"
+               Margin="32"
+               x:Shared="false">
+        <Rectangle.Fill>
+            <ImageBrush AlignmentX="Right"
+                        AlignmentY="Bottom"
+                        ImageSource="/Assets/background.kitty.png"
+                        Opacity=".1"
+                        Stretch="None" />
+        </Rectangle.Fill>
+    </Rectangle>
+
+</ResourceDictionary>
