@@ -4,7 +4,6 @@
 //  
 // Copyrights (c) 2014 SLAM3 INC. All rights reserved.
 
-using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Media;
@@ -20,12 +19,15 @@ namespace SLAM3.ViewModels
 
         private readonly Color[] accentColors =
         {
-            Color.FromRgb(0xa4, 0xc4, 0x00), Color.FromRgb(0x60, 0xa9, 0x17), Color.FromRgb(0x00, 0x8a, 0x00), Color.FromRgb(0x10, 0x44, 0x10),
-            Color.FromRgb(0x00, 0xab, 0xa9), Color.FromRgb(0x00, 0x82, 0xAD), Color.FromRgb(0x00, 0x50, 0xef), Color.FromRgb(0x00, 0x00, 0xff),
+            Color.FromRgb(0xff, 0xff, 0xff), Color.FromRgb(0x64, 0x76, 0x87), Color.FromRgb(0x00, 0x00, 0x00), 
+            Color.FromRgb(0x82, 0x5a, 0x2c), Color.FromRgb(0x87, 0x79, 0x4e), Color.FromRgb(0x6d, 0x87, 0x64),
+           
+            Color.FromRgb(0x00, 0xab, 0xa9), Color.FromRgb(0x00, 0xbc, 0xff), Color.FromRgb(0x00, 0x82, 0xAD), Color.FromRgb(0x00, 0x50, 0xa9),
+            Color.FromRgb(0x00, 0x50, 0xef), Color.FromRgb(0x00, 0x20, 0xdc), Color.FromRgb(0x00, 0x00, 0xef), Color.FromRgb(0x50, 0x00, 0xee),
             Color.FromRgb(0xaa, 0x00, 0xff), Color.FromRgb(0xf4, 0x72, 0xd0), Color.FromRgb(0xd8, 0x00, 0x73), Color.FromRgb(0xa2, 0x00, 0x25),
             Color.FromRgb(0xff, 0x00, 0x00), Color.FromRgb(0xe5, 0x14, 0x00), Color.FromRgb(0xfa, 0x68, 0x00), Color.FromRgb(0xf0, 0xa3, 0x0a), 
-            Color.FromRgb(0xe3, 0xc8, 0x00), Color.FromRgb(0x82, 0x5a, 0x2c), Color.FromRgb(0x6d, 0x87, 0x64), Color.FromRgb(0x64, 0x76, 0x87), 
-            Color.FromRgb(0x76, 0x60, 0x8a), Color.FromRgb(0x87, 0x79, 0x4e), Color.FromRgb(0x00, 0x00, 0x00), Color.FromRgb(0xff, 0xff, 0xff)
+            Color.FromRgb(0xe3, 0xc8, 0x00), Color.FromRgb(0xa4, 0xc4, 0x00), Color.FromRgb(0x60, 0xa9, 0x17), Color.FromRgb(0x00, 0x8a, 0x00), Color.FromRgb(0x10, 0x44, 0x10)
+           
         };
         private readonly LinkCollection themes = new LinkCollection();
 
@@ -37,12 +39,6 @@ namespace SLAM3.ViewModels
         {
             themes.Add(new Link { DisplayName = "Sombre", Source = AppearanceManager.DarkThemeSource});
             themes.Add(new Link { DisplayName = "Lumineu", Source = AppearanceManager.LightThemeSource});
-
-            themes.Add(new Link { DisplayName = "Hello Kitty", Source = new Uri("/SLAM3;component/Assets/ModernUI.HelloKitty.xaml", UriKind.Relative) });
-            themes.Add(new Link { DisplayName = "Love", Source = new Uri("/SLAM3;component/Assets/ModernUI.Love.xaml", UriKind.Relative) });
-            themes.Add(new Link { DisplayName = "Snowflakes", Source = new Uri("/SLAM3;component/Assets/ModernUI.Snowflakes.xaml", UriKind.Relative) });
-            themes.Add(new Link { DisplayName = "Impero", Source = new Uri("/SLAM3;component/Assets/ModernUI.Impero.xaml", UriKind.Relative) });
-            themes.Add(new Link { DisplayName = "Ghost", Source = new Uri("/SLAM3;component/Assets/ModernUI.Ghost.xaml", UriKind.Relative) });
 
             SelectedFontSize = AppearanceManager.Current.FontSize == FontSize.Large ? FontLarge : FontSmall;
             SyncThemeAndColor();

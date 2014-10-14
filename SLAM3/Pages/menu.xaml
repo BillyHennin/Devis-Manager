@@ -1,4 +1,4 @@
-﻿<UserControl x:Name="Menu" x:Class="SLAM3.Pages.amortissements"
+﻿<UserControl x:Name="Menu" x:Class="SLAM3.Pages.devis"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -54,18 +54,25 @@
                     <TextBlock Margin="0,3,101,7" 
                                VerticalAlignment="Center"
                                Text="Ajouter un produit :" Height="16" Grid.ColumnSpan="3" />
-                    <Button x:Name="BTNAddProduit" Content="Add" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" Margin="58,32,-23,-36" Width="75" Click="BTNAddFeed_click" Height="26" VerticalAlignment="Top" Grid.ColumnSpan="3"/>
-                    <TextBox x:Name="TextBoxDevisDesc" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="108" Grid.ColumnSpan="3" Margin="25,0,-23,0"/>
+                    <Button Content="Add" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" Margin="58,32,-23,-36" Width="75" Click="BTNAddFeed_click" Height="26" VerticalAlignment="Top" Grid.ColumnSpan="3"/>
+                    <TextBox Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="108" Grid.ColumnSpan="3" Margin="25,0,-23,0" TabIndex="1"/>
                     <TextBlock Grid.Row="1" Margin="0,68,101,-67"
                            Style="{StaticResource Heading2}" TextWrapping="Wrap" Text="Le client" Grid.ColumnSpan="3"
                                Grid.Column="0" />
-                    <TextBlock Margin="0,10,101,-4" 
+                    <TextBlock Margin="0,6,101,0" 
                     	VerticalAlignment="Center"
                     	Text="Quantité :" Height="16" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1" />
-                    <TextBox x:Name="TextBoxDevisQte" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="108" Grid.ColumnSpan="3" Margin="25,3,-23,-4"/>
+                    <TextBox x:Name="TextBoxDevisQte" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" MaxLength = "8" TextWrapping="Wrap" Text="Ex : 12" Width="108" Grid.ColumnSpan="3" Margin="25,3,-23,-4" TabIndex="2" TextChanged="TextBoxDevisQte_TextChanged" TextAlignment="Right" MaxLines="1" Grid.IsSharedSizeScope="True"/>
+                    <TextBlock Margin="0,36,22,-30" 
+                    	VerticalAlignment="Center"
+                    	Text="Prix total :" Height="16" Grid.Column="0" Grid.Row="1" />
+
+                    <Label Margin="71,36,60,-30" 
+                    	VerticalAlignment="Center" x:Name="LabelPrix" Height="16" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" Content=""/>
+
 
                 </Grid>
-                <Border x:Name="BorderBlack" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="399" Margin="360,-80,-177,0" VerticalAlignment="Top" Width="405"/>
+                <Border x:Name="BorderBlack" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="400" Margin="300,-80,-177,0" VerticalAlignment="Top" Width="450"/>
 
             </StackPanel>
         </ScrollViewer>

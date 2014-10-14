@@ -3,8 +3,15 @@
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                   xmlns:mui="http://firstfloorsoftware.com/ModernUI"
 
-                  Title="MainWindow" Height="600" Width="900" ContentSource="/Pages/about.xaml"
-                  LogoData="F1 M 25,27L 46,19L 46,22.25L 28.5,29L 31.75,31.25L 51,23.75L 51,48.5L 31.75,57L 25,52L 25,27 Z " Icon="Assets/background.ghost.png">
+                  Title="MainWindow" 
+                  Height="600" 
+                  Width="824" 
+                  ContentSource="/Pages/about.xaml"
+                  MinHeight="500" 
+                  MinWidth="550" 
+                  ShowBackButton="True" 
+                  ShowForwardButton="True" 
+                  ShowRefreshButton="True" ShowHomeButton="True" HomeSource="Pages/menu.xaml">
     <mui:ModernWindow.TitleLinks>
         <mui:Link DisplayName="A propos" Source="/Pages/about.xaml"  />
     </mui:ModernWindow.TitleLinks>
