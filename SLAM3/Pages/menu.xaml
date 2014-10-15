@@ -61,8 +61,11 @@
                     <Custom:AutoCompleteTextBox Grid.Row="0" x:Name="TextBoxProduit" Grid.Column="2" Height="23"
                                                 Text="" Width="108" Grid.ColumnSpan="3" Margin="25,0,-23,0"
                                                 TabIndex="1" HorizontalAlignment="Left" VerticalAlignment="Top"
-                                                Background="White" BorderBrush="{x:Null}" ClipToBounds="True"
-                                                BorderThickness="1" Foreground="White" />
+                                                Background="White" BorderBrush="{x:Null}" ClipToBounds="True">
+                        <Custom:AutoCompleteTextBox.Popup>
+                            <Popup OpacityMask="#FFF00808"/>
+                        </Custom:AutoCompleteTextBox.Popup>
+                    </Custom:AutoCompleteTextBox>
                     <TextBlock Grid.Row="1" Margin="0,68,101,-67"
                                Style="{StaticResource Heading2}" TextWrapping="Wrap" Text="Le client"
                                Grid.ColumnSpan="3"

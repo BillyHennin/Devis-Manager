@@ -99,9 +99,9 @@
                                    AllowsTransparency="True"
                                    PopupAnimation="Slide"
                                    Focusable="False">
-                                <Border Background="White"
+                                <Border Background="#333333"
                                         BorderThickness="1"
-                                        BorderBrush="Gray"
+                                        
                                         CornerRadius="5"
                                         Padding="2">
                                     <StackPanel Orientation="Vertical">
