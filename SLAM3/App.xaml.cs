@@ -7,7 +7,9 @@
 using System;
 using System.Windows;
 using System.Windows.Media;
+
 using FirstFloor.ModernUI.Presentation;
+
 using SLAM3.Properties;
 
 namespace SLAM3

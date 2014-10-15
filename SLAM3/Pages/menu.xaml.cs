@@ -5,8 +5,12 @@
 // Copyrights (c) 2014 SLAM3 INC. All rights reserved.
 
 using System;
+using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
+
+using SLAM3.Properties;
 
 namespace SLAM3.Pages
 {
@@ -17,26 +21,34 @@ namespace SLAM3.Pages
     public partial class devis
     {
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
-        private double prix = 0;
+        private static readonly List<Marchandise> listMarchandise = new List<Marchandise>();
+        private readonly Devis nouvDevis = new Devis(listMarchandise);
+        private int id;
+        private readonly double prix = 1;
 
-        public devis()
-        {
-            InitializeComponent();
-        }
-        
         private void BTNAddFeed_click(object sender, RoutedEventArgs e)
         {
-            
+            /* 
+             * 
+             * TODO : Verification des attributs (avec le bouton en isEnabled false/true ?).
+             * 
+             * TODO : Pouvoir recupere les marchandises au dessus et en dessous (avec la liste).
+             * 
+             */
+
+            int intPrix = Convert.ToInt32(LabelPrix.Content.ToString().Substring(0, LabelPrix.Content.ToString().Length - 1));
+            int qte = Convert.ToInt32(TextBoxDevisQte.Text);
+            nouvDevis.getList().Add(new Marchandise(id, TextBoxProduit.Text, qte, intPrix));
+            id++;
         }
 
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             BorderBlack.Width = Menu.ActualWidth > 341 ? Menu.ActualWidth - 340 : 1;
-            
             BorderBlack.Height = Menu.ActualHeight - 60;
         }
 
-        private void TextBoxDevisQte_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private void TextBoxDevisQte_TextChanged(object sender, TextChangedEventArgs e)
         {
             prixArticle(TextBoxDevisQte.Text);
         }
@@ -52,6 +64,9 @@ namespace SLAM3.Pages
             LabelPrix.Content = "Erreur";
             LabelPrix.Foreground = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00));
             TextBoxDevisQte.BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00));
+            TextBoxDevisQte.SelectionBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00));
+            TextBoxDevisQte.CaretBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00));
+            Ajouter.IsEnabled = false;
         }
 
         private void prixArticle(string Text)
@@ -59,16 +74,16 @@ namespace SLAM3.Pages
             if(nEstPasUnNombre(Text))
             {
                 erreur();
-            } 
+            }
             else
             {
-                if(Convert.ToInt32(TextBoxDevisQte.Text)==0)
+                if(Convert.ToInt32(TextBoxDevisQte.Text) == 0 || prix == 0)
                 {
                     try
                     {
                         erreur();
                     }
-                    // ReSharper disable once EmptyGeneralCatchClause
+                        // ReSharper disable once EmptyGeneralCatchClause
                     catch
                     {
                         //This is just like you, you don't get it
@@ -79,13 +94,18 @@ namespace SLAM3.Pages
                     LabelPrix.Foreground = new SolidColorBrush(Color.FromRgb(0xC1, 0xC1, 0xC1));
                     LabelPrix.Content = string.Format("{0}€", (prix * Convert.ToInt32(TextBoxDevisQte.Text)));
                     TextBoxDevisQte.BorderBrush = new SolidColorBrush();
+                    TextBoxDevisQte.SelectionBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
+                    TextBoxDevisQte.CaretBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString("White"));
+                    Ajouter.IsEnabled = true;
                 }
             }
         }
 
-        private void TextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private void Menu_Loaded(object sender, RoutedEventArgs e)
         {
-
+            id = 0;
+            TextBoxProduit.Background = new SolidColorBrush((Color) ColorConverter.ConvertFromString(TextBoxDevisQte.Background.ToString()));
+            TextBoxProduit.BorderBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(TextBoxDevisQte.BorderBrush.ToString()));
         }
     }
 }
