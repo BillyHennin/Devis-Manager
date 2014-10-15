@@ -54,27 +54,30 @@
                     <TextBlock Margin="0,3,101,7" 
                                VerticalAlignment="Center"
                                Text="Ajouter un produit :" Height="16" Grid.ColumnSpan="3" />
-                    <Button Content="Add" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" Margin="58,32,-23,-36" Width="75" Click="BTNAddFeed_click" Height="26" VerticalAlignment="Top" Grid.ColumnSpan="3"/>
-                    <TextBox Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="108" Grid.ColumnSpan="3" Margin="25,0,-23,0" TabIndex="1"/>
+                    <Button Content="Ajouter" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" Margin="58,32,-23,-36" Width="75" Click="BTNAddFeed_click" Height="26" VerticalAlignment="Top" Grid.ColumnSpan="3"/>
+                    <TextBox Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="108" Grid.ColumnSpan="3" Margin="25,0,-23,0" TabIndex="1" TextChanged="TextBox_TextChanged"/>
                     <TextBlock Grid.Row="1" Margin="0,68,101,-67"
                            Style="{StaticResource Heading2}" TextWrapping="Wrap" Text="Le client" Grid.ColumnSpan="3"
                                Grid.Column="0" />
                     <TextBlock Margin="0,6,101,0" 
                     	VerticalAlignment="Center"
                     	Text="Quantité :" Height="16" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1" />
-                    <TextBox x:Name="TextBoxDevisQte" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" MaxLength = "8" TextWrapping="Wrap" Text="Ex : 12" Width="108" Grid.ColumnSpan="3" Margin="25,3,-23,-4" TabIndex="2" TextChanged="TextBoxDevisQte_TextChanged" TextAlignment="Right" MaxLines="1" Grid.IsSharedSizeScope="True"/>
-                    <TextBlock Margin="0,36,22,-30" 
+                    <TextBox x:Name="TextBoxDevisQte" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" MaxLength = "8" TextWrapping="Wrap" Text="0" Width="108" Grid.ColumnSpan="3" Margin="25,3,-23,-4" TabIndex="2" TextChanged="TextBoxDevisQte_TextChanged" TextAlignment="Right" MaxLines="1" Grid.IsSharedSizeScope="True"/>
+                    <TextBlock Margin="0,36,96,-30" 
                     	VerticalAlignment="Center"
-                    	Text="Prix total :" Height="16" Grid.Column="0" Grid.Row="1" />
+                    	Text="Prix  :" Height="16" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" />
 
-                    <Label Margin="71,36,60,-30" 
-                    	VerticalAlignment="Center" x:Name="LabelPrix" Height="16" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" Content=""/>
-
-
+                    <Label Margin="46,36,105,-30" 
+                    	VerticalAlignment="Center" x:Name="LabelPrix" Height="16" Grid.Row="1" Content="" Grid.ColumnSpan="3"
+                           Grid.Column="0" />
                 </Grid>
-                <Border x:Name="BorderBlack" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="400" Margin="300,-80,-177,0" VerticalAlignment="Top" Width="450"/>
-
+                <Grid x:Name="MarchandiseGrid">
+                    <Border x:Name="BorderBlack" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="400" Margin="300,-80,-177,0" VerticalAlignment="Top" Width="450" Grid.Column="0"/>
+                </Grid>
+                     <TextBlock x:Name="TextBlockPrixTotal" Margin="0,-50,-300,0"
+                		Style="{StaticResource Heading2}" TextWrapping="Wrap" Text="Prix total :" Height="29" VerticalAlignment="Bottom" Width="119" HorizontalAlignment="Left" />
             </StackPanel>
         </ScrollViewer>
+
     </Grid>
 </UserControl>

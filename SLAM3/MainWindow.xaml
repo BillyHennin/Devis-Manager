@@ -14,13 +14,13 @@
                   ShowRefreshButton="True" ShowHomeButton="True" HomeSource="Pages/menu.xaml">
     <mui:ModernWindow.TitleLinks>
         <mui:Link DisplayName="A propos" Source="/Pages/about.xaml"  />
+        <mui:Link DisplayName="Apparence" Source="Pages/Appearance.xaml"/>
     </mui:ModernWindow.TitleLinks>
 
     <mui:ModernWindow.MenuLinkGroups>
         <mui:LinkGroup DisplayName="Createur de devis" >
             <mui:LinkGroup.Links>
-                <mui:Link DisplayName="Menu" Source="/Pages/menu.xaml" />
-                <mui:Link DisplayName="Apparence" Source="/Pages/Appearance.xaml" />
+                <mui:Link DisplayName="Devis" Source="/Pages/menu.xaml" />
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
     </mui:ModernWindow.MenuLinkGroups>
