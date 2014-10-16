@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:Custom="http://wpfcontrols.com/" x:Name="Menu" x:Class="SLAM3.Pages.devis"
+    x:Name="Menu" x:Class="SLAM3.Pages.devis"
     mc:Ignorable="d"
     d:DesignHeight="300" d:DesignWidth="300" SizeChanged="UserControl_SizeChanged" Loaded="Menu_Loaded">
     <Grid Style="{StaticResource ContentRoot}">
@@ -54,23 +54,19 @@
                     <TextBlock Margin="0,3,101,7"
                                VerticalAlignment="Center"
                                Text="Ajouter un produit :" Height="16" Grid.ColumnSpan="3" />
-
+                    <TextBox x:Name="TextBoxProduit" Grid.Column="2" MaxLength="8" TextWrapping="Wrap"
+                             Text="Produit" Grid.Row="0" Grid.ColumnSpan="3" Margin="25,0,-23,3" TabIndex="2" TextAlignment="Right" MaxLines="1"
+                             Grid.IsSharedSizeScope="True" Height="23" VerticalAlignment="Bottom" TextChanged="TextBoxProduit_TextChanged" />
                     <Button x:Name="Ajouter" Content="Ajouter" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left"
                             Margin="58,32,-23,-36" Width="75" Click="BTNAddFeed_click" Height="26"
                             VerticalAlignment="Top" Grid.ColumnSpan="3" IsEnabled="False" />
-                    <Custom:AutoCompleteTextBox Grid.Row="0" x:Name="TextBoxProduit" Grid.Column="2" Height="23"
-                                                Text="" Width="108" Grid.ColumnSpan="3" Margin="25,0,-23,0"
-                                                TabIndex="1" HorizontalAlignment="Left" VerticalAlignment="Top"
-                                                Background="White" BorderBrush="{x:Null}" ClipToBounds="True">
-                        <Custom:AutoCompleteTextBox.Popup>
-                            <Popup OpacityMask="#FFF00808"/>
-                        </Custom:AutoCompleteTextBox.Popup>
-                    </Custom:AutoCompleteTextBox>
+
+
                     <TextBlock Grid.Row="1" Margin="0,68,101,-67"
                                Style="{StaticResource Heading2}" TextWrapping="Wrap" Text="Le client"
                                Grid.ColumnSpan="3"
                                Grid.Column="0" />
-                    <TextBlock Margin="0,6,101,0"
+                    <TextBlock x:Name="couleur" Margin="0,6,101,0"
                                VerticalAlignment="Center"
                                Text="Quantité :" Height="16" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1" />
                     <TextBox x:Name="TextBoxDevisQte" Grid.Row="1" Grid.Column="2" MaxLength="8" TextWrapping="Wrap"

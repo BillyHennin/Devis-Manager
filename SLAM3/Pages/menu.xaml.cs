@@ -24,7 +24,7 @@ namespace SLAM3.Pages
         private static readonly List<Marchandise> listMarchandise = new List<Marchandise>();
         private readonly Devis nouvDevis = new Devis(listMarchandise);
         private int id;
-        private readonly double prix = 1;
+        private double prix = 0;
 
         private void BTNAddFeed_click(object sender, RoutedEventArgs e)
         {
@@ -39,7 +39,18 @@ namespace SLAM3.Pages
             int intPrix = Convert.ToInt32(LabelPrix.Content.ToString().Substring(0, LabelPrix.Content.ToString().Length - 1));
             int qte = Convert.ToInt32(TextBoxDevisQte.Text);
             nouvDevis.getList().Add(new Marchandise(id, TextBoxProduit.Text, qte, intPrix));
+            afficherListe();
             id++;
+        }
+
+        private void afficherListe()
+        {
+            int nbMarchandise = nouvDevis.getList().Count;
+            // ReSharper disable once EmptyForStatement
+            for(int i = 0; i < nbMarchandise; i++)
+            {
+                //bla   bla    bla
+            }
         }
 
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -63,10 +74,21 @@ namespace SLAM3.Pages
         {
             LabelPrix.Content = "Erreur";
             LabelPrix.Foreground = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00));
+            Ajouter.IsEnabled = false;
+        }
+
+        private void TextBoxDevisQteErreur()
+        {
             TextBoxDevisQte.BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00));
             TextBoxDevisQte.SelectionBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00));
             TextBoxDevisQte.CaretBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00));
-            Ajouter.IsEnabled = false;
+        }
+
+        private void TextBoxProduitErreur()
+        {
+            TextBoxProduit.BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00));
+            TextBoxProduit.SelectionBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00));
+            TextBoxProduit.CaretBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00));
         }
 
         private void prixArticle(string Text)
@@ -74,6 +96,7 @@ namespace SLAM3.Pages
             if(nEstPasUnNombre(Text))
             {
                 erreur();
+                TextBoxDevisQteErreur();
             }
             else
             {
@@ -82,6 +105,7 @@ namespace SLAM3.Pages
                     try
                     {
                         erreur();
+                        TextBoxDevisQteErreur();
                     }
                         // ReSharper disable once EmptyGeneralCatchClause
                     catch
@@ -95,7 +119,7 @@ namespace SLAM3.Pages
                     LabelPrix.Content = string.Format("{0}€", (prix * Convert.ToInt32(TextBoxDevisQte.Text)));
                     TextBoxDevisQte.BorderBrush = new SolidColorBrush();
                     TextBoxDevisQte.SelectionBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
-                    TextBoxDevisQte.CaretBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString("White"));
+                    TextBoxDevisQte.CaretBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Settings.Default.AccentColor));
                     Ajouter.IsEnabled = true;
                 }
             }
@@ -104,8 +128,29 @@ namespace SLAM3.Pages
         private void Menu_Loaded(object sender, RoutedEventArgs e)
         {
             id = 0;
-            TextBoxProduit.Background = new SolidColorBrush((Color) ColorConverter.ConvertFromString(TextBoxDevisQte.Background.ToString()));
-            TextBoxProduit.BorderBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(TextBoxDevisQte.BorderBrush.ToString()));
+        }
+
+        private void TextBoxProduit_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if(TextBoxProduit.Text == "Produit")
+            {
+                try
+                {
+                    erreur();
+                    TextBoxProduitErreur();
+                }
+                // ReSharper disable once EmptyGeneralCatchClause
+                catch
+                {
+                    //Catching is for the weaks
+                }
+            }
+            else
+            {
+                TextBoxProduit.BorderBrush = new SolidColorBrush();
+                TextBoxProduit.SelectionBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Settings.Default.AccentColor));
+                TextBoxProduit.CaretBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Settings.Default.AccentColor));
+            }
         }
     }
 }
