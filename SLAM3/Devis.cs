@@ -11,15 +11,21 @@ namespace SLAM3
     internal class Devis
     {
         private readonly List<Marchandise> listMarchandise;
+        private Client client;
 
-        public Devis(List<Marchandise> listMarchandise)
+        public Devis(List<Marchandise> list)
         {
-            this.listMarchandise = listMarchandise;
+            listMarchandise = list;
+            client = new Client();
+            TotalPrix = 0;
         }
 
-        public List<Marchandise> getList()
-        {
-            return listMarchandise;
-        }
+        public List<Marchandise> list { get { return listMarchandise; } }
+
+        public Marchandise this[int i]{ get { return list[i]; }}
+
+        public double TotalPrix { get; set; }
+
+        public Client setClient{ set { client = value; } }
     }
 }

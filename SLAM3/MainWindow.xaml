@@ -3,15 +3,16 @@
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                   xmlns:mui="http://firstfloorsoftware.com/ModernUI"
 
-                  Title="MainWindow"
+                  Title="Devis"
                   Height="600"
                   Width="824"
                   ContentSource="/Pages/about.xaml"
                   MinHeight="500"
                   MinWidth="550"
+                  IsTitleVisible="True"
                   ShowBackButton="True"
                   ShowForwardButton="True"
-                  ShowRefreshButton="True" ShowHomeButton="True" HomeSource="Pages/menu.xaml">
+                  ShowRefreshButton="True">
     <mui:ModernWindow.TitleLinks>
         <mui:Link DisplayName="A propos" Source="/Pages/about.xaml" />
         <mui:Link DisplayName="Apparence" Source="Pages/Appearance.xaml" />
