@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
+using SLAM3.Classes;
 using SLAM3.Properties;
 
 namespace SLAM3.Pages
@@ -18,20 +19,19 @@ namespace SLAM3.Pages
     /// <summary>
     ///   Logique d'interaction pour devis.xaml
     /// </summary>
-    // ReSharper disable once UnusedMember.Global
+
     public partial class devis
     {
-        // ReSharper disable once FieldCanBeMadeReadOnly.Local
         private static readonly List<Marchandise> listMarchandise = new List<Marchandise>();
-        private readonly Devis devisA = new Devis(listMarchandise);
+        private readonly Devis leDevis = new Devis(listMarchandise);
         private readonly double prix = 1;
         private int id;
         private double prixTotal;
+        private int QTE;
 
         private void BTNAddFeed_click(object sender, RoutedEventArgs e)
         {
             var intPrix = Convert.ToInt32(LabelPrix.Content.ToString().Substring(0, LabelPrix.Content.ToString().Length - 1));
-            var qte = Convert.ToInt32(TextBoxDevisQte.Text);
             var panelMarchandise = new StackPanel();
 
             var bordure = new Border
@@ -48,7 +48,7 @@ namespace SLAM3.Pages
 
             var libelle = new TextBlock
             {
-                Text = TextBoxProduit.Text,
+                Text = comboBoxProduit.Text,
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Top,
                 Margin = new Thickness(5, 1, 0, 0),
@@ -64,9 +64,9 @@ namespace SLAM3.Pages
                 Height = 16
             };
 
-            var qteProduit = new TextBlock
+            var QTEProduit = new TextBlock
             {
-                Text = qte.ToString(CultureInfo.InvariantCulture),
+                Text = QTE.ToString(CultureInfo.InvariantCulture),
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Top,
                 Margin = new Thickness(5, 1, 0, 0),
@@ -75,22 +75,22 @@ namespace SLAM3.Pages
 
             panelMarchandise.Children.Add(libelle);
             panelMarchandise.Children.Add(prixProduit);
-            panelMarchandise.Children.Add(qteProduit);
+            panelMarchandise.Children.Add(QTEProduit);
             panelDevis.Children.Add(bordure);
 
-            devisA.list.Add(new Marchandise(id, TextBoxProduit.Text, qte, intPrix, bordure));
+            leDevis.list.Add(new Marchandise(id, comboBoxProduit.Text, QTE, intPrix, bordure));
 
-            updatePrix();
+            updatePrixTotal();
             id++;
             LabelTotalPrix.Content = prixTotal + "€";
         }
 
-        private void updatePrix()
+        private void updatePrixTotal()
         {
-            int nbMarchandise = devisA.list.Count;
+            int nbMarchandise = leDevis.list.Count;
             for(int i = 0; i < nbMarchandise; i++)
             {
-                prixTotal += devisA[i].getPrix;
+                prixTotal += leDevis[i].getPrix;
             }
         }
 
@@ -99,56 +99,48 @@ namespace SLAM3.Pages
             BorderDevis.Width = Menu.ActualWidth - 340;
             BorderDevis.Height = Menu.ActualHeight - 50;
 
-            int nbMarchandise = devisA.list.Count;
+            int nbMarchandise = leDevis.list.Count;
             for(int i = 0; i < nbMarchandise; i++)
             {
-                devisA[i].getBordure.Width = BorderDevis.Width - 4;
+                leDevis[i].getBordure.Width = BorderDevis.Width - 4;
             }
         }
 
         private void TextBoxDevisQte_TextChanged(object sender, TextChangedEventArgs e)
         {
-            prixArticle(TextBoxDevisQte.Text);
+           VerifePrixArticle(TextBoxDevisQte.Text);
         }
 
-        private static bool nEstPasUnNombre(string QTE)
+        private static bool estUnNombre(string QTE)
         {
             int value;
-            return (QTE.Trim() == string.Empty) || !int.TryParse(QTE, out value);
+            return (QTE.Trim() != string.Empty) && int.TryParse(QTE, out value);
         }
 
-        private void erreur()
+        private void erreurPrix()
         {
             LabelPrix.Content = "Erreur";
             LabelPrix.Foreground = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00));
             Ajouter.IsEnabled = false;
         }
 
-        private void TextBoxDevisQteErreur()
+        private void TextBoxDevisQteerreurPrix()
         {
-            TextBoxDevisQte.CaretBrush = TextBoxDevisQte.SelectionBrush = TextBoxDevisQte.BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00));
+            TextBoxDevisQte.CaretBrush = 
+                TextBoxDevisQte.SelectionBrush = 
+                    TextBoxDevisQte.BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00));
         }
 
-        private void TextBoxProduitErreur()
+        private void VerifePrixArticle(string Text)
         {
-            TextBoxProduit.CaretBrush = TextBoxProduit.SelectionBrush = TextBoxProduit.BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00));
-        }
-
-        private void prixArticle(string Text)
-        {
-            if(nEstPasUnNombre(Text))
+            if(estUnNombre(Text))
             {
-                erreur();
-                TextBoxDevisQteErreur();
-            }
-            else
-            {
-                if(Convert.ToInt32(TextBoxDevisQte.Text) <= 0 || prix == 0)
+                if(Convert.ToInt32(Text) <= 0 || prix == 0)
                 {
                     try
                     {
-                        erreur();
-                        TextBoxDevisQteErreur();
+                        erreurPrix();
+                        TextBoxDevisQteerreurPrix();
                     }
                         // ReSharper disable once EmptyGeneralCatchClause
                     catch
@@ -158,58 +150,40 @@ namespace SLAM3.Pages
                 }
                 else
                 {
+                    QTE = Convert.ToInt32(Text);
                     LabelPrix.Foreground = new SolidColorBrush(Color.FromRgb(0xC1, 0xC1, 0xC1));
-                    LabelPrix.Content = string.Format("{0}€", (prix * Convert.ToInt32(TextBoxDevisQte.Text)));
+                    LabelPrix.Content = string.Format("{0}€", (prix * QTE));
                     TextBoxDevisQte.BorderBrush =
                         TextBoxDevisQte.CaretBrush =
                             TextBoxDevisQte.SelectionBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
                     Ajouter.IsEnabled = true;
                 }
             }
-        }
-
-        private void TextBoxProduit_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if(TextBoxProduit.Text == "Produit")
-            {
-                try
-                {
-                    erreur();
-                    TextBoxProduitErreur();
-                }
-                    // ReSharper disable once EmptyGeneralCatchClause
-                catch
-                {
-                    //Catching is for the weaks
-                }
-            }
             else
             {
-                TextBoxProduit.BorderBrush =
-                    TextBoxProduit.CaretBrush =
-                        TextBoxProduit.SelectionBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
+                erreurPrix();
+                TextBoxDevisQteerreurPrix();
             }
         }
 
         private void Menu_Loaded(object sender, RoutedEventArgs e)
         {
+
             Ajouter.BorderBrush =
                 BorderDevis.BorderBrush =
                     TextBoxDevisQte.BorderBrush =
                         TextBoxDevisQte.CaretBrush =
                             TextBoxDevisQte.SelectionBrush =
-                                TextBoxProduit.BorderBrush =
-                                    TextBoxProduit.CaretBrush =
-                                        TextBoxProduit.SelectionBrush =
-                                            new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
-            int nbMarchandise = devisA.list.Count;
-            for(int i = 0; i < nbMarchandise; i++)
+                                comboBoxProduit.BorderBrush =
+                                    comboBoxClient.BorderBrush =
+                                            new SolidColorBrush((Color)ColorConverter.ConvertFromString(Settings.Default.AccentColor));
+            int nbMarchandise = leDevis.list.Count;
+            for (int i = 0; i < nbMarchandise; i++)
             {
-                devisA[i].getBordure.BorderBrush = Ajouter.BorderBrush;
+                leDevis[i].getBordure.BorderBrush = Ajouter.BorderBrush;
             }
         }
 
-        // TODO : this.
         private void ComboBoxClient_OnInitialized(object sender, EventArgs e)
         {
             /*
@@ -217,27 +191,40 @@ namespace SLAM3.Pages
              * TODO : Connexion BDD Oracle
              * 
              */
-            //Maybe later
-            var item = new ComboboxItem {Text = "Item text1", Value = new Client()};
-            comboBoxClient.Items.Add(item);
+            for(int i = 0; i < 10; i++)
+            {
+                comboBoxClient.Items.Add(new ComboboxItemClient {Text = "Item text1 "+ i, Value = new Client()});
+            }
             comboBoxClient.SelectedIndex = 0;
         }
 
         private void comboBoxClient_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            /*comboBoxClient.SelectedIndex
-            devisA.setClient(comboBoxClient.SelectedValue);*/
+            leDevis.setClient = (comboBoxClient.SelectedItem as ComboboxItemClient).Value;
         }
 
-        public class ComboboxItem
+        private void ComboBoxProduit_OnInitialized(object sender, EventArgs e)
         {
-            public string Text { get; set; }
-            public Client Value { get; set; }
-
-            public override string ToString()
+            /*
+             *
+             * TODO : Connexion BDD Oracle
+             * 
+             */
+            for (int i = 0; i < 10; i++)
             {
-                return Text;
+                comboBoxProduit.Items.Add(new ComboboxItemProduit { Text = "Item text1 " + i, Value = new Produit(10 + i, "yolo") });
             }
+            comboBoxProduit.SelectedIndex = 0;
         }
+        
+        private void ComboBoxProduit_SelectionChanged(object sender, SelectionChangedEventArgs selectionChangedEventArgs)
+        {
+            try
+            {
+                LabelPrix.Content = (comboBoxProduit.SelectedItem as ComboboxItemProduit).Value.getPrix * Convert.ToInt32(TextBoxDevisQte.Text) + "€";
+            }
+            // ReSharper disable once EmptyGeneralCatchClause
+            catch { }
+        } 
     }
 }

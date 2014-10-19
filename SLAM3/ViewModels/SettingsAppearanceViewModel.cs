@@ -7,7 +7,9 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Media;
+
 using FirstFloor.ModernUI.Presentation;
+
 using SLAM3.Properties;
 
 namespace SLAM3.ViewModels

@@ -15,7 +15,7 @@
             <RowDefinition Height="119*" />
             <RowDefinition Height="137*" />
         </Grid.RowDefinitions>
-        <ScrollViewer Grid.RowSpan="2" Margin="0,0,-94,0" Grid.ColumnSpan="2">
+        <ScrollViewer Grid.RowSpan="2" Margin="0,0,-94,-15" Grid.ColumnSpan="2">
             <StackPanel x:Name="Panel" MinWidth="150">
                 <TextBlock Margin="0,0,0,8"
                            Style="{StaticResource Heading2}"
@@ -58,13 +58,11 @@
                     <TextBlock Margin="0,3,101,7"
                                VerticalAlignment="Center"
                                Text="Ajouter un produit :" Height="16" Grid.ColumnSpan="3" />
-                    <TextBox x:Name="TextBoxProduit" Grid.Column="2" MaxLength="8" TextWrapping="Wrap"
-                             Text="Produit" Grid.Row="0" Grid.ColumnSpan="3" Margin="25,0,-23,3" TabIndex="2"
-                             TextAlignment="Right" MaxLines="1"
+                    <ComboBox x:Name="comboBoxProduit" Grid.Column="2" Text="Produit" Grid.Row="0" Grid.ColumnSpan="3" Margin="25,0,-57,3" TabIndex="2"
                              Grid.IsSharedSizeScope="True" Height="23" VerticalAlignment="Bottom"
-                             TextChanged="TextBoxProduit_TextChanged" />
+                             SelectionChanged="ComboBoxProduit_SelectionChanged" Initialized="ComboBoxProduit_OnInitialized"/>
                     <Button x:Name="Ajouter" Content="Ajouter" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left"
-                            Margin="58,32,-23,-36" Width="75" Click="BTNAddFeed_click" Height="26"
+                            Margin="70,32,-57,-36" Width="97" Click="BTNAddFeed_click" Height="26"
                             VerticalAlignment="Top" Grid.ColumnSpan="3" IsEnabled="False" />
 
 
@@ -72,13 +70,14 @@
                                Style="{StaticResource Heading2}" TextWrapping="Wrap" Text="Le client"
                                Grid.ColumnSpan="3"
                                Grid.Column="0" />
-                    <ComboBox x:Name="comboBoxClient" Grid.ColumnSpan="3" Grid.Column="2" Margin="40,68,-23,-72" Grid.Row="1" Initialized="ComboBoxClient_OnInitialized" SelectionChanged="comboBoxClient_SelectionChanged">
-                    </ComboBox>
+                    <ComboBox x:Name="comboBoxClient" Grid.ColumnSpan="3" Grid.Column="2" Margin="25,68,-57,-72"
+                              Grid.Row="1" Initialized="ComboBoxClient_OnInitialized"
+                              SelectionChanged="comboBoxClient_SelectionChanged" />
                     <TextBlock x:Name="couleur" Margin="0,6,101,0"
                                VerticalAlignment="Center"
                                Text="Quantité :" Height="16" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1" />
                     <TextBox x:Name="TextBoxDevisQte" Grid.Row="1" Grid.Column="2" MaxLength="8" TextWrapping="Wrap"
-                             Text="0" Grid.ColumnSpan="3" Margin="25,0,-23,-4" TabIndex="2"
+                             Text="0" Grid.ColumnSpan="3" Margin="25,0,-57,-4" TabIndex="2"
                              TextChanged="TextBoxDevisQte_TextChanged" TextAlignment="Right" MaxLines="1"
                              Grid.IsSharedSizeScope="True" Height="23" VerticalAlignment="Bottom" />
                     <TextBlock Margin="0,36,96,-30"

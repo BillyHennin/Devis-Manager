@@ -88,9 +88,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Client.cs" />
-    <Compile Include="Devis.cs" />
-    <Compile Include="Marchandise.cs" />
+    <Compile Include="Classes\Client.cs" />
+    <Compile Include="Classes\ComboboxItemClient.cs" />
+    <Compile Include="Classes\ComboboxItemProduit.cs" />
+    <Compile Include="Classes\Devis.cs" />
+    <Compile Include="Classes\Marchandise.cs" />
+    <Compile Include="Classes\Produit.cs" />
     <Compile Include="Pages\about.xaml.cs">
       <DependentUpon>about.xaml</DependentUpon>
     </Compile>

@@ -6,7 +6,7 @@
 
 using System.Collections.Generic;
 
-namespace SLAM3
+namespace SLAM3.Classes
 {
     internal class Devis
     {
@@ -22,10 +22,10 @@ namespace SLAM3
 
         public List<Marchandise> list { get { return listMarchandise; } }
 
-        public Marchandise this[int i]{ get { return list[i]; }}
+        public Marchandise this[int i] { get { return list[i]; } }
 
         public double TotalPrix { get; set; }
 
-        public Client setClient{ set { client = value; } }
+        public Client setClient { set { client = value; } }
     }
 }

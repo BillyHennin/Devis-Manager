@@ -6,7 +6,7 @@
 
 using System.Windows.Controls;
 
-namespace SLAM3
+namespace SLAM3.Classes
 {
     internal class Marchandise
     {
@@ -25,9 +25,9 @@ namespace SLAM3
             this.bordure = bordure;
         }
 
-        public double getPrix{ get { return prix; } }
+        public double getPrix { get { return prix; } }
 
-        public double setBordureWidth{set{bordure.Width = value;}}
+        public double setBordureWidth { set { bordure.Width = value; } }
 
         public Border getBordure { get { return bordure; } }
     }

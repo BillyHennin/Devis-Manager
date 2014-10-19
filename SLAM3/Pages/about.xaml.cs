@@ -5,6 +5,7 @@
 // Copyrights (c) 2014 SLAM3 INC. All rights reserved.
 
 using System;
+
 /*
 using Oracle.DataAccess.Client;
 using Oracle.DataAccess.Types; 
