@@ -48,7 +48,7 @@ namespace SLAM3.Pages
             var panelMarchandise = new StackPanel();
             var nouvelleMarchadise = new Marchandise(comboBoxProduit.Text, QTE, prixMarchandise);
 
-            var nbMarchandise = leDevis.list.Count;
+            var nbMarchandise = leDevis.getList.Count;
             for(var i = 0; i < nbMarchandise; i++)
             {
                 if(leDevis[i].getNom == nouvelleMarchadise.getNom)
@@ -101,7 +101,7 @@ namespace SLAM3.Pages
 
             nouvelleMarchadise.Bordure = bordure;
             panelDevis.Children.Add(bordure);
-            leDevis.list.Add(nouvelleMarchadise);
+            leDevis.getList.Add(nouvelleMarchadise);
             prixTotal += prixMarchandise;
             LabelTotalPrix.Content = prixTotal + "€";
             AjouterDevis.IsEnabled = true;
@@ -109,7 +109,13 @@ namespace SLAM3.Pages
 
         private void BTNAddDevis_click(object sender, RoutedEventArgs e)
         {
-            
+            // TODO : Demander a l'user si il veux vraiment add le devis + Ajout bdd
+            leDevis.client.listDevis.Add(leDevis);
+            panelDevis.Children.Clear();
+            listMarchandise.Clear();
+            prixTotal = 0;
+            LabelTotalPrix.Content = "";
+            AjouterDevis.IsEnabled = false;
         }
 
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -117,7 +123,7 @@ namespace SLAM3.Pages
             BorderDevis.Width = Menu.ActualWidth - 340;
             BorderDevis.Height = Menu.ActualHeight - 50;
 
-            var nbMarchandise = leDevis.list.Count;
+            var nbMarchandise = leDevis.getList.Count;
             for(var i = 0; i < nbMarchandise; i++)
             {
                 leDevis[i].Bordure.Width = BorderDevis.Width - 4;
@@ -171,7 +177,7 @@ namespace SLAM3.Pages
                                 TextBoxDevisQte.SelectionBrush =
                                     comboBoxProduit.BorderBrush =
                                         comboBoxClient.BorderBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
-            var nbMarchandise = leDevis.list.Count;
+            var nbMarchandise = leDevis.getList.Count;
             for(var i = 0; i < nbMarchandise; i++)
             {
                 leDevis[i].Bordure.BorderBrush = Ajouter.BorderBrush;
@@ -185,17 +191,17 @@ namespace SLAM3.Pages
              * TODO : Connexion BDD Oracle
              * 
              */
-
+            var listDevis = new List<Devis>();
             for(var i = 0; i < 10; i++)
             {
-                comboBoxClient.Items.Add(new ComboboxItemClient {Text = "Item text1 " + i, Value = new Client()});
+                comboBoxClient.Items.Add(new ComboboxItemClient { Text = "Item text1 " + i, Value = new Client("Item text1 " + i, "02", "mes@couiuklles", listDevis) });
             }
             comboBoxClient.SelectedIndex = 0;
         }
 
         private void comboBoxClient_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            leDevis.setClient = (comboBoxClient.SelectedItem as ComboboxItemClient).Value;
+            leDevis.client = (comboBoxClient.SelectedItem as ComboboxItemClient).Value;
         }
 
         private void ComboBoxProduit_OnInitialized(object sender, EventArgs e)

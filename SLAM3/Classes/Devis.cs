@@ -4,28 +4,28 @@
 //  
 // Copyrights (c) 2014 SLAM3 INC. All rights reserved.
 
+using System;
 using System.Collections.Generic;
 
 namespace SLAM3.Classes
 {
-    internal class Devis
+    public class Devis
     {
         private readonly List<Marchandise> listMarchandise;
-        private Client client;
+        private readonly DateTime date;
 
         public Devis(List<Marchandise> list)
         {
             listMarchandise = list;
-            client = new Client();
             TotalPrix = 0;
+            date = DateTime.Now;
         }
 
-        public List<Marchandise> list { get { return listMarchandise; } }
-
-        public Marchandise this[int i] { get { return list[i]; } }
-
         public double TotalPrix { get; set; }
+        public Client client { get; set; }
 
-        public Client setClient { set { client = value; } }
+        public DateTime getDate { get { return date; } }
+        public List<Marchandise> getList { get { return listMarchandise; } }
+        public Marchandise this[int i] { get { return getList[i]; } }
     }
 }

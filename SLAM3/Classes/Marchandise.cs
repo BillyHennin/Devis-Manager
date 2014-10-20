@@ -8,7 +8,7 @@ using System.Windows.Controls;
 
 namespace SLAM3.Classes
 {
-    internal class Marchandise
+    public class Marchandise
     {
         private readonly string nom;
         private readonly double prix;
@@ -21,12 +21,11 @@ namespace SLAM3.Classes
             this.prix = prix;
         }
 
-        public string getNom { get { return nom; } }
-
-        public double getPrix { get { return prix; } }
-
-        public double setBordureWidth { set { Bordure.Width = value; } }
-
         public Border Bordure { get; set; }
+
+        public string getNom { get { return nom; } }
+        public double getPrix { get { return prix; } }
+        
+        public double setBordureWidth { set { Bordure.Width = value; } }
     }
 }

@@ -4,6 +4,8 @@
 //  
 // Copyrights (c) 2014 SLAM3 INC. All rights reserved.
 
+using System.Collections.Generic;
+
 namespace SLAM3.Classes
 {
     public class Client
@@ -12,23 +14,15 @@ namespace SLAM3.Classes
         private readonly string email;
         private readonly string telephone;
 
-        public Client()
+        public Client(string denomination, string telephone, string email, List<Devis> listDevis)
         {
-            id = 0;
-            denomination = "";
-            telephone = "";
-            email = "";
-        }
-
-        public Client(int id, string denomination, string telephone, string email)
-        {
-            this.id = id;
             this.denomination = denomination;
             this.telephone = telephone;
             this.email = email;
+            this.listDevis = listDevis;
         }
 
-        public int id { get; set; }
+        public List<Devis> listDevis { get; set; }
 
         public string getDenomination { get { return denomination; } }
         public string getTelephone { get { return telephone; } }

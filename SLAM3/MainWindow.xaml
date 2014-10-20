@@ -13,7 +13,7 @@
                   ShowBackButton="True"
                   ShowForwardButton="True"
                   ShowRefreshButton="True"
-                  Language="fr-FR">
+                  ToolTip="{DynamicResource {x:Type ToolTip}}">
 
     <mui:ModernWindow.TitleLinks>
         <mui:Link DisplayName="A propos" Source="/Pages/about.xaml" />
@@ -29,3 +29,4 @@
     </mui:ModernWindow.MenuLinkGroups>
 
 </mui:ModernWindow>
+    
