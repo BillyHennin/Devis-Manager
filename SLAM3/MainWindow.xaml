@@ -12,7 +12,9 @@
                   IsTitleVisible="True"
                   ShowBackButton="True"
                   ShowForwardButton="True"
-                  ShowRefreshButton="True">
+                  ShowRefreshButton="True"
+                  Language="fr-FR">
+
     <mui:ModernWindow.TitleLinks>
         <mui:Link DisplayName="A propos" Source="/Pages/about.xaml" />
         <mui:Link DisplayName="Apparence" Source="Pages/Appearance.xaml" />

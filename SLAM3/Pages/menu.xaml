@@ -58,9 +58,11 @@
                     <TextBlock Margin="0,3,101,7"
                                VerticalAlignment="Center"
                                Text="Ajouter un produit :" Height="16" Grid.ColumnSpan="3" />
-                    <ComboBox x:Name="comboBoxProduit" Grid.Column="2" Text="Produit" Grid.Row="0" Grid.ColumnSpan="3" Margin="25,0,-57,3" TabIndex="2"
-                             Grid.IsSharedSizeScope="True" Height="23" VerticalAlignment="Bottom"
-                             SelectionChanged="ComboBoxProduit_SelectionChanged" Initialized="ComboBoxProduit_OnInitialized"/>
+                    <ComboBox x:Name="comboBoxProduit" Grid.Column="2" Text="Produit" Grid.Row="0" Grid.ColumnSpan="3"
+                              Margin="25,0,-57,3" TabIndex="2"
+                              Grid.IsSharedSizeScope="True" Height="23" VerticalAlignment="Bottom"
+                              SelectionChanged="ComboBoxProduit_SelectionChanged"
+                              Initialized="ComboBoxProduit_OnInitialized" />
                     <Button x:Name="Ajouter" Content="Ajouter" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left"
                             Margin="70,32,-57,-36" Width="97" Click="BTNAddFeed_click" Height="26"
                             VerticalAlignment="Top" Grid.ColumnSpan="3" IsEnabled="False" />
@@ -97,12 +99,24 @@
                         </ScrollViewer>
                     </Border>
                 </Grid>
-                <TextBlock x:Name="TextBlockPrixTotal" Margin="0,-15,-300,0"
-                           Style="{StaticResource Heading2}" TextWrapping="Wrap" Text="Prix total :" Height="29"
-                           VerticalAlignment="Bottom" Width="119" HorizontalAlignment="Left" />
-                <Label Margin="90,-26,-100,0"
-                       VerticalAlignment="Bottom" Width="119" HorizontalAlignment="Left" x:Name="LabelTotalPrix"
-                       Height="29" Content="" />
+                <Grid HorizontalAlignment="Left" Width="267">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="89" />
+                        <ColumnDefinition Width="30" />
+                        <ColumnDefinition Width="125" />
+                        <ColumnDefinition Width="22*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="TextBlockPrixTotal" Margin="0,-15,0,0"
+                		    Style="{StaticResource Heading2}" TextWrapping="Wrap" Text="Prix total :" Height="29"
+                		    VerticalAlignment="Bottom" Width="119" HorizontalAlignment="Left" Grid.Column="0" Grid.ColumnSpan="2" />
+                    <Label Margin="0,-10,0,0"
+                		    VerticalAlignment="Bottom" Width="119" HorizontalAlignment="Left" x:Name="LabelTotalPrix"
+                		    Height="29" Content="" Grid.Column="1" Grid.ColumnSpan="2"/>
+                    <Button x:Name="AjouterDevis" Content="Ajouter" HorizontalAlignment="Left"
+                		    Margin="50,-20,0,10" Width="97" Click="BTNAddDevis_click" Height="26"
+                		    VerticalAlignment="Bottom" IsEnabled="False" Grid.Column="2" Grid.ColumnSpan="2"/>
+                </Grid >
             </StackPanel>
         </ScrollViewer>
     </Grid>

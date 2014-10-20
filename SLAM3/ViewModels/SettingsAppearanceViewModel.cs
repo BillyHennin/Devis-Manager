@@ -38,7 +38,7 @@ namespace SLAM3.ViewModels
         public SettingsAppearanceViewModel()
         {
             themes.Add(new Link {DisplayName = "Sombre", Source = AppearanceManager.DarkThemeSource});
-            themes.Add(new Link {DisplayName = "Lumineu", Source = AppearanceManager.LightThemeSource});
+            themes.Add(new Link {DisplayName = "Clair", Source = AppearanceManager.LightThemeSource});
 
             SelectedFontSize = AppearanceManager.Current.FontSize == FontSize.Large ? FontLarge : FontSmall;
             SyncThemeAndColor();

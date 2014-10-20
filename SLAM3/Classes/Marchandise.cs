@@ -10,25 +10,23 @@ namespace SLAM3.Classes
 {
     internal class Marchandise
     {
-        private readonly Border bordure;
+        private readonly string nom;
         private readonly double prix;
-        private int id;
-        private string nom;
-        private int quantite;
+        private readonly int quantite;
 
-        public Marchandise(int id, string nom, int quantite, double prix, Border bordure)
+        public Marchandise(string nom, int quantite, double prix)
         {
-            this.id = id;
             this.nom = nom;
             this.quantite = quantite;
             this.prix = prix;
-            this.bordure = bordure;
         }
+
+        public string getNom { get { return nom; } }
 
         public double getPrix { get { return prix; } }
 
-        public double setBordureWidth { set { bordure.Width = value; } }
+        public double setBordureWidth { set { Bordure.Width = value; } }
 
-        public Border getBordure { get { return bordure; } }
+        public Border Bordure { get; set; }
     }
 }
