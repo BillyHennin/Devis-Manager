@@ -97,6 +97,9 @@
     <Compile Include="Pages\about.xaml.cs">
       <DependentUpon>about.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\affichageClient.xaml.cs">
+      <DependentUpon>affichageClient.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\menu.xaml.cs">
       <DependentUpon>menu.xaml</DependentUpon>
     </Compile>
@@ -116,6 +119,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Pages\about.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\affichageClient.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

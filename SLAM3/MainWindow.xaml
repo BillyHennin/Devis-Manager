@@ -24,6 +24,7 @@
         <mui:LinkGroup DisplayName="Createur de devis">
             <mui:LinkGroup.Links>
                 <mui:Link DisplayName="Devis" Source="/Pages/menu.xaml" />
+                <mui:Link DisplayName="Client" Source="/Pages/affichageClient.xaml" />
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
     </mui:ModernWindow.MenuLinkGroups>

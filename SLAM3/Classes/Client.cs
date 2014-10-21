@@ -14,15 +14,12 @@ namespace SLAM3.Classes
         private readonly string email;
         private readonly string telephone;
 
-        public Client(string denomination, string telephone, string email, List<Devis> listDevis)
+        public Client(string denomination, string telephone, string email)
         {
             this.denomination = denomination;
             this.telephone = telephone;
             this.email = email;
-            this.listDevis = listDevis;
         }
-
-        public List<Devis> listDevis { get; set; }
 
         public string getDenomination { get { return denomination; } }
         public string getTelephone { get { return telephone; } }

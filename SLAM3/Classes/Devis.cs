@@ -11,8 +11,8 @@ namespace SLAM3.Classes
 {
     public class Devis
     {
-        private readonly List<Marchandise> listMarchandise;
         private readonly DateTime date;
+        private readonly List<Marchandise> listMarchandise;
 
         public Devis(List<Marchandise> list)
         {

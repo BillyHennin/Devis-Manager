@@ -21,12 +21,10 @@ namespace SLAM3.Pages
     /// </summary>
     public partial class devis
     {
-        // TODO : Ajout d'un devis à un client via btn
-
         private static readonly List<Marchandise> listMarchandise = new List<Marchandise>();
         private readonly Devis leDevis = new Devis(listMarchandise);
-        private double prixTotal;
         private int QTE;
+        private double prixTotal;
 
         private static bool estUnNombre(string QTE)
         {
@@ -110,7 +108,7 @@ namespace SLAM3.Pages
         private void BTNAddDevis_click(object sender, RoutedEventArgs e)
         {
             // TODO : Demander a l'user si il veux vraiment add le devis + Ajout bdd
-            leDevis.client.listDevis.Add(leDevis);
+            
             panelDevis.Children.Clear();
             listMarchandise.Clear();
             prixTotal = 0;
@@ -191,10 +189,13 @@ namespace SLAM3.Pages
              * TODO : Connexion BDD Oracle
              * 
              */
-            var listDevis = new List<Devis>();
             for(var i = 0; i < 10; i++)
             {
-                comboBoxClient.Items.Add(new ComboboxItemClient { Text = "Item text1 " + i, Value = new Client("Item text1 " + i, "02", "mes@couiuklles", listDevis) });
+                comboBoxClient.Items.Add(new ComboboxItemClient
+                {
+                    Text = "Item text1 " + i,
+                    Value = new Client("Item text1 " + i, "02", "mes@couilles")
+                });
             }
             comboBoxClient.SelectedIndex = 0;
         }

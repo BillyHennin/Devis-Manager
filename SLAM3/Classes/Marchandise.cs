@@ -25,7 +25,7 @@ namespace SLAM3.Classes
 
         public string getNom { get { return nom; } }
         public double getPrix { get { return prix; } }
-        
+
         public double setBordureWidth { set { Bordure.Width = value; } }
     }
 }
