@@ -60,9 +60,9 @@ namespace SLAM3.Pages
                 BorderBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor)),
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Top,
-                Margin = new Thickness(1, 1, 0, 0),
+                Margin = new Thickness(2, 2, 1, 0),
                 BorderThickness = new Thickness(1),
-                Width = BorderDevis.Width - 4,
+                Width = BorderDevis.Width - 6,
                 Child = panelMarchandise,
                 Height = 70
             };
@@ -124,7 +124,7 @@ namespace SLAM3.Pages
             var nbMarchandise = leDevis.getList.Count;
             for(var i = 0; i < nbMarchandise; i++)
             {
-                leDevis[i].Bordure.Width = BorderDevis.Width - 4;
+                leDevis[i].Bordure.Width = BorderDevis.Width - 6;
             }
         }
 

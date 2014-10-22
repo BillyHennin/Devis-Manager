@@ -90,6 +90,7 @@
     </ApplicationDefinition>
     <Compile Include="Classes\Client.cs" />
     <Compile Include="Classes\ComboboxItemClient.cs" />
+    <Compile Include="Classes\ComboboxItemDevis.cs" />
     <Compile Include="Classes\ComboboxItemProduit.cs" />
     <Compile Include="Classes\Devis.cs" />
     <Compile Include="Classes\Marchandise.cs" />
