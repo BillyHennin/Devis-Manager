@@ -91,7 +91,7 @@ namespace SLAM3.Pages
                 {
                     var panelMarchandise = new StackPanel();
 
-                    panelDevis.Children.Add(new Border
+                    var bordure = new Border
                     {
                         BorderBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor)),
                         HorizontalAlignment = HorizontalAlignment.Left,
@@ -101,7 +101,10 @@ namespace SLAM3.Pages
                         Width = BorderDevis.Width - 5,
                         Child = panelMarchandise,
                         Height = 70
-                    });
+                    };
+
+                    (comboBoxDevis.SelectedItem as ComboboxItemDevis).Value[i].Bordure = bordure;
+                    panelDevis.Children.Add(bordure);
 
                     // Nom du produit
                     panelMarchandise.Children.Add(new TextBlock
