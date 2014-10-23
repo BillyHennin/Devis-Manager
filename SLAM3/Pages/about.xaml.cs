@@ -28,7 +28,7 @@ namespace SLAM3.Pages
         {
             /*
             string oradb = "Data Source=ORCL;User Id=hr;Password=hr;";
-            OracleConnection conn = new OracleConnection(oradb);  // C#
+            OracleConnection conn = new OracleConnection(oradb);  // C#, no shit
             conn.Open();
             OracleCommand cmd = new OracleCommand();
             cmd.Connection = conn;
