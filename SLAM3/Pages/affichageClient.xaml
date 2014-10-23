@@ -44,7 +44,7 @@
         <Grid x:Name="DevisGrid">
             <Border x:Name="BorderDevis" BorderThickness="1" HorizontalAlignment="Left"
                     Height="277" Margin="10,-59,0,0" VerticalAlignment="Top" Width="326" Grid.Column="0">
-                <ScrollViewer Margin="-1,-1,-1,1">
+                <ScrollViewer Margin="-1,-1,-94,1">
                     <StackPanel x:Name="panelDevis" MinWidth="150" />
                 </ScrollViewer>
             </Border>

@@ -61,13 +61,11 @@ namespace SLAM3.Pages
             for (var i = 0; i < 10; i++)
             {
                 var listMarchandise = new List<Marchandise>();
-                var nouvelleMarchadise1 = new Marchandise("Test 1", 1, 40);
-                var nouvelleMarchadise2 = new Marchandise("Test 2", 3, 50);
-                var nouvelleMarchadise3 = new Marchandise("Test 3", 10, 60);
                 var leDevis = new Devis(listMarchandise);
-                leDevis.getList.Add(nouvelleMarchadise1);
-                leDevis.getList.Add(nouvelleMarchadise2);
-                leDevis.getList.Add(nouvelleMarchadise3);
+                for(var j = 0; j < 12; j++)
+                {
+                    leDevis.getList.Add(new Marchandise("Test "+j, 1, 40));
+                }
 
                 comboBoxDevis.Items.Add(new ComboboxItemDevis
                 {

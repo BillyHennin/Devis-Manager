@@ -25,6 +25,7 @@
             <mui:LinkGroup.Links>
                 <mui:Link DisplayName="Devis" Source="/Pages/menu.xaml" />
                 <mui:Link DisplayName="Client" Source="/Pages/affichageClient.xaml" />
+                <mui:Link DisplayName="Produit" Source="/Pages/affichageProduit.xaml" />
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
     </mui:ModernWindow.MenuLinkGroups>
