@@ -7,9 +7,7 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Media;
-
 using FirstFloor.ModernUI.Presentation;
-
 using SLAM3.Properties;
 
 namespace SLAM3.ViewModels
@@ -22,14 +20,20 @@ namespace SLAM3.ViewModels
         private readonly Color[] accentColors =
         {
             Color.FromRgb(0xff, 0xff, 0xff), Color.FromRgb(0x64, 0x76, 0x87), Color.FromRgb(0x00, 0x00, 0x00),
-            Color.FromRgb(0x82, 0x5a, 0x2c), Color.FromRgb(0x87, 0x79, 0x4e), Color.FromRgb(0x6d, 0x87, 0x64), Color.FromRgb(0x00, 0xab, 0xa9),
-            Color.FromRgb(0x00, 0x82, 0xAD), Color.FromRgb(0x00, 0xbc, 0xff), Color.FromRgb(0x00, 0x50, 0xef), Color.FromRgb(0x00, 0x50, 0xa9),
+            Color.FromRgb(0x82, 0x5a, 0x2c), Color.FromRgb(0x87, 0x79, 0x4e), Color.FromRgb(0x6d, 0x87, 0x64),
+            Color.FromRgb(0x00, 0xab, 0xa9),
+            Color.FromRgb(0x00, 0x82, 0xAD), Color.FromRgb(0x00, 0xbc, 0xff), Color.FromRgb(0x00, 0x50, 0xef),
+            Color.FromRgb(0x00, 0x50, 0xa9),
             Color.FromRgb(0x00, 0x20, 0xdc), Color.FromRgb(0x50, 0x00, 0xee), Color.FromRgb(0xaa, 0x00, 0xff),
-            Color.FromRgb(0xf4, 0x72, 0xd0), Color.FromRgb(0xd8, 0x00, 0x73), Color.FromRgb(0xa2, 0x00, 0x25), Color.FromRgb(0xff, 0x00, 0x00),
-            Color.FromRgb(0xe5, 0x14, 0x00), Color.FromRgb(0xfa, 0x68, 0x00), Color.FromRgb(0xf0, 0xa3, 0x0a), Color.FromRgb(0xe3, 0xc8, 0x00),
-            Color.FromRgb(0xa4, 0xc4, 0x00), Color.FromRgb(0x60, 0xa9, 0x17), Color.FromRgb(0x00, 0xb5, 0x00), Color.FromRgb(0x00, 0xff, 0x00), 
+            Color.FromRgb(0xf4, 0x72, 0xd0), Color.FromRgb(0xd8, 0x00, 0x73), Color.FromRgb(0xa2, 0x00, 0x25),
+            Color.FromRgb(0xff, 0x00, 0x00),
+            Color.FromRgb(0xe5, 0x14, 0x00), Color.FromRgb(0xfa, 0x68, 0x00), Color.FromRgb(0xf0, 0xa3, 0x0a),
+            Color.FromRgb(0xe3, 0xc8, 0x00),
+            Color.FromRgb(0xa4, 0xc4, 0x00), Color.FromRgb(0x60, 0xa9, 0x17), Color.FromRgb(0x00, 0xb5, 0x00),
+            Color.FromRgb(0x00, 0xff, 0x00),
             Color.FromRgb(0x10, 0x44, 0x10)
         };
+
         private readonly LinkCollection themes = new LinkCollection();
 
         private Color selectedAccentColor;
@@ -47,18 +51,27 @@ namespace SLAM3.ViewModels
             AppearanceManager.Current.PropertyChanged += OnAppearanceManagerPropertyChanged;
         }
 
-        public LinkCollection Themes { get { return themes; } }
+        public LinkCollection Themes
+        {
+            get { return themes; }
+        }
 
-        public string[] FontSizes { get { return new[] {FontSmall, FontLarge}; } }
+        public string[] FontSizes
+        {
+            get { return new[] {FontSmall, FontLarge}; }
+        }
 
-        public Color[] AccentColors { get { return accentColors; } }
+        public Color[] AccentColors
+        {
+            get { return accentColors; }
+        }
 
         public Link SelectedTheme
         {
             get { return selectedTheme; }
             set
             {
-                if(selectedTheme == value)
+                if (selectedTheme == value)
                 {
                     return;
                 }
@@ -74,7 +87,7 @@ namespace SLAM3.ViewModels
             get { return selectedFontSize; }
             set
             {
-                if(selectedFontSize == value)
+                if (selectedFontSize == value)
                 {
                     return;
                 }
@@ -90,7 +103,7 @@ namespace SLAM3.ViewModels
             get { return selectedAccentColor; }
             set
             {
-                if(selectedAccentColor == value)
+                if (selectedAccentColor == value)
                 {
                     return;
                 }
@@ -111,7 +124,7 @@ namespace SLAM3.ViewModels
         private void OnAppearanceManagerPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             Settings.Default.Save();
-            if(e.PropertyName == "ThemeSource" || e.PropertyName == "AccentColor")
+            if (e.PropertyName == "ThemeSource" || e.PropertyName == "AccentColor")
             {
                 SyncThemeAndColor();
             }

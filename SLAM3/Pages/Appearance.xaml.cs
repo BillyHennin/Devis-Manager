@@ -9,7 +9,9 @@ using System.Windows.Controls;
 namespace SLAM3.Pages
 {
     /// <summary>
-    ///   Logique d'interaction pour Appearance.xaml
+    ///     Logique d'interaction pour Appearance.xaml
     /// </summary>
-    public class Appearance : UserControl {}
+    public class Appearance : UserControl
+    {
+    }
 }

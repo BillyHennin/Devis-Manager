@@ -1,6 +1,6 @@
 ﻿namespace SLAM3.Classes
 {
-    class ComboboxItemDevis
+    internal class ComboboxItemDevis
     {
         public string Text { get; set; }
         public Devis Value { get; set; }

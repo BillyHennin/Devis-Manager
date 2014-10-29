@@ -3,89 +3,79 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-
 using SLAM3.Classes;
 using SLAM3.Properties;
 
 namespace SLAM3.Pages
 {
     /// <summary>
-    /// Logique d'interaction pour affichageProduit.xaml
+    ///     Logique d'interaction pour affichageProduit.xaml
     /// </summary>
-    public partial class affichageProduit
+    public partial class AffichageProduit
     {
+        private static readonly List<Marchandise> ListMarchandise = new List<Marchandise>();
 
-        private static readonly List<Marchandise> listMarchandise = new List<Marchandise>();
-
-        public affichageProduit()
+        public AffichageProduit()
         {
             InitializeComponent();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            BorderDevis.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Settings.Default.AccentColor));
-            try
+            BorderDevis.BorderBrush =
+                new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
+
+            for (var i = 1; i < 11; i++)
             {
-                
-                for (var i = 0; i < 12; i++)
+                var text = "Produit " + i;
+                var qte = (100*i);
+                var prixMarchandise = (10*i);
+                var nouvelleMarchadise = new Marchandise(text, qte, prixMarchandise);
+                var panelMarchandise = new StackPanel();
+                var thick = new Thickness(5, 2, 0, 0);
+
+                //nouvelle bordure
+                var bordure = new Border
                 {
-                    var text = "Produit " + i;
-                    var QTE = (100 * i);
-                    var prixMarchandise = (10*i);
-                    var nouvelleMarchadise = new Marchandise(text, QTE, prixMarchandise);
-                    var panelMarchandise = new StackPanel();
+                    BorderBrush =
+                        new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor)),
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    Margin = new Thickness(2, 2, 1, 0),
+                    BorderThickness = new Thickness(1),
+                    Width = BorderDevis.Width - 5,
+                    Child = panelMarchandise,
+                    Height = 70
+                };
 
-                    //nouvelle bordure
-                    var bordure = new Border
-                    {
-                        BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Settings.Default.AccentColor)),
-                        HorizontalAlignment = HorizontalAlignment.Left,
-                        VerticalAlignment = VerticalAlignment.Top,
-                        Margin = new Thickness(2, 2, 1, 0),
-                        BorderThickness = new Thickness(1),
-                        Width = BorderDevis.Width - 5,
-                        Child = panelMarchandise,
-                        Height = 70
-                    };
+                PanelProduit.Children.Add(bordure);
 
-                    panelDevis.Children.Add(bordure);
+                // Nom du produit
+                panelMarchandise.Children.Add(new TextBlock
+                {
+                    Margin = thick,
+                    Text = text,
+                    Height = 16
+                });
 
-                    // Nom du produit
-                    panelMarchandise.Children.Add(new TextBlock
-                    {
-                        HorizontalAlignment = HorizontalAlignment.Left,
-                        VerticalAlignment = VerticalAlignment.Top,
-                        Margin = new Thickness(5, 2, 0, 0),
-                        Text = text,
-                        Height = 16
-                    });
+                // Prix
+                panelMarchandise.Children.Add(new TextBlock
+                {
+                    Text = qte.ToString(CultureInfo.InvariantCulture),
+                    Margin = thick,
+                    Height = 16
+                });
 
-                    // Prix
-                    panelMarchandise.Children.Add(new TextBlock
-                    {
-                        Text = QTE.ToString(CultureInfo.InvariantCulture),
-                        HorizontalAlignment = HorizontalAlignment.Left,
-                        VerticalAlignment = VerticalAlignment.Top,
-                        Margin = new Thickness(5, 2, 0, 0),
-                        Height = 16
-                    });
+                // Quantité
+                panelMarchandise.Children.Add(new TextBlock
+                {
+                    Text = prixMarchandise.ToString(CultureInfo.InvariantCulture),
+                    Margin = new Thickness(5, 2, 0, 0),
+                    Height = 16
+                });
 
-                    // Quantité
-                    panelMarchandise.Children.Add(new TextBlock
-                    {
-                        Text = prixMarchandise.ToString(CultureInfo.InvariantCulture),
-                        HorizontalAlignment = HorizontalAlignment.Left,
-                        VerticalAlignment = VerticalAlignment.Top,
-                        Margin = new Thickness(5, 2, 0, 0),
-                        Height = 16
-                    });
-
-                    nouvelleMarchadise.Bordure = bordure;
-                    listMarchandise.Add(nouvelleMarchadise);
-                }
-            }// ReSharper disable once EmptyGeneralCatchClause
-            catch {}
+                nouvelleMarchadise.Bordure = bordure;
+                ListMarchandise.Add(nouvelleMarchadise);
+            }
         }
 
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -95,13 +85,16 @@ namespace SLAM3.Pages
 
             try
             {
-                var nbMarchandise = listMarchandise.Count;
+                var nbMarchandise = ListMarchandise.Count;
                 for (var i = 0; i < nbMarchandise; i++)
                 {
-                    listMarchandise[i].Bordure.Width = BorderDevis.Width - 5;
+                    ListMarchandise[i].Bordure.Width = BorderDevis.Width - 5;
                 }
-                // ReSharper disable once EmptyGeneralCatchClause
-            }catch { }
+            }// ReSharper disable once EmptyGeneralCatchClause
+            catch
+            {
+                //Bro, do you even try ?
+            }
         }
     }
 }

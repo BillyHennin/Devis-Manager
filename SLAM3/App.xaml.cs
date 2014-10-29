@@ -7,22 +7,21 @@
 using System;
 using System.Windows;
 using System.Windows.Media;
-
 using FirstFloor.ModernUI.Presentation;
-
 using SLAM3.Properties;
 
 namespace SLAM3
 {
     /// <summary>
-    ///   Logique d'interaction pour App.xaml
+    ///     Logique d'interaction pour App.xaml
     /// </summary>
     public partial class App
     {
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            AppearanceManager.Current.AccentColor = (Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor);
+            AppearanceManager.Current.AccentColor =
+                (Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor);
             AppearanceManager.Current.FontSize = Settings.Default.FontSize == "Large" ? FontSize.Large : FontSize.Small;
             AppearanceManager.Current.ThemeSource = new Uri(Settings.Default.Theme, UriKind.Relative);
             //var x = SLAM3.Properties.Resources.SettingsData;

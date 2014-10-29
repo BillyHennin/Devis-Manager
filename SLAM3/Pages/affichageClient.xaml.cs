@@ -10,18 +10,17 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-
 using SLAM3.Classes;
 using SLAM3.Properties;
 
 namespace SLAM3.Pages
 {
     /// <summary>
-    ///   Logique d'interaction pour affichageClient.xaml
+    ///     Logique d'interaction pour affichageClient.xaml
     /// </summary>
-    public partial class affichageClient
+    public partial class AffichageClient
     {
-        public affichageClient()
+        public AffichageClient()
         {
             InitializeComponent();
         }
@@ -33,7 +32,7 @@ namespace SLAM3.Pages
              * TODO : Connexion BDD Oracle
              * 
              */
-            for(var i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
                 try
                 {
@@ -43,11 +42,12 @@ namespace SLAM3.Pages
                         Value = new Client("Item text1 " + i, "02", "mes@couilles")
                     });
                     comboBoxClient.SelectedIndex = 0;
-                    // ReSharper disable once EmptyGeneralCatchClause
-                }catch{}
-                
+
+                }// ReSharper disable once EmptyGeneralCatchClause
+                catch
+                {
+                }
             }
-            
         }
 
         //TODO : Creer un combobox contenant les devis des clients + afficher le devis lorsqu'on change la valeur de cette combobox
@@ -55,44 +55,44 @@ namespace SLAM3.Pages
         private void comboBoxClient_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // garder ça
-            comboBoxDevis.Items.Clear();
+            ComboBoxDevis.Items.Clear();
             // oui
 
             for (var i = 0; i < 10; i++)
             {
                 var listMarchandise = new List<Marchandise>();
                 var leDevis = new Devis(listMarchandise);
-                for(var j = 0; j < 12; j++)
+                for (var j = 0; j < 12; j++)
                 {
-                    leDevis.getList.Add(new Marchandise("Test "+j, 1, 40));
+                    leDevis.getList.Add(new Marchandise("Test " + j, 1, 40));
                 }
 
-                comboBoxDevis.Items.Add(new ComboboxItemDevis
+                ComboBoxDevis.Items.Add(new ComboboxItemDevis
                 {
-                    Text = "Devis "+i,
+                    Text = "Devis " + i,
                     Value = leDevis
                 });
-
-                
             }
             comboBoxClient.SelectedIndex = 0;
-            panelDevis.Children.Clear();
+            PanelDevis.Children.Clear();
         }
 
         private void comboBoxDevis_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
             {
-                var nbMarchandise = (comboBoxDevis.SelectedItem as ComboboxItemDevis).Value.getList.Count;
-                panelDevis.Children.Clear();
+                var nbMarchandise = (ComboBoxDevis.SelectedItem as ComboboxItemDevis).Value.getList.Count;
+                PanelDevis.Children.Clear();
 
-                for(var i = 0; i < nbMarchandise; i++)
+                for (var i = 0; i < nbMarchandise; i++)
                 {
-                    var panelMarchandise = new StackPanel();
-
+                    var panelMarchandise = new StackPanel(); 
+                    var thick = new Thickness(5, 2, 0, 0);
+                    var item = (ComboBoxDevis.SelectedItem as ComboboxItemDevis).Value[i];
                     var bordure = new Border
                     {
-                        BorderBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor)),
+                        BorderBrush =
+                            new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor)),
                         HorizontalAlignment = HorizontalAlignment.Left,
                         VerticalAlignment = VerticalAlignment.Top,
                         Margin = new Thickness(2, 2, 1, 0),
@@ -102,49 +102,45 @@ namespace SLAM3.Pages
                         Height = 70
                     };
 
-                    (comboBoxDevis.SelectedItem as ComboboxItemDevis).Value[i].Bordure = bordure;
-                    panelDevis.Children.Add(bordure);
+                    item.Bordure = bordure;
+                    PanelDevis.Children.Add(bordure);
 
                     // Nom du produit
                     panelMarchandise.Children.Add(new TextBlock
                     {
-                        HorizontalAlignment = HorizontalAlignment.Left,
-                        VerticalAlignment = VerticalAlignment.Top,
-                        Margin = new Thickness(5, 2, 0, 0),
-                        Text = (comboBoxDevis.SelectedItem as ComboboxItemDevis).Value[i].getNom,
+                        Margin = thick,
+                        Text = item.getNom,
                         Height = 16
                     });
 
                     // Prix
                     panelMarchandise.Children.Add(new TextBlock
                     {
-                        Text = (comboBoxDevis.SelectedItem as ComboboxItemDevis).Value[i].getPrix.ToString(CultureInfo.InvariantCulture),
-                        HorizontalAlignment = HorizontalAlignment.Left,
-                        VerticalAlignment = VerticalAlignment.Top,
-                        Margin = new Thickness(5, 2, 0, 0),
+                        Text = item.getPrix.ToString(CultureInfo.InvariantCulture),
+                        Margin = thick,
                         Height = 16
                     });
 
                     // Quantité
                     panelMarchandise.Children.Add(new TextBlock
                     {
-                        Text = (comboBoxDevis.SelectedItem as ComboboxItemDevis).Value[i].getQTE.ToString(CultureInfo.InvariantCulture),
-                        HorizontalAlignment = HorizontalAlignment.Left,
-                        VerticalAlignment = VerticalAlignment.Top,
-                        Margin = new Thickness(5, 2, 0, 0),
+                        Text = item.getQTE.ToString(CultureInfo.InvariantCulture),
+                        Margin = thick,
                         Height = 16
                     });
-
                 }
             }// ReSharper disable once EmptyGeneralCatchClause
-            catch {}
+            catch
+            {
+            }
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            comboBoxClient.BorderBrush = 
-                BorderDevis.BorderBrush = 
-                    comboBoxDevis.BorderBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
+            comboBoxClient.BorderBrush =
+                BorderDevis.BorderBrush =
+                    ComboBoxDevis.BorderBrush =
+                        new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
         }
 
         private void MenuClient_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -153,13 +149,15 @@ namespace SLAM3.Pages
             BorderDevis.Height = MenuClient.ActualHeight - 70;
             try
             {
-                var nbMarchandise = (comboBoxDevis.SelectedItem as ComboboxItemDevis).Value.getList.Count;
-                for(var i = 0; i < nbMarchandise; i++)
+                var nbMarchandise = (ComboBoxDevis.SelectedItem as ComboboxItemDevis).Value.getList.Count;
+                for (var i = 0; i < nbMarchandise; i++)
                 {
-                    (comboBoxDevis.SelectedItem as ComboboxItemDevis).Value[i].Bordure.Width = BorderDevis.Width - 5;
+                    (ComboBoxDevis.SelectedItem as ComboboxItemDevis).Value[i].Bordure.Width = BorderDevis.Width - 5;
                 }
-                // ReSharper disable once EmptyGeneralCatchClause
-            }catch{}
+            }// ReSharper disable once EmptyGeneralCatchClause
+            catch
+            {
+            }
         }
     }
 }

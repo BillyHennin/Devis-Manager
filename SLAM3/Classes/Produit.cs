@@ -8,16 +8,23 @@ namespace SLAM3.Classes
 {
     internal class Produit
     {
-        private readonly string nom;
-        private readonly double prix;
+        private readonly string _nom;
+        private readonly double _prix;
 
         public Produit(double prix, string nom)
         {
-            this.prix = prix;
-            this.nom = nom;
+            this._prix = prix;
+            this._nom = nom;
         }
 
-        public string getNom { get { return nom; } }
-        public double getPrix { get { return prix; } }
+        public string GetNom
+        {
+            get { return _nom; }
+        }
+
+        public double GetPrix
+        {
+            get { return _prix; }
+        }
     }
 }

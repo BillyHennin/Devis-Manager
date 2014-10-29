@@ -9,7 +9,7 @@ using SLAM3.ViewModels;
 namespace SLAM3.Pages
 {
     /// <summary>
-    ///   Logique d'interaction pour SettingsAppearance.xaml
+    ///     Logique d'interaction pour SettingsAppearance.xaml
     /// </summary>
     public partial class SettingsAppearance
     {

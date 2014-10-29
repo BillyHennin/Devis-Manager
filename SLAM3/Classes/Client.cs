@@ -4,8 +4,6 @@
 //  
 // Copyrights (c) 2014 SLAM3 INC. All rights reserved.
 
-using System.Collections.Generic;
-
 namespace SLAM3.Classes
 {
     public class Client
@@ -21,8 +19,19 @@ namespace SLAM3.Classes
             this.email = email;
         }
 
-        public string getDenomination { get { return denomination; } }
-        public string getTelephone { get { return telephone; } }
-        public string getEmail { get { return email; } }
+        public string getDenomination
+        {
+            get { return denomination; }
+        }
+
+        public string getTelephone
+        {
+            get { return telephone; }
+        }
+
+        public string getEmail
+        {
+            get { return email; }
+        }
     }
 }
