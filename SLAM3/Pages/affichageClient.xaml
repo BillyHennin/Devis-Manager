@@ -23,8 +23,8 @@
             </Grid.RowDefinitions>
             <TextBlock Margin="0,10,0,0" Style="{StaticResource Heading2}" TextWrapping="Wrap" Text="Le client :"
                        Grid.Column="0" />
-            <ComboBox x:Name="comboBoxClient" Margin="0,10,0,0" Initialized="ComboBoxClient_OnInitialized"
-                      SelectionChanged="comboBoxClient_SelectionChanged" Grid.Row="0" Grid.Column="1"
+            <ComboBox x:Name="ComboBoxClient" Margin="0,10,0,0" Initialized="ComboBoxClient_OnInitialized"
+                      SelectionChanged="ComboBoxClient_SelectionChanged" Grid.Row="0" Grid.Column="1"
                       Grid.ColumnSpan="5" />
         </Grid>
         <Grid x:Name="DevisClientGrid" Margin="268,-5,0,0" RenderTransformOrigin="0.488,0.287" Height="80">
@@ -37,9 +37,9 @@
                     Grid.ColumnSpan="2">
                 <StackPanel MinWidth="150">
                     <TextBlock Margin="-250,-27,-50,0" Style="{StaticResource Heading2}" TextWrapping="Wrap"
-                               Text="Le client :" />
+                               Text="Ses devis :" />
                     <ComboBox x:Name="ComboBoxDevis" Margin="-150,-35,239,0"
-                              SelectionChanged="comboBoxDevis_SelectionChanged" Height="22" />
+                              SelectionChanged="ComboBoxDevis_SelectionChanged" Height="22" />
                 </StackPanel>
             </Border>
         </Grid>

@@ -10,35 +10,35 @@ namespace SLAM3.Classes
 {
     public class Marchandise
     {
-        private readonly string nom;
-        private readonly double prix;
-        private readonly int quantite;
+        private readonly string _nom;
+        private readonly double _prix;
+        private readonly int _quantite;
 
         public Marchandise(string nom, int quantite, double prix)
         {
-            this.nom = nom;
-            this.quantite = quantite;
-            this.prix = prix;
+            _nom = nom;
+            _quantite = quantite;
+            _prix = prix;
         }
 
         public Border Bordure { get; set; }
 
-        public string getNom
+        public string GetNom
         {
-            get { return nom; }
+            get { return _nom; }
         }
 
-        public double getPrix
+        public double GetPrix
         {
-            get { return prix; }
+            get { return _prix; }
         }
 
-        public double getQTE
+        public double GetQte
         {
-            get { return quantite; }
+            get { return _quantite; }
         }
 
-        public double setBordureWidth
+        public double SetBordureWidth
         {
             set { Bordure.Width = value; }
         }

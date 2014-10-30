@@ -37,8 +37,7 @@ namespace SLAM3.Pages
                 //nouvelle bordure
                 var bordure = new Border
                 {
-                    BorderBrush =
-                        new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor)),
+                    BorderBrush = BorderDevis.BorderBrush,
                     HorizontalAlignment = HorizontalAlignment.Left,
                     Margin = new Thickness(2, 2, 1, 0),
                     BorderThickness = new Thickness(1),

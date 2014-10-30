@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data.SqlServerCe;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
@@ -47,12 +48,12 @@ namespace SLAM3.Pages
             var prixMarchandise =
                 Convert.ToInt32(LabelPrix.Content.ToString().Substring(0, LabelPrix.Content.ToString().Length - 1));
             var panelMarchandise = new StackPanel();
-            var nouvelleMarchadise = new Marchandise(comboBoxProduit.Text, _qte, prixMarchandise);
+            var nouvelleMarchadise = new Marchandise(ComboBoxProduit.Text, _qte, prixMarchandise);
 
-            var nbMarchandise = _leDevis.getList.Count;
+            var nbMarchandise = _leDevis.GetList.Count;
             for (var i = 0; i < nbMarchandise; i++)
             {
-                if (_leDevis[i].getNom == nouvelleMarchadise.getNom)
+                if (_leDevis[i].GetNom == nouvelleMarchadise.GetNom)
                 {
                     return;
                 }
@@ -77,7 +78,7 @@ namespace SLAM3.Pages
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Top,
                 Margin = new Thickness(5, 2, 0, 0),
-                Text = comboBoxProduit.Text,
+                Text = ComboBoxProduit.Text,
                 Height = 16
             });
 
@@ -102,8 +103,8 @@ namespace SLAM3.Pages
             });
 
             nouvelleMarchadise.Bordure = bordure;
-            panelDevis.Children.Add(bordure);
-            _leDevis.getList.Add(nouvelleMarchadise);
+            PanelDevis.Children.Add(bordure);
+            _leDevis.GetList.Add(nouvelleMarchadise);
             _prixTotal += prixMarchandise;
             LabelTotalPrix.Content = _prixTotal + "€";
             AjouterDevis.IsEnabled = true;
@@ -111,9 +112,32 @@ namespace SLAM3.Pages
 
         private void BTNAddDevis_click(object sender, RoutedEventArgs e)
         {
-            // TODO : Demander a l'user si il veux vraiment add le devis + Ajout bdd
+            // TODO : Demander a l'user si il veux vraiment add le devis
+            var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
+            db.Open();
+            var tailleList = ListMarchandise.Count;
+            try{
+                for (var i = 0; i < tailleList; i++)
+                {
+                    var query = "INSERT INTO DEVIS (Client, Marchandise, Quantite, Date)" +
+                                "VALUES (" + _leDevis.Client.GetDenomination +
+                                "," + _leDevis[i].GetNom + 
+                                "," + _leDevis[i].GetPrix +
+                                "," + DateTime.Now.ToString("M/d/yyyy h:mm") + ")";
+                    var oCommand = new SqlCeCommand { Connection = db, CommandText = query };
+                    oCommand.ExecuteNonQuery();
+                }
+            }catch (SqlCeException caught){
+                Console.WriteLine(caught.Message);
+                Console.Read();
+            }finally{
+                        db.Close();
+            }
 
-            panelDevis.Children.Clear();
+
+
+            //Garder ça
+            PanelDevis.Children.Clear();
             ListMarchandise.Clear();
             _prixTotal = 0;
             LabelTotalPrix.Content = "";
@@ -125,7 +149,7 @@ namespace SLAM3.Pages
             BorderDevis.Width = Menu.ActualWidth - 340;
             BorderDevis.Height = Menu.ActualHeight - 50;
 
-            var nbMarchandise = _leDevis.getList.Count;
+            var nbMarchandise = _leDevis.GetList.Count;
             for (var i = 0; i < nbMarchandise; i++)
             {
                 _leDevis[i].Bordure.Width = BorderDevis.Width - 6;
@@ -157,7 +181,7 @@ namespace SLAM3.Pages
                     _qte = nouvQte;
                     LabelPrix.Foreground = new SolidColorBrush(Color.FromRgb(0xC1, 0xC1, 0xC1));
                     LabelPrix.Content = string.Format("{0}€",
-                        ((comboBoxProduit.SelectedItem as ComboboxItemProduit).Value.GetPrix*_qte));
+                        ((ComboBoxProduit.SelectedItem as ComboboxItemProduit).Value.GetPrix*_qte));
                     TextBoxDevisQte.BorderBrush =
                         TextBoxDevisQte.CaretBrush =
                             TextBoxDevisQte.SelectionBrush =
@@ -180,11 +204,11 @@ namespace SLAM3.Pages
                         TextBoxDevisQte.BorderBrush =
                             TextBoxDevisQte.CaretBrush =
                                 TextBoxDevisQte.SelectionBrush =
-                                    comboBoxProduit.BorderBrush =
-                                        comboBoxClient.BorderBrush =
+                                    ComboBoxProduit.BorderBrush =
+                                        ComboBoxClient.BorderBrush =
                                             new SolidColorBrush(
                                                 (Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
-            var nbMarchandise = _leDevis.getList.Count;
+            var nbMarchandise = _leDevis.GetList.Count;
             for (var i = 0; i < nbMarchandise; i++)
             {
                 _leDevis[i].Bordure.BorderBrush = Ajouter.BorderBrush;
@@ -198,21 +222,41 @@ namespace SLAM3.Pages
              * TODO : Connexion BDD Oracle
              * 
              */
-            for (var i = 0; i < 10; i++)
+            var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
+            const string query = "SELECT * FROM CLIENT";
+            db.Open();
+            try
             {
-                var text = "Client " + i;
-                comboBoxClient.Items.Add(new ComboboxItemClient
+                var oCommand = new SqlCeCommand { Connection = db, CommandText = query };
+                var resultat = oCommand.ExecuteReader();
+                while (resultat.Read())
                 {
-                    Text = text,
-                    Value = new Client(text, "02", "mes@couilles")
-                });
+                    ComboBoxClient.Items.Add(new ComboboxItemClient
+                    {
+                        Text = query[0].ToString(CultureInfo.InvariantCulture),
+                        Value = new Client(query[0].ToString(CultureInfo.InvariantCulture),
+                                                query[1].ToString(CultureInfo.InvariantCulture),
+                                                    query[2].ToString(CultureInfo.InvariantCulture))
+                    });
+                    ComboBoxClient.SelectedIndex = 0;
+                }
+                resultat.Close();
             }
-            comboBoxClient.SelectedIndex = 0;
+            catch (Exception caught)
+            {
+                Console.WriteLine(caught.Message);
+                Console.Read();
+            }
+            finally
+            {
+                db.Close();
+            }
+            ComboBoxClient.SelectedIndex = 0;
         }
 
         private void comboBoxClient_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            _leDevis.client = (comboBoxClient.SelectedItem as ComboboxItemClient).Value;
+            _leDevis.Client = (ComboBoxClient.SelectedItem as ComboboxItemClient).Value;
         }
 
         private void ComboBoxProduit_OnInitialized(object sender, EventArgs e)
@@ -222,16 +266,34 @@ namespace SLAM3.Pages
              * TODO : Connexion BDD Oracle
              * 
              */
-            for (var i = 0; i < 10; i++)
+            var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
+            const string query = "SELECT * FROM MARCHANDISE";
+            db.Open();
+            try
             {
-                var text = "Produit " + i;
-                comboBoxProduit.Items.Add(new ComboboxItemProduit
+                var oCommand = new SqlCeCommand { Connection = db, CommandText = query };
+                var resultat = oCommand.ExecuteReader();
+                while (resultat.Read())
                 {
-                    Text = text,
-                    Value = new Produit(10 + i, text)
-                });
+                    ComboBoxProduit.Items.Add(new ComboboxItemProduit
+                    {
+                        Text = query[0].ToString(CultureInfo.InvariantCulture),
+                        Value = new Produit(Convert.ToInt32(query[0]),
+                                                query[1].ToString(CultureInfo.InvariantCulture))
+                    });
+                }
+                resultat.Close();
             }
-            comboBoxProduit.SelectedIndex = 0;
+            catch (Exception caught)
+            {
+                Console.WriteLine(caught.Message);
+                Console.Read();
+            }
+            finally
+            {
+                db.Close();
+            }
+            ComboBoxProduit.SelectedIndex = 0;
         }
 
         private void ComboBoxProduit_SelectionChanged(object sender, SelectionChangedEventArgs selectionChangedEventArgs)
@@ -244,7 +306,7 @@ namespace SLAM3.Pages
                         ErreurPrix();
                         break;
                     default:
-                        LabelPrix.Content = (comboBoxProduit.SelectedItem as ComboboxItemProduit).Value.GetPrix*
+                        LabelPrix.Content = (ComboBoxProduit.SelectedItem as ComboboxItemProduit).Value.GetPrix*
                                             Convert.ToInt32(TextBoxDevisQte.Text) + "€";
                         break;
                 }

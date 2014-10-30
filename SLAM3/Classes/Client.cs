@@ -8,30 +8,30 @@ namespace SLAM3.Classes
 {
     public class Client
     {
-        private readonly string denomination;
-        private readonly string email;
-        private readonly string telephone;
+        private readonly string _denomination;
+        private readonly string _email;
+        private readonly string _telephone;
 
         public Client(string denomination, string telephone, string email)
         {
-            this.denomination = denomination;
-            this.telephone = telephone;
-            this.email = email;
+            _denomination = denomination;
+            _telephone = telephone;
+            _email = email;
         }
 
-        public string getDenomination
+        public string GetDenomination
         {
-            get { return denomination; }
+            get { return _denomination; }
         }
 
-        public string getTelephone
+        public string GetTelephone
         {
-            get { return telephone; }
+            get { return _telephone; }
         }
 
-        public string getEmail
+        public string GetEmail
         {
-            get { return email; }
+            get { return _email; }
         }
     }
 }

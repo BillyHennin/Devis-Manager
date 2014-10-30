@@ -4,6 +4,12 @@
 //  
 // Copyrights (c) 2014 SLAM3 INC. All rights reserved.
 
+using System;
+using System.IO;
+using System.Windows;
+using SLAM3.Properties;
+
+
 namespace SLAM3
 {
     /// <summary>
@@ -14,6 +20,21 @@ namespace SLAM3
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void ModernWindow_Initialized(object sender, EventArgs e)
+        {
+
+            var file = Environment.CurrentDirectory + "//Database.sdf";
+            if (File.Exists(file))
+            {
+                Settings.Default.DatabaseConnectionString = "Data Source=" + file;
+            }
+            else
+            {
+                MessageBox.Show("Le fichier de base de donnée (Database.sdf) est manquant dans la dossier de l'executable","Erreur");
+                Application.Current.Shutdown();
+            }
         }
     }
 }

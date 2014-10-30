@@ -13,8 +13,8 @@ namespace SLAM3.Classes
 
         public Produit(double prix, string nom)
         {
-            this._prix = prix;
-            this._nom = nom;
+            _prix = prix;
+            _nom = nom;
         }
 
         public string GetNom

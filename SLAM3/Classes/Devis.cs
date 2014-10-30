@@ -11,32 +11,32 @@ namespace SLAM3.Classes
 {
     public class Devis
     {
-        private readonly DateTime date;
-        private readonly List<Marchandise> listMarchandise;
+        private readonly DateTime _date;
+        private readonly List<Marchandise> _listMarchandise;
 
         public Devis(List<Marchandise> list)
         {
-            listMarchandise = list;
+            _listMarchandise = list;
             TotalPrix = 0;
-            date = DateTime.Now;
+            _date = DateTime.Now;
         }
 
         public double TotalPrix { get; set; }
-        public Client client { get; set; }
+        public Client Client { get; set; }
 
-        public DateTime getDate
+        public DateTime GetDate
         {
-            get { return date; }
+            get { return _date; }
         }
 
-        public List<Marchandise> getList
+        public List<Marchandise> GetList
         {
-            get { return listMarchandise; }
+            get { return _listMarchandise; }
         }
 
         public Marchandise this[int i]
         {
-            get { return getList[i]; }
+            get { return GetList[i]; }
         }
     }
 }
