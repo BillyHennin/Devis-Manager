@@ -43,9 +43,9 @@ namespace FirstFloor.ModernUI.Shell
         {
             commandLineArgs = GetCommandLineArgs(uniqueName);
 
-            string applicationIdentifier = uniqueName + Environment.UserName;
+            var applicationIdentifier = uniqueName + Environment.UserName;
 
-            string channelName = String.Concat(applicationIdentifier, Delimiter, ChannelNameSuffix);
+            var channelName = String.Concat(applicationIdentifier, Delimiter, ChannelNameSuffix);
 
             bool firstInstance;
             singleInstanceMutex = new Mutex(true, applicationIdentifier, out firstInstance);
@@ -85,9 +85,9 @@ namespace FirstFloor.ModernUI.Shell
             }
             else
             {
-                string appFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), uniqueApplicationName);
+                var appFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), uniqueApplicationName);
 
-                string cmdLinePath = Path.Combine(appFolderPath, "cmdline.txt");
+                var cmdLinePath = Path.Combine(appFolderPath, "cmdline.txt");
                 if(File.Exists(cmdLinePath))
                 {
                     try
@@ -133,7 +133,7 @@ namespace FirstFloor.ModernUI.Shell
             var secondInstanceChannel = new IpcClientChannel();
             ChannelServices.RegisterChannel(secondInstanceChannel, true);
 
-            string remotingServiceUrl = IpcProtocol + channelName + "/" + RemoteServiceName;
+            var remotingServiceUrl = IpcProtocol + channelName + "/" + RemoteServiceName;
 
             var firstInstanceRemoteServiceReference = (IPCRemoteService) RemotingServices.Connect(typeof(IPCRemoteService), remotingServiceUrl);
 

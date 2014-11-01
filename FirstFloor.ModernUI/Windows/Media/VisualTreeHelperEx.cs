@@ -16,7 +16,7 @@ namespace FirstFloor.ModernUI.Windows.Media
     {
         public static VisualStateGroup TryGetVisualStateGroup(this DependencyObject dependencyObject, string groupName)
         {
-            FrameworkElement root = GetImplementationRoot(dependencyObject);
+            var root = GetImplementationRoot(dependencyObject);
             if(root == null)
             {
                 return null;

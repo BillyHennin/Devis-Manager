@@ -88,6 +88,10 @@
     <Compile Include="Classes\Devis.cs" />
     <Compile Include="Classes\Marchandise.cs" />
     <Compile Include="Classes\Produit.cs" />
+    <Compile Include="DatabaseDataSet.cs">
+      <DependentUpon>DatabaseDataSet.xsd</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="DatabaseDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

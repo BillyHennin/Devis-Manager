@@ -32,7 +32,7 @@ namespace FirstFloor.ModernUI.Windows.Controls.BBCode
 
         public Token LA(int count)
         {
-            int index = position + count - 1;
+            var index = position + count - 1;
             if(index < tokens.Count)
             {
                 return tokens[index];

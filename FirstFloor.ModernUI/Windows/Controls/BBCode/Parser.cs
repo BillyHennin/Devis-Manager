@@ -10,7 +10,7 @@ namespace FirstFloor.ModernUI.Windows.Controls.BBCode
 {
     internal abstract class Parser<TResult>
     {
-        private readonly TokenBuffer buffer;
+        private readonly TokenBuffer _buffer;
 
         protected Parser(Lexer lexer)
         {
@@ -18,17 +18,17 @@ namespace FirstFloor.ModernUI.Windows.Controls.BBCode
             {
                 throw new ArgumentNullException("lexer");
             }
-            buffer = new TokenBuffer(lexer);
+            _buffer = new TokenBuffer(lexer);
         }
 
-        protected Token LA(int count)
+        protected Token La(int count)
         {
-            return buffer.LA(count);
+            return _buffer.LA(count);
         }
 
         protected void Consume()
         {
-            buffer.Consume();
+            _buffer.Consume();
         }
 
         protected bool IsInRange(params int[] tokenTypes)
@@ -38,8 +38,8 @@ namespace FirstFloor.ModernUI.Windows.Controls.BBCode
                 return false;
             }
 
-            Token token = LA(1);
-            foreach(int t in tokenTypes)
+            var token = La(1);
+            foreach(var t in tokenTypes)
             {
                 if(token.TokenType == t)
                 {
@@ -52,7 +52,7 @@ namespace FirstFloor.ModernUI.Windows.Controls.BBCode
 
         protected void Match(int tokenType)
         {
-            if(LA(1).TokenType == tokenType)
+            if(La(1).TokenType == tokenType)
             {
                 Consume();
             }
@@ -64,7 +64,7 @@ namespace FirstFloor.ModernUI.Windows.Controls.BBCode
 
         protected void MatchNot(int tokenType)
         {
-            if(LA(1).TokenType != tokenType)
+            if(La(1).TokenType != tokenType)
             {
                 Consume();
             }
@@ -76,7 +76,7 @@ namespace FirstFloor.ModernUI.Windows.Controls.BBCode
 
         protected void MatchRange(int[] tokenTypes, int minOccurs, int maxOccurs)
         {
-            int i = 0;
+            var i = 0;
             while(IsInRange(tokenTypes))
             {
                 Consume();

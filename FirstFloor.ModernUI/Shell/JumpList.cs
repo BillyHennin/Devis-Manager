@@ -95,7 +95,7 @@ namespace FirstFloor.ModernUI.Shell
             var link = (IShellLinkW) Activator.CreateInstance(Type.GetTypeFromCLSID(new Guid(CLSID.ShellLink)));
             try
             {
-                string appPath = _FullName;
+                var appPath = _FullName;
                 if(!string.IsNullOrEmpty(jumpTask.ApplicationPath))
                 {
                     appPath = jumpTask.ApplicationPath;
@@ -113,7 +113,7 @@ namespace FirstFloor.ModernUI.Shell
 
                 if(jumpTask.IconResourceIndex != -1)
                 {
-                    string resourcePath = _FullName;
+                    var resourcePath = _FullName;
                     if(!string.IsNullOrEmpty(jumpTask.IconResourcePath))
                     {
                         if(jumpTask.IconResourcePath.Length >= Win32Value.MAX_PATH)
@@ -131,7 +131,7 @@ namespace FirstFloor.ModernUI.Shell
                 var propStore = (IPropertyStore) link;
                 using(var pv = new PROPVARIANT())
                 {
-                    PKEY pkey = default(PKEY);
+                    var pkey = default(PKEY);
                     if(!string.IsNullOrEmpty(jumpTask.Title))
                     {
                         pv.SetValue(jumpTask.Title);
@@ -145,7 +145,7 @@ namespace FirstFloor.ModernUI.Shell
                     propStore.SetValue(ref pkey, pv);
                 }
                 propStore.Commit();
-                IShellLinkW retLink = link;
+                var retLink = link;
                 link = null;
                 return retLink;
             }
@@ -167,7 +167,7 @@ namespace FirstFloor.ModernUI.Shell
             }
             var iidShellItem2 = new Guid(IID.ShellItem2);
             object unk;
-            HRESULT hr = NativeMethods.SHCreateItemFromParsingName(path, null, ref iidShellItem2, out unk);
+            var hr = NativeMethods.SHCreateItemFromParsingName(path, null, ref iidShellItem2, out unk);
 
             if(hr == (HRESULT) Win32Error.ERROR_FILE_NOT_FOUND || hr == (HRESULT) Win32Error.ERROR_PATH_NOT_FOUND)
             {
@@ -227,7 +227,7 @@ namespace FirstFloor.ModernUI.Shell
                 using(var pv = new PROPVARIANT())
                 {
                     var propStore = (IPropertyStore) shellLink;
-                    PKEY pkeyTitle = PKEY.Title;
+                    var pkeyTitle = PKEY.Title;
                     propStore.GetValue(ref pkeyTitle, pv);
 
                     task.Title = pv.GetValue() ?? "";
@@ -248,7 +248,7 @@ namespace FirstFloor.ModernUI.Shell
             using(var pv = new PROPVARIANT())
             {
                 var propStore = (IPropertyStore) shellLink;
-                PKEY pkeyTitle = PKEY.Title;
+                var pkeyTitle = PKEY.Title;
                 propStore.GetValue(ref pkeyTitle, pv);
 
                 title = pv.GetValue() ?? "";
@@ -301,7 +301,7 @@ namespace FirstFloor.ModernUI.Shell
             get
             {
                 string appId;
-                HRESULT hr = NativeMethods.GetCurrentProcessExplicitAppUserModelID(out appId);
+                var hr = NativeMethods.GetCurrentProcessExplicitAppUserModelID(out appId);
                 if(hr == HRESULT.E_FAIL)
                 {
                     hr = HRESULT.S_OK;
@@ -359,7 +359,7 @@ namespace FirstFloor.ModernUI.Shell
 
             if(Utility.IsOSWindows7OrNewer)
             {
-                IShellLinkW shellLink = CreateLinkFromJumpTask(jumpTask, false);
+                var shellLink = CreateLinkFromJumpTask(jumpTask, false);
                 try
                 {
                     if(shellLink != null)
@@ -428,13 +428,13 @@ namespace FirstFloor.ModernUI.Shell
             }
             _jumpItems = successList;
 
-            EventHandler<JumpItemsRejectedEventArgs> rejectedHandler = JumpItemsRejected;
-            EventHandler<JumpItemsRemovedEventArgs> removedHandler = JumpItemsRemovedByUser;
+            var rejectedHandler = JumpItemsRejected;
+            var removedHandler = JumpItemsRemovedByUser;
             if(rejectedList.Count > 0 && rejectedHandler != null)
             {
                 var items = new List<JumpItem>(rejectedList.Count);
                 var reasons = new List<JumpItemRejectionReason>(rejectedList.Count);
-                foreach(_RejectedJumpItemPair rejectionPair in rejectedList)
+                foreach(var rejectionPair in rejectedList)
                 {
                     items.Add(rejectionPair.JumpItem);
                     reasons.Add(rejectionPair.Reason);
@@ -444,7 +444,7 @@ namespace FirstFloor.ModernUI.Shell
             if(removedList.Count > 0 && removedHandler != null)
             {
                 var items = new List<JumpItem>(removedList.Count);
-                foreach(_ShellObjectPair shellMap in removedList)
+                foreach(var shellMap in removedList)
                 {
                     if(shellMap.JumpItem != null)
                     {
@@ -465,7 +465,7 @@ namespace FirstFloor.ModernUI.Shell
             var destinationList = CLSID.CoCreateInstance<ICustomDestinationList>(CLSID.DestinationList);
             try
             {
-                string appId = _RuntimeId;
+                var appId = _RuntimeId;
                 if(!string.IsNullOrEmpty(appId))
                 {
                     destinationList.SetAppID(appId);
@@ -513,7 +513,7 @@ namespace FirstFloor.ModernUI.Shell
                         }
                         else
                         {
-                            bool categoryExists = false;
+                            var categoryExists = false;
                             foreach(var list in categories)
                             {
                                 if(list.Count > 0 && list[0].JumpItem.CustomCategory == jumpItem.CustomCategory)
@@ -547,11 +547,11 @@ namespace FirstFloor.ModernUI.Shell
                     destinationList.AppendKnownCategory(KDC.RECENT);
                 }
 
-                foreach(List<_ShellObjectPair> categoryList in categories)
+                foreach(var categoryList in categories)
                 {
                     if(categoryList.Count > 0)
                     {
-                        string categoryHeader = categoryList[0].JumpItem.CustomCategory;
+                        var categoryHeader = categoryList[0].JumpItem.CustomCategory;
                         AddCategory(destinationList, categoryHeader, categoryList, successList, rejectedList);
                     }
                 }
@@ -564,7 +564,7 @@ namespace FirstFloor.ModernUI.Shell
                 Utility.SafeRelease(ref destinationList);
                 if(categories != null)
                 {
-                    foreach(List<_ShellObjectPair> list in categories)
+                    foreach(var list in categories)
                     {
                         _ShellObjectPair.ReleaseShellObjects(list);
                     }
@@ -607,8 +607,8 @@ namespace FirstFloor.ModernUI.Shell
                     var removedLink = shellMap.ShellObject as IShellLinkW;
                     if(removedLink != null)
                     {
-                        string removedLinkString = ShellLinkToString(removedLink);
-                        string linkString = ShellLinkToString(shellLink);
+                        var removedLinkString = ShellLinkToString(removedLink);
+                        var linkString = ShellLinkToString(shellLink);
                         if(removedLinkString == linkString)
                         {
                             return true;
@@ -644,10 +644,10 @@ namespace FirstFloor.ModernUI.Shell
             Debug.Assert(shellObjects != null);
             var retList = new List<_ShellObjectPair>();
             var unknownIid = new Guid(IID.Unknown);
-            uint count = shellObjects.GetCount();
+            var count = shellObjects.GetCount();
             for(uint i = 0; i < count; ++i)
             {
-                object unk = shellObjects.GetAt(i, ref unknownIid);
+                var unk = shellObjects.GetAt(i, ref unknownIid);
                 JumpItem item = null;
                 try
                 {
@@ -675,10 +675,10 @@ namespace FirstFloor.ModernUI.Shell
             {
                 shellObjectCollection.AddObject(itemMap.ShellObject);
             }
-            HRESULT hr = string.IsNullOrEmpty(category) ? cdl.AddUserTasks(shellObjectCollection) : cdl.AppendCategory(category, shellObjectCollection);
+            var hr = string.IsNullOrEmpty(category) ? cdl.AddUserTasks(shellObjectCollection) : cdl.AppendCategory(category, shellObjectCollection);
             if(hr.Succeeded)
             {
-                for(int i = jumpItems.Count; --i >= 0;)
+                for(var i = jumpItems.Count; --i >= 0;)
                 {
                     successList.Add(jumpItems[i].JumpItem);
                 }
@@ -720,7 +720,7 @@ namespace FirstFloor.ModernUI.Shell
 
         private void RejectEverything()
         {
-            EventHandler<JumpItemsRejectedEventArgs> handler = JumpItemsRejected;
+            var handler = JumpItemsRejected;
             if(handler == null)
             {
                 _jumpItems.Clear();
@@ -729,7 +729,7 @@ namespace FirstFloor.ModernUI.Shell
             if(_jumpItems.Count > 0)
             {
                 var reasons = new List<JumpItemRejectionReason>(JumpItems.Count);
-                for(int i = 0; i < JumpItems.Count; ++i)
+                for(var i = 0; i < JumpItems.Count; ++i)
                 {
                     reasons.Add(JumpItemRejectionReason.InvalidItem);
                 }
@@ -759,9 +759,9 @@ namespace FirstFloor.ModernUI.Shell
             {
                 if(list != null)
                 {
-                    foreach(_ShellObjectPair shellMap in list)
+                    foreach(var shellMap in list)
                     {
-                        object o = shellMap.ShellObject;
+                        var o = shellMap.ShellObject;
                         shellMap.ShellObject = null;
                         Utility.SafeRelease(ref o);
                     }

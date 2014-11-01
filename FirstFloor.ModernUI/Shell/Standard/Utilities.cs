@@ -45,11 +45,11 @@ namespace FirstFloor.ModernUI.Shell.Standard
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private static bool _MemCmp(IntPtr left, IntPtr right, long cb)
         {
-            int offset = 0;
+            var offset = 0;
             for(; offset < (cb - sizeof(Int64)); offset += sizeof(Int64))
             {
-                Int64 left64 = Marshal.ReadInt64(left, offset);
-                Int64 right64 = Marshal.ReadInt64(right, offset);
+                var left64 = Marshal.ReadInt64(left, offset);
+                var right64 = Marshal.ReadInt64(right, offset);
                 if(left64 != right64)
                 {
                     return false;
@@ -57,8 +57,8 @@ namespace FirstFloor.ModernUI.Shell.Standard
             }
             for(; offset < cb; offset += sizeof(byte))
             {
-                byte left8 = Marshal.ReadByte(left, offset);
-                byte right8 = Marshal.ReadByte(right, offset);
+                var left8 = Marshal.ReadByte(left, offset);
+                var right8 = Marshal.ReadByte(right, offset);
                 if(left8 != right8)
                 {
                     return false;
@@ -77,7 +77,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         public static T FailableFunction<T>(Func<T> function)
         {
             T result;
-            Exception e = FailableFunction(function, out result);
+            var e = FailableFunction(function, out result);
             if(e != null)
             {
                 throw e;
@@ -89,7 +89,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         public static T FailableFunction<T>(int maxRetries, Func<T> function)
         {
             T result;
-            Exception e = FailableFunction(maxRetries, function, out result);
+            var e = FailableFunction(maxRetries, function, out result);
             if(e != null)
             {
                 throw e;
@@ -103,7 +103,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         {
             Assert.IsNotNull(function);
             Assert.BoundedInteger(1, maxRetries, 100);
-            int i = 0;
+            var i = 0;
             while(true)
             {
                 try
@@ -126,10 +126,10 @@ namespace FirstFloor.ModernUI.Shell.Standard
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static string GetHashString(string value)
         {
-            using(MD5 md5 = MD5.Create())
+            using(var md5 = MD5.Create())
             {
-                byte[] signatureHash = md5.ComputeHash(Encoding.UTF8.GetBytes(value));
-                string signature = signatureHash.Aggregate(new StringBuilder(), (sb, b) => sb.Append(b.ToString("x2", CultureInfo.InvariantCulture))).ToString();
+                var signatureHash = md5.ComputeHash(Encoding.UTF8.GetBytes(value));
+                var signature = signatureHash.Aggregate(new StringBuilder(), (sb, b) => sb.Append(b.ToString("x2", CultureInfo.InvariantCulture))).ToString();
                 return signature;
             }
         }
@@ -183,21 +183,21 @@ namespace FirstFloor.ModernUI.Shell.Standard
             left.Position = 0;
             right.Position = 0;
 
-            int totalReadLeft = 0;
-            int totalReadRight = 0;
+            var totalReadLeft = 0;
+            var totalReadRight = 0;
 
             var leftBuffer = new byte[512];
             var rightBuffer = new byte[512];
 
-            GCHandle handleLeft = GCHandle.Alloc(leftBuffer, GCHandleType.Pinned);
-            IntPtr ptrLeft = handleLeft.AddrOfPinnedObject();
+            var handleLeft = GCHandle.Alloc(leftBuffer, GCHandleType.Pinned);
+            var ptrLeft = handleLeft.AddrOfPinnedObject();
 
-            GCHandle handleRight = GCHandle.Alloc(rightBuffer, GCHandleType.Pinned);
-            IntPtr ptrRight = handleRight.AddrOfPinnedObject();
+            var handleRight = GCHandle.Alloc(rightBuffer, GCHandleType.Pinned);
+            var ptrRight = handleRight.AddrOfPinnedObject();
             try
             {
-                int cbReadLeft = 0;
-                int cbReadRight = 0;
+                var cbReadLeft = 0;
+                var cbReadRight = 0;
                 while(totalReadLeft < length)
                 {
                     Assert.AreEqual(totalReadLeft, totalReadRight);
@@ -292,10 +292,10 @@ namespace FirstFloor.ModernUI.Shell.Standard
                     File.Copy(sourceFileName, destFileName, true);
                     return destFileName;
                 case SafeCopyFileOptions.FindBetterName:
-                    string directoryPart = Path.GetDirectoryName(destFileName);
-                    string fileNamePart = Path.GetFileNameWithoutExtension(destFileName);
-                    string extensionPart = Path.GetExtension(destFileName);
-                    foreach(string path in GenerateFileNames(directoryPart, fileNamePart, extensionPart))
+                    var directoryPart = Path.GetDirectoryName(destFileName);
+                    var fileNamePart = Path.GetFileNameWithoutExtension(destFileName);
+                    var extensionPart = Path.GetExtension(destFileName);
+                    foreach(var path in GenerateFileNames(directoryPart, fileNamePart, extensionPart))
                     {
                         if(!File.Exists(path))
                         {
@@ -356,15 +356,15 @@ namespace FirstFloor.ModernUI.Shell.Standard
         public static string GenerateToString<T>(T @object) where T : struct
         {
             var sbRet = new StringBuilder();
-            foreach(PropertyInfo property in typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            foreach(var property in typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
                 if(0 != sbRet.Length)
                 {
                     sbRet.Append(", ");
                 }
                 Assert.AreEqual(0, property.GetIndexParameters().Length);
-                object value = property.GetValue(@object, null);
-                string format = null == value ? "{0}: <null>" : "{0}: \"{1}\"";
+                var value = property.GetValue(@object, null);
+                var format = null == value ? "{0}: <null>" : "{0}: \"{1}\"";
                 sbRet.AppendFormat(format, property.Name, value);
             }
             return sbRet.ToString();
@@ -403,9 +403,9 @@ namespace FirstFloor.ModernUI.Shell.Standard
         {
             stm.Position = 0;
             var hashBuilder = new StringBuilder();
-            using(MD5 md5 = MD5.Create())
+            using(var md5 = MD5.Create())
             {
-                foreach(byte b in md5.ComputeHash(stm))
+                foreach(var b in md5.ComputeHash(stm))
                 {
                     hashBuilder.Append(b.ToString("x2", CultureInfo.InvariantCulture));
                 }
@@ -434,12 +434,12 @@ namespace FirstFloor.ModernUI.Shell.Standard
             Assert.IsNotNull(right);
             Assert.IsTrue(cb <= Math.Min(left.Length, right.Length));
 
-            GCHandle handleLeft = GCHandle.Alloc(left, GCHandleType.Pinned);
-            IntPtr ptrLeft = handleLeft.AddrOfPinnedObject();
+            var handleLeft = GCHandle.Alloc(left, GCHandleType.Pinned);
+            var ptrLeft = handleLeft.AddrOfPinnedObject();
 
-            GCHandle handleRight = GCHandle.Alloc(right, GCHandleType.Pinned);
-            IntPtr ptrRight = handleRight.AddrOfPinnedObject();
-            bool fRet = _MemCmp(ptrLeft, ptrRight, cb);
+            var handleRight = GCHandle.Alloc(right, GCHandleType.Pinned);
+            var ptrRight = handleRight.AddrOfPinnedObject();
+            var fRet = _MemCmp(ptrLeft, ptrRight, cb);
             handleLeft.Free();
             handleRight.Free();
             return fRet;
@@ -453,10 +453,10 @@ namespace FirstFloor.ModernUI.Shell.Standard
                 return null;
             }
             var decoder = new _UrlDecoder(url.Length, Encoding.UTF8);
-            int length = url.Length;
-            for(int i = 0; i < length; ++i)
+            var length = url.Length;
+            for(var i = 0; i < length; ++i)
             {
-                char ch = url[i];
+                var ch = url[i];
                 if(ch == '+')
                 {
                     decoder.AddByte((byte) ' ');
@@ -466,10 +466,10 @@ namespace FirstFloor.ModernUI.Shell.Standard
                 {
                     if(url[i + 1] == 'u' && i < length - 5)
                     {
-                        int a = _HexToInt(url[i + 2]);
-                        int b = _HexToInt(url[i + 3]);
-                        int c = _HexToInt(url[i + 4]);
-                        int d = _HexToInt(url[i + 5]);
+                        var a = _HexToInt(url[i + 2]);
+                        var b = _HexToInt(url[i + 3]);
+                        var c = _HexToInt(url[i + 4]);
+                        var d = _HexToInt(url[i + 5]);
                         if(a >= 0 && b >= 0 && c >= 0 && d >= 0)
                         {
                             decoder.AddChar((char) ((a << 12) | (b << 8) | (c << 4) | d));
@@ -479,8 +479,8 @@ namespace FirstFloor.ModernUI.Shell.Standard
                     }
                     else
                     {
-                        int a = _HexToInt(url[i + 1]);
-                        int b = _HexToInt(url[i + 2]);
+                        var a = _HexToInt(url[i + 1]);
+                        var b = _HexToInt(url[i + 2]);
                         if(a >= 0 && b >= 0)
                         {
                             decoder.AddByte((byte) ((a << 4) | b));
@@ -510,10 +510,10 @@ namespace FirstFloor.ModernUI.Shell.Standard
             {
                 return null;
             }
-            byte[] bytes = Encoding.UTF8.GetBytes(url);
-            bool needsEncoding = false;
-            int unsafeCharCount = 0;
-            foreach(byte b in bytes)
+            var bytes = Encoding.UTF8.GetBytes(url);
+            var needsEncoding = false;
+            var unsafeCharCount = 0;
+            foreach(var b in bytes)
             {
                 if(b == ' ')
                 {
@@ -528,8 +528,8 @@ namespace FirstFloor.ModernUI.Shell.Standard
             if(needsEncoding)
             {
                 var buffer = new byte[bytes.Length + (unsafeCharCount * 2)];
-                int writeIndex = 0;
-                foreach(byte b in bytes)
+                var writeIndex = 0;
+                foreach(var b in bytes)
                 {
                     if(_UrlEncodeIsSafe(b))
                     {
@@ -625,7 +625,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
             Verify.IsNeitherNullNorEmpty(directory, "directory");
             Verify.IsNeitherNullNorEmpty(primaryFileName, "primaryFileName");
             primaryFileName = MakeValidFileName(primaryFileName);
-            for(int i = 0; i <= 50; ++i)
+            for(var i = 0; i <= 50; ++i)
             {
                 if(0 == i)
                 {
@@ -663,9 +663,9 @@ namespace FirstFloor.ModernUI.Shell.Standard
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static byte[] GetBytesFromBitmapSource(BitmapSource bmp)
         {
-            int width = bmp.PixelWidth;
-            int height = bmp.PixelHeight;
-            int stride = width * ((bmp.Format.BitsPerPixel + 7) / 8);
+            var width = bmp.PixelWidth;
+            var height = bmp.PixelHeight;
+            var stride = width * ((bmp.Format.BitsPerPixel + 7) / 8);
             var pixels = new byte[height * stride];
             bmp.CopyPixels(pixels, stride, 0);
             return pixels;
@@ -681,7 +681,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         public static BitmapSource GenerateBitmapSource(ImageSource img, double renderWidth, double renderHeight)
         {
             var dv = new DrawingVisual();
-            using(DrawingContext dc = dv.RenderOpen())
+            using(var dc = dv.RenderOpen())
             {
                 dc.DrawImage(img, new Rect(0, 0, renderWidth, renderHeight));
             }
@@ -700,7 +700,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
             }
             var bmp = new RenderTargetBitmap((int) renderWidth, (int) renderHeight, 96, 96, PixelFormats.Pbgra32);
             var dv = new DrawingVisual();
-            using(DrawingContext dc = dv.RenderOpen())
+            using(var dc = dv.RenderOpen())
             {
                 dc.DrawRectangle(new VisualBrush(element), null, new Rect(0, 0, renderWidth, renderHeight));
             }
@@ -713,7 +713,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         {
             var encoder = new PngBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(source));
-            using(FileStream stream = File.Create(fileName))
+            using(var stream = File.Create(fileName))
             {
                 encoder.Save(stream);
             }
@@ -724,7 +724,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         {
             if(s_bitDepth == 0)
             {
-                using(SafeDC dc = SafeDC.GetDesktop())
+                using(var dc = SafeDC.GetDesktop())
                 {
                     s_bitDepth = NativeMethods.GetDeviceCaps(dc, DeviceCap.BITSPIXEL) * NativeMethods.GetDeviceCaps(dc, DeviceCap.PLANES);
                 }
@@ -741,14 +741,14 @@ namespace FirstFloor.ModernUI.Shell.Standard
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private static int _MatchImage(BitmapFrame frame, int bitDepth, int width, int height, int bpp)
         {
-            int score = 2 * _WeightedAbs(bpp, bitDepth, false) + _WeightedAbs(frame.PixelWidth, width, true) + _WeightedAbs(frame.PixelHeight, height, true);
+            var score = 2 * _WeightedAbs(bpp, bitDepth, false) + _WeightedAbs(frame.PixelWidth, width, true) + _WeightedAbs(frame.PixelHeight, height, true);
             return score;
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private static int _WeightedAbs(int valueHave, int valueWant, bool fPunish)
         {
-            int diff = (valueHave - valueWant);
+            var diff = (valueHave - valueWant);
             if(diff < 0)
             {
                 diff = (fPunish ? -2 : -1) * diff;
@@ -759,18 +759,18 @@ namespace FirstFloor.ModernUI.Shell.Standard
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         private static BitmapFrame _GetBestMatch(IList<BitmapFrame> frames, int bitDepth, int width, int height)
         {
-            int bestScore = int.MaxValue;
-            int bestBpp = 0;
-            int bestIndex = 0;
-            bool isBitmapIconDecoder = frames[0].Decoder is IconBitmapDecoder;
-            for(int i = 0; i < frames.Count && bestScore != 0; ++i)
+            var bestScore = int.MaxValue;
+            var bestBpp = 0;
+            var bestIndex = 0;
+            var isBitmapIconDecoder = frames[0].Decoder is IconBitmapDecoder;
+            for(var i = 0; i < frames.Count && bestScore != 0; ++i)
             {
-                int currentIconBitDepth = isBitmapIconDecoder ? frames[i].Thumbnail.Format.BitsPerPixel : frames[i].Format.BitsPerPixel;
+                var currentIconBitDepth = isBitmapIconDecoder ? frames[i].Thumbnail.Format.BitsPerPixel : frames[i].Format.BitsPerPixel;
                 if(currentIconBitDepth == 0)
                 {
                     currentIconBitDepth = 8;
                 }
-                int score = _MatchImage(frames[i], bitDepth, width, height, currentIconBitDepth);
+                var score = _MatchImage(frames[i], bitDepth, width, height, currentIconBitDepth);
                 if(score < bestScore)
                 {
                     bestIndex = i;
@@ -819,10 +819,10 @@ namespace FirstFloor.ModernUI.Shell.Standard
             {
                 return false;
             }
-            BitmapSource leftBmp = GenerateBitmapSource(left);
-            BitmapSource rightBmp = GenerateBitmapSource(right);
-            byte[] leftPixels = GetBytesFromBitmapSource(leftBmp);
-            byte[] rightPixels = GetBytesFromBitmapSource(rightBmp);
+            var leftBmp = GenerateBitmapSource(left);
+            var rightBmp = GenerateBitmapSource(right);
+            var leftPixels = GetBytesFromBitmapSource(leftBmp);
+            var rightPixels = GetBytesFromBitmapSource(rightBmp);
             if(leftPixels.Length != rightPixels.Length)
             {
                 return false;
@@ -848,8 +848,8 @@ namespace FirstFloor.ModernUI.Shell.Standard
             {
                 var drawingDimensions = new Rect(0, 0, dimensions.Width, dimensions.Height);
 
-                double renderRatio = dimensions.Width / dimensions.Height;
-                double aspectRatio = image.Width / image.Height;
+                var renderRatio = dimensions.Width / dimensions.Height;
+                var aspectRatio = image.Width / image.Height;
 
                 if(image.Width <= dimensions.Width && image.Height <= dimensions.Height)
                 {
@@ -857,16 +857,16 @@ namespace FirstFloor.ModernUI.Shell.Standard
                 }
                 else if(renderRatio > aspectRatio)
                 {
-                    double scaledRenderWidth = (image.Width / image.Height) * dimensions.Width;
+                    var scaledRenderWidth = (image.Width / image.Height) * dimensions.Width;
                     drawingDimensions = new Rect((dimensions.Width - scaledRenderWidth) / 2, 0, scaledRenderWidth, dimensions.Height);
                 }
                 else if(renderRatio < aspectRatio)
                 {
-                    double scaledRenderHeight = (image.Height / image.Width) * dimensions.Height;
+                    var scaledRenderHeight = (image.Height / image.Width) * dimensions.Height;
                     drawingDimensions = new Rect(0, (dimensions.Height - scaledRenderHeight) / 2, dimensions.Width, scaledRenderHeight);
                 }
                 var dv = new DrawingVisual();
-                DrawingContext dc = dv.RenderOpen();
+                var dc = dv.RenderOpen();
                 dc.DrawImage(image, drawingDimensions);
                 dc.Close();
                 var bmp = new RenderTargetBitmap((int) dimensions.Width, (int) dimensions.Height, 96, 96, PixelFormats.Pbgra32);
@@ -881,10 +881,10 @@ namespace FirstFloor.ModernUI.Shell.Standard
                 enc.Save(memstm);
                 using(var istm = new ManagedIStream(memstm))
                 {
-                    IntPtr bitmap = IntPtr.Zero;
+                    var bitmap = IntPtr.Zero;
                     try
                     {
-                        Status gpStatus = NativeMethods.GdipCreateBitmapFromStream(istm, out bitmap);
+                        var gpStatus = NativeMethods.GdipCreateBitmapFromStream(istm, out bitmap);
                         if(Status.Ok != gpStatus)
                         {
                             return IntPtr.Zero;
@@ -915,7 +915,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
             }
             Assert.IsNotNull(property);
             Assert.IsNotNull(listener);
-            DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(property, component.GetType());
+            var dpd = DependencyPropertyDescriptor.FromProperty(property, component.GetType());
             dpd.AddValueChanged(component, listener);
         }
 
@@ -928,7 +928,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
             }
             Assert.IsNotNull(property);
             Assert.IsNotNull(listener);
-            DependencyPropertyDescriptor dpd = DependencyPropertyDescriptor.FromProperty(property, component.GetType());
+            var dpd = DependencyPropertyDescriptor.FromProperty(property, component.GetType());
             dpd.RemoveValueChanged(component, listener);
         }
 
@@ -979,7 +979,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static void SafeDestroyIcon(ref IntPtr hicon)
         {
-            IntPtr p = hicon;
+            var p = hicon;
             hicon = IntPtr.Zero;
             if(IntPtr.Zero != p)
             {
@@ -990,7 +990,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static void SafeDeleteObject(ref IntPtr gdiObject)
         {
-            IntPtr p = gdiObject;
+            var p = gdiObject;
             gdiObject = IntPtr.Zero;
             if(IntPtr.Zero != p)
             {
@@ -1001,7 +1001,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static void SafeDestroyWindow(ref IntPtr hwnd)
         {
-            IntPtr p = hwnd;
+            var p = hwnd;
             hwnd = IntPtr.Zero;
             if(NativeMethods.IsWindow(p))
             {
@@ -1012,7 +1012,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static void SafeDisposeImage(ref IntPtr gdipImage)
         {
-            IntPtr p = gdipImage;
+            var p = gdipImage;
             gdipImage = IntPtr.Zero;
             if(IntPtr.Zero != p)
             {
@@ -1024,7 +1024,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         public static void SafeCoTaskMemFree(ref IntPtr ptr)
         {
-            IntPtr p = ptr;
+            var p = ptr;
             ptr = IntPtr.Zero;
             if(IntPtr.Zero != p)
             {
@@ -1036,7 +1036,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         public static void SafeFreeHGlobal(ref IntPtr hglobal)
         {
-            IntPtr p = hglobal;
+            var p = hglobal;
             hglobal = IntPtr.Zero;
             if(IntPtr.Zero != p)
             {
@@ -1048,7 +1048,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         public static void SafeRelease<T>(ref T comObject) where T : class
         {
-            T t = comObject;
+            var t = comObject;
             comObject = default(T);
             if(null != t)
             {

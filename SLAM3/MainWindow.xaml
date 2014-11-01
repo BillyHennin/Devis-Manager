@@ -13,7 +13,8 @@
                   ShowBackButton="True"
                   ShowForwardButton="True"
                   ShowRefreshButton="True"
-                  ToolTip="{DynamicResource {x:Type ToolTip}}" Icon="Asset/appbar.currency.euro.png" Initialized="ModernWindow_Initialized">
+                  ToolTip="{DynamicResource {x:Type ToolTip}}" Icon="Asset/appbar.currency.euro.png"
+                  Initialized="ModernWindow_Initialized">
 
     <mui:ModernWindow.TitleLinks>
         <mui:Link DisplayName="A propos" Source="/Pages/about.xaml" />

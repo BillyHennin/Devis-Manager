@@ -19,13 +19,13 @@ namespace SLAM3.Pages
     /// <summary>
     ///     Logique d'interaction pour devis.xaml
     /// </summary>
-// ReSharper disable once InconsistentNaming
+    // ReSharper disable once InconsistentNaming
     public partial class devis
     {
         private static readonly List<Marchandise> ListMarchandise = new List<Marchandise>();
         private readonly Devis _leDevis = new Devis(ListMarchandise);
-        private int _qte;
         private double _prixTotal;
+        private int _qte;
 
         private static bool EstUnNombre(string qte)
         {
@@ -48,12 +48,12 @@ namespace SLAM3.Pages
             var prixMarchandise =
                 Convert.ToInt32(LabelPrix.Content.ToString().Substring(0, LabelPrix.Content.ToString().Length - 1));
             var panelMarchandise = new StackPanel();
-            var nouvelleMarchadise = new Marchandise(ComboBoxProduit.Text, _qte, prixMarchandise);
+            var nouvelleMarchandise = new Marchandise(ComboBoxProduit.Text, _qte, prixMarchandise);
 
             var nbMarchandise = _leDevis.GetList.Count;
             for (var i = 0; i < nbMarchandise; i++)
             {
-                if (_leDevis[i].GetNom == nouvelleMarchadise.GetNom)
+                if (_leDevis[i].GetNom == nouvelleMarchandise.GetNom)
                 {
                     return;
                 }
@@ -102,9 +102,9 @@ namespace SLAM3.Pages
                 Height = 16
             });
 
-            nouvelleMarchadise.Bordure = bordure;
+            nouvelleMarchandise.Bordure = bordure;
             PanelDevis.Children.Add(bordure);
-            _leDevis.GetList.Add(nouvelleMarchadise);
+            _leDevis.GetList.Add(nouvelleMarchandise);
             _prixTotal += prixMarchandise;
             LabelTotalPrix.Content = _prixTotal + "€";
             AjouterDevis.IsEnabled = true;
@@ -116,25 +116,39 @@ namespace SLAM3.Pages
             var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
             db.Open();
             var tailleList = ListMarchandise.Count;
-            try{
-                for (var i = 0; i < tailleList; i++)
+            try
+            {
+                const string query = "SELECT max(Id), max(NumeroDEvis) FROM DEVIS";
+                var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
+                var resultat = oCommand.ExecuteReader();
+                while (resultat.Read())
                 {
-                    var query = "INSERT INTO DEVIS (Client, Marchandise, Quantite, Date)" +
-                                "VALUES (" + _leDevis.Client.GetDenomination +
-                                "," + _leDevis[i].GetNom + 
-                                "," + _leDevis[i].GetPrix +
-                                "," + DateTime.Now.ToString("M/d/yyyy h:mm") + ")";
-                    var oCommand = new SqlCeCommand { Connection = db, CommandText = query };
-                    oCommand.ExecuteNonQuery();
+                    for (var i = 0; i < tailleList; i++)
+                    {
+                        var query2 =
+                            "INSERT INTO DEVIS (Id, Client, Marchandise, Quantite, Date, PrixMarchandise, NumeroDevis)" +
+                            " VALUES (" + (Convert.ToInt32(resultat[0]) + i + 1) +
+                            ",'" + _leDevis.Client.GetDenomination +
+                            "','" + _leDevis[i].GetNom +
+                            "','" + _leDevis[i].GetQte +
+                            "','" + DateTime.Now.ToString("M/d/yyyy h:mm") +
+                            "'," + _leDevis[i].GetPrix +
+                            "," + (Convert.ToInt32(resultat[1]) + 1) + ")";
+                        var oCommand2 = new SqlCeCommand {Connection = db, CommandText = query2};
+                        oCommand2.ExecuteNonQuery();
+                    }
                 }
-            }catch (SqlCeException caught){
+                resultat.Close();
+            }
+            catch (SqlCeException caught)
+            {
                 Console.WriteLine(caught.Message);
                 Console.Read();
-            }finally{
-                        db.Close();
             }
-
-
+            finally
+            {
+                db.Close();
+            }
 
             //Garder ça
             PanelDevis.Children.Clear();
@@ -178,16 +192,31 @@ namespace SLAM3.Pages
                 }
                 else
                 {
-                    _qte = nouvQte;
-                    LabelPrix.Foreground = new SolidColorBrush(Color.FromRgb(0xC1, 0xC1, 0xC1));
-                    LabelPrix.Content = string.Format("{0}€",
-                        ((ComboBoxProduit.SelectedItem as ComboboxItemProduit).Value.GetPrix*_qte));
-                    TextBoxDevisQte.BorderBrush =
-                        TextBoxDevisQte.CaretBrush =
-                            TextBoxDevisQte.SelectionBrush =
-                                new SolidColorBrush(
-                                    (Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
-                    Ajouter.IsEnabled = true;
+                    if (ComboBoxProduit.Items.Count != 0)
+                    {
+                        _qte = nouvQte;
+                        LabelPrix.Foreground = new SolidColorBrush(Color.FromRgb(0xC1, 0xC1, 0xC1));
+                        LabelPrix.Content = string.Format("{0}€",
+                            ((ComboBoxProduit.SelectedItem as ComboboxItemProduit).Value.GetPrix*_qte));
+                        TextBoxDevisQte.BorderBrush =
+                            TextBoxDevisQte.CaretBrush =
+                                TextBoxDevisQte.SelectionBrush =
+                                    new SolidColorBrush(
+                                        (Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
+                        Ajouter.IsEnabled = true;
+                    }
+                    else
+                    {
+                        try
+                        {
+                            ErreurPrix();
+                        }
+                            // ReSharper disable once EmptyGeneralCatchClause
+                        catch
+                        {
+                            //This is just like you, you don't get it
+                        }
+                    }
                 }
             }
             else
@@ -222,21 +251,22 @@ namespace SLAM3.Pages
              * TODO : Connexion BDD Oracle
              * 
              */
+
             var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
             const string query = "SELECT * FROM CLIENT";
             db.Open();
             try
             {
-                var oCommand = new SqlCeCommand { Connection = db, CommandText = query };
+                var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
                 var resultat = oCommand.ExecuteReader();
                 while (resultat.Read())
                 {
                     ComboBoxClient.Items.Add(new ComboboxItemClient
                     {
-                        Text = query[0].ToString(CultureInfo.InvariantCulture),
-                        Value = new Client(query[0].ToString(CultureInfo.InvariantCulture),
-                                                query[1].ToString(CultureInfo.InvariantCulture),
-                                                    query[2].ToString(CultureInfo.InvariantCulture))
+                        Text = resultat[0].ToString(),
+                        Value = new Client(resultat[0].ToString(),
+                            resultat[2].ToString(),
+                            resultat[1].ToString())
                     });
                     ComboBoxClient.SelectedIndex = 0;
                 }
@@ -271,15 +301,14 @@ namespace SLAM3.Pages
             db.Open();
             try
             {
-                var oCommand = new SqlCeCommand { Connection = db, CommandText = query };
+                var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
                 var resultat = oCommand.ExecuteReader();
                 while (resultat.Read())
                 {
                     ComboBoxProduit.Items.Add(new ComboboxItemProduit
                     {
-                        Text = query[0].ToString(CultureInfo.InvariantCulture),
-                        Value = new Produit(Convert.ToInt32(query[0]),
-                                                query[1].ToString(CultureInfo.InvariantCulture))
+                        Text = resultat[0].ToString(),
+                        Value = new Produit(Convert.ToInt32(resultat[1]), resultat[0].ToString())
                     });
                 }
                 resultat.Close();

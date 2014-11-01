@@ -261,7 +261,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
             Assert.IsNotNull(parameter);
             Assert.IsNotNull(interfaceType);
             Assert.IsTrue(interfaceType.IsInterface);
-            bool isImplemented = false;
+            var isImplemented = false;
             foreach(var ifaceType in parameter.GetType().GetInterfaces())
             {
                 if(ifaceType == interfaceType)

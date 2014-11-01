@@ -85,7 +85,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         public override int Read(byte[] buffer, int offset, int count)
         {
             _Validate();
-            IntPtr pcbRead = IntPtr.Zero;
+            var pcbRead = IntPtr.Zero;
             try
             {
                 pcbRead = Marshal.AllocHGlobal(sizeof(Int32));
@@ -104,7 +104,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         public override long Seek(long offset, SeekOrigin origin)
         {
             _Validate();
-            IntPtr plibNewPosition = IntPtr.Zero;
+            var plibNewPosition = IntPtr.Zero;
             try
             {
                 plibNewPosition = Marshal.AllocHGlobal(sizeof(Int64));
@@ -200,7 +200,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
             long cbWritten = 0;
             while(cbWritten < cb)
             {
-                int cbRead = _source.Read(buffer, 0, buffer.Length);
+                var cbRead = _source.Read(buffer, 0, buffer.Length);
                 if(0 == cbRead)
                 {
                     break;
@@ -231,7 +231,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         public void Read(byte[] pv, int cb, IntPtr pcbRead)
         {
             _Validate();
-            int cbRead = _source.Read(pv, 0, cb);
+            var cbRead = _source.Read(pv, 0, cb);
             if(IntPtr.Zero != pcbRead)
             {
                 Marshal.WriteInt32(pcbRead, cbRead);
@@ -250,7 +250,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         public void Seek(long dlibMove, int dwOrigin, IntPtr plibNewPosition)
         {
             _Validate();
-            long position = _source.Seek(dlibMove, (SeekOrigin) dwOrigin);
+            var position = _source.Seek(dlibMove, (SeekOrigin) dwOrigin);
             if(IntPtr.Zero != plibNewPosition)
             {
                 Marshal.WriteInt64(plibNewPosition, position);

@@ -32,7 +32,7 @@ namespace FirstFloor.ModernUI.Shell
 
         private static void _PostSystemCommand(Window window, SC command)
         {
-            IntPtr hwnd = new WindowInteropHelper(window).Handle;
+            var hwnd = new WindowInteropHelper(window).Handle;
             if(hwnd == IntPtr.Zero || !NativeMethods.IsWindow(hwnd))
             {
                 return;
@@ -75,13 +75,13 @@ namespace FirstFloor.ModernUI.Shell
             const uint TPM_RETURNCMD = 0x0100;
             const uint TPM_LEFTBUTTON = 0x0;
             Verify.IsNotNull(window, "window");
-            IntPtr hwnd = new WindowInteropHelper(window).Handle;
+            var hwnd = new WindowInteropHelper(window).Handle;
             if(hwnd == IntPtr.Zero || !NativeMethods.IsWindow(hwnd))
             {
                 return;
             }
-            IntPtr hmenu = NativeMethods.GetSystemMenu(hwnd, false);
-            uint cmd = NativeMethods.TrackPopupMenuEx(hmenu, TPM_LEFTBUTTON | TPM_RETURNCMD, (int) physicalScreenLocation.X, (int) physicalScreenLocation.Y,
+            var hmenu = NativeMethods.GetSystemMenu(hwnd, false);
+            var cmd = NativeMethods.TrackPopupMenuEx(hmenu, TPM_LEFTBUTTON | TPM_RETURNCMD, (int) physicalScreenLocation.X, (int) physicalScreenLocation.Y,
                 hwnd, IntPtr.Zero);
             if(0 != cmd)
             {

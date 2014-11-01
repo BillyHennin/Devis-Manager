@@ -40,12 +40,12 @@
                                                Style="{StaticResource Fixed}"
                                                Text="{Binding}" />
                                     <TextBlock FontWeight="Bold" Text="Suggestions" />
-                                    <controls:BBCodeBlock
-                                        BBCode="[url=cmd://copy]Copy[/url] the error details to the clipboard. Try to [url=cmd://refresh]refresh[/url] this page or go [url=cmd://browseback]back[/url].">
-                                        <controls:BBCodeBlock.LinkNavigator>
+                                    <controls:BbCodeBlock
+                                        BbCode="[url=cmd://copy]Copy[/url] the error details to the clipboard. Try to [url=cmd://refresh]refresh[/url] this page or go [url=cmd://browseback]back[/url].">
+                                        <controls:BbCodeBlock.LinkNavigator>
                                             <nav:DefaultLinkNavigator />
-                                        </controls:BBCodeBlock.LinkNavigator>
-                                    </controls:BBCodeBlock>
+                                        </controls:BbCodeBlock.LinkNavigator>
+                                    </controls:BbCodeBlock>
                                 </StackPanel>
                             </ScrollViewer>
                         </DataTemplate>

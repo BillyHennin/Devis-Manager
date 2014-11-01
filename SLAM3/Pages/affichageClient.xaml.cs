@@ -40,48 +40,18 @@ namespace SLAM3.Pages
             var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
             const string query = "SELECT * FROM CLIENT";
             db.Open();
-            try{
-                var oCommand = new SqlCeCommand { Connection = db, CommandText = query };
-                var resultat = oCommand.ExecuteReader();
-            while (resultat.Read())
-            {
-                ComboBoxClient.Items.Add(new ComboboxItemClient
-                {
-                    Text = query[0].ToString(CultureInfo.InvariantCulture),
-                    Value = new Client(query[0].ToString(CultureInfo.InvariantCulture),
-                                            query[1].ToString(CultureInfo.InvariantCulture),
-                                                query[2].ToString(CultureInfo.InvariantCulture))
-                });
-                ComboBoxClient.SelectedIndex = 0;
-            }
-            resultat.Close();
-            }catch (Exception caught){
-                        Console.WriteLine(caught.Message);
-                        Console.Read();
-            }finally{
-                        db.Close();
-            }
-        }
-
-        private void ComboBoxClient_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            // garder ça
-            ComboBoxDevis.Items.Clear();
-            // oui
-            //TODO : liaison ddb
-            var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
-            var query = "SELECT Id FROM DEVIS WHERE Client =" + (ComboBoxClient.SelectedItem as ComboboxItemClient).Value.GetDenomination;
-            db.Open();
             try
             {
-                var oCommand = new SqlCeCommand { Connection = db, CommandText = query };
+                var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
                 var resultat = oCommand.ExecuteReader();
                 while (resultat.Read())
                 {
-                    ComboBoxDevis.Items.Add(new ComboboxItemDevis
+                    ComboBoxClient.Items.Add(new ComboboxItemClient
                     {
-                        Text = "Devis n°" + query[0].ToString(CultureInfo.InvariantCulture),
-                        Value = query[0]
+                        Text = resultat[0].ToString(),
+                        Value = new Client(resultat[0].ToString(),
+                            resultat[1].ToString(),
+                            resultat[2].ToString())
                     });
                 }
                 resultat.Close();
@@ -95,84 +65,41 @@ namespace SLAM3.Pages
             {
                 db.Close();
             }
-            ComboBoxClient.SelectedIndex = 0;
-            PanelDevis.Children.Clear();
         }
 
-        private void ComboBoxDevis_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ComboBoxClient_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // garder ça
+            ComboBoxDevis.Items.Clear();
             PanelDevis.Children.Clear();
-            ListMarchandise.Clear();
             // oui
+            //TODO : liaison ddb
             var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
-            var query = "SELECT Marchandise FROM DEVIS WHERE Client ="
-                + (ComboBoxClient.SelectedItem as ComboboxItemClient).Value.GetDenomination 
-                + " AND Id = "
-                + (ComboBoxDevis.SelectedItem as ComboboxItemDevis).Value;
+            var query = "SELECT DISTINCT NumeroDevis FROM DEVIS WHERE Client ='" +
+                           (ComboBoxClient.SelectedItem as ComboboxItemClient).Value.GetDenomination + "'";
             db.Open();
             try
             {
-                var oCommand = new SqlCeCommand { Connection = db, CommandText = query };
+                var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
                 var resultat = oCommand.ExecuteReader();
                 while (resultat.Read())
                 {
-
-                    var query2 = "SELECT MARCHANDISE.* FROM DEVIS, MARCHANDISE WHERE Id ="
-                        + (ComboBoxDevis.SelectedItem as ComboboxItemDevis).Value
-                        + "AND Marchandise = "
-                        + query[0].ToString(CultureInfo.InvariantCulture);
-                    var oCommand2 = new SqlCeCommand { Connection = db, CommandText = query2 };
+                    var query2 = "SELECT Marchandise, Quantite, PrixMarchandise FROM DEVIS WHERE NumeroDevis =" +
+                                    resultat[0];
+                    var oCommand2 = new SqlCeCommand {Connection = db, CommandText = query2};
                     var resultat2 = oCommand2.ExecuteReader();
+                    var listMarchandise2 = new List<Marchandise>();
                     while (resultat2.Read())
                     {
-                        var text = query2[0].ToString(CultureInfo.InvariantCulture);
-                        var qte = Convert.ToInt32(query2[1]);
-                        var prixMarchandise = Convert.ToInt32(query2[2]);
-                        var item = new Marchandise(text, qte, prixMarchandise);
+                        listMarchandise2.Add(new Marchandise(resultat2[0].ToString(), Convert.ToInt32(resultat2[1]),
+                            Convert.ToInt32(resultat2[2])));
+                    }
 
-
-                        var panelMarchandise = new StackPanel();
-                        var thick = new Thickness(5, 2, 0, 0);
-                        var bordure = new Border
-                        {
-                            BorderBrush = ComboBoxClient.BorderBrush,
-                            HorizontalAlignment = HorizontalAlignment.Left,
-                            VerticalAlignment = VerticalAlignment.Top,
-                            Margin = new Thickness(2, 2, 1, 0),
-                            BorderThickness = new Thickness(1),
-                            Width = BorderDevis.Width - 5,
-                            Child = panelMarchandise,
-                            Height = 70
-                        };
-
-                        item.Bordure = bordure;
-                        PanelDevis.Children.Add(bordure);
-
-                        // Nom du produit
-                        panelMarchandise.Children.Add(new TextBlock
-                        {
-                            Margin = thick,
-                            Text = text,
-                            Height = 16
-                        });
-
-                        // Prix
-                        panelMarchandise.Children.Add(new TextBlock
-                        {
-                            Text = qte.ToString(CultureInfo.InvariantCulture),
-                            Margin = thick,
-                            Height = 16
-                        });
-
-                        // Quantité
-                        panelMarchandise.Children.Add(new TextBlock
-                        {
-                            Text = prixMarchandise.ToString(CultureInfo.InvariantCulture),
-                            Margin = thick,
-                            Height = 16
-                        });
-                    }                    
+                    ComboBoxDevis.Items.Add(new ComboboxItemDevis
+                    {
+                        Text = "Devis n°" + resultat[0],
+                        Value = new Devis(listMarchandise2)
+                    });
                 }
                 resultat.Close();
             }
@@ -185,8 +112,65 @@ namespace SLAM3.Pages
             {
                 db.Close();
             }
-            ComboBoxClient.SelectedIndex = 0;
-           
+            PanelDevis.Children.Clear();
+        }
+
+        private void ComboBoxDevis_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            PanelDevis.Children.Clear();
+            if (ComboBoxDevis.Items.Count == 0) return;
+
+            var listMarchandise = (ComboBoxDevis.SelectedItem as ComboboxItemDevis).Value.GetList;
+            var taille = listMarchandise.Count;
+            for (var i = 0; i < taille; i++)
+            {
+                var text = listMarchandise[i].GetNom;
+                var qte = Convert.ToInt32(listMarchandise[i].GetQte);
+                var prixMarchandise = Convert.ToInt32(listMarchandise[i].GetPrix);
+                var item = new Marchandise(text, qte, prixMarchandise);
+                var panelMarchandise = new StackPanel();
+                var thick = new Thickness(5, 2, 0, 0);
+
+                var bordure = new Border
+                {
+                    BorderBrush = ComboBoxClient.BorderBrush,
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    VerticalAlignment = VerticalAlignment.Top,
+                    Margin = new Thickness(2, 2, 1, 0),
+                    BorderThickness = new Thickness(1),
+                    Width = BorderDevis.Width - 5,
+                    Child = panelMarchandise,
+                    Height = 70
+                };
+
+                // Nom du produit
+                panelMarchandise.Children.Add(new TextBlock
+                {
+                    Margin = thick,
+                    Text = text,
+                    Height = 16
+                });
+
+                // Prix
+                panelMarchandise.Children.Add(new TextBlock
+                {
+                    Text = qte.ToString(CultureInfo.InvariantCulture),
+                    Margin = thick,
+                    Height = 16
+                });
+
+                // Quantité
+                panelMarchandise.Children.Add(new TextBlock
+                {
+                    Text = prixMarchandise.ToString(CultureInfo.InvariantCulture),
+                    Margin = thick,
+                    Height = 16
+                });
+
+                item.Bordure = bordure;
+                PanelDevis.Children.Add(bordure);
+                _leDevis.GetList.Add(item);
+            }
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -208,7 +192,7 @@ namespace SLAM3.Pages
                 {
                     ListMarchandise[i].Bordure.Width = BorderDevis.Width - 5;
                 }
-            }// ReSharper disable once EmptyGeneralCatchClause
+            } // ReSharper disable once EmptyGeneralCatchClause
             catch
             {
             }

@@ -9,10 +9,11 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using FirstFloor.ModernUI.Annotations;
 
 namespace FirstFloor.ModernUI.Windows.Controls.BBCode
 {
-    internal class BBCodeParser : Parser<Span>
+    internal class BbCodeParser : Parser<Span>
     {
         private const string TagBold = "b";
         private const string TagColor = "color";
@@ -21,15 +22,15 @@ namespace FirstFloor.ModernUI.Windows.Controls.BBCode
         private const string TagUnderline = "u";
         private const string TagUrl = "url";
 
-        private readonly FrameworkElement source;
+        private readonly FrameworkElement _source;
 
-        public BBCodeParser(string value, FrameworkElement source) : base(new BBCodeLexer(value))
+        public BbCodeParser(string value, FrameworkElement source) : base(new BBCodeLexer(value))
         {
             if(source == null)
             {
                 throw new ArgumentNullException("source");
             }
-            this.source = source;
+            _source = source;
         }
 
         public CommandDictionary Commands { get; set; }
@@ -48,7 +49,7 @@ namespace FirstFloor.ModernUI.Windows.Controls.BBCode
             {
                 if(start)
                 {
-                    Token token = LA(1);
+                    var token = La(1);
                     if(token.TokenType == BBCodeLexer.TokenAttribute)
                     {
                         var color = (Color) ColorConverter.ConvertFromString(token.Value);
@@ -77,7 +78,7 @@ namespace FirstFloor.ModernUI.Windows.Controls.BBCode
             {
                 if(start)
                 {
-                    Token token = LA(1);
+                    var token = La(1);
                     if(token.TokenType == BBCodeLexer.TokenAttribute)
                     {
                         context.FontSize = Convert.ToDouble(token.Value);
@@ -98,7 +99,7 @@ namespace FirstFloor.ModernUI.Windows.Controls.BBCode
             {
                 if(start)
                 {
-                    Token token = LA(1);
+                    var token = La(1);
                     if(token.TokenType == BBCodeLexer.TokenAttribute)
                     {
                         context.NavigateUri = token.Value;
@@ -118,7 +119,7 @@ namespace FirstFloor.ModernUI.Windows.Controls.BBCode
 
             while(true)
             {
-                Token token = LA(1);
+                var token = La(1);
                 Consume();
 
                 if(token.TokenType == BBCodeLexer.TokenStartTag)
@@ -134,7 +135,7 @@ namespace FirstFloor.ModernUI.Windows.Controls.BBCode
                     var parent = span;
                     if(context.NavigateUri != null)
                     {
-                        string uriStr = context.NavigateUri;
+                        var uriStr = context.NavigateUri;
                         string parameter = null;
                         string targetName = null;
 
@@ -161,7 +162,7 @@ namespace FirstFloor.ModernUI.Windows.Controls.BBCode
                             link.CommandParameter = parameter;
                             if(targetName != null)
                             {
-                                link.CommandTarget = source.FindName(targetName) as IInputElement;
+                                link.CommandTarget = _source.FindName(targetName) as IInputElement;
                             }
                         }
                         else
@@ -210,7 +211,7 @@ namespace FirstFloor.ModernUI.Windows.Controls.BBCode
                 Parent = parent;
             }
 
-            private Span Parent { get; set; }
+            private Span Parent { [UsedImplicitly] get; set; }
             public double? FontSize { private get; set; }
             public FontWeight? FontWeight { private get; set; }
             internal FontStyle? FontStyle { private get; set; }

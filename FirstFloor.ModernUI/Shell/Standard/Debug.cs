@@ -63,8 +63,8 @@ namespace FirstFloor.ModernUI.Shell.Standard
         {
             IsNotNull(expectedResult);
             IsNotNull(actualResult);
-            T actual = actualResult();
-            T expected = expectedResult();
+            var actual = actualResult();
+            var expected = expectedResult();
             if(null == expected)
             {
                 if(null != actual && !actual.Equals(expected))

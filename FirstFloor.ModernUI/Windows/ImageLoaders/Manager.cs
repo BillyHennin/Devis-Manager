@@ -159,8 +159,8 @@ namespace FirstFloor.ModernUI.Windows.ImageLoaders
 
         private ImageSource GetBitmapSource(LoadImageRequest loadTask)
         {
-            Image image = loadTask.Image;
-            string source = loadTask.Source;
+            var image = loadTask.Image;
+            var source = loadTask.Source;
 
             ImageSource imageSource = null;
 
@@ -180,7 +180,7 @@ namespace FirstFloor.ModernUI.Windows.ImageLoaders
                 {
                     if(loadTask.Stream == null)
                     {
-                        ILoader loader = LoaderFactory.CreateLoader(sourceType);
+                        var loader = LoaderFactory.CreateLoader(sourceType);
                         imageStream = loader.Load(source);
                         loadTask.Stream = imageStream;
                     }
@@ -249,7 +249,7 @@ namespace FirstFloor.ModernUI.Windows.ImageLoaders
 
                     if(loadTask != null && !loadTask.IsCanceled)
                     {
-                        ImageSource bitmapSource = GetBitmapSource(loadTask);
+                        var bitmapSource = GetBitmapSource(loadTask);
 
                         EndLoading(loadTask.Image, bitmapSource, loadTask, false);
 
@@ -283,7 +283,7 @@ namespace FirstFloor.ModernUI.Windows.ImageLoaders
 
                     if(loadTask != null && !loadTask.IsCanceled)
                     {
-                        ImageSource bitmapSource = GetBitmapSource(loadTask);
+                        var bitmapSource = GetBitmapSource(loadTask);
                         EndLoading(loadTask.Image, bitmapSource, loadTask, true);
                     }
                 }

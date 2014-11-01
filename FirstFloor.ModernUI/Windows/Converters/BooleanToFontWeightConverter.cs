@@ -15,7 +15,7 @@ namespace FirstFloor.ModernUI.Windows.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            bool inverse = (parameter as string) == "inverse";
+            var inverse = (parameter as string) == "inverse";
 
             var bold = value as bool?;
             if(bold.HasValue && bold.Value)

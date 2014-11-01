@@ -14,7 +14,7 @@ namespace FirstFloor.ModernUI.Windows.ImageLoaders
         public Stream Load(string source)
         {
             var webClient = new WebClient();
-            byte[] html = webClient.DownloadData(source);
+            var html = webClient.DownloadData(source);
             return new MemoryStream(html);
         }
     }

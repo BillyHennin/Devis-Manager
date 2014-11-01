@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.SqlServerCe;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,58 +24,80 @@ namespace SLAM3.Pages
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            BorderDevis.BorderBrush =
-                new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
+            PanelProduit.Children.Clear();
+            ListMarchandise.Clear();
 
-            for (var i = 1; i < 11; i++)
+            TextBoxDevisQte.BorderBrush =
+                BorderDevis.BorderBrush =
+                    new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
+
+            var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
+            const string query = "SELECT * FROM MARCHANDISE";
+            db.Open();
+            try
             {
-                var text = "Produit " + i;
-                var qte = (100*i);
-                var prixMarchandise = (10*i);
-                var nouvelleMarchadise = new Marchandise(text, qte, prixMarchandise);
-                var panelMarchandise = new StackPanel();
-                var thick = new Thickness(5, 2, 0, 0);
-
-                //nouvelle bordure
-                var bordure = new Border
+                var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
+                var resultat = oCommand.ExecuteReader();
+                while (resultat.Read())
                 {
-                    BorderBrush = BorderDevis.BorderBrush,
-                    HorizontalAlignment = HorizontalAlignment.Left,
-                    Margin = new Thickness(2, 2, 1, 0),
-                    BorderThickness = new Thickness(1),
-                    Width = BorderDevis.Width - 5,
-                    Child = panelMarchandise,
-                    Height = 70
-                };
+                    var text = resultat[0].ToString();
+                    var qte = Convert.ToInt32(resultat[1]);
+                    var prixMarchandise = Convert.ToInt32(resultat[2]);
+                    var nouvelleMarchandise = new Marchandise(text, qte, prixMarchandise);
+                    var panelMarchandise = new StackPanel();
+                    var thick = new Thickness(5, 2, 0, 0);
 
-                PanelProduit.Children.Add(bordure);
+                    //nouvelle bordure
+                    var bordure = new Border
+                    {
+                        BorderBrush = BorderDevis.BorderBrush,
+                        HorizontalAlignment = HorizontalAlignment.Left,
+                        Margin = new Thickness(2, 2, 1, 0),
+                        BorderThickness = new Thickness(1),
+                        Width = BorderDevis.Width - 5,
+                        Child = panelMarchandise,
+                        Height = 70
+                    };
 
-                // Nom du produit
-                panelMarchandise.Children.Add(new TextBlock
-                {
-                    Margin = thick,
-                    Text = text,
-                    Height = 16
-                });
+                    PanelProduit.Children.Add(bordure);
 
-                // Prix
-                panelMarchandise.Children.Add(new TextBlock
-                {
-                    Text = qte.ToString(CultureInfo.InvariantCulture),
-                    Margin = thick,
-                    Height = 16
-                });
+                    // Nom du produit
+                    panelMarchandise.Children.Add(new TextBlock
+                    {
+                        Margin = thick,
+                        Text = text,
+                        Height = 16
+                    });
 
-                // Quantité
-                panelMarchandise.Children.Add(new TextBlock
-                {
-                    Text = prixMarchandise.ToString(CultureInfo.InvariantCulture),
-                    Margin = new Thickness(5, 2, 0, 0),
-                    Height = 16
-                });
+                    // Prix
+                    panelMarchandise.Children.Add(new TextBlock
+                    {
+                        Text = qte.ToString(CultureInfo.InvariantCulture),
+                        Margin = thick,
+                        Height = 16
+                    });
 
-                nouvelleMarchadise.Bordure = bordure;
-                ListMarchandise.Add(nouvelleMarchadise);
+                    // Quantité
+                    panelMarchandise.Children.Add(new TextBlock
+                    {
+                        Text = prixMarchandise.ToString(CultureInfo.InvariantCulture),
+                        Margin = new Thickness(5, 2, 0, 0),
+                        Height = 16
+                    });
+
+                    nouvelleMarchandise.Bordure = bordure;
+                    ListMarchandise.Add(nouvelleMarchandise);
+                }
+                resultat.Close();
+            }
+            catch (Exception caught)
+            {
+                Console.WriteLine(caught.Message);
+                Console.Read();
+            }
+            finally
+            {
+                db.Close();
             }
         }
 
@@ -89,7 +113,7 @@ namespace SLAM3.Pages
                 {
                     ListMarchandise[i].Bordure.Width = BorderDevis.Width - 5;
                 }
-            }// ReSharper disable once EmptyGeneralCatchClause
+            } // ReSharper disable once EmptyGeneralCatchClause
             catch
             {
                 //Bro, do you even try ?

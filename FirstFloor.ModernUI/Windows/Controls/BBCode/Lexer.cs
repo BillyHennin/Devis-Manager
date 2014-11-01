@@ -78,7 +78,7 @@ namespace FirstFloor.ModernUI.Windows.Controls.BBCode
 
         protected bool IsInRange(char first, char last)
         {
-            char la = LA(1);
+            var la = LA(1);
             return la >= first && la <= last;
         }
 
@@ -88,8 +88,8 @@ namespace FirstFloor.ModernUI.Windows.Controls.BBCode
             {
                 return false;
             }
-            char la = LA(1);
-            foreach(char t in value)
+            var la = LA(1);
+            foreach(var t in value)
             {
                 if(la == t)
                 {
@@ -114,7 +114,7 @@ namespace FirstFloor.ModernUI.Windows.Controls.BBCode
 
         protected void Match(char value, int minOccurs, int maxOccurs)
         {
-            int i = 0;
+            var i = 0;
             while(LA(1) == value)
             {
                 Consume();
@@ -129,7 +129,7 @@ namespace FirstFloor.ModernUI.Windows.Controls.BBCode
             {
                 throw new ArgumentNullException("value");
             }
-            foreach(char t in value)
+            foreach(var t in value)
             {
                 if(LA(1) == t)
                 {
@@ -156,7 +156,7 @@ namespace FirstFloor.ModernUI.Windows.Controls.BBCode
 
         protected void MatchRange(char[] value, int minOccurs, int maxOccurs)
         {
-            int i = 0;
+            var i = 0;
             while(IsInRange(value))
             {
                 Consume();
@@ -179,7 +179,7 @@ namespace FirstFloor.ModernUI.Windows.Controls.BBCode
 
         protected void MatchRange(char first, char last, int minOccurs, int maxOccurs)
         {
-            int i = 0;
+            var i = 0;
             while(IsInRange(first, last))
             {
                 Consume();

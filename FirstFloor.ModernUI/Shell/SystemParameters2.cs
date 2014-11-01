@@ -63,7 +63,7 @@ namespace FirstFloor.ModernUI.Shell
 
         private void _UpdateGlassColor(IntPtr wParam, IntPtr lParam)
         {
-            bool isOpaque = lParam != IntPtr.Zero;
+            var isOpaque = lParam != IntPtr.Zero;
             var color = unchecked((uint) (int) wParam.ToInt64());
             color |= isOpaque ? 0xFF000000 : 0;
             WindowGlassColor = Utility.ColorFromArgbDword(color);
@@ -86,7 +86,7 @@ namespace FirstFloor.ModernUI.Shell
         private void _InitializeWindowResizeBorderThickness()
         {
             var frameSize = new Size(NativeMethods.GetSystemMetrics(SM.CXSIZEFRAME), NativeMethods.GetSystemMetrics(SM.CYSIZEFRAME));
-            Size frameSizeInDips = DpiHelper.DeviceSizeToLogical(frameSize);
+            var frameSizeInDips = DpiHelper.DeviceSizeToLogical(frameSize);
             WindowResizeBorderThickness = new Thickness(frameSizeInDips.Width, frameSizeInDips.Height, frameSizeInDips.Width, frameSizeInDips.Height);
         }
 
@@ -98,9 +98,9 @@ namespace FirstFloor.ModernUI.Shell
         private void _InitializeWindowNonClientFrameThickness()
         {
             var frameSize = new Size(NativeMethods.GetSystemMetrics(SM.CXSIZEFRAME), NativeMethods.GetSystemMetrics(SM.CYSIZEFRAME));
-            Size frameSizeInDips = DpiHelper.DeviceSizeToLogical(frameSize);
-            int captionHeight = NativeMethods.GetSystemMetrics(SM.CYCAPTION);
-            double captionHeightInDips = DpiHelper.DevicePixelsToLogical(new Point(0, captionHeight)).Y;
+            var frameSizeInDips = DpiHelper.DeviceSizeToLogical(frameSize);
+            var captionHeight = NativeMethods.GetSystemMetrics(SM.CYCAPTION);
+            var captionHeightInDips = DpiHelper.DevicePixelsToLogical(new Point(0, captionHeight)).Y;
             WindowNonClientFrameThickness = new Thickness(frameSizeInDips.Width, frameSizeInDips.Height + captionHeightInDips, frameSizeInDips.Width,
                 frameSizeInDips.Height);
         }
@@ -122,10 +122,10 @@ namespace FirstFloor.ModernUI.Shell
 
         private void _LegacyInitializeCaptionButtonLocation()
         {
-            int captionX = NativeMethods.GetSystemMetrics(SM.CXSIZE);
-            int captionY = NativeMethods.GetSystemMetrics(SM.CYSIZE);
-            int frameX = NativeMethods.GetSystemMetrics(SM.CXSIZEFRAME) + NativeMethods.GetSystemMetrics(SM.CXEDGE);
-            int frameY = NativeMethods.GetSystemMetrics(SM.CYSIZEFRAME) + NativeMethods.GetSystemMetrics(SM.CYEDGE);
+            var captionX = NativeMethods.GetSystemMetrics(SM.CXSIZE);
+            var captionY = NativeMethods.GetSystemMetrics(SM.CYSIZE);
+            var frameX = NativeMethods.GetSystemMetrics(SM.CXSIZEFRAME) + NativeMethods.GetSystemMetrics(SM.CXEDGE);
+            var frameY = NativeMethods.GetSystemMetrics(SM.CYSIZEFRAME) + NativeMethods.GetSystemMetrics(SM.CYEDGE);
             var captionRect = new Rect(0, 0, captionX * 3, captionY);
             captionRect.Offset(-frameX - captionRect.Width, frameY);
             WindowCaptionButtonsLocation = captionRect;
@@ -140,7 +140,7 @@ namespace FirstFloor.ModernUI.Shell
                 return;
             }
             var tbix = new TITLEBARINFOEX {cbSize = Marshal.SizeOf(typeof(TITLEBARINFOEX))};
-            IntPtr lParam = Marshal.AllocHGlobal(tbix.cbSize);
+            var lParam = Marshal.AllocHGlobal(tbix.cbSize);
             try
             {
                 Marshal.StructureToPtr(tbix, lParam, false);
@@ -155,14 +155,14 @@ namespace FirstFloor.ModernUI.Shell
                 Utility.SafeFreeHGlobal(ref lParam);
             }
 
-            RECT rcAllCaptionButtons = RECT.Union(tbix.rgrect_CloseButton, tbix.rgrect_MinimizeButton);
+            var rcAllCaptionButtons = RECT.Union(tbix.rgrect_CloseButton, tbix.rgrect_MinimizeButton);
 
             Assert.AreEqual(rcAllCaptionButtons, RECT.Union(rcAllCaptionButtons, tbix.rgrect_MaximizeButton));
-            RECT rcWindow = NativeMethods.GetWindowRect(_messageHwnd.Handle);
+            var rcWindow = NativeMethods.GetWindowRect(_messageHwnd.Handle);
 
             var deviceCaptionLocation = new Rect(rcAllCaptionButtons.Left - rcWindow.Width - rcWindow.Left, rcAllCaptionButtons.Top - rcWindow.Top,
                 rcAllCaptionButtons.Width, rcAllCaptionButtons.Height);
-            Rect logicalCaptionLocation = DpiHelper.DeviceRectToLogical(deviceCaptionLocation);
+            var logicalCaptionLocation = DpiHelper.DeviceRectToLogical(deviceCaptionLocation);
             WindowCaptionButtonsLocation = logicalCaptionLocation;
         }
 
@@ -173,7 +173,7 @@ namespace FirstFloor.ModernUI.Shell
 
         private void _InitializeHighContrast()
         {
-            HIGHCONTRAST hc = NativeMethods.SystemParameterInfo_GetHIGHCONTRAST();
+            var hc = NativeMethods.SystemParameterInfo_GetHIGHCONTRAST();
             HighContrast = (hc.dwFlags & HCF.HIGHCONTRASTON) != 0;
         }
 

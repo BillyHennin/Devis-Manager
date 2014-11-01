@@ -1235,7 +1235,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
             SafeDC dc = null;
             try
             {
-                IntPtr hPtr = IntPtr.Zero;
+                var hPtr = IntPtr.Zero;
                 if(hdc != null)
                 {
                     hPtr = hdc.handle;
@@ -1344,7 +1344,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
         protected override bool ReleaseHandle()
         {
-            Status s = NativeMethods.GdiplusShutdown(handle);
+            var s = NativeMethods.GdiplusShutdown(handle);
             return s == Status.Ok;
         }
 
@@ -1354,7 +1354,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         {
             IntPtr unsafeHandle;
             StartupOutput output;
-            Status s = NativeMethods.GdiplusStartup(out unsafeHandle, new StartupInput(), out output);
+            var s = NativeMethods.GdiplusStartup(out unsafeHandle, new StartupInput(), out output);
             if(s == Status.Ok)
             {
                 var safeHandle = new SafeGdiplusStartupToken(unsafeHandle);
@@ -1410,7 +1410,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
             {
                 if(!IsInvalid)
                 {
-                    int dwCookie = handle.ToInt32();
+                    var dwCookie = handle.ToInt32();
                     handle = IntPtr.Zero;
                     Assert.IsNotNull(_cp);
                     try
@@ -1647,7 +1647,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
 
         public void Clear()
         {
-            HRESULT hr = NativeMethods.PropVariantClear(this);
+            var hr = NativeMethods.PropVariantClear(this);
             Assert.IsTrue(hr.Succeeded);
         }
 
@@ -2201,7 +2201,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static void AllowSetForegroundWindow()
         {
-            int ASFW_ANY = -1;
+            var ASFW_ANY = -1;
             AllowSetForegroundWindow(ASFW_ANY);
         }
 
@@ -2266,26 +2266,26 @@ namespace FirstFloor.ModernUI.Shell.Standard
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static string[] CommandLineToArgvW(string cmdLine)
         {
-            IntPtr argv = IntPtr.Zero;
+            var argv = IntPtr.Zero;
             try
             {
-                int numArgs = 0;
+                var numArgs = 0;
                 argv = _CommandLineToArgvW(cmdLine, out numArgs);
                 if(argv == IntPtr.Zero)
                 {
                     throw new Win32Exception();
                 }
                 var result = new string[numArgs];
-                for(int i = 0; i < numArgs; i++)
+                for(var i = 0; i < numArgs; i++)
                 {
-                    IntPtr currArg = Marshal.ReadIntPtr(argv, i * Marshal.SizeOf(typeof(IntPtr)));
+                    var currArg = Marshal.ReadIntPtr(argv, i * Marshal.SizeOf(typeof(IntPtr)));
                     result[i] = Marshal.PtrToStringUni(currArg);
                 }
                 return result;
             }
             finally
             {
-                IntPtr p = _LocalFree(argv);
+                var p = _LocalFree(argv);
 
                 Assert.AreEqual(IntPtr.Zero, p);
             }
@@ -2323,7 +2323,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static IntPtr CreateRoundRectRgn(int nLeftRect, int nTopRect, int nRightRect, int nBottomRect, int nWidthEllipse, int nHeightEllipse)
         {
-            IntPtr ret = _CreateRoundRectRgn(nLeftRect, nTopRect, nRightRect, nBottomRect, nWidthEllipse, nHeightEllipse);
+            var ret = _CreateRoundRectRgn(nLeftRect, nTopRect, nRightRect, nBottomRect, nWidthEllipse, nHeightEllipse);
             if(IntPtr.Zero == ret)
             {
                 throw new Win32Exception();
@@ -2338,7 +2338,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static IntPtr CreateRectRgn(int nLeftRect, int nTopRect, int nRightRect, int nBottomRect)
         {
-            IntPtr ret = _CreateRectRgn(nLeftRect, nTopRect, nRightRect, nBottomRect);
+            var ret = _CreateRectRgn(nLeftRect, nTopRect, nRightRect, nBottomRect);
             if(IntPtr.Zero == ret)
             {
                 throw new Win32Exception();
@@ -2353,7 +2353,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static IntPtr CreateRectRgnIndirect(RECT lprc)
         {
-            IntPtr ret = _CreateRectRgnIndirect(ref lprc);
+            var ret = _CreateRectRgnIndirect(ref lprc);
             if(IntPtr.Zero == ret)
             {
                 throw new Win32Exception();
@@ -2375,7 +2375,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         public static IntPtr CreateWindowEx(WS_EX dwExStyle, string lpClassName, string lpWindowName, WS dwStyle, int x, int y, int nWidth, int nHeight,
             IntPtr hWndParent, IntPtr hMenu, IntPtr hInstance, IntPtr lpParam)
         {
-            IntPtr ret = _CreateWindowEx(dwExStyle, lpClassName, lpWindowName, dwStyle, x, y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam);
+            var ret = _CreateWindowEx(dwExStyle, lpClassName, lpWindowName, dwStyle, x, y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam);
             if(IntPtr.Zero == ret)
             {
                 HRESULT.ThrowLastError();
@@ -2420,7 +2420,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         {
             if(Utility.IsOSVistaOrNewer && IsThemeActive())
             {
-                HRESULT hr = _DwmGetColorizationColor(out pcrColorization, out pfOpaqueBlend);
+                var hr = _DwmGetColorizationColor(out pcrColorization, out pfOpaqueBlend);
                 if(hr.Succeeded)
                 {
                     return true;
@@ -2444,7 +2444,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
                 return null;
             }
             var dti = new DWM_TIMING_INFO {cbSize = Marshal.SizeOf(typeof(DWM_TIMING_INFO))};
-            HRESULT hr = _DwmGetCompositionTimingInfo(hwnd, ref dti);
+            var hr = _DwmGetCompositionTimingInfo(hwnd, ref dti);
             if(hr == HRESULT.E_PENDING)
             {
                 return null;
@@ -2489,7 +2489,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         public static void DwmSetWindowAttributeDisallowPeek(IntPtr hwnd, bool disallowPeek)
         {
             Assert.IsTrue(Utility.IsOSWindows7OrNewer);
-            int dwDisallow = (disallowPeek ? Win32Value.TRUE : Win32Value.FALSE);
+            var dwDisallow = (disallowPeek ? Win32Value.TRUE : Win32Value.FALSE);
             _DwmSetWindowAttribute(hwnd, DWMWA.DISALLOW_PEEK, ref dwDisallow, sizeof(int));
         }
 
@@ -2500,7 +2500,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static MF EnableMenuItem(IntPtr hMenu, SC uIDEnableItem, MF uEnable)
         {
-            int iRet = _EnableMenuItem(hMenu, uIDEnableItem, uEnable);
+            var iRet = _EnableMenuItem(hMenu, uIDEnableItem, uEnable);
             return (MF) iRet;
         }
 
@@ -2621,7 +2621,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
             var buffer = new StringBuilder((int) Win32Value.MAX_PATH);
             while(true)
             {
-                int size = _GetModuleFileName(hModule, buffer, buffer.Capacity);
+                var size = _GetModuleFileName(hModule, buffer, buffer.Capacity);
                 if(size == 0)
                 {
                     HRESULT.ThrowLastError();
@@ -2643,7 +2643,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static IntPtr GetModuleHandle(string lpModuleName)
         {
-            IntPtr retPtr = _GetModuleHandle(lpModuleName);
+            var retPtr = _GetModuleHandle(lpModuleName);
             if(retPtr == IntPtr.Zero)
             {
                 HRESULT.ThrowLastError();
@@ -2674,7 +2674,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static IntPtr GetStockObject(StockObject fnObject)
         {
-            IntPtr retPtr = _GetStockObject(fnObject);
+            var retPtr = _GetStockObject(fnObject);
             return retPtr;
         }
 
@@ -2689,7 +2689,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static IntPtr GetWindowLongPtr(IntPtr hwnd, GWL nIndex)
         {
-            IntPtr ret = IntPtr.Zero;
+            var ret = IntPtr.Zero;
             ret = 8 == IntPtr.Size ? GetWindowLongPtr64(hwnd, nIndex) : new IntPtr(GetWindowLongPtr32(hwnd, nIndex));
             if(IntPtr.Zero == ret)
             {
@@ -2821,7 +2821,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static short RegisterClassEx(ref WNDCLASSEX lpwcx)
         {
-            short ret = _RegisterClassEx(ref lpwcx);
+            var ret = _RegisterClassEx(ref lpwcx);
             if(ret == 0)
             {
                 HRESULT.ThrowLastError();
@@ -2836,7 +2836,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static WM RegisterWindowMessage(string lpString)
         {
-            uint iRet = _RegisterWindowMessage(lpString);
+            var iRet = _RegisterWindowMessage(lpString);
             if(iRet == 0)
             {
                 HRESULT.ThrowLastError();
@@ -2852,7 +2852,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         public static IntPtr SetActiveWindow(IntPtr hwnd)
         {
             Verify.IsNotDefault(hwnd, "hwnd");
-            IntPtr ret = _SetActiveWindow(hwnd);
+            var ret = _SetActiveWindow(hwnd);
             if(ret == IntPtr.Zero)
             {
                 HRESULT.ThrowLastError();
@@ -2925,7 +2925,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static void SetWindowRgn(IntPtr hWnd, IntPtr hRgn, bool bRedraw)
         {
-            int err = _SetWindowRgn(hWnd, hRgn, bRedraw);
+            var err = _SetWindowRgn(hWnd, hRgn, bRedraw);
             if(0 == err)
             {
                 throw new Win32Exception();
@@ -3008,7 +3008,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static IntPtr SelectObject(SafeDC hdc, IntPtr hgdiobj)
         {
-            IntPtr ret = _SelectObject(hdc, hgdiobj);
+            var ret = _SelectObject(hdc, hgdiobj);
             if(ret == IntPtr.Zero)
             {
                 HRESULT.ThrowLastError();
@@ -3023,7 +3023,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static IntPtr SelectObject(SafeDC hdc, SafeHBITMAP hgdiobj)
         {
-            IntPtr ret = _SelectObjectSafeHBITMAP(hdc, hgdiobj);
+            var ret = _SelectObjectSafeHBITMAP(hdc, hgdiobj);
             if(ret == IntPtr.Zero)
             {
                 HRESULT.ThrowLastError();
@@ -3110,7 +3110,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static uint RegisterClipboardFormat(string formatName)
         {
-            uint ret = _RegisterClipboardFormat(formatName);
+            var ret = _RegisterClipboardFormat(formatName);
             if(ret == 0)
             {
                 HRESULT.ThrowLastError();

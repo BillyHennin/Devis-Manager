@@ -9,7 +9,6 @@ using System.IO;
 using System.Windows;
 using SLAM3.Properties;
 
-
 namespace SLAM3
 {
     /// <summary>
@@ -24,7 +23,6 @@ namespace SLAM3
 
         private void ModernWindow_Initialized(object sender, EventArgs e)
         {
-
             var file = Environment.CurrentDirectory + "//Database.sdf";
             if (File.Exists(file))
             {
@@ -32,7 +30,8 @@ namespace SLAM3
             }
             else
             {
-                MessageBox.Show("Le fichier de base de donnée (Database.sdf) est manquant dans la dossier de l'executable","Erreur");
+                MessageBox.Show(
+                    "Le fichier de base de donnée (Database.sdf) est manquant dans la dossier de l'executable", "Erreur");
                 Application.Current.Shutdown();
             }
         }

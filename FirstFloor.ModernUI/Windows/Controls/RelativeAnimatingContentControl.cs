@@ -56,11 +56,11 @@ namespace FirstFloor.ModernUI.Windows.Controls
                         {
                             if(state != null)
                             {
-                                Storyboard sb = state.Storyboard;
+                                var sb = state.Storyboard;
 
                                 if(sb != null)
                                 {
-                                    foreach(Timeline timeline in sb.Children)
+                                    foreach(var timeline in sb.Children)
                                     {
                                         var da = timeline as DoubleAnimation;
                                         var dakeys = timeline as DoubleAnimationUsingKeyFrames;
@@ -91,7 +91,7 @@ namespace FirstFloor.ModernUI.Windows.Controls
                     {
                         if(state != null)
                         {
-                            Storyboard sb = state.Storyboard;
+                            var sb = state.Storyboard;
 
                             if(sb != null)
                             {
@@ -105,7 +105,7 @@ namespace FirstFloor.ModernUI.Windows.Controls
 
         private void UpdateKnownAnimations()
         {
-            foreach(AnimationValueAdapter adapter in _specialAnimations)
+            foreach(var adapter in _specialAnimations)
             {
                 adapter.UpdateWithNewDimension(_knownWidth, _knownHeight);
             }
@@ -245,8 +245,8 @@ namespace FirstFloor.ModernUI.Windows.Controls
 
             public static DoubleAnimationDimension? GetDimensionFromIdentifyingValue(double number)
             {
-                double floor = Math.Floor(number);
-                double remainder = number - floor;
+                var floor = Math.Floor(number);
+                var remainder = number - floor;
 
                 if(remainder >= .1 - SimpleDoubleComparisonEpsilon && remainder <= .1 + SimpleDoubleComparisonEpsilon)
                 {
@@ -261,7 +261,7 @@ namespace FirstFloor.ModernUI.Windows.Controls
 
             public override void UpdateWithNewDimension(double width, double height)
             {
-                double size = Dimension == DoubleAnimationDimension.Width ? width : height;
+                var size = Dimension == DoubleAnimationDimension.Width ? width : height;
                 UpdateValue(size);
             }
 

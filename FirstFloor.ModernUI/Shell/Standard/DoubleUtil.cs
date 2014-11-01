@@ -19,7 +19,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
             {
                 return true;
             }
-            double delta = value1 - value2;
+            var delta = value1 - value2;
             return (delta < Epsilon) && (delta > -Epsilon);
         }
 

@@ -134,7 +134,7 @@ namespace FirstFloor.ModernUI.Windows.Controls.BBCode
                     {
                         return CloseTag();
                     }
-                    Token token = OpenTag();
+                    var token = OpenTag();
                     PushState(StateTag);
                     return token;
                 }

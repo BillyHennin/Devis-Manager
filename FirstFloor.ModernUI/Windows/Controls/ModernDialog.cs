@@ -97,7 +97,7 @@ namespace FirstFloor.ModernUI.Windows.Controls
             var dlg = new ModernDialog
             {
                 Title = title,
-                Content = new BBCodeBlock {BBCode = text, Margin = new Thickness(0, 0, 0, 8)},
+                Content = new BbCodeBlock {BbCode = text, Margin = new Thickness(0, 0, 0, 8)},
                 MinHeight = 0,
                 MinWidth = 0,
                 MaxHeight = 480,

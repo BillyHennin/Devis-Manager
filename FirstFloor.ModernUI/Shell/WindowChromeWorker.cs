@@ -68,7 +68,7 @@ namespace FirstFloor.ModernUI.Shell
                 {
                     return false;
                 }
-                RECT adjustedOffset = _GetAdjustedWindowRect(new RECT {Bottom = 100, Right = 100});
+                var adjustedOffset = _GetAdjustedWindowRect(new RECT {Bottom = 100, Right = 100});
                 var windowTopLeft = new Point(_window.Left, _window.Top);
                 windowTopLeft -= (Vector) DpiHelper.DevicePixelsToLogical(new Point(adjustedOffset.Left, adjustedOffset.Top));
                 return _window.RestoreBounds.Location != windowTopLeft;
@@ -93,9 +93,9 @@ namespace FirstFloor.ModernUI.Shell
 
         private IntPtr _HandleSetTextOrIcon(WM uMsg, IntPtr wParam, IntPtr lParam, out bool handled)
         {
-            bool modified = _ModifyStyle(WS.VISIBLE, 0);
+            var modified = _ModifyStyle(WS.VISIBLE, 0);
 
-            IntPtr lRet = NativeMethods.DefWindowProc(_hwnd, uMsg, wParam, lParam);
+            var lRet = NativeMethods.DefWindowProc(_hwnd, uMsg, wParam, lParam);
 
             if(modified)
             {
@@ -107,7 +107,7 @@ namespace FirstFloor.ModernUI.Shell
 
         private IntPtr _HandleNCActivate(WM uMsg, IntPtr wParam, IntPtr lParam, out bool handled)
         {
-            IntPtr lRet = NativeMethods.DefWindowProc(_hwnd, WM.NCACTIVATE, wParam, new IntPtr(-1));
+            var lRet = NativeMethods.DefWindowProc(_hwnd, WM.NCACTIVATE, wParam, new IntPtr(-1));
             handled = true;
             return lRet;
         }
@@ -116,7 +116,7 @@ namespace FirstFloor.ModernUI.Shell
         {
             if(_chromeInfo.SacrificialEdge != SacrificialEdge.None)
             {
-                Thickness windowResizeBorderThicknessDevice = DpiHelper.LogicalThicknessToDevice(SystemParameters2.Current.WindowResizeBorderThickness);
+                var windowResizeBorderThicknessDevice = DpiHelper.LogicalThicknessToDevice(SystemParameters2.Current.WindowResizeBorderThickness);
                 var rcClientArea = (RECT) Marshal.PtrToStructure(lParam, typeof(RECT));
                 if(Utility.IsFlagSet((int) _chromeInfo.SacrificialEdge, (int) SacrificialEdge.Top))
                 {
@@ -142,7 +142,7 @@ namespace FirstFloor.ModernUI.Shell
 
         private HT _GetHTFromResizeGripDirection(ResizeGripDirection direction)
         {
-            bool compliment = _window.FlowDirection == FlowDirection.RightToLeft;
+            var compliment = _window.FlowDirection == FlowDirection.RightToLeft;
             switch(direction)
             {
                 case ResizeGripDirection.Bottom:
@@ -171,12 +171,12 @@ namespace FirstFloor.ModernUI.Shell
         private IntPtr _HandleNCHitTest(WM uMsg, IntPtr wParam, IntPtr lParam, out bool handled)
         {
             var mousePosScreen = new Point(Utility.GET_X_LPARAM(lParam), Utility.GET_Y_LPARAM(lParam));
-            Rect windowPosition = _GetWindowRect();
-            Point mousePosWindow = mousePosScreen;
+            var windowPosition = _GetWindowRect();
+            var mousePosWindow = mousePosScreen;
             mousePosWindow.Offset(-windowPosition.X, -windowPosition.Y);
             mousePosWindow = DpiHelper.DevicePixelsToLogical(mousePosWindow);
 
-            IInputElement inputElement = _window.InputHitTest(mousePosWindow);
+            var inputElement = _window.InputHitTest(mousePosWindow);
             if(inputElement != null)
             {
                 if(WindowChrome.GetIsHitTestVisibleInChrome(inputElement))
@@ -184,7 +184,7 @@ namespace FirstFloor.ModernUI.Shell
                     handled = true;
                     return new IntPtr((int) HT.CLIENT);
                 }
-                ResizeGripDirection direction = WindowChrome.GetResizeGripDirection(inputElement);
+                var direction = WindowChrome.GetResizeGripDirection(inputElement);
                 if(direction != ResizeGripDirection.None)
                 {
                     handled = true;
@@ -204,7 +204,7 @@ namespace FirstFloor.ModernUI.Shell
                     }
                 }
             }
-            HT ht = _HitTestNca(DpiHelper.DeviceRectToLogical(windowPosition), DpiHelper.DevicePixelsToLogical(mousePosScreen));
+            var ht = _HitTestNca(DpiHelper.DeviceRectToLogical(windowPosition), DpiHelper.DevicePixelsToLogical(mousePosScreen));
             handled = true;
             return new IntPtr((int) ht);
         }
@@ -454,14 +454,14 @@ namespace FirstFloor.ModernUI.Shell
                 _window.Dispatcher.BeginInvoke(DispatcherPriority.Loaded, (_Action) _FixupTemplateIssues);
                 return;
             }
-            Thickness templateFixupMargin = default(Thickness);
+            var templateFixupMargin = default(Thickness);
             Transform templateFixupTransform = null;
             if(_IsPresentationFrameworkVersionLessThan4)
             {
-                RECT rcWindow = NativeMethods.GetWindowRect(_hwnd);
-                RECT rcAdjustedClient = _GetAdjustedWindowRect(rcWindow);
-                Rect rcLogicalWindow = DpiHelper.DeviceRectToLogical(new Rect(rcWindow.Left, rcWindow.Top, rcWindow.Width, rcWindow.Height));
-                Rect rcLogicalClient =
+                var rcWindow = NativeMethods.GetWindowRect(_hwnd);
+                var rcAdjustedClient = _GetAdjustedWindowRect(rcWindow);
+                var rcLogicalWindow = DpiHelper.DeviceRectToLogical(new Rect(rcWindow.Left, rcWindow.Top, rcWindow.Width, rcWindow.Height));
+                var rcLogicalClient =
                     DpiHelper.DeviceRectToLogical(new Rect(rcAdjustedClient.Left, rcAdjustedClient.Top, rcAdjustedClient.Width, rcAdjustedClient.Height));
                 var nonClientThickness = new Thickness(rcLogicalWindow.Left - rcLogicalClient.Left, rcLogicalWindow.Top - rcLogicalClient.Top,
                     rcLogicalClient.Right - rcLogicalWindow.Right, rcLogicalClient.Bottom - rcLogicalWindow.Bottom);
@@ -512,9 +512,9 @@ namespace FirstFloor.ModernUI.Shell
                 if(_hasUserMovedWindow)
                 {
                     _hasUserMovedWindow = false;
-                    WINDOWPLACEMENT wp = NativeMethods.GetWindowPlacement(_hwnd);
-                    RECT adjustedDeviceRc = _GetAdjustedWindowRect(new RECT {Bottom = 100, Right = 100});
-                    Point adjustedTopLeft =
+                    var wp = NativeMethods.GetWindowPlacement(_hwnd);
+                    var adjustedDeviceRc = _GetAdjustedWindowRect(new RECT {Bottom = 100, Right = 100});
+                    var adjustedTopLeft =
                         DpiHelper.DevicePixelsToLogical(new Point(wp.rcNormalPosition.Left - adjustedDeviceRc.Left,
                             wp.rcNormalPosition.Top - adjustedDeviceRc.Top));
                     _window.Top = adjustedTopLeft.Y;
@@ -559,7 +559,7 @@ namespace FirstFloor.ModernUI.Shell
 
         private Rect _GetWindowRect()
         {
-            RECT windowPosition = NativeMethods.GetWindowRect(_hwnd);
+            var windowPosition = NativeMethods.GetWindowRect(_hwnd);
             return new Rect(windowPosition.Left, windowPosition.Top, windowPosition.Width, windowPosition.Height);
         }
 
@@ -567,18 +567,18 @@ namespace FirstFloor.ModernUI.Shell
         {
             const MF mfEnabled = MF.ENABLED | MF.BYCOMMAND;
             const MF mfDisabled = MF.GRAYED | MF.DISABLED | MF.BYCOMMAND;
-            WindowState state = assumeState ?? _GetHwndState();
+            var state = assumeState ?? _GetHwndState();
             if(null != assumeState || _lastMenuState != state)
             {
                 _lastMenuState = state;
-                bool modified = _ModifyStyle(WS.VISIBLE, 0);
-                IntPtr hmenu = NativeMethods.GetSystemMenu(_hwnd, false);
+                var modified = _ModifyStyle(WS.VISIBLE, 0);
+                var hmenu = NativeMethods.GetSystemMenu(_hwnd, false);
                 if(IntPtr.Zero != hmenu)
                 {
                     var dwStyle = (WS) NativeMethods.GetWindowLongPtr(_hwnd, GWL.STYLE).ToInt32();
-                    bool canMinimize = Utility.IsFlagSet((int) dwStyle, (int) WS.MINIMIZEBOX);
-                    bool canMaximize = Utility.IsFlagSet((int) dwStyle, (int) WS.MAXIMIZEBOX);
-                    bool canSize = Utility.IsFlagSet((int) dwStyle, (int) WS.THICKFRAME);
+                    var canMinimize = Utility.IsFlagSet((int) dwStyle, (int) WS.MINIMIZEBOX);
+                    var canMaximize = Utility.IsFlagSet((int) dwStyle, (int) WS.MAXIMIZEBOX);
+                    var canSize = Utility.IsFlagSet((int) dwStyle, (int) WS.THICKFRAME);
                     switch(state)
                     {
                         case WindowState.Maximized:
@@ -618,7 +618,7 @@ namespace FirstFloor.ModernUI.Shell
                 return;
             }
 
-            bool frameState = NativeMethods.DwmIsCompositionEnabled();
+            var frameState = NativeMethods.DwmIsCompositionEnabled();
             if(force || frameState != _isGlassEnabled)
             {
                 _isGlassEnabled = frameState && _chromeInfo.GlassFrameThickness != default(Thickness);
@@ -644,7 +644,7 @@ namespace FirstFloor.ModernUI.Shell
         {
             const int MONITOR_DEFAULTTONEAREST = 0x00000002;
 
-            WINDOWPLACEMENT wpl = NativeMethods.GetWindowPlacement(_hwnd);
+            var wpl = NativeMethods.GetWindowPlacement(_hwnd);
             if(wpl.showCmd == SW.SHOWMAXIMIZED)
             {
                 int left;
@@ -656,16 +656,16 @@ namespace FirstFloor.ModernUI.Shell
                 }
                 else
                 {
-                    Rect r = _GetWindowRect();
+                    var r = _GetWindowRect();
                     left = (int) r.Left;
                     top = (int) r.Top;
                 }
-                IntPtr hMon = NativeMethods.MonitorFromWindow(_hwnd, MONITOR_DEFAULTTONEAREST);
-                MONITORINFO mi = NativeMethods.GetMonitorInfo(hMon);
-                RECT rcMax = mi.rcWork;
+                var hMon = NativeMethods.MonitorFromWindow(_hwnd, MONITOR_DEFAULTTONEAREST);
+                var mi = NativeMethods.GetMonitorInfo(hMon);
+                var rcMax = mi.rcWork;
 
                 rcMax.Offset(-left, -top);
-                IntPtr hrgn = IntPtr.Zero;
+                var hrgn = IntPtr.Zero;
                 try
                 {
                     hrgn = NativeMethods.CreateRectRgnIndirect(rcMax);
@@ -694,11 +694,11 @@ namespace FirstFloor.ModernUI.Shell
                     windowSize = _GetWindowRect().Size;
                 }
                 _lastRoundingState = _window.WindowState;
-                IntPtr hrgn = IntPtr.Zero;
+                var hrgn = IntPtr.Zero;
                 try
                 {
-                    double shortestDimension = Math.Min(windowSize.Width, windowSize.Height);
-                    double topLeftRadius = DpiHelper.LogicalPixelsToDevice(new Point(_chromeInfo.CornerRadius.TopLeft, 0)).X;
+                    var shortestDimension = Math.Min(windowSize.Width, windowSize.Height);
+                    var topLeftRadius = DpiHelper.LogicalPixelsToDevice(new Point(_chromeInfo.CornerRadius.TopLeft, 0)).X;
                     topLeftRadius = Math.Min(topLeftRadius, shortestDimension / 2);
                     if(_IsUniform(_chromeInfo.CornerRadius))
                     {
@@ -707,19 +707,19 @@ namespace FirstFloor.ModernUI.Shell
                     else
                     {
                         hrgn = _CreateRoundRectRgn(new Rect(0, 0, windowSize.Width / 2 + topLeftRadius, windowSize.Height / 2 + topLeftRadius), topLeftRadius);
-                        double topRightRadius = DpiHelper.LogicalPixelsToDevice(new Point(_chromeInfo.CornerRadius.TopRight, 0)).X;
+                        var topRightRadius = DpiHelper.LogicalPixelsToDevice(new Point(_chromeInfo.CornerRadius.TopRight, 0)).X;
                         topRightRadius = Math.Min(topRightRadius, shortestDimension / 2);
                         var topRightRegionRect = new Rect(0, 0, windowSize.Width / 2 + topRightRadius, windowSize.Height / 2 + topRightRadius);
                         topRightRegionRect.Offset(windowSize.Width / 2 - topRightRadius, 0);
                         Assert.AreEqual(topRightRegionRect.Right, windowSize.Width);
                         _CreateAndCombineRoundRectRgn(hrgn, topRightRegionRect, topRightRadius);
-                        double bottomLeftRadius = DpiHelper.LogicalPixelsToDevice(new Point(_chromeInfo.CornerRadius.BottomLeft, 0)).X;
+                        var bottomLeftRadius = DpiHelper.LogicalPixelsToDevice(new Point(_chromeInfo.CornerRadius.BottomLeft, 0)).X;
                         bottomLeftRadius = Math.Min(bottomLeftRadius, shortestDimension / 2);
                         var bottomLeftRegionRect = new Rect(0, 0, windowSize.Width / 2 + bottomLeftRadius, windowSize.Height / 2 + bottomLeftRadius);
                         bottomLeftRegionRect.Offset(0, windowSize.Height / 2 - bottomLeftRadius);
                         Assert.AreEqual(bottomLeftRegionRect.Bottom, windowSize.Height);
                         _CreateAndCombineRoundRectRgn(hrgn, bottomLeftRegionRect, bottomLeftRadius);
-                        double bottomRightRadius = DpiHelper.LogicalPixelsToDevice(new Point(_chromeInfo.CornerRadius.BottomRight, 0)).X;
+                        var bottomRightRadius = DpiHelper.LogicalPixelsToDevice(new Point(_chromeInfo.CornerRadius.BottomRight, 0)).X;
                         bottomRightRadius = Math.Min(bottomRightRadius, shortestDimension / 2);
                         var bottomRightRegionRect = new Rect(0, 0, windowSize.Width / 2 + bottomRightRadius, windowSize.Height / 2 + bottomRightRadius);
                         bottomRightRegionRect.Offset(windowSize.Width / 2 - bottomRightRadius, windowSize.Height / 2 - bottomRightRadius);
@@ -752,11 +752,11 @@ namespace FirstFloor.ModernUI.Shell
         [SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "HRGNs")]
         private static void _CreateAndCombineRoundRectRgn(IntPtr hrgnSource, Rect region, double radius)
         {
-            IntPtr hrgn = IntPtr.Zero;
+            var hrgn = IntPtr.Zero;
             try
             {
                 hrgn = _CreateRoundRectRgn(region, radius);
-                CombineRgnResult result = NativeMethods.CombineRgn(hrgnSource, hrgnSource, hrgn, RGN.OR);
+                var result = NativeMethods.CombineRgn(hrgnSource, hrgnSource, hrgn, RGN.OR);
                 if(result == CombineRgnResult.ERROR)
                 {
                     throw new InvalidOperationException("Unable to combine two HRGNs.");
@@ -806,10 +806,10 @@ namespace FirstFloor.ModernUI.Shell
             {
                 _hwndSource.CompositionTarget.BackgroundColor = Colors.Transparent;
 
-                Thickness deviceGlassThickness = DpiHelper.LogicalThicknessToDevice(_chromeInfo.GlassFrameThickness);
+                var deviceGlassThickness = DpiHelper.LogicalThicknessToDevice(_chromeInfo.GlassFrameThickness);
                 if(_chromeInfo.SacrificialEdge != SacrificialEdge.None)
                 {
-                    Thickness windowResizeBorderThicknessDevice = DpiHelper.LogicalThicknessToDevice(SystemParameters2.Current.WindowResizeBorderThickness);
+                    var windowResizeBorderThicknessDevice = DpiHelper.LogicalThicknessToDevice(SystemParameters2.Current.WindowResizeBorderThickness);
                     if(Utility.IsFlagSet((int) _chromeInfo.SacrificialEdge, (int) SacrificialEdge.Top))
                     {
                         deviceGlassThickness.Top -= windowResizeBorderThicknessDevice.Top;
@@ -844,9 +844,9 @@ namespace FirstFloor.ModernUI.Shell
 
         private HT _HitTestNca(Rect windowPosition, Point mousePosition)
         {
-            int uRow = 1;
-            int uCol = 1;
-            bool onResizeBorder = false;
+            var uRow = 1;
+            var uCol = 1;
+            var onResizeBorder = false;
 
             if(mousePosition.Y >= windowPosition.Top && mousePosition.Y < windowPosition.Top + _chromeInfo.ResizeBorderThickness.Top + _chromeInfo.CaptionHeight)
             {
@@ -871,7 +871,7 @@ namespace FirstFloor.ModernUI.Shell
             {
                 uRow = 1;
             }
-            HT ht = _HitTestBorders[uRow, uCol];
+            var ht = _HitTestBorders[uRow, uCol];
             if(ht == HT.TOP && !onResizeBorder)
             {
                 ht = HT.CAPTION;

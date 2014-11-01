@@ -98,7 +98,7 @@ namespace FirstFloor.ModernUI.Shell
             var newChrome = (WindowChrome) e.NewValue;
             Assert.IsNotNull(window);
 
-            WindowChromeWorker chromeWorker = WindowChromeWorker.GetWindowChromeWorker(window);
+            var chromeWorker = WindowChromeWorker.GetWindowChromeWorker(window);
             if(chromeWorker == null)
             {
                 chromeWorker = new WindowChromeWorker();

@@ -15,31 +15,31 @@ using FirstFloor.ModernUI.Windows.Navigation;
 
 namespace FirstFloor.ModernUI.Windows.Controls
 {
-    public class BBCodeBlock : TextBlock
+    public class BbCodeBlock : TextBlock
     {
-        public static DependencyProperty BBCodeProperty = DependencyProperty.Register("BBCode", typeof(string), typeof(BBCodeBlock),
+        public static DependencyProperty BbCodeProperty = DependencyProperty.Register("BbCode", typeof(string), typeof(BbCodeBlock),
             new PropertyMetadata(OnBBCodeChanged));
 
-        public static DependencyProperty LinkNavigatorProperty = DependencyProperty.Register("LinkNavigator", typeof(ILinkNavigator), typeof(BBCodeBlock),
+        public static DependencyProperty LinkNavigatorProperty = DependencyProperty.Register("LinkNavigator", typeof(ILinkNavigator), typeof(BbCodeBlock),
             new PropertyMetadata(new DefaultLinkNavigator(), OnLinkNavigatorChanged));
 
         private bool dirty;
 
-        public BBCodeBlock()
+        public BbCodeBlock()
         {
-            DefaultStyleKey = typeof(BBCodeBlock);
+            DefaultStyleKey = typeof(BbCodeBlock);
 
             AddHandler(FrameworkContentElement.LoadedEvent, new RoutedEventHandler(OnLoaded));
             AddHandler(Hyperlink.RequestNavigateEvent, new RequestNavigateEventHandler(OnRequestNavigate));
         }
 
-        public string BBCode { get { return (string) GetValue(BBCodeProperty); } set { SetValue(BBCodeProperty, value); } }
+        public string BbCode { get { return (string) GetValue(BbCodeProperty); } set { SetValue(BbCodeProperty, value); } }
 
         public ILinkNavigator LinkNavigator { get { return (ILinkNavigator) GetValue(LinkNavigatorProperty); } set { SetValue(LinkNavigatorProperty, value); } }
 
         private static void OnBBCodeChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
-            ((BBCodeBlock) o).UpdateDirty();
+            ((BbCodeBlock) o).UpdateDirty();
         }
 
         private static void OnLinkNavigatorChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
@@ -49,7 +49,7 @@ namespace FirstFloor.ModernUI.Windows.Controls
                 throw new ArgumentNullException("e", @"LinkNavigator");
             }
 
-            ((BBCodeBlock) o).UpdateDirty();
+            ((BbCodeBlock) o).UpdateDirty();
         }
 
         private void OnLoaded(object o, EventArgs e)
@@ -70,7 +70,7 @@ namespace FirstFloor.ModernUI.Windows.Controls
                 return;
             }
 
-            var bbcode = BBCode;
+            var bbcode = BbCode;
 
             Inlines.Clear();
 
@@ -79,7 +79,7 @@ namespace FirstFloor.ModernUI.Windows.Controls
                 Inline inline;
                 try
                 {
-                    var parser = new BBCodeParser(bbcode, this) {Commands = LinkNavigator.Commands};
+                    var parser = new BbCodeParser(bbcode, this) {Commands = LinkNavigator.Commands};
                     inline = parser.Parse();
                 }
                 catch(Exception)

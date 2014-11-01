@@ -28,7 +28,7 @@ namespace FirstFloor.ModernUI.Shell
 
         internal void InvokeClick()
         {
-            EventHandler local = Click;
+            var local = Click;
             if(local != null)
             {
                 local(this, EventArgs.Empty);
@@ -38,11 +38,11 @@ namespace FirstFloor.ModernUI.Shell
 
         private void _InvokeCommand()
         {
-            ICommand command = Command;
+            var command = Command;
             if(command != null)
             {
-                object parameter = CommandParameter;
-                IInputElement target = CommandTarget;
+                var parameter = CommandParameter;
+                var target = CommandTarget;
                 var routedCommand = command as RoutedCommand;
                 if(routedCommand != null)
                 {
@@ -77,8 +77,8 @@ namespace FirstFloor.ModernUI.Shell
         {
             if(Command != null)
             {
-                object parameter = CommandParameter;
-                IInputElement target = CommandTarget;
+                var parameter = CommandParameter;
+                var target = CommandTarget;
                 var routed = Command as RoutedCommand;
                 _CanExecute = routed != null ? routed.CanExecute(parameter, target) : Command.CanExecute(parameter);
             }

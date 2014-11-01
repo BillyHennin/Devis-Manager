@@ -1112,7 +1112,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
             }
             var iidShellItem2 = new Guid(IID.ShellItem2);
             object unk;
-            HRESULT hr = NativeMethods.SHCreateItemFromParsingName(path, null, ref iidShellItem2, out unk);
+            var hr = NativeMethods.SHCreateItemFromParsingName(path, null, ref iidShellItem2, out unk);
 
             if(hr == (HRESULT) Win32Error.ERROR_FILE_NOT_FOUND || hr == (HRESULT) Win32Error.ERROR_PATH_NOT_FOUND)
             {

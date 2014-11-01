@@ -89,8 +89,8 @@ namespace FirstFloor.ModernUI.Shell
                 return;
             }
 
-            IntPtr hwnd = new WindowInteropHelper(_window).Handle;
-            bool isAttached = hwnd != IntPtr.Zero;
+            var hwnd = new WindowInteropHelper(_window).Handle;
+            var isAttached = hwnd != IntPtr.Zero;
             if(!isAttached)
             {
                 _window.SourceInitialized += _OnWindowSourceInitialized;
@@ -106,7 +106,7 @@ namespace FirstFloor.ModernUI.Shell
         private void _OnWindowSourceInitialized(object sender, EventArgs e)
         {
             _window.SourceInitialized -= _OnWindowSourceInitialized;
-            IntPtr hwnd = new WindowInteropHelper(_window).Handle;
+            var hwnd = new WindowInteropHelper(_window).Handle;
             _hwndSource = HwndSource.FromHwnd(hwnd);
 
             _hwndSource.AddHook(_WndProc);
@@ -132,7 +132,7 @@ namespace FirstFloor.ModernUI.Shell
                     case WM.COMMAND:
                         if(Utility.HIWORD(wParam.ToInt32()) == THUMBBUTTON.THBN_CLICKED)
                         {
-                            int index = Utility.LOWORD(wParam.ToInt32());
+                            var index = Utility.LOWORD(wParam.ToInt32());
                             ThumbButtonInfos[index].InvokeClick();
                             handled = true;
                         }
@@ -185,13 +185,13 @@ namespace FirstFloor.ModernUI.Shell
 
         private HRESULT _UpdateOverlay(bool attached)
         {
-            ImageSource source = Overlay;
+            var source = Overlay;
 
             if(null == source || !attached)
             {
                 return _taskbarList.SetOverlayIcon(_hwndSource.Handle, IntPtr.Zero, null);
             }
-            IntPtr hicon = IntPtr.Zero;
+            var hicon = IntPtr.Zero;
             try
             {
                 hicon = _GetHICONFromImageSource(source, _overlaySize);
@@ -205,7 +205,7 @@ namespace FirstFloor.ModernUI.Shell
 
         private HRESULT _UpdateTooltip(bool attached)
         {
-            string tooltip = Description ?? "";
+            var tooltip = Description ?? "";
             if(!attached)
             {
                 tooltip = "";
@@ -228,7 +228,7 @@ namespace FirstFloor.ModernUI.Shell
 
         private HRESULT _UpdateProgressState(bool attached)
         {
-            TaskbarItemProgressState ps = ProgressState;
+            var ps = ProgressState;
             var tbpf = TBPF.NOPROGRESS;
             if(attached)
             {
@@ -256,7 +256,7 @@ namespace FirstFloor.ModernUI.Shell
                         break;
                 }
             }
-            HRESULT hr = _taskbarList.SetProgressState(_hwndSource.Handle, tbpf);
+            var hr = _taskbarList.SetProgressState(_hwndSource.Handle, tbpf);
             if(hr.Succeeded)
             {
                 hr = _UpdateProgressValue(attached);
@@ -270,10 +270,10 @@ namespace FirstFloor.ModernUI.Shell
             RefRECT interopRc = null;
             if(attached && ThumbnailClipMargin != _EmptyThickness)
             {
-                Thickness margin = ThumbnailClipMargin;
+                var margin = ThumbnailClipMargin;
 
-                RECT physicalClientRc = NativeMethods.GetClientRect(_hwndSource.Handle);
-                Rect logicalClientRc =
+                var physicalClientRc = NativeMethods.GetClientRect(_hwndSource.Handle);
+                var logicalClientRc =
                     DpiHelper.DeviceRectToLogical(new Rect(physicalClientRc.Left, physicalClientRc.Top, physicalClientRc.Width, physicalClientRc.Height));
 
                 if(margin.Left + margin.Right >= logicalClientRc.Width || margin.Top + margin.Bottom >= logicalClientRc.Height)
@@ -284,23 +284,23 @@ namespace FirstFloor.ModernUI.Shell
                 {
                     var logicalClip = new Rect(margin.Left, margin.Top, logicalClientRc.Width - margin.Left - margin.Right,
                         logicalClientRc.Height - margin.Top - margin.Bottom);
-                    Rect physicalClip = DpiHelper.LogicalRectToDevice(logicalClip);
+                    var physicalClip = DpiHelper.LogicalRectToDevice(logicalClip);
                     interopRc = new RefRECT((int) physicalClip.Left, (int) physicalClip.Top, (int) physicalClip.Right, (int) physicalClip.Bottom);
                 }
             }
 
-            HRESULT hr = _taskbarList.SetThumbnailClip(_hwndSource.Handle, interopRc);
+            var hr = _taskbarList.SetThumbnailClip(_hwndSource.Handle, interopRc);
             Assert.IsTrue(hr.Succeeded);
             return hr;
         }
 
         private HRESULT _RegisterThumbButtons()
         {
-            HRESULT hr = HRESULT.S_OK;
+            var hr = HRESULT.S_OK;
             if(!_haveAddedButtons)
             {
                 var nativeButtons = new THUMBBUTTON[c_MaximumThumbButtons];
-                for(int i = 0; i < c_MaximumThumbButtons; ++i)
+                for(var i = 0; i < c_MaximumThumbButtons; ++i)
                 {
                     nativeButtons[i] = new THUMBBUTTON
                     {
@@ -323,18 +323,18 @@ namespace FirstFloor.ModernUI.Shell
         private HRESULT _UpdateThumbButtons(bool attached)
         {
             var nativeButtons = new THUMBBUTTON[c_MaximumThumbButtons];
-            HRESULT hr = _RegisterThumbButtons();
+            var hr = _RegisterThumbButtons();
             if(hr.Failed)
             {
                 return hr;
             }
-            ThumbButtonInfoCollection thumbButtons = ThumbButtonInfos;
+            var thumbButtons = ThumbButtonInfos;
             try
             {
                 uint currentButton = 0;
                 if(attached && null != thumbButtons)
                 {
-                    foreach(ThumbButtonInfo wrappedTB in thumbButtons)
+                    foreach(var wrappedTB in thumbButtons)
                     {
                         var nativeTB = new THUMBBUTTON {iId = currentButton, dwMask = THB.FLAGS | THB.TOOLTIP | THB.ICON,};
                         switch(wrappedTB.Visibility)
@@ -399,7 +399,7 @@ namespace FirstFloor.ModernUI.Shell
             {
                 foreach(var nativeButton in nativeButtons)
                 {
-                    IntPtr hico = nativeButton.hIcon;
+                    var hico = nativeButton.hIcon;
                     if(IntPtr.Zero != hico)
                     {
                         Utility.SafeDestroyIcon(ref hico);

@@ -18,10 +18,10 @@ namespace FirstFloor.ModernUI.Shell.Standard
         [SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline")]
         static DpiHelper()
         {
-            using(SafeDC desktop = SafeDC.GetDesktop())
+            using(var desktop = SafeDC.GetDesktop())
             {
-                int pixelsPerInchX = NativeMethods.GetDeviceCaps(desktop, DeviceCap.LOGPIXELSX);
-                int pixelsPerInchY = NativeMethods.GetDeviceCaps(desktop, DeviceCap.LOGPIXELSY);
+                var pixelsPerInchX = NativeMethods.GetDeviceCaps(desktop, DeviceCap.LOGPIXELSX);
+                var pixelsPerInchY = NativeMethods.GetDeviceCaps(desktop, DeviceCap.LOGPIXELSY);
                 _transformToDip = Matrix.Identity;
                 _transformToDip.Scale(96d / pixelsPerInchX, 96d / pixelsPerInchY);
                 _transformToDevice = Matrix.Identity;
@@ -44,38 +44,38 @@ namespace FirstFloor.ModernUI.Shell.Standard
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static Rect LogicalRectToDevice(Rect logicalRectangle)
         {
-            Point topLeft = LogicalPixelsToDevice(new Point(logicalRectangle.Left, logicalRectangle.Top));
-            Point bottomRight = LogicalPixelsToDevice(new Point(logicalRectangle.Right, logicalRectangle.Bottom));
+            var topLeft = LogicalPixelsToDevice(new Point(logicalRectangle.Left, logicalRectangle.Top));
+            var bottomRight = LogicalPixelsToDevice(new Point(logicalRectangle.Right, logicalRectangle.Bottom));
             return new Rect(topLeft, bottomRight);
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static Rect DeviceRectToLogical(Rect deviceRectangle)
         {
-            Point topLeft = DevicePixelsToLogical(new Point(deviceRectangle.Left, deviceRectangle.Top));
-            Point bottomRight = DevicePixelsToLogical(new Point(deviceRectangle.Right, deviceRectangle.Bottom));
+            var topLeft = DevicePixelsToLogical(new Point(deviceRectangle.Left, deviceRectangle.Top));
+            var bottomRight = DevicePixelsToLogical(new Point(deviceRectangle.Right, deviceRectangle.Bottom));
             return new Rect(topLeft, bottomRight);
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static Size LogicalSizeToDevice(Size logicalSize)
         {
-            Point pt = LogicalPixelsToDevice(new Point(logicalSize.Width, logicalSize.Height));
+            var pt = LogicalPixelsToDevice(new Point(logicalSize.Width, logicalSize.Height));
             return new Size {Width = pt.X, Height = pt.Y};
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static Size DeviceSizeToLogical(Size deviceSize)
         {
-            Point pt = DevicePixelsToLogical(new Point(deviceSize.Width, deviceSize.Height));
+            var pt = DevicePixelsToLogical(new Point(deviceSize.Width, deviceSize.Height));
             return new Size(pt.X, pt.Y);
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static Thickness LogicalThicknessToDevice(Thickness logicalThickness)
         {
-            Point topLeft = LogicalPixelsToDevice(new Point(logicalThickness.Left, logicalThickness.Top));
-            Point bottomRight = LogicalPixelsToDevice(new Point(logicalThickness.Right, logicalThickness.Bottom));
+            var topLeft = LogicalPixelsToDevice(new Point(logicalThickness.Left, logicalThickness.Top));
+            var bottomRight = LogicalPixelsToDevice(new Point(logicalThickness.Right, logicalThickness.Bottom));
             return new Thickness(topLeft.X, topLeft.Y, bottomRight.X, bottomRight.Y);
         }
     }

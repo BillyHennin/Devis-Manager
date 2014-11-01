@@ -82,7 +82,7 @@ namespace FirstFloor.ModernUI.Windows.Controls
         [SecurityCritical]
         protected override bool RunDialog(IntPtr hwndOwner)
         {
-            bool result = false;
+            var result = false;
 
             IntPtr pidlRoot = IntPtr.Zero, pszPath = IntPtr.Zero, pidlSelected = IntPtr.Zero;
 
@@ -125,7 +125,7 @@ namespace FirstFloor.ModernUI.Windows.Controls
             }
             finally
             {
-                NativeMethods.IMalloc malloc = NativeMethods.GetSHMalloc();
+                var malloc = NativeMethods.GetSHMalloc();
 
                 if(pidlRoot != IntPtr.Zero)
                 {

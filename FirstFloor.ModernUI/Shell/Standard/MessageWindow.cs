@@ -38,7 +38,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
                 lpszClassName = _className,
             };
             NativeMethods.RegisterClassEx(ref wc);
-            GCHandle gcHandle = default(GCHandle);
+            var gcHandle = default(GCHandle);
             try
             {
                 gcHandle = GCHandle.Alloc(this);
@@ -73,8 +73,8 @@ namespace FirstFloor.ModernUI.Shell.Standard
                 return;
             }
             _isDisposed = true;
-            IntPtr hwnd = Handle;
-            string className = _className;
+            var hwnd = Handle;
+            var className = _className;
             if(isHwndBeingDestroyed)
             {
                 Dispatcher.BeginInvoke(DispatcherPriority.Normal, (DispatcherOperationCallback) (arg => _DestroyWindow(IntPtr.Zero, className)));
@@ -98,12 +98,12 @@ namespace FirstFloor.ModernUI.Shell.Standard
         [SuppressMessage("Microsoft.Usage", "CA1816:CallGCSuppressFinalizeCorrectly")]
         private static IntPtr _WndProc(IntPtr hwnd, WM msg, IntPtr wParam, IntPtr lParam)
         {
-            IntPtr ret = IntPtr.Zero;
+            var ret = IntPtr.Zero;
             MessageWindow hwndWrapper = null;
             if(msg == WM.CREATE)
             {
                 var createStruct = (CREATESTRUCT) Marshal.PtrToStructure(lParam, typeof(CREATESTRUCT));
-                GCHandle gcHandle = GCHandle.FromIntPtr(createStruct.lpCreateParams);
+                var gcHandle = GCHandle.FromIntPtr(createStruct.lpCreateParams);
                 hwndWrapper = (MessageWindow) gcHandle.Target;
                 s_windowLookup.Add(hwnd, hwndWrapper);
             }
@@ -115,7 +115,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
                 }
             }
             Assert.IsNotNull(hwndWrapper);
-            WndProc callback = hwndWrapper._wndProcCallback;
+            var callback = hwndWrapper._wndProcCallback;
             ret = callback != null ? callback(hwnd, msg, wParam, lParam) : NativeMethods.DefWindowProc(hwnd, msg, wParam, lParam);
             if(msg == WM.NCDESTROY)
             {

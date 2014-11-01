@@ -369,7 +369,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
 
         public override string ToString()
         {
-            foreach(FieldInfo publicStaticField in typeof(HRESULT).GetFields(BindingFlags.Static | BindingFlags.Public))
+            foreach(var publicStaticField in typeof(HRESULT).GetFields(BindingFlags.Static | BindingFlags.Public))
             {
                 if(publicStaticField.FieldType == typeof(HRESULT))
                 {
@@ -383,7 +383,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
 
             if(Facility == Facility.Win32)
             {
-                foreach(FieldInfo publicStaticField in typeof(Win32Error).GetFields(BindingFlags.Static | BindingFlags.Public))
+                foreach(var publicStaticField in typeof(Win32Error).GetFields(BindingFlags.Static | BindingFlags.Public))
                 {
                     if(publicStaticField.FieldType == typeof(Win32Error))
                     {
@@ -453,7 +453,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
                 }
 #endif
 
-                Exception e = Marshal.GetExceptionForHR((int) _value, new IntPtr(-1));
+                var e = Marshal.GetExceptionForHR((int) _value, new IntPtr(-1));
                 Assert.IsNotNull(e);
 
                 Assert.IsFalse(e is ArgumentNullException);
@@ -472,7 +472,7 @@ namespace FirstFloor.ModernUI.Shell.Standard
                 }
                 else
                 {
-                    ConstructorInfo cons = e.GetType().GetConstructor(new[] {typeof(string)});
+                    var cons = e.GetType().GetConstructor(new[] {typeof(string)});
                     if(null != cons)
                     {
                         e = cons.Invoke(new object[] {message}) as Exception;

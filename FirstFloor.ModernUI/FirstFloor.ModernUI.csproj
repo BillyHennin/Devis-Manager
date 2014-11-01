@@ -89,6 +89,7 @@
     <Compile Include="Presentation\RelayCommand.cs" />
     <Compile Include="Presentation\AppearanceManager.cs" />
     <Compile Include="Presentation\Theme.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>

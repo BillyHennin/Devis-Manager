@@ -26,7 +26,7 @@ namespace FirstFloor.ModernUI.Windows.Controls.BBCode
 
         public char LA(int count)
         {
-            int index = position + count - 1;
+            var index = position + count - 1;
             if(index < value.Length)
             {
                 return value[index];

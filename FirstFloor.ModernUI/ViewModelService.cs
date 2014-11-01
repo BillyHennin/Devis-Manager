@@ -36,7 +36,7 @@ namespace FirstFloor.ModernUI
         public List<object> GetAllViewModel(Type type)
         {
             var list = new List<object>();
-            foreach(KeyValuePair<object, Type> val in vModels)
+            foreach(var val in vModels)
             {
                 if(val.Value == type)
                 {
