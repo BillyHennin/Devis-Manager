@@ -158,18 +158,6 @@ namespace SLAM3.Pages
             AjouterDevis.IsEnabled = false;
         }
 
-        private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            BorderDevis.Width = Menu.ActualWidth - 340;
-            BorderDevis.Height = Menu.ActualHeight - 50;
-
-            var nbMarchandise = _leDevis.GetList.Count;
-            for (var i = 0; i < nbMarchandise; i++)
-            {
-                _leDevis[i].Bordure.Width = BorderDevis.Width - 6;
-            }
-        }
-
         private void TextBoxDevisQte_TextChanged(object sender, TextChangedEventArgs e)
         {
             _qte = 0;
@@ -222,25 +210,6 @@ namespace SLAM3.Pages
             else
             {
                 ErreurPrix();
-            }
-        }
-
-        private void Menu_Loaded(object sender, RoutedEventArgs e)
-        {
-            Ajouter.BorderBrush =
-                AjouterDevis.BorderBrush =
-                    BorderDevis.BorderBrush =
-                        TextBoxDevisQte.BorderBrush =
-                            TextBoxDevisQte.CaretBrush =
-                                TextBoxDevisQte.SelectionBrush =
-                                    ComboBoxProduit.BorderBrush =
-                                        ComboBoxClient.BorderBrush =
-                                            new SolidColorBrush(
-                                                (Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
-            var nbMarchandise = _leDevis.GetList.Count;
-            for (var i = 0; i < nbMarchandise; i++)
-            {
-                _leDevis[i].Bordure.BorderBrush = Ajouter.BorderBrush;
             }
         }
 
@@ -343,6 +312,37 @@ namespace SLAM3.Pages
                 // ReSharper disable once EmptyGeneralCatchClause
             catch
             {
+            }
+        }
+
+        private void Menu_Loaded(object sender, RoutedEventArgs e)
+        {
+            Ajouter.BorderBrush =
+                AjouterDevis.BorderBrush =
+                    BorderDevis.BorderBrush =
+                        TextBoxDevisQte.BorderBrush =
+                            TextBoxDevisQte.CaretBrush =
+                                TextBoxDevisQte.SelectionBrush =
+                                    ComboBoxProduit.BorderBrush =
+                                        ComboBoxClient.BorderBrush =
+                                            new SolidColorBrush(
+                                                (Color)ColorConverter.ConvertFromString(Settings.Default.AccentColor));
+            var nbMarchandise = _leDevis.GetList.Count;
+            for (var i = 0; i < nbMarchandise; i++)
+            {
+                _leDevis[i].Bordure.BorderBrush = Ajouter.BorderBrush;
+            }
+        }
+
+        private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            BorderDevis.Width = Menu.ActualWidth - 340;
+            BorderDevis.Height = Menu.ActualHeight - 50;
+
+            var nbMarchandise = _leDevis.GetList.Count;
+            for (var i = 0; i < nbMarchandise; i++)
+            {
+                _leDevis[i].Bordure.Width = BorderDevis.Width - 6;
             }
         }
     }
