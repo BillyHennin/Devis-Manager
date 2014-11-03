@@ -5,7 +5,7 @@ This is the Devis manager's git's readme. From here you can see how the applicat
 
 =====
 
-If you just want the application, go here https://github.com/BillyHennin/APPSLAM3/tree/release
+If you just want the application, go here https://github.com/BillyHennin/Devis-Manager/tree/release
 
 If you want to see the source code, you're in the good place.
 
@@ -17,4 +17,4 @@ Feel free to improve it, to see how it works or even take it for a personnal use
 
 =====
 
-For further information about how to use the app, please check the app's website : http://billyhennin.github.io/APPSLAM3
+For further information about how to use the app, please check the app's website : http://billyhennin.github.io/Devis-Manager. 
