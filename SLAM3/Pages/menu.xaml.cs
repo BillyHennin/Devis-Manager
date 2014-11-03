@@ -11,13 +11,14 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+
 using SLAM3.Classes;
 using SLAM3.Properties;
 
 namespace SLAM3.Pages
 {
     /// <summary>
-    ///     Logique d'interaction pour devis.xaml
+    ///   Logique d'interaction pour devis.xaml
     /// </summary>
     // ReSharper disable once InconsistentNaming
     public partial class devis
@@ -38,22 +39,19 @@ namespace SLAM3.Pages
             LabelPrix.Content = "Erreur";
             Ajouter.IsEnabled = false;
             LabelPrix.Foreground =
-                TextBoxDevisQte.CaretBrush =
-                    TextBoxDevisQte.SelectionBrush =
-                        TextBoxDevisQte.BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00));
+                TextBoxDevisQte.CaretBrush = TextBoxDevisQte.SelectionBrush = TextBoxDevisQte.BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00));
         }
 
         private void BTNAddFeed_click(object sender, RoutedEventArgs e)
         {
-            var prixMarchandise =
-                Convert.ToInt32(LabelPrix.Content.ToString().Substring(0, LabelPrix.Content.ToString().Length - 1));
+            var prixMarchandise = Convert.ToInt32(LabelPrix.Content.ToString().Substring(0, LabelPrix.Content.ToString().Length - 1));
             var panelMarchandise = new StackPanel();
             var nouvelleMarchandise = new Marchandise(ComboBoxProduit.Text, _qte, prixMarchandise);
 
             var nbMarchandise = _leDevis.GetList.Count;
-            for (var i = 0; i < nbMarchandise; i++)
+            for(var i = 0; i < nbMarchandise; i++)
             {
-                if (_leDevis[i].GetNom == nouvelleMarchandise.GetNom)
+                if(_leDevis[i].GetNom == nouvelleMarchandise.GetNom)
                 {
                     return;
                 }
@@ -61,8 +59,7 @@ namespace SLAM3.Pages
 
             var bordure = new Border
             {
-                BorderBrush =
-                    new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor)),
+                BorderBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor)),
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Top,
                 Margin = new Thickness(2, 2, 1, 0),
@@ -121,26 +118,21 @@ namespace SLAM3.Pages
                 const string query = "SELECT max(Id), max(NumeroDEvis) FROM DEVIS";
                 var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
                 var resultat = oCommand.ExecuteReader();
-                while (resultat.Read())
+                while(resultat.Read())
                 {
-                    for (var i = 0; i < tailleList; i++)
+                    for(var i = 0; i < tailleList; i++)
                     {
-                        var query2 =
-                            "INSERT INTO DEVIS (Id, Client, Marchandise, Quantite, Date, PrixMarchandise, NumeroDevis)" +
-                            " VALUES (" + (Convert.ToInt32(resultat[0]) + i + 1) +
-                            ",'" + _leDevis.Client.GetDenomination +
-                            "','" + _leDevis[i].GetNom +
-                            "','" + _leDevis[i].GetQte +
-                            "','" + DateTime.Now.ToString("M/d/yyyy h:mm") +
-                            "'," + _leDevis[i].GetPrix +
-                            "," + (Convert.ToInt32(resultat[1]) + 1) + ")";
+                        var query2 = "INSERT INTO DEVIS (Id, Client, Marchandise, Quantite, Date, PrixMarchandise, NumeroDevis)" + " VALUES ("
+                                     + (Convert.ToInt32(resultat[0]) + i + 1) + ",'" + _leDevis.Client.GetDenomination + "','" + _leDevis[i].GetNom + "','"
+                                     + _leDevis[i].GetQte + "','" + DateTime.Now.ToString("M/d/yyyy h:mm") + "'," + _leDevis[i].GetPrix + ","
+                                     + (Convert.ToInt32(resultat[1]) + 1) + ")";
                         var oCommand2 = new SqlCeCommand {Connection = db, CommandText = query2};
                         oCommand2.ExecuteNonQuery();
                     }
                 }
                 resultat.Close();
             }
-            catch (SqlCeException caught)
+            catch(SqlCeException caught)
             {
                 Console.WriteLine(caught.Message);
                 Console.Read();
@@ -162,11 +154,11 @@ namespace SLAM3.Pages
         {
             _qte = 0;
 
-            if (EstUnNombre(TextBoxDevisQte.Text))
+            if(EstUnNombre(TextBoxDevisQte.Text))
             {
                 var nouvQte = Convert.ToInt32(TextBoxDevisQte.Text);
 
-                if (nouvQte <= 0)
+                if(nouvQte <= 0)
                 {
                     try
                     {
@@ -180,17 +172,14 @@ namespace SLAM3.Pages
                 }
                 else
                 {
-                    if (ComboBoxProduit.Items.Count != 0)
+                    if(ComboBoxProduit.Items.Count != 0)
                     {
                         _qte = nouvQte;
                         LabelPrix.Foreground = new SolidColorBrush(Color.FromRgb(0xC1, 0xC1, 0xC1));
-                        LabelPrix.Content = string.Format("{0}€",
-                            ((ComboBoxProduit.SelectedItem as ComboboxItemProduit).Value.GetPrix*_qte));
+                        LabelPrix.Content = string.Format("{0}€", ((ComboBoxProduit.SelectedItem as ComboboxItemProduit).Value.GetPrix * _qte));
                         TextBoxDevisQte.BorderBrush =
                             TextBoxDevisQte.CaretBrush =
-                                TextBoxDevisQte.SelectionBrush =
-                                    new SolidColorBrush(
-                                        (Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
+                                TextBoxDevisQte.SelectionBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
                         Ajouter.IsEnabled = true;
                     }
                     else
@@ -228,20 +217,18 @@ namespace SLAM3.Pages
             {
                 var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
                 var resultat = oCommand.ExecuteReader();
-                while (resultat.Read())
+                while(resultat.Read())
                 {
                     ComboBoxClient.Items.Add(new ComboboxItemClient
                     {
                         Text = resultat[0].ToString(),
-                        Value = new Client(resultat[0].ToString(),
-                            resultat[2].ToString(),
-                            resultat[1].ToString())
+                        Value = new Client(resultat[0].ToString(), resultat[2].ToString(), resultat[1].ToString())
                     });
                     ComboBoxClient.SelectedIndex = 0;
                 }
                 resultat.Close();
             }
-            catch (Exception caught)
+            catch(Exception caught)
             {
                 Console.WriteLine(caught.Message);
                 Console.Read();
@@ -272,7 +259,7 @@ namespace SLAM3.Pages
             {
                 var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
                 var resultat = oCommand.ExecuteReader();
-                while (resultat.Read())
+                while(resultat.Read())
                 {
                     ComboBoxProduit.Items.Add(new ComboboxItemProduit
                     {
@@ -282,7 +269,7 @@ namespace SLAM3.Pages
                 }
                 resultat.Close();
             }
-            catch (Exception caught)
+            catch(Exception caught)
             {
                 Console.WriteLine(caught.Message);
                 Console.Read();
@@ -298,21 +285,18 @@ namespace SLAM3.Pages
         {
             try
             {
-                switch (_qte)
+                switch(_qte)
                 {
                     case 0:
                         ErreurPrix();
                         break;
                     default:
-                        LabelPrix.Content = (ComboBoxProduit.SelectedItem as ComboboxItemProduit).Value.GetPrix*
-                                            Convert.ToInt32(TextBoxDevisQte.Text) + "€";
+                        LabelPrix.Content = (ComboBoxProduit.SelectedItem as ComboboxItemProduit).Value.GetPrix * Convert.ToInt32(TextBoxDevisQte.Text) + "€";
                         break;
                 }
             }
                 // ReSharper disable once EmptyGeneralCatchClause
-            catch
-            {
-            }
+            catch {}
         }
 
         private void Menu_Loaded(object sender, RoutedEventArgs e)
@@ -324,11 +308,9 @@ namespace SLAM3.Pages
                             TextBoxDevisQte.CaretBrush =
                                 TextBoxDevisQte.SelectionBrush =
                                     ComboBoxProduit.BorderBrush =
-                                        ComboBoxClient.BorderBrush =
-                                            new SolidColorBrush(
-                                                (Color)ColorConverter.ConvertFromString(Settings.Default.AccentColor));
+                                        ComboBoxClient.BorderBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
             var nbMarchandise = _leDevis.GetList.Count;
-            for (var i = 0; i < nbMarchandise; i++)
+            for(var i = 0; i < nbMarchandise; i++)
             {
                 _leDevis[i].Bordure.BorderBrush = Ajouter.BorderBrush;
             }
@@ -340,7 +322,7 @@ namespace SLAM3.Pages
             BorderDevis.Height = Menu.ActualHeight - 50;
 
             var nbMarchandise = _leDevis.GetList.Count;
-            for (var i = 0; i < nbMarchandise; i++)
+            for(var i = 0; i < nbMarchandise; i++)
             {
                 _leDevis[i].Bordure.Width = BorderDevis.Width - 6;
             }

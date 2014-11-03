@@ -17,14 +17,8 @@ namespace SLAM3.Classes
             _nom = nom;
         }
 
-        public string GetNom
-        {
-            get { return _nom; }
-        }
+        public string GetNom { get { return _nom; } }
 
-        public double GetPrix
-        {
-            get { return _prix; }
-        }
+        public double GetPrix { get { return _prix; } }
     }
 }

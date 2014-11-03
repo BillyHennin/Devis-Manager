@@ -19,19 +19,10 @@ namespace SLAM3.Classes
             _email = email;
         }
 
-        public string GetDenomination
-        {
-            get { return _denomination; }
-        }
+        public string GetDenomination { get { return _denomination; } }
 
-        public string GetTelephone
-        {
-            get { return _telephone; }
-        }
+        public string GetTelephone { get { return _telephone; } }
 
-        public string GetEmail
-        {
-            get { return _email; }
-        }
+        public string GetEmail { get { return _email; } }
     }
 }

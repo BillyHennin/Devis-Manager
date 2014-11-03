@@ -11,13 +11,14 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+
 using SLAM3.Classes;
 using SLAM3.Properties;
 
 namespace SLAM3.Pages
 {
     /// <summary>
-    ///     Logique d'interaction pour affichageClient.xaml
+    ///   Logique d'interaction pour affichageClient.xaml
     /// </summary>
     public partial class AffichageClient
     {
@@ -44,19 +45,17 @@ namespace SLAM3.Pages
             {
                 var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
                 var resultat = oCommand.ExecuteReader();
-                while (resultat.Read())
+                while(resultat.Read())
                 {
                     ComboBoxClient.Items.Add(new ComboboxItemClient
                     {
                         Text = resultat[0].ToString(),
-                        Value = new Client(resultat[0].ToString(),
-                            resultat[1].ToString(),
-                            resultat[2].ToString())
+                        Value = new Client(resultat[0].ToString(), resultat[1].ToString(), resultat[2].ToString())
                     });
                 }
                 resultat.Close();
             }
-            catch (Exception caught)
+            catch(Exception caught)
             {
                 Console.WriteLine(caught.Message);
                 Console.Read();
@@ -75,35 +74,29 @@ namespace SLAM3.Pages
             // oui
             //TODO : liaison ddb
             var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
-            var query = "SELECT DISTINCT NumeroDevis FROM DEVIS WHERE Client ='" +
-                           (ComboBoxClient.SelectedItem as ComboboxItemClient).Value.GetDenomination + "'";
+            var query = "SELECT DISTINCT NumeroDevis FROM DEVIS WHERE Client ='" + (ComboBoxClient.SelectedItem as ComboboxItemClient).Value.GetDenomination
+                        + "'";
             db.Open();
             try
             {
                 var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
                 var resultat = oCommand.ExecuteReader();
-                while (resultat.Read())
+                while(resultat.Read())
                 {
-                    var query2 = "SELECT Marchandise, Quantite, PrixMarchandise FROM DEVIS WHERE NumeroDevis =" +
-                                    resultat[0];
+                    var query2 = "SELECT Marchandise, Quantite, PrixMarchandise FROM DEVIS WHERE NumeroDevis =" + resultat[0];
                     var oCommand2 = new SqlCeCommand {Connection = db, CommandText = query2};
                     var resultat2 = oCommand2.ExecuteReader();
                     var listMarchandise2 = new List<Marchandise>();
-                    while (resultat2.Read())
+                    while(resultat2.Read())
                     {
-                        listMarchandise2.Add(new Marchandise(resultat2[0].ToString(), Convert.ToInt32(resultat2[1]),
-                            Convert.ToInt32(resultat2[2])));
+                        listMarchandise2.Add(new Marchandise(resultat2[0].ToString(), Convert.ToInt32(resultat2[1]), Convert.ToInt32(resultat2[2])));
                     }
 
-                    ComboBoxDevis.Items.Add(new ComboboxItemDevis
-                    {
-                        Text = "Devis n°" + resultat[0],
-                        Value = new Devis(listMarchandise2)
-                    });
+                    ComboBoxDevis.Items.Add(new ComboboxItemDevis {Text = "Devis n°" + resultat[0], Value = new Devis(listMarchandise2)});
                 }
                 resultat.Close();
             }
-            catch (Exception caught)
+            catch(Exception caught)
             {
                 Console.WriteLine(caught.Message);
                 Console.Read();
@@ -118,11 +111,14 @@ namespace SLAM3.Pages
         private void ComboBoxDevis_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             PanelDevis.Children.Clear();
-            if (ComboBoxDevis.Items.Count == 0) return;
+            if(ComboBoxDevis.Items.Count == 0)
+            {
+                return;
+            }
 
             var listMarchandise = (ComboBoxDevis.SelectedItem as ComboboxItemDevis).Value.GetList;
             var taille = listMarchandise.Count;
-            for (var i = 0; i < taille; i++)
+            for(var i = 0; i < taille; i++)
             {
                 var text = listMarchandise[i].GetNom;
                 var qte = Convert.ToInt32(listMarchandise[i].GetQte);
@@ -144,28 +140,13 @@ namespace SLAM3.Pages
                 };
 
                 // Nom du produit
-                panelMarchandise.Children.Add(new TextBlock
-                {
-                    Margin = thick,
-                    Text = text,
-                    Height = 16
-                });
+                panelMarchandise.Children.Add(new TextBlock {Margin = thick, Text = text, Height = 16});
 
                 // Prix
-                panelMarchandise.Children.Add(new TextBlock
-                {
-                    Text = qte.ToString(CultureInfo.InvariantCulture),
-                    Margin = thick,
-                    Height = 16
-                });
+                panelMarchandise.Children.Add(new TextBlock {Text = qte.ToString(CultureInfo.InvariantCulture), Margin = thick, Height = 16});
 
                 // Quantité
-                panelMarchandise.Children.Add(new TextBlock
-                {
-                    Text = prixMarchandise.ToString(CultureInfo.InvariantCulture),
-                    Margin = thick,
-                    Height = 16
-                });
+                panelMarchandise.Children.Add(new TextBlock {Text = prixMarchandise.ToString(CultureInfo.InvariantCulture), Margin = thick, Height = 16});
 
                 item.Bordure = bordure;
                 PanelDevis.Children.Add(bordure);
@@ -177,8 +158,7 @@ namespace SLAM3.Pages
         {
             ComboBoxClient.BorderBrush =
                 BorderDevis.BorderBrush =
-                    ComboBoxDevis.BorderBrush =
-                        new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
+                    ComboBoxDevis.BorderBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
         }
 
         private void MenuClient_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -188,14 +168,12 @@ namespace SLAM3.Pages
             try
             {
                 var nbMarchandise = _leDevis.GetList.Count;
-                for (var i = 0; i < nbMarchandise; i++)
+                for(var i = 0; i < nbMarchandise; i++)
                 {
                     ListMarchandise[i].Bordure.Width = BorderDevis.Width - 5;
                 }
             } // ReSharper disable once EmptyGeneralCatchClause
-            catch
-            {
-            }
+            catch {}
         }
     }
 }
