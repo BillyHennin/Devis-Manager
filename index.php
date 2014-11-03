@@ -6,11 +6,10 @@
 -->
 <html>
 	<head>
-		<title>ZeroFour by HTML5 UP</title>
+		<title>Devis Manager</title>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="description" content="" />
 		<meta name="keywords" content="" />
-		<!--[if lte IE 8]><script src="css/ie/html5shiv.js"></script><![endif]-->
 		<script src="js/jquery.min.js"></script>
 		<script src="js/jquery.dropotron.min.js"></script>
 		<script src="js/skel.min.js"></script>
@@ -21,8 +20,6 @@
 			<link rel="stylesheet" href="css/style.css" />
 			<link rel="stylesheet" href="css/style-desktop.css" />
 		</noscript>
-		<!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css" /><![endif]-->
-		<!--[if lte IE 9]><link rel="stylesheet" href="css/ie/v9.css" /><![endif]-->
 	</head>
 	<body class="homepage">
 
@@ -37,12 +34,12 @@
 									<div class="inner">
 									
 										<!-- Logo -->
-											<h1><a href="index.html" id="logo">ZeroFour</a></h1>
+											<h1><a href="index.php" id="logo">Devis Manager</a></h1>
 										
 										<!-- Nav -->
 											<nav id="nav">
 												<ul>
-													<li class="current_page_item"><a href="index.html">Home</a></li>
+													<li class="current_page_item"><a href="index.php">Home</a></li>
 													<li>
 														<a href="">Dropdown</a>
 														<ul>
@@ -71,11 +68,11 @@
 
 							<!-- Banner -->
 								<div id="banner">
-									<h2><strong>ZeroFour:</strong> A free responsive site template
+									<h2><strong>Devis Manager:</strong> Une application libre de gestion de devis.
 									<br />
-									built on HTML5 and CSS3 by <a href="http://html5up.net">HTML5 UP</a></h2>
-									<p>Does this statement make you want to click the big shiny button?</p>
-									<a href="#" class="button big icon fa-check-circle">Yes it does</a>
+									Construite en C# par <a href="https://github.com/BillyHennin">Billy Hennin</a></h2>
+									<p>Utilisation et suivis gratuits ? C'est ici : </p>
+									<a href="#" class="button big icon fa-check-circle">Telecharger</a>
 								</div>
 
 						</div>
