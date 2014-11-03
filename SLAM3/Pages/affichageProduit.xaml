@@ -28,7 +28,8 @@
                        Grid.Column="0" />
             <TextBox x:Name="TextBoxDevisQte" Grid.Column="1" MaxLength="8" TextWrapping="Wrap"
                      Text="" Grid.ColumnSpan="5" Margin="13,0,-26,0" TabIndex="2" TextAlignment="Right" MaxLines="1"
-                     Grid.IsSharedSizeScope="True" Height="23" VerticalAlignment="Bottom" Grid.Row="0" Grid.RowSpan="2" TextChanged="TextBoxDevisQte_TextChanged" />
+                     Grid.IsSharedSizeScope="True" Height="23" VerticalAlignment="Bottom" Grid.Row="0" Grid.RowSpan="2"
+                     TextChanged="TextBoxDevisQte_TextChanged" />
         </Grid>
         <Grid x:Name="DevisGrid">
             <Border x:Name="BorderDevis" BorderThickness="1" HorizontalAlignment="Left"

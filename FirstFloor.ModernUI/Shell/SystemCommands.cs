@@ -81,8 +81,8 @@ namespace FirstFloor.ModernUI.Shell
                 return;
             }
             var hmenu = NativeMethods.GetSystemMenu(hwnd, false);
-            var cmd = NativeMethods.TrackPopupMenuEx(hmenu, TPM_LEFTBUTTON | TPM_RETURNCMD, (int) physicalScreenLocation.X, (int) physicalScreenLocation.Y,
-                hwnd, IntPtr.Zero);
+            var cmd = NativeMethods.TrackPopupMenuEx(hmenu, TPM_LEFTBUTTON | TPM_RETURNCMD, (int) physicalScreenLocation.X, (int) physicalScreenLocation.Y, hwnd,
+                IntPtr.Zero);
             if(0 != cmd)
             {
                 NativeMethods.PostMessage(hwnd, WM.SYSCOMMAND, new IntPtr(cmd), IntPtr.Zero);

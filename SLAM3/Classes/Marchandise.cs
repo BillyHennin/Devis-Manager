@@ -23,24 +23,12 @@ namespace SLAM3.Classes
 
         public Border Bordure { get; set; }
 
-        public string GetNom
-        {
-            get { return _nom; }
-        }
+        public string GetNom { get { return _nom; } }
 
-        public double GetPrix
-        {
-            get { return _prix; }
-        }
+        public double GetPrix { get { return _prix; } }
 
-        public double GetQte
-        {
-            get { return _quantite; }
-        }
+        public int GetQte { get { return _quantite; } }
 
-        public double SetBordureWidth
-        {
-            set { Bordure.Width = value; }
-        }
+        public double SetBordureWidth { set { Bordure.Width = value; } }
     }
 }

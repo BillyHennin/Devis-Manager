@@ -24,19 +24,10 @@ namespace SLAM3.Classes
         public double TotalPrix { get; set; }
         public Client Client { get; set; }
 
-        public DateTime GetDate
-        {
-            get { return _date; }
-        }
+        public DateTime GetDate { get { return _date; } }
 
-        public List<Marchandise> GetList
-        {
-            get { return _listMarchandise; }
-        }
+        public List<Marchandise> GetList { get { return _listMarchandise; } }
 
-        public Marchandise this[int i]
-        {
-            get { return GetList[i]; }
-        }
+        public Marchandise this[int i] { get { return GetList[i]; } }
     }
 }
