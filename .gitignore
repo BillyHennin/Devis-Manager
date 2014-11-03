@@ -67,7 +67,6 @@ ipch/
 *.aps
 *.ncb
 *.opensdf
-*.sdf
 *.cachefile
 
 # Visual Studio profiler
@@ -194,7 +193,8 @@ FakesAssemblies/
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
