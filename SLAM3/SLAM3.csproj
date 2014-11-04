@@ -59,6 +59,7 @@
     <Reference Include="ReachFramework" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.OracleClient" />
     <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Printing" />
@@ -88,6 +89,9 @@
     <Compile Include="Classes\Devis.cs" />
     <Compile Include="Classes\Marchandise.cs" />
     <Compile Include="Classes\Produit.cs" />
+    <Compile Include="Connection\ConnectionLocale.cs" />
+    <Compile Include="Connection\ConnectionMySql.cs" />
+    <Compile Include="Connection\ConnectionOracle.cs" />
     <Compile Include="DatabaseDataSet.cs">
       <DependentUpon>DatabaseDataSet.xsd</DependentUpon>
       <SubType>Component</SubType>
@@ -108,6 +112,9 @@
     </Compile>
     <Compile Include="Pages\menu.xaml.cs">
       <DependentUpon>menu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Parametre.xaml.cs">
+      <DependentUpon>Parametre.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModels\PlayerViewModel.cs" />
@@ -141,6 +148,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Appearance.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Parametre.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -204,6 +215,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Database.sdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

@@ -24,16 +24,37 @@ namespace SLAM3
 
         private void ModernWindow_Initialized(object sender, EventArgs e)
         {
-            var file = Environment.CurrentDirectory + "//Database.sdf";
-            if(File.Exists(file))
+            /*var file = Environment.CurrentDirectory + "//Database.sdf";
+            //var file = Environment.CurrentDirectory + "//Config.xmls";
+            
+            if(!File.Exists(file))
             {
-                Settings.Default.DatabaseConnectionString = "Data Source=" + file;
-            }
-            else
+                File.Create(file);
+                //ini.IniWriteValue("Database", "Connection", Environment.CurrentDirectory + "\\Database.sdf");
+
+                ContentSource = new Uri(@"/Pages/Parametre.xaml", UriKind.Relative);
+            }*/
+
+            var reader = new System.Xml.XmlTextReader(Environment.CurrentDirectory + "\\Config.xml");
+            var contents = "";
+            while (reader.Read())
             {
-                MessageBox.Show("Le fichier de base de donnée (Database.sdf) est manquant dans la dossier de l'executable", "Erreur");
-                Application.Current.Shutdown();
+                reader.MoveToContent();
+                if (reader.NodeType == System.Xml.XmlNodeType.Element)
+                    contents += "<" + reader.Name + ">\n";
+                if (reader.NodeType == System.Xml.XmlNodeType.Text)
+                    contents += reader.Value + "\n";
             }
+            MessageBox.Show(contents);
+            //MessageBox.Show(ini.IniReadValue("Database", "Connection"));
+            //Settings.Default.DatabaseConnectionString = "Data Source=" + ini.IniReadValue("Database","Connection");
+            Settings.Default.DatabaseConnectionString = "Data Source=" + Environment.CurrentDirectory + "\\Database.sdf";
+
+            //MessageBox.Show("Le fichier de base de donnée (Database.sdf) est manquant dans la dossier de l'executable", "Erreur");
+            //Environment.Exit(0);
+
+
+
         }
     }
 }

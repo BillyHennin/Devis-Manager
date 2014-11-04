@@ -14,11 +14,12 @@
                   ShowForwardButton="True"
                   ShowRefreshButton="True"
                   ToolTip="{DynamicResource {x:Type ToolTip}}" Icon="Asset/appbar.currency.euro.png"
-                  Initialized="ModernWindow_Initialized">
+                  Initialized="                                                                                                                                                                                                                                                                                                                                                                                                       ModernWindow_Initialized">
 
     <mui:ModernWindow.TitleLinks>
         <mui:Link DisplayName="A propos" Source="/Pages/about.xaml" />
         <mui:Link DisplayName="Apparence" Source="Pages/Appearance.xaml" />
+        <mui:Link DisplayName="Parametre" Source="Pages/Parametre.xaml" />
     </mui:ModernWindow.TitleLinks>
 
     <mui:ModernWindow.MenuLinkGroups>
