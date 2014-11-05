@@ -10,7 +10,6 @@ using System.Data.SqlServerCe;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 
 using MANAGER.Classes;
 using MANAGER.Properties;
@@ -150,8 +149,6 @@ namespace MANAGER.Pages
         {
             PanelProduit.Children.Clear();
             ListMarchandise.Clear();
-
-            TextBoxDevisQte.BorderBrush = BorderDevis.BorderBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
 
             var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
             const string query = "SELECT * FROM MARCHANDISE";

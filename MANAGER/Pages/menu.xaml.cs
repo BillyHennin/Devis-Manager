@@ -301,14 +301,6 @@ namespace MANAGER.Pages
 
         private void Menu_Loaded(object sender, RoutedEventArgs e)
         {
-            Ajouter.BorderBrush =
-                AjouterDevis.BorderBrush =
-                    BorderDevis.BorderBrush =
-                        TextBoxDevisQte.BorderBrush =
-                            TextBoxDevisQte.CaretBrush =
-                                TextBoxDevisQte.SelectionBrush =
-                                    ComboBoxProduit.BorderBrush =
-                                        ComboBoxClient.BorderBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
             var nbMarchandise = _leDevis.GetList.Count;
             for(var i = 0; i < nbMarchandise; i++)
             {

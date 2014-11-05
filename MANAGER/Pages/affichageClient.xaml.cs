@@ -10,7 +10,6 @@ using System.Data.SqlServerCe;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 
 using MANAGER.Classes;
 using MANAGER.Properties;
@@ -152,13 +151,6 @@ namespace MANAGER.Pages
                 PanelDevis.Children.Add(bordure);
                 _leDevis.GetList.Add(item);
             }
-        }
-
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            ComboBoxClient.BorderBrush =
-                BorderDevis.BorderBrush =
-                    ComboBoxDevis.BorderBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
         }
 
         private void MenuClient_SizeChanged(object sender, SizeChangedEventArgs e)
