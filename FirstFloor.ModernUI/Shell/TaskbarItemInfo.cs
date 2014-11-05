@@ -498,7 +498,7 @@ namespace FirstFloor.ModernUI.Shell
             new PropertyMetadata(default(Thickness), (d, e) => ((TaskbarItemInfo) d)._OnThumbnailClipMarginChanged(),
                 (d, e) => _CoerceThumbnailClipMargin((Thickness) e)));
 
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifieSLAM3houldBeSpelledCorrectly", MessageId = "Infos")]
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifieMANAGERhouldBeSpelledCorrectly", MessageId = "Infos")]
         public static readonly DependencyProperty ThumbButtonInfosProperty = DependencyProperty.Register("ThumbButtonInfos", typeof(ThumbButtonInfoCollection),
             typeof(TaskbarItemInfo), new PropertyMetadata(null, (d, e) => ((TaskbarItemInfo) d)._OnThumbButtonsChanged()));
 
@@ -520,7 +520,7 @@ namespace FirstFloor.ModernUI.Shell
             set { SetValue(ThumbnailClipMarginProperty, value); }
         }
 
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifieSLAM3houldBeSpelledCorrectly", MessageId = "Infos")]
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifieMANAGERhouldBeSpelledCorrectly", MessageId = "Infos")]
         [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public ThumbButtonInfoCollection ThumbButtonInfos
         {

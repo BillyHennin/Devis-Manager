@@ -367,8 +367,8 @@ namespace FirstFloor.ModernUI.Shell
             }
         }
 
-        [SuppressMessage("Microsoft.Naming", "CA1709:IdentifieSLAM3houldBeCasedCorrectly", MessageId = "Ux")]
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifieSLAM3houldBeSpelledCorrectly", MessageId = "Ux")]
+        [SuppressMessage("Microsoft.Naming", "CA1709:IdentifieMANAGERhouldBeCasedCorrectly", MessageId = "Ux")]
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifieMANAGERhouldBeSpelledCorrectly", MessageId = "Ux")]
         public string UxThemeName
         {
             get { return _uxThemeName; }
@@ -382,8 +382,8 @@ namespace FirstFloor.ModernUI.Shell
             }
         }
 
-        [SuppressMessage("Microsoft.Naming", "CA1709:IdentifieSLAM3houldBeCasedCorrectly", MessageId = "Ux")]
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifieSLAM3houldBeSpelledCorrectly", MessageId = "Ux")]
+        [SuppressMessage("Microsoft.Naming", "CA1709:IdentifieMANAGERhouldBeCasedCorrectly", MessageId = "Ux")]
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifieMANAGERhouldBeSpelledCorrectly", MessageId = "Ux")]
         public string UxThemeColor
         {
             get { return _uxThemeColor; }
