@@ -22,10 +22,10 @@
                 <RowDefinition Height="8*" />
                 <RowDefinition Height="67*" />
             </Grid.RowDefinitions>
-            <TextBlock Margin="0,10,0,0" Style="{StaticResource Heading2}" TextWrapping="Wrap" Text="Le client :"
-                       Grid.Column="0" />
-            <ComboBox x:Name="ComboBoxClient" BorderBrush="{DynamicResource Accent}" Margin="0,10,0,0" Grid.Row="0" Grid.Column="1"
-                      Grid.ColumnSpan="5" />
+            <TextBlock Margin="0,10,0,0" Style="{StaticResource Heading2}" TextWrapping="Wrap" Text="La base de donnée :"
+                       Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Left" Width="161" />
+            <ComboBox x:Name="ComboBoxClient" BorderBrush="{DynamicResource Accent}" Margin="54,10,-61,0" Grid.Row="0" Grid.Column="2"
+                      Grid.ColumnSpan="4" />
         </Grid>
         <Grid x:Name="DevisGrid">
             <Border x:Name="BorderDevis" BorderBrush="{DynamicResource Accent}" BorderThickness="1" HorizontalAlignment="Left"
