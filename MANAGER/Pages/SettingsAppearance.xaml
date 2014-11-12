@@ -56,9 +56,6 @@
                               BorderBrush="{DynamicResource Accent}"
                               VerticalAlignment="Center"
                               DisplayMemberPath="DisplayName"
-                              ItemsSource="{Binding Themes}"
-                              SelectedItem="{Binding SelectedTheme,
-                                                     Mode=TwoWay}"
                               Height="22" />
 
                     <TextBlock Grid.Row="1"
@@ -70,9 +67,6 @@
                               Grid.Column="2"
                               VerticalAlignment="Center"
                               BorderBrush="{DynamicResource Accent}"
-                              ItemsSource="{Binding FontSizes}"
-                              SelectedItem="{Binding SelectedFontSize,
-                                                     Mode=TwoWay}"
                               Height="22" />
                 </Grid>
             </StackPanel>
