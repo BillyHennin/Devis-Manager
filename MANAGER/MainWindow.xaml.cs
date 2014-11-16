@@ -44,8 +44,10 @@ namespace MANAGER
                 ContentSource = new Uri(@"/Pages/Parametre.xaml", UriKind.Relative);
             }
 
-            //Settings.Default.DatabaseConnectionString = "Data Source=" + ini.IniReadValue("Database","Connection");
-            Settings.Default.DatabaseConnectionString = "Data Source=" + Environment.CurrentDirectory + "\\Database.sdf";
+            //Settings.Default.DatabaseConnectionString = "Data Source=" + Environment.CurrentDirectory + "\\Database.sdf";
+
+            Settings.Default.DatabaseConnectionString = "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1527))" 
+                + "(CONNECT_DATA=(SID=mysid)));User Id=myuserid;Password=mypassword;";
 
             //MessageBox.Show("Le fichier de base de donnée (Database.sdf) est manquant dans la dossier de l'executable", "Erreur");
             //Environment.Exit(0);

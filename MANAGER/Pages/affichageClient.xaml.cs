@@ -6,12 +6,13 @@
 
 using System;
 using System.Collections.Generic;
-using System.Data.SqlServerCe;
+//using System.Data.SqlServerCe;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 
 using MANAGER.Classes;
+using MANAGER.Connection;
 using MANAGER.Properties;
 
 namespace MANAGER.Pages
@@ -37,12 +38,15 @@ namespace MANAGER.Pages
              * 
              */
 
-            var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
+            //var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
+            var Co = new ConnectionOracle();
+            var db = Co.OracleDatabase(Settings.Default.DatabaseConnectionString);
             const string query = "SELECT * FROM CLIENT";
             db.Open();
             try
             {
-                var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
+                //var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
+                var oCommand = Co.OracleCommand(db, query);
                 var resultat = oCommand.ExecuteReader();
                 while(resultat.Read())
                 {
@@ -72,18 +76,22 @@ namespace MANAGER.Pages
             PanelDevis.Children.Clear();
             // oui
             //TODO : liaison ddb
-            var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
+            //var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
+            var Co = new ConnectionOracle();
+            var db = Co.OracleDatabase(Settings.Default.DatabaseConnectionString);
             var query = "SELECT DISTINCT NumeroDevis FROM DEVIS WHERE Client ='" + (ComboBoxClient.SelectedItem as ComboboxItemClient).Value.GetDenomination
                         + "'";
             db.Open();
             try
             {
-                var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
+                //var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
+                var oCommand = Co.OracleCommand(db, query);
                 var resultat = oCommand.ExecuteReader();
                 while(resultat.Read())
                 {
                     var query2 = "SELECT Marchandise, Quantite, PrixMarchandise FROM DEVIS WHERE NumeroDevis =" + resultat[0];
-                    var oCommand2 = new SqlCeCommand {Connection = db, CommandText = query2};
+                    var oCommand2 = Co.OracleCommand(db, query2);
+                    //var oCommand2 = new SqlCeCommand {Connection = db, CommandText = query2};
                     var resultat2 = oCommand2.ExecuteReader();
                     var listMarchandise2 = new List<Marchandise>();
                     while(resultat2.Read())
@@ -166,6 +174,19 @@ namespace MANAGER.Pages
                 }
             } // ReSharper disable once EmptyGeneralCatchClause
             catch {}
+        }
+
+        private void MenuClient_Loaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var nbMarchandise = _leDevis.GetList.Count;
+                for (var i = 0; i < nbMarchandise; i++)
+                {
+                    _leDevis[i].Bordure.BorderBrush = BorderDevis.BorderBrush;
+                }
+            } // ReSharper disable once EmptyGeneralCatchClause
+            catch { }
         }
     }
 }

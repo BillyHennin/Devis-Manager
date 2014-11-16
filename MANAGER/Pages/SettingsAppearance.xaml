@@ -35,40 +35,7 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
 
-                <Grid HorizontalAlignment="Left">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="65" />
-                        <ColumnDefinition Width="35" />
-                        <ColumnDefinition MinWidth="120" />
-                        <ColumnDefinition Width="0*" />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
 
-                    <TextBlock Margin="0,3,16,7"
-                               VerticalAlignment="Center"
-                               Text="Theme:" Grid.ColumnSpan="2" Height="16" />
-                    <ComboBox Grid.Row="0"
-                              Grid.Column="2"
-                              Margin="0,0,0,4"
-                              BorderBrush="{DynamicResource Accent}"
-                              VerticalAlignment="Center"
-                              DisplayMemberPath="DisplayName"
-                              Height="22" />
-
-                    <TextBlock Grid.Row="1"
-                               Grid.Column="0"
-                               Margin="0,3,16,3"
-                               VerticalAlignment="Center"
-                               Text="Taille du texte:" Grid.ColumnSpan="2" Height="16" />
-                    <ComboBox Grid.Row="1"
-                              Grid.Column="2"
-                              VerticalAlignment="Center"
-                              BorderBrush="{DynamicResource Accent}"
-                              Height="22" />
-                </Grid>
             </StackPanel>
         </ScrollViewer>
     </Grid>

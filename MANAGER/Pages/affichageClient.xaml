@@ -6,7 +6,7 @@
       mc:Ignorable="d"
       x:Name="MenuClient"
       d:DesignHeight="300" d:DesignWidth="300"
-      Title="affichageClient" SizeChanged="MenuClient_SizeChanged">
+      Title="affichageClient" SizeChanged="MenuClient_SizeChanged" Loaded="MenuClient_Loaded">
     <StackPanel x:Name="Panel" MinWidth="150" Margin="10,10,-222,-10">
         <Grid HorizontalAlignment="Left" Width="252">
             <Grid.ColumnDefinitions>

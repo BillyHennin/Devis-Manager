@@ -5,9 +5,7 @@
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
 using System;
-using System.Data.OracleClient;
-
-#pragma warning disable 618
+using Oracle.DataAccess.Client; 
 
 namespace MANAGER.Connection
 {

@@ -6,12 +6,13 @@
 
 using System;
 using System.Collections.Generic;
-using System.Data.SqlServerCe;
+//using System.Data.SqlServerCe;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 
 using MANAGER.Classes;
+using MANAGER.Connection;
 using MANAGER.Properties;
 
 namespace MANAGER.Pages
@@ -84,12 +85,15 @@ namespace MANAGER.Pages
                 PanelProduit.Children.Clear();
                 ListMarchandise.Clear();
 
-                var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
+               // var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
+                var Co = new ConnectionOracle();
+                var db = Co.OracleDatabase(Settings.Default.DatabaseConnectionString);
                 var query = "SELECT * FROM MARCHANDISE WHERE Denomination LIKE '%" + TextBoxDevisQte.Text + "%'";
                 db.Open();
                 try
                 {
-                    var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
+                    //var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
+                    var oCommand = Co.OracleCommand(db, query);
                     var resultat = oCommand.ExecuteReader();
                     while(resultat.Read())
                     {
@@ -150,12 +154,15 @@ namespace MANAGER.Pages
             PanelProduit.Children.Clear();
             ListMarchandise.Clear();
 
-            var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
+            // var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
+            var Co = new ConnectionOracle();
+            var db = Co.OracleDatabase(Settings.Default.DatabaseConnectionString);
             const string query = "SELECT * FROM MARCHANDISE";
             db.Open();
             try
             {
-                var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
+             //   var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
+                var oCommand = Co.OracleCommand(db, query);
                 var resultat = oCommand.ExecuteReader();
                 while(resultat.Read())
                 {

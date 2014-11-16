@@ -22,7 +22,7 @@ namespace MANAGER.Pages
 
         private static string Motd()
         {
-            var webRequest = WebRequest.Create(@"http://niitr0x.free.fr/VirtualNews/LATEST_VERSION.txt");
+            var webRequest = WebRequest.Create(@"http://billyhennin.github.io/Devis-Manager/motd.html");
             string msg;
             using(var response = webRequest.GetResponse())
             {
@@ -50,7 +50,7 @@ namespace MANAGER.Pages
                           + "\r\n\r\nA propos de l'application : "
                           + "\r\n\r\n\tCette application à été créée dans le cadre d'un projet de MANAGER. Le but était créer un application utilisant une base de données Oracle et de l'exploiter."
                           + "\r\n\tAvec cette application vous serez capable de creer des devis, de visualiser vos devis et de voir la liste de produit que vous disposez."
-                          + "\r\nL'application que vous utilisez actuellement est open-source et est disponible [url='https://github.com/BillyHennin/APPMANAGER']ici (GitHub)[/url]."
+                          + "\r\nL'application que vous utilisez actuellement est open-source et est disponible [url='https://github.com/BillyHennin/Devis-Manager']ici (GitHub)[/url]."
                           + "\r\n\r\nMessage du jour : \r\n \r\n" + Motd();
         }
     }
