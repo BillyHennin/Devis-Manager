@@ -22,6 +22,7 @@ namespace MANAGER.Classes
         }
 
         public double TotalPrix { get; set; }
+
         public Client Client { get; set; }
 
         public DateTime GetDate { get { return _date; } }

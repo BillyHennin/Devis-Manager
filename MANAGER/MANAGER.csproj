@@ -58,10 +58,7 @@
   <ItemGroup>
     <Reference Include="Accessibility" />
     <Reference Include="microsoft.visualbasic" />
-    <Reference Include="Oracle.DataAccess, Version=2.121.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\dll\Oracle.DataAccess.dll</HintPath>
-    </Reference>
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.121.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationUI, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="ReachFramework" />
@@ -91,10 +88,9 @@
     <Compile Include="Classes\Client.cs" />
     <Compile Include="Classes\ComboboxItemClient.cs" />
     <Compile Include="Classes\ComboboxItemDevis.cs" />
-    <Compile Include="Classes\ComboboxItemProduit.cs" />
+    <Compile Include="Classes\ComboboxItemMarchandise.cs" />
     <Compile Include="Classes\Devis.cs" />
     <Compile Include="Classes\Marchandise.cs" />
-    <Compile Include="Classes\Produit.cs" />
     <Compile Include="Connection\ConnectionLocale.cs" />
     <Compile Include="Connection\ConnectionMySql.cs" />
     <Compile Include="Connection\ConnectionOracle.cs" />

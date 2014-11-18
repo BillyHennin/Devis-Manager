@@ -13,13 +13,17 @@ namespace MANAGER.Classes
         private readonly string _nom;
         private readonly double _prix;
         private readonly int _quantite;
+        private readonly int _id;
 
-        public Marchandise(string nom, int quantite, double prix)
+        public Marchandise(int id, string nom, int quantite, double prix)
         {
+            _id = id;
             _nom = nom;
             _quantite = quantite;
             _prix = prix;
         }
+
+        
 
         public Border Bordure { get; set; }
 
@@ -29,6 +33,8 @@ namespace MANAGER.Classes
 
         public int GetQte { get { return _quantite; } }
 
-        public double SetBordureWidth { set { Bordure.Width = value; } }
+        public int GetId { get { return _id; }}
+        /* for future use
+        public double SetBordureWidth { set { Bordure.Width = value; } }*/
     }
 }

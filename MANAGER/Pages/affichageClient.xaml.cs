@@ -15,6 +15,8 @@ using MANAGER.Classes;
 using MANAGER.Connection;
 using MANAGER.Properties;
 
+using Oracle.ManagedDataAccess.Client;
+
 namespace MANAGER.Pages
 {
     /// <summary>
@@ -39,21 +41,21 @@ namespace MANAGER.Pages
              */
 
             //var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
-            var Co = new ConnectionOracle();
-            var db = Co.OracleDatabase(Settings.Default.DatabaseConnectionString);
+           
+            var db = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
             const string query = "SELECT * FROM CLIENT";
             db.Open();
             try
             {
                 //var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
-                var oCommand = Co.OracleCommand(db, query);
+                var oCommand = ConnectionOracle.OracleCommand(db, query);
                 var resultat = oCommand.ExecuteReader();
                 while(resultat.Read())
                 {
                     ComboBoxClient.Items.Add(new ComboboxItemClient
                     {
-                        Text = resultat[0].ToString(),
-                        Value = new Client(resultat[0].ToString(), resultat[1].ToString(), resultat[2].ToString())
+                        Text = resultat[2].ToString(),
+                        Value = new Client(Convert.ToInt32(resultat[0]), resultat[2].ToString(), resultat[1].ToString(), resultat[3].ToString())
                     });
                 }
                 resultat.Close();
@@ -75,28 +77,30 @@ namespace MANAGER.Pages
             ComboBoxDevis.Items.Clear();
             PanelDevis.Children.Clear();
             // oui
-            //TODO : liaison ddb
-            //var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
-            var Co = new ConnectionOracle();
-            var db = Co.OracleDatabase(Settings.Default.DatabaseConnectionString);
-            var query = "SELECT DISTINCT NumeroDevis FROM DEVIS WHERE Client ='" + (ComboBoxClient.SelectedItem as ComboboxItemClient).Value.GetDenomination
-                        + "'";
+            var db = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
+            var query = "SELECT DISTINCT NUMERODEVIS FROM DEVIS WHERE ID_CLIENT = " + (ComboBoxClient.SelectedItem as ComboboxItemClient).Value.GetId + ";";
+            MessageBox.Show(query);
             db.Open();
             try
             {
-                //var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
-                var oCommand = Co.OracleCommand(db, query);
+                var oCommand = ConnectionOracle.OracleCommand(db, query);
                 var resultat = oCommand.ExecuteReader();
                 while(resultat.Read())
                 {
-                    var query2 = "SELECT Marchandise, Quantite, PrixMarchandise FROM DEVIS WHERE NumeroDevis =" + resultat[0];
-                    var oCommand2 = Co.OracleCommand(db, query2);
-                    //var oCommand2 = new SqlCeCommand {Connection = db, CommandText = query2};
+                    MessageBox.Show(resultat[0].ToString());
+                    var query2 = "SELECT ID_MARCHANDISE, PRIXMARCHANDISE FROM DEVIS WHERE NUMERODEVIS = " + resultat[0];
+                    var oCommand2 = ConnectionOracle.OracleCommand(db, query2);
                     var resultat2 = oCommand2.ExecuteReader();
                     var listMarchandise2 = new List<Marchandise>();
                     while(resultat2.Read())
                     {
-                        listMarchandise2.Add(new Marchandise(resultat2[0].ToString(), Convert.ToInt32(resultat2[1]), Convert.ToInt32(resultat2[2])));
+                        var query3 = "SELECT ID_MARCHANDISE, NOM, QUANTITE, PRIX FROM MARCHANDISE WHERE ID_MARCHANDISE =" + resultat2[0];
+                        var oCommand3 = ConnectionOracle.OracleCommand(db, query3);
+                        var resultat3 = oCommand3.ExecuteReader();
+                        while(resultat3.Read())
+                        {
+                            listMarchandise2.Add(new Marchandise(Convert.ToInt32(resultat3[0]), resultat3[1].ToString(), Convert.ToInt32(resultat3[2]), Convert.ToInt32(resultat3[3])));
+                        }
                     }
 
                     ComboBoxDevis.Items.Add(new ComboboxItemDevis {Text = "Devis n°" + resultat[0], Value = new Devis(listMarchandise2)});
@@ -112,6 +116,7 @@ namespace MANAGER.Pages
             {
                 db.Close();
             }
+            BTN_Supprimer.Visibility = Visibility.Visible;
             PanelDevis.Children.Clear();
         }
 
@@ -127,10 +132,11 @@ namespace MANAGER.Pages
             var taille = listMarchandise.Count;
             for(var i = 0; i < taille; i++)
             {
+                var id = listMarchandise[i].GetId;
                 var text = listMarchandise[i].GetNom;
                 var qte = Convert.ToInt32(listMarchandise[i].GetQte);
                 var prixMarchandise = Convert.ToInt32(listMarchandise[i].GetPrix);
-                var item = new Marchandise(text, qte, prixMarchandise);
+                var item = new Marchandise(id, text, qte, prixMarchandise);
                 var panelMarchandise = new StackPanel();
                 var thick = new Thickness(5, 2, 0, 0);
 
@@ -164,7 +170,7 @@ namespace MANAGER.Pages
         private void MenuClient_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             BorderDevis.Width = MenuClient.ActualWidth - 40;
-            BorderDevis.Height = MenuClient.ActualHeight - 70;
+            BorderDevis.Height = MenuClient.ActualHeight - 100;
             try
             {
                 var nbMarchandise = _leDevis.GetList.Count;
@@ -187,6 +193,31 @@ namespace MANAGER.Pages
                 }
             } // ReSharper disable once EmptyGeneralCatchClause
             catch { }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var con = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
+            var commandeModif = new OracleCommand {CommandType = System.Data.CommandType.StoredProcedure, Connection = con, CommandText = "DELETECLIENT"};
+            var ID = (ComboBoxClient.SelectedItem as ComboboxItemClient).Value.GetId;
+            var param1 = new OracleParameter(":1", OracleDbType.Int32) {Value = ID};
+
+            commandeModif.Parameters.Add(param1);
+ 
+            try
+            {
+                con.Open();
+                commandeModif.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                con.Close();
+            }
+ 
         }
     }
 }

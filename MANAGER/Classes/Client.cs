@@ -11,18 +11,22 @@ namespace MANAGER.Classes
         private readonly string _denomination;
         private readonly string _email;
         private readonly string _telephone;
+        private readonly int _id;
 
-        public Client(string denomination, string telephone, string email)
+        public Client(int id, string denomination, string telephone, string email)
         {
+            _id = id;
             _denomination = denomination;
             _telephone = telephone;
             _email = email;
         }
 
-        public string GetDenomination { get { return _denomination; } }
+        public int GetId { get { return _id;  }}
 
+        public string GetDenomination { get { return _denomination; } }
+        /* For future use
         public string GetTelephone { get { return _telephone; } }
 
-        public string GetEmail { get { return _email; } }
+        public string GetEmail { get { return _email; } }*/
     }
 }

@@ -10,10 +10,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 using MANAGER.Classes;
 using MANAGER.Connection;
 using MANAGER.Properties;
+
+using Oracle.ManagedDataAccess.Client;
 
 namespace MANAGER.Pages
 {
@@ -40,10 +43,11 @@ namespace MANAGER.Pages
 
                 for(var i = 0; i < taille; i++)
                 {
+                    var id = ListMarchandise[i].GetId;
                     var text = ListMarchandise[i].GetNom;
-                    var qte = ListMarchandise[i].GetQte;
-                    var prixMarchandise = ListMarchandise[i].GetPrix;
-                    var nouvelleMarchandise = new Marchandise(text, qte, prixMarchandise);
+                    var qte = "Quantitée en stock : " + ListMarchandise[i].GetQte;
+                    var prixMarchandise = ListMarchandise[i].GetPrix + "€";
+                    var nouvelleMarchandise = new Marchandise(id, text, ListMarchandise[i].GetQte, ListMarchandise[i].GetPrix);
                     var panelMarchandise = new StackPanel();
                     var thick = new Thickness(5, 2, 0, 0);
 
@@ -86,21 +90,21 @@ namespace MANAGER.Pages
                 ListMarchandise.Clear();
 
                // var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
-                var Co = new ConnectionOracle();
-                var db = Co.OracleDatabase(Settings.Default.DatabaseConnectionString);
-                var query = "SELECT * FROM MARCHANDISE WHERE Denomination LIKE '%" + TextBoxDevisQte.Text + "%'";
+                var db = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
+                var query = "SELECT * FROM MARCHANDISE WHERE NOM LIKE '%" + TextBoxDevisQte.Text + "%'";
                 db.Open();
                 try
                 {
                     //var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
-                    var oCommand = Co.OracleCommand(db, query);
+                    var oCommand = ConnectionOracle.OracleCommand(db, query);
                     var resultat = oCommand.ExecuteReader();
                     while(resultat.Read())
                     {
-                        var text = resultat[0].ToString();
-                        var qte = Convert.ToInt32(resultat[1]);
-                        var prixMarchandise = Convert.ToInt32(resultat[2]);
-                        var nouvelleMarchandise = new Marchandise(text, qte, prixMarchandise);
+                        var id = Convert.ToInt32(resultat[0]);
+                        var text = resultat[1].ToString();
+                        var qte = "Quantitée en stock : "+ Convert.ToInt32(resultat[3]);
+                        var prixMarchandise = Convert.ToInt32(resultat[2]) + "€";
+                        var nouvelleMarchandise = new Marchandise(id, text, Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]));
                         var panelMarchandise = new StackPanel();
                         var thick = new Thickness(5, 2, 0, 0);
 
@@ -132,6 +136,16 @@ namespace MANAGER.Pages
                             Height = 16
                         });
 
+                        // Suppression
+                        panelMarchandise.Children.Add(new Button
+                        {
+                            HorizontalAlignment = HorizontalAlignment.Right,
+                            Name = "BTN_Supprimer",
+                            Content = "Supprimer le client",
+                            Margin = new Thickness(9, -30, 67, 50),
+                            BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00))
+                        });
+
                         nouvelleMarchandise.Bordure = bordure;
                         ListMarchandise.Add(nouvelleMarchandise);
                     }
@@ -155,24 +169,25 @@ namespace MANAGER.Pages
             ListMarchandise.Clear();
 
             // var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
-            var Co = new ConnectionOracle();
-            var db = Co.OracleDatabase(Settings.Default.DatabaseConnectionString);
-            const string query = "SELECT * FROM MARCHANDISE";
+
+            var db = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
+            const string query = "SELECT * FROM MARCHANDISE WHERE ENVENTE = 1";
             db.Open();
             try
             {
              //   var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
-                var oCommand = Co.OracleCommand(db, query);
+                var oCommand = ConnectionOracle.OracleCommand(db, query);
                 var resultat = oCommand.ExecuteReader();
                 while(resultat.Read())
                 {
-                    var text = resultat[0].ToString();
-                    var qte = Convert.ToInt32(resultat[1]);
-                    var prixMarchandise = Convert.ToInt32(resultat[2]);
-                    var nouvelleMarchandise = new Marchandise(text, qte, prixMarchandise);
+                    var id = Convert.ToInt32(resultat[0]);
+                    var text = resultat[1].ToString();
+                    var qte = "Quantitée en stock : " + Convert.ToInt32(resultat[3]);
+                    var prixMarchandise = Convert.ToInt32(resultat[2]) + "€";
+                    var nouvelleMarchandise = new Marchandise(id, text, Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]));
                     var panelMarchandise = new StackPanel();
                     var thick = new Thickness(5, 2, 0, 0);
-
+                    
                     //nouvelle bordure
                     var bordure = new Border
                     {
@@ -200,6 +215,21 @@ namespace MANAGER.Pages
                         Margin = new Thickness(5, 2, 0, 0),
                         Height = 16
                     });
+
+                    var BTN_Supprimer=new Button
+                    {
+                        HorizontalAlignment = HorizontalAlignment.Right,
+                        Name="BTN_Supprimer", 
+                        Content="Supprimer le client",
+                        Margin=new Thickness(9,-30,67,50),
+                        BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00))
+                        
+                    };
+
+                    // Suppression
+                    panelMarchandise.Children.Add(BTN_Supprimer);
+
+                    BTN_Supprimer.Click += bouton_Click;
 
                     nouvelleMarchandise.Bordure = bordure;
                     ListMarchandise.Add(nouvelleMarchandise);
@@ -235,5 +265,29 @@ namespace MANAGER.Pages
                 /*Bro, do you even try ?*/
             }
         }
+
+        private void bouton_Click(object sender, EventArgs e)
+        {
+            var con = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
+            var commandeModif = new OracleCommand { CommandType = System.Data.CommandType.StoredProcedure, Connection = con, CommandText = "DELETEPRODUIT" };
+            var ID = 1;
+            var param1 = new OracleParameter(":1", OracleDbType.Int32) { Value = ID };
+
+            commandeModif.Parameters.Add(param1);
+
+            try
+            {
+                con.Open();
+                commandeModif.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                con.Close();
+            }
+        } 
     }
 }

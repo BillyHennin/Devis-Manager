@@ -5,19 +5,19 @@
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
 using System;
-using Oracle.DataAccess.Client; 
+using Oracle.ManagedDataAccess.Client;
 
 namespace MANAGER.Connection
 {
     internal class ConnectionOracle
     {
-        public OracleConnection OracleDatabase(String DatabaseConnectionString)
+        public static OracleConnection OracleDatabase(String DatabaseConnectionString)
 
         {
             return new OracleConnection(DatabaseConnectionString);
         }
 
-        public OracleCommand OracleCommand(OracleConnection db, string query)
+        public static OracleCommand OracleCommand(OracleConnection db, string query)
         {
             return new OracleCommand {Connection = db, CommandText = query};
         }

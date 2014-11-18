@@ -71,7 +71,7 @@ namespace MANAGER.Pages
                         {
                             _qte = nouvQte;
                             LabelPrix.Foreground = new SolidColorBrush(Color.FromRgb(0xC1, 0xC1, 0xC1));
-                            LabelPrix.Content = string.Format("{0}€", ((ComboBoxProduit.SelectedItem as ComboboxItemProduit).Value.GetPrix * _qte));
+                            LabelPrix.Content = string.Format("{0}€", ((ComboBoxProduit.SelectedItem as ComboboxItemMarchandise).Value.GetPrix * _qte));
                             TextBoxDevisQte.BorderBrush =
                                 TextBoxDevisQte.CaretBrush =
                                     TextBoxDevisQte.SelectionBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Settings.Default.AccentColor));
@@ -101,7 +101,7 @@ namespace MANAGER.Pages
         {
             var prixMarchandise = Convert.ToInt32(LabelPrix.Content.ToString().Substring(0, LabelPrix.Content.ToString().Length - 1));
             var panelMarchandise = new StackPanel();
-            var nouvelleMarchandise = new Marchandise(ComboBoxProduit.Text, _qte, prixMarchandise);
+            var nouvelleMarchandise = new Marchandise((ComboBoxProduit.SelectedItem as ComboboxItemMarchandise).Value.GetId, ComboBoxProduit.Text, _qte, prixMarchandise);
 
             var nbMarchandise = _leDevis.GetList.Count;
             for(var i = 0; i < nbMarchandise; i++)
@@ -164,34 +164,33 @@ namespace MANAGER.Pages
 
         private void BTNAddDevis_click(object sender, RoutedEventArgs e)
         {
-            // TODO : Demander a l'user si il veux vraiment add le devis
-            var Co = new ConnectionOracle();
-            var db = Co.OracleDatabase(Settings.Default.DatabaseConnectionString);
-            //var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
+            var db = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
             db.Open();
             var tailleList = ListMarchandise.Count;
             try
             {
-                const string query = "SELECT max(Id), max(NumeroDEvis) FROM DEVIS";
-                //var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
-                var oCommand = Co.OracleCommand(db, query);
+                const string query = "SELECT max(ID_DEVIS), max(NUMERODEVIS) FROM DEVIS";
+                var oCommand = ConnectionOracle.OracleCommand(db, query);
                 var resultat = oCommand.ExecuteReader();
                 while(resultat.Read())
                 {
+                    var idDevis = resultat[0].ToString() == "" ? 1 : Convert.ToInt32(resultat[0]);
+                    var numeroDevis = resultat[1].ToString() == "" ? 1 : Convert.ToInt32(resultat[1]);
                     for(var i = 0; i < tailleList; i++)
                     {
-                        var query2 = "INSERT INTO DEVIS (Id, Client, Marchandise, Quantite, Date, PrixMarchandise, NumeroDevis)" + " VALUES ("
-                                     + (Convert.ToInt32(resultat[0]) + i + 1) + ",'" + _leDevis.Client.GetDenomination + "','" + _leDevis[i].GetNom + "','"
-                                     + _leDevis[i].GetQte + "','" + DateTime.Now.ToString("M/d/yyyy h:mm") + "'," + _leDevis[i].GetPrix + ","
-                                     + (Convert.ToInt32(resultat[1]) + 1) + ")";
-                        //var oCommand2 = new SqlCeCommand {Connection = db, CommandText = query2};
-                        var oCommand2 = Co.OracleCommand(db, query2);
+                        var query2 = "INSERT INTO DEVIS(ID_CLIENT, ID_MARCHANDISE, ID_DEVIS, QUANTITE, JOUR, PRIXMARCHANDISE, NUMERODEVIS)"
+                            + "VALUES (" + _leDevis.Client.GetId + "," + _leDevis[i].GetId + "," 
+                            + ((idDevis) + i + 1) + ","+ _leDevis[i].GetQte 
+                            + ",'" + DateTime.Now.ToString("d/M/yyyy") + "'," + _leDevis[i].GetPrix 
+                            + ",'" + ((numeroDevis) + 1) + "');";
+                        MessageBox.Show(query2);
+                        var oCommand2 = ConnectionOracle.OracleCommand(db, query2);
                         oCommand2.ExecuteNonQuery();
                     }
                 }
                 resultat.Close();
             }
-                // ReSharper disable once EmptyGeneralCatchClause
+            // ReSharper disable once EmptyGeneralCatchClause
             catch{}
             finally
             {
@@ -219,23 +218,21 @@ namespace MANAGER.Pages
              * 
              */
             //var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
-            var Co = new ConnectionOracle();
-            var db = Co.OracleDatabase(Settings.Default.DatabaseConnectionString);
+            var db = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
             const string query = "SELECT * FROM CLIENT";
             db.Open();
             try
             {
                 //var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
-                var oCommand = Co.OracleCommand(db,query);
+                var oCommand = ConnectionOracle.OracleCommand(db,query);
                 var resultat = oCommand.ExecuteReader();
                 while(resultat.Read())
                 {
                     ComboBoxClient.Items.Add(new ComboboxItemClient
                     {
-                        Text = resultat[0].ToString(),
-                        Value = new Client(resultat[0].ToString(), resultat[2].ToString(), resultat[1].ToString())
+                        Text = resultat[2].ToString(),
+                        Value = new Client(Convert.ToInt32(resultat[0]), resultat[2].ToString(), resultat[1].ToString(), resultat[3].ToString())
                     });
-                    ComboBoxClient.SelectedIndex = 0;
                 }
                 resultat.Close();
             }
@@ -264,21 +261,21 @@ namespace MANAGER.Pages
              * 
              */
             // var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
-            var Co = new ConnectionOracle();
-            var db = Co.OracleDatabase(Settings.Default.DatabaseConnectionString);
-            const string query = "SELECT * FROM MARCHANDISE";
+           
+            var db = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
+            const string query = "SELECT * FROM MARCHANDISE WHERE ENVENTE = 1";
             db.Open();
             try
             {
                // var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
-                var oCommand = Co.OracleCommand(db, query);
+                var oCommand = ConnectionOracle.OracleCommand(db, query);
                 var resultat = oCommand.ExecuteReader();
                 while(resultat.Read())
                 {
-                    ComboBoxProduit.Items.Add(new ComboboxItemProduit
+                    ComboBoxProduit.Items.Add(new ComboboxItemMarchandise
                     {
-                        Text = resultat[0].ToString(),
-                        Value = new Produit(Convert.ToInt32(resultat[1]), resultat[0].ToString())
+                        Text = resultat[1].ToString(),
+                        Value = new Marchandise(Convert.ToInt32(resultat[0]), resultat[1].ToString(), Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]))
                     });
                 }
                 resultat.Close();
@@ -305,7 +302,7 @@ namespace MANAGER.Pages
                         ErreurPrix();
                         break;
                     default:
-                        LabelPrix.Content = (ComboBoxProduit.SelectedItem as ComboboxItemProduit).Value.GetPrix * Convert.ToInt32(TextBoxDevisQte.Text) + "€";
+                        LabelPrix.Content = (ComboBoxProduit.SelectedItem as ComboboxItemMarchandise).Value.GetPrix * Convert.ToInt32(TextBoxDevisQte.Text) + "€";
                         break;
                 }
             }
