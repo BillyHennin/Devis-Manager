@@ -30,13 +30,13 @@ namespace MANAGER.Pages
         private static readonly List<Merchandise> ListMerchandise = new List<Merchandise>();
         // A Estimate that use the previous list.
         private readonly Devis _leDevis = new Devis(ListMerchandise);
-        // The total cost of the estimate.
-        // The quantity of the product you want, for future use.
+        // The total cost of the devis.
         private int _qte;
+        // The quantity of the product you want, for future use.
         private double _totalCost;
 
         /// <summary>
-        ///   This method checks if "str" is a intiger or not and return a boolean.
+        ///   This method checks if "str" is a integer or not and return a boolean.
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
@@ -59,7 +59,7 @@ namespace MANAGER.Pages
 
         /// <summary>
         ///   When the quantity changes, this method is called.
-        ///   It checks if "TextBoxDevisQte.Text" is a intiger or not and call ErrorCost if not.
+        ///   It checks if "TextBoxDevisQte.Text" is a integer or not and call ErrorCost if not.
         ///   If it is, then it checks if it's more than zero and call ErrorCost if not.
         /// </summary>
         private void QteChanged()
@@ -197,17 +197,22 @@ namespace MANAGER.Pages
                 const string querySelect = "SELECT max(ID_DEVIS), max(NUMERODEVIS) FROM DEVIS";
                 var oCommand = ConnectionOracle.OracleCommand(dataBaseConnection, querySelect);
                 var result = oCommand.ExecuteReader();
+                //Get the size of the current list.
                 var sizeList = ListMerchandise.Count;
+                //for each row in result :
                 while(result.Read())
                 {
                     var idDevis = result[0].ToString() == "" ? 1 : Convert.ToInt32(result[0]);
                     var numeroDevis = result[1].ToString() == "" ? 1 : Convert.ToInt32(result[1]);
+                    //Get the current date on the Oracle format.
                     var date = "TO_DATE('" + DateTime.Now.ToString("dd/MM/yy") + "', 'DD/MM/RR')";
                     for(var i = 0; i < sizeList; i++)
                     {
                         var queryInsert = "INSERT INTO DEVIS (ID_CLIENT, ID_Merchandise, ID_DEVIS, QUANTITE, JOUR, PRIXMARCHANDISE, NUMERODEVIS)"
                                           + " VALUES (:1, :2, :3, :4, :5, :6, :7)";
+
                         var commandeModif = new OracleCommand {Connection = dataBaseConnection, CommandText = queryInsert};
+                        //Change every parameters with the proper value.
                         var paramIdClient = new OracleParameter(":1", OracleDbType.Int32) {Value = _leDevis.Client.GetId};
                         var paramIdMerchandise = new OracleParameter(":2", OracleDbType.Int32) {Value = _leDevis[i].GetId};
                         var paramIdDevis = new OracleParameter(":3", OracleDbType.Int32) {Value = ((idDevis) + i + 1)};
@@ -216,6 +221,7 @@ namespace MANAGER.Pages
                         var paramPrice = new OracleParameter(":6", OracleDbType.Int32) {Value = _leDevis[i].GetPrix};
                         var paramNumDevis = new OracleParameter(":7", OracleDbType.Int32) {Value = ((numeroDevis) + 1)};
 
+                        //add every parameters that have changed
                         commandeModif.Parameters.Add(paramIdClient);
                         commandeModif.Parameters.Add(paramIdMerchandise);
                         commandeModif.Parameters.Add(paramIdDevis);
@@ -226,10 +232,7 @@ namespace MANAGER.Pages
 
                         //TODO : Makes insert works
                         // Oracle, why don't you love me ?
-                        MessageBox.Show(commandeModif.CommandText);
-
-                        var rowsUpdated = commandeModif.ExecuteNonQuery();
-                        MessageBox.Show(rowsUpdated == 0 ? "Record not inserted" : "Success!");
+                        commandeModif.ExecuteNonQuery();
                     }
                 }
                 result.Close();
@@ -244,7 +247,7 @@ namespace MANAGER.Pages
                 dataBaseConnection.Close();
             }
 
-            //Garder ça
+            //Final stuff, reset everything.
             PanelDevis.Children.Clear();
             ListMerchandise.Clear();
             _totalCost = 0;
@@ -252,6 +255,21 @@ namespace MANAGER.Pages
             AjouterDevis.IsEnabled = false;
         }
 
+        /// <summary>
+        ///   For future use, will allow to change the max length of a string in combobox
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        private static string verifyLength(string text)
+        {
+            return text;
+        }
+
+        /// <summary>
+        ///   If the quantity changes, verify if it's an integer > 0
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TextBoxDevisQte_TextChanged(object sender, TextChangedEventArgs e)
         {
             try
@@ -265,20 +283,31 @@ namespace MANAGER.Pages
             }
         }
 
+        /// <summary>
+        ///   The first time the page is open, this method is called
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ComboBoxClient_OnInitialized(object sender, EventArgs e)
         {
+            //Obtain every client on the database
             var dataBaseConnection = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
             const string query = "SELECT * FROM CLIENT";
             dataBaseConnection.Open();
             try
             {
+                //Execute the query
                 var oCommand = ConnectionOracle.OracleCommand(dataBaseConnection, query);
                 var resultat = oCommand.ExecuteReader();
+                //For each result :
                 while(resultat.Read())
                 {
+                    //Fill the combobox with every result
                     ComboBoxClient.Items.Add(new ComboboxItemClient
                     {
-                        Text = resultat[2].ToString(),
+                        //Show the text + possibly change his length.
+                        Text = verifyLength(resultat[2].ToString()),
+                        //For each items, add a client as a value.
                         Value = new Client(Convert.ToInt32(resultat[0]), resultat[2].ToString(), resultat[1].ToString(), resultat[3].ToString())
                     });
                 }
@@ -296,25 +325,40 @@ namespace MANAGER.Pages
             ComboBoxClient.SelectedIndex = 0;
         }
 
+        /// <summary>
+        ///   Change the client on the devis when the user change his selection in the combobox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void comboBoxClient_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             _leDevis.Client = (ComboBoxClient.SelectedItem as ComboboxItemClient).Value;
         }
 
+        /// <summary>
+        ///   The first time the page is open, this method is called
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ComboBoxProduit_OnInitialized(object sender, EventArgs e)
         {
             var dataBaseConnection = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
+            // Select every merchandise which is on store
             const string query = "SELECT * FROM MARCHANDISE WHERE ENVENTE = 1";
             dataBaseConnection.Open();
             try
             {
                 var oCommand = ConnectionOracle.OracleCommand(dataBaseConnection, query);
                 var resultat = oCommand.ExecuteReader();
+                //For each result :
                 while(resultat.Read())
                 {
+                    //Fill the combobox with every result
                     ComboBoxProduit.Items.Add(new ComboboxItemMerchandise
                     {
-                        Text = resultat[1].ToString(),
+                        //Show the text + possibly change his length.
+                        Text = verifyLength(resultat[1].ToString()),
+                        //For each items, add a merchandise as a value.
                         Value =
                             new Merchandise(Convert.ToInt32(resultat[0]), resultat[1].ToString(), Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]))
                     });
@@ -333,10 +377,16 @@ namespace MANAGER.Pages
             ComboBoxProduit.SelectedIndex = 0;
         }
 
+        /// <summary>
+        ///   Change the qte and the price when the user change his selection in the combobox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="selectionChangedEventArgs"></param>
         private void ComboBoxProduit_SelectionChanged(object sender, SelectionChangedEventArgs selectionChangedEventArgs)
         {
             try
             {
+                //If the merchandise price is zero, it's an error.
                 switch(_qte)
                 {
                     case 0:
@@ -355,6 +405,11 @@ namespace MANAGER.Pages
             }
         }
 
+        /// <summary>
+        ///   Every time this page is loaded, this method is called.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Menu_Loaded(object sender, RoutedEventArgs e)
         {
             var nbMerchandise = _leDevis.GetList.Count;
@@ -365,11 +420,18 @@ namespace MANAGER.Pages
             QteChanged();
         }
 
+        /// <summary>
+        ///   When the user changes UserControl's size, this method is called.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
+            //Change the border size to always match with UserControl.
             BorderDevis.Width = Menu.ActualWidth - 340;
             BorderDevis.Height = Menu.ActualHeight - 50;
 
+            //Do the same with the the sub-borders.
             var nbMerchandise = _leDevis.GetList.Count;
             for(var i = 0; i < nbMerchandise; i++)
             {

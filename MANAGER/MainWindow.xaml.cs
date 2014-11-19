@@ -5,6 +5,8 @@
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
 using System;
+using System.IO;
+using System.Windows;
 using System.Xml;
 
 using MANAGER.Properties;
@@ -23,15 +25,14 @@ namespace MANAGER
 
         private void ModernWindow_Initialized(object sender, EventArgs e)
         {
-            var file = Environment.CurrentDirectory + "//Config.xmls";
+            Settings.Default.DatabaseConnectionString = "user id=SLAM3;password=pw;data source=localhost:1521/xe";
 
-            /*var file = Environment.CurrentDirectory + "//Database.sdf";
-            
-            
+            var file = Environment.CurrentDirectory + "//Config.xmls";
             if(!File.Exists(file))
             {
-
-            }*/
+                ContentSource = new Uri(@"/Pages/Parametre.xaml", UriKind.Relative);
+                MessageBox.Show("Le fichier de base de donnée (Config.xmls) est manquant dans la dossier de l'executable", "Erreur");
+            }
 
             var xmlDoc = new XmlDocument();
             xmlDoc.Load(file);
@@ -41,15 +42,10 @@ namespace MANAGER
 
             if(Convert.ToInt32(node.Attributes["IsDatabaseCreated"].Value) == 0)
             {
-                //ContentSource = new Uri(@"/Pages/Parametre.xaml", UriKind.Relative);
+                ContentSource = new Uri(@"/Pages/Parametre.xaml", UriKind.Relative);
             }
 
-            //Settings.Default.DatabaseConnectionString = "Data Source=" + Environment.CurrentDirectory + "\\Database.sdf";
-
             Settings.Default.DatabaseConnectionString = "user id=SLAM3;password=pw;data source=localhost:1521/xe";
-
-            //MessageBox.Show("Le fichier de base de donnée (Database.sdf) est manquant dans la dossier de l'executable", "Erreur");
-            //Environment.Exit(0);
         }
     }
 }

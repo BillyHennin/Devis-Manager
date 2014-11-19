@@ -4,7 +4,6 @@
 //  
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
-//using System.Data.SqlServerCe;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -36,20 +35,11 @@ namespace MANAGER.Pages
 
         private void ComboBoxClient_OnInitialized(object sender, EventArgs e)
         {
-            /*
-             *
-             * TODO : Connexion BDD Oracle
-             * 
-             */
-
-            //var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
-
             var db = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
             const string query = "SELECT * FROM CLIENT";
             db.Open();
             try
             {
-                //var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
                 var oCommand = ConnectionOracle.OracleCommand(db, query);
                 var resultat = oCommand.ExecuteReader();
                 while(resultat.Read())
@@ -75,10 +65,10 @@ namespace MANAGER.Pages
 
         private void ComboBoxClient_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // garder ça
+            // TODO : See why it don't works
             ComboBoxDevis.Items.Clear();
             PanelDevis.Children.Clear();
-            // oui
+
             var db = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
             var query = "SELECT DISTINCT NUMERODEVIS FROM DEVIS WHERE ID_CLIENT = " + (ComboBoxClient.SelectedItem as ComboboxItemClient).Value.GetId + ";";
             MessageBox.Show(query);
@@ -181,8 +171,12 @@ namespace MANAGER.Pages
                 {
                     ListMerchandise[i].Border.Width = BorderDevis.Width - 5;
                 }
-            } // ReSharper disable once EmptyGeneralCatchClause
-            catch {}
+            }
+            catch(Exception caught)
+            {
+                Console.WriteLine(caught.Message);
+                Console.Read();
+            }
         }
 
         private void MenuClient_Loaded(object sender, RoutedEventArgs e)
@@ -194,14 +188,18 @@ namespace MANAGER.Pages
                 {
                     _leDevis[i].Border.BorderBrush = BorderDevis.BorderBrush;
                 }
-            } // ReSharper disable once EmptyGeneralCatchClause
-            catch {}
+            }
+            catch(Exception caught)
+            {
+                Console.WriteLine(caught.Message);
+                Console.Read();
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             var con = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
-            var commandeModif = new OracleCommand {CommandType = CommandType.StoredProcedure, Connection = con, CommandText = "DELETECLIENT"};
+            var commandeModif = ConnectionOracle.OracleCommandStored(CommandType.StoredProcedure, con, "DELETECLIENT");
             var ID = (ComboBoxClient.SelectedItem as ComboboxItemClient).Value.GetId;
             var param1 = new OracleParameter(":1", OracleDbType.Int32) {Value = ID};
 
@@ -212,9 +210,10 @@ namespace MANAGER.Pages
                 con.Open();
                 commandeModif.ExecuteNonQuery();
             }
-            catch(Exception ex)
+            catch(Exception caught)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(caught.Message);
+                Console.Read();
             }
             finally
             {

@@ -4,7 +4,6 @@
 //  
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
-//using System.Data.SqlServerCe;
 using System;
 using System.Collections.Generic;
 using System.Data;

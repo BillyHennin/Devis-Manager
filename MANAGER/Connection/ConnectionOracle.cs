@@ -5,15 +5,15 @@
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
 using System;
+using System.Data;
 
 using Oracle.ManagedDataAccess.Client;
 
 namespace MANAGER.Connection
 {
-    internal class ConnectionOracle
+    internal static class ConnectionOracle
     {
         public static OracleConnection OracleDatabase(String DatabaseConnectionString)
-
         {
             return new OracleConnection(DatabaseConnectionString);
         }
@@ -21,6 +21,11 @@ namespace MANAGER.Connection
         public static OracleCommand OracleCommand(OracleConnection db, string query)
         {
             return new OracleCommand {Connection = db, CommandText = query};
+        }
+
+        public static OracleCommand OracleCommandStored(CommandType type, OracleConnection db, string query)
+        {
+            return new OracleCommand {CommandType = type, Connection = db, CommandText = query};
         }
     }
 }
