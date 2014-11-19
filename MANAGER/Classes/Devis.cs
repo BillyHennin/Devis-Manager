@@ -12,11 +12,11 @@ namespace MANAGER.Classes
     public class Devis
     {
         private readonly DateTime _date;
-        private readonly List<Marchandise> _listMarchandise;
+        private readonly List<Merchandise> _listMerchandise;
 
-        public Devis(List<Marchandise> list)
+        public Devis(List<Merchandise> list)
         {
-            _listMarchandise = list;
+            _listMerchandise = list;
             TotalPrix = 0;
             _date = DateTime.Now;
         }
@@ -27,8 +27,8 @@ namespace MANAGER.Classes
 
         public DateTime GetDate { get { return _date; } }
 
-        public List<Marchandise> GetList { get { return _listMarchandise; } }
+        public List<Merchandise> GetList { get { return _listMerchandise; } }
 
-        public Marchandise this[int i] { get { return GetList[i]; } }
+        public Merchandise this[int i] { get { return GetList[i]; } }
     }
 }

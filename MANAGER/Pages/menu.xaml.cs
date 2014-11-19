@@ -6,36 +6,50 @@
 
 using System;
 using System.Collections.Generic;
-//using System.Data.SqlServerCe;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
 using MANAGER.Classes;
+using MANAGER.ComboBox;
 using MANAGER.Connection;
 using MANAGER.Properties;
+
+using Oracle.ManagedDataAccess.Client;
 
 namespace MANAGER.Pages
 {
     /// <summary>
-    ///   Logique d'interaction pour devis.xaml
+    ///   This page is uses to create devis. you can choose a customer and add some ( or every ) product, then insert it in the
+    ///   database.
     /// </summary>
-    // ReSharper disable once InconsistentNaming
     public partial class devis
     {
-        private static readonly List<Marchandise> ListMarchandise = new List<Marchandise>();
-        private readonly Devis _leDevis = new Devis(ListMarchandise);
-        private double _prixTotal;
+        // A empty list of Merchandise, for future use.
+        private static readonly List<Merchandise> ListMerchandise = new List<Merchandise>();
+        // A Estimate that use the previous list.
+        private readonly Devis _leDevis = new Devis(ListMerchandise);
+        // The total cost of the estimate.
+        // The quantity of the product you want, for future use.
         private int _qte;
+        private double _totalCost;
 
-        private static bool EstUnNombre(string qte)
+        /// <summary>
+        ///   This method checks if "str" is a intiger or not and return a boolean.
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        private static bool IsInt(string str)
         {
             int value;
-            return (qte.Trim() != string.Empty) && int.TryParse(qte, out value);
+            return (str.Trim() != string.Empty) && int.TryParse(str, out value);
         }
 
-        private void ErreurPrix()
+        /// <summary>
+        ///   If there's an error with the cost, this methode is called.
+        /// </summary>
+        private void ErrorCost()
         {
             LabelPrix.Content = "Erreur";
             Ajouter.IsEnabled = false;
@@ -43,76 +57,79 @@ namespace MANAGER.Pages
                 TextBoxDevisQte.CaretBrush = TextBoxDevisQte.SelectionBrush = TextBoxDevisQte.BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00));
         }
 
+        /// <summary>
+        ///   When the quantity changes, this method is called.
+        ///   It checks if "TextBoxDevisQte.Text" is a intiger or not and call ErrorCost if not.
+        ///   If it is, then it checks if it's more than zero and call ErrorCost if not.
+        /// </summary>
         private void QteChanged()
         {
             _qte = 0;
 
-            if (EstUnNombre(TextBoxDevisQte.Text))
+            if(IsInt(TextBoxDevisQte.Text))
             {
                 var nouvQte = Convert.ToInt32(TextBoxDevisQte.Text);
 
-                if (nouvQte <= 0)
+                if(nouvQte <= 0)
                 {
-                    try
-                    {
-                        ErreurPrix();
-                    }
-                    // ReSharper disable once EmptyGeneralCatchClause
-                    catch
-                    {
-                        //This is just like you, you don't get it
-                    }
+                    ErrorCost();
                 }
                 else
                 {
-                    if (ComboBoxProduit.Items.Count != 0)
+                    if(ComboBoxProduit.Items.Count != 0)
                     {
-                        try
-                        {
-                            _qte = nouvQte;
-                            LabelPrix.Foreground = new SolidColorBrush(Color.FromRgb(0xC1, 0xC1, 0xC1));
-                            LabelPrix.Content = string.Format("{0}€", ((ComboBoxProduit.SelectedItem as ComboboxItemMarchandise).Value.GetPrix * _qte));
-                            TextBoxDevisQte.BorderBrush =
-                                TextBoxDevisQte.CaretBrush =
-                                    TextBoxDevisQte.SelectionBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Settings.Default.AccentColor));
-                            Ajouter.IsEnabled = true;
-                        }
-                        // ReSharper disable once EmptyGeneralCatchClause
-                        catch{}
+                        _qte = nouvQte;
+                        LabelPrix.Foreground = new SolidColorBrush(Color.FromRgb(0xC1, 0xC1, 0xC1));
+                        LabelPrix.Content = string.Format("{0}€", ((ComboBoxProduit.SelectedItem as ComboboxItemMerchandise).Value.GetPrix * _qte));
+                        TextBoxDevisQte.BorderBrush =
+                            TextBoxDevisQte.CaretBrush =
+                                TextBoxDevisQte.SelectionBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
+                        Ajouter.IsEnabled = true;
                     }
                     else
                     {
-                        try
-                        {
-                            ErreurPrix();
-                        }
-                        // ReSharper disable once EmptyGeneralCatchClause
-                        catch{}
+                        ErrorCost();
                     }
                 }
             }
             else
             {
-                ErreurPrix();
+                ErrorCost();
             }
         }
 
+        /// <summary>
+        ///   When the user click on "BTNAddFeed" bouton, the app adding it to the grid.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BTNAddFeed_click(object sender, RoutedEventArgs e)
         {
-            var prixMarchandise = Convert.ToInt32(LabelPrix.Content.ToString().Substring(0, LabelPrix.Content.ToString().Length - 1));
-            var panelMarchandise = new StackPanel();
-            var nouvelleMarchandise = new Marchandise((ComboBoxProduit.SelectedItem as ComboboxItemMarchandise).Value.GetId, ComboBoxProduit.Text, _qte, prixMarchandise);
+            // get the cost of the merchandise (without the "€")
+            var merchandiseCost = Convert.ToInt32(LabelPrix.Content.ToString().Substring(0, LabelPrix.Content.ToString().Length - 1));
+            // Creating a new panel, useful only on menu.xaml
+            var panelMerchandise = new StackPanel();
+            // Creating a new merchandise with the merchandise selected on the comboBox
+            var newMerchandise = new Merchandise((ComboBoxProduit.SelectedItem as ComboboxItemMerchandise).Value.GetId, ComboBoxProduit.Text, _qte,
+                merchandiseCost);
 
-            var nbMarchandise = _leDevis.GetList.Count;
-            for(var i = 0; i < nbMarchandise; i++)
+            // Check if the merchandise isn't already in the list
+            var nbMerchandise = _leDevis.GetList.Count;
+            for(var i = 0; i < nbMerchandise; i++)
             {
-                if(_leDevis[i].GetNom == nouvelleMarchandise.GetNom)
+                if(_leDevis[i].GetNom == newMerchandise.GetNom)
                 {
                     return;
                 }
             }
-
-            var bordure = new Border
+            /**
+             *  What's following is the visual construction of the merchandise in the list
+             *      - Creation of the visual border
+             *          - Name of the merchandise
+             *          - Price of the merchandise
+             *          - Quantity of the merchandise 
+             **/
+            var border = new Border
             {
                 BorderBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor)),
                 HorizontalAlignment = HorizontalAlignment.Left,
@@ -120,12 +137,12 @@ namespace MANAGER.Pages
                 Margin = new Thickness(2, 2, 1, 0),
                 BorderThickness = new Thickness(1),
                 Width = BorderDevis.Width - 6,
-                Child = panelMarchandise,
+                Child = panelMerchandise,
                 Height = 70
             };
 
-            // Nom du produit
-            panelMarchandise.Children.Add(new TextBlock
+            // Name of the merchandise
+            panelMerchandise.Children.Add(new TextBlock
             {
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Top,
@@ -134,18 +151,18 @@ namespace MANAGER.Pages
                 Height = 16
             });
 
-            // Prix
-            panelMarchandise.Children.Add(new TextBlock
+            // Price of the merchandise
+            panelMerchandise.Children.Add(new TextBlock
             {
-                Text = prixMarchandise.ToString(CultureInfo.InvariantCulture) + "€",
+                Text = merchandiseCost.ToString(CultureInfo.InvariantCulture) + "€",
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Top,
                 Margin = new Thickness(5, 2, 0, 0),
                 Height = 16
             });
 
-            // Quantité
-            panelMarchandise.Children.Add(new TextBlock
+            // Quantity of the merchandise
+            panelMerchandise.Children.Add(new TextBlock
             {
                 Text = _qte.ToString(CultureInfo.InvariantCulture),
                 HorizontalAlignment = HorizontalAlignment.Left,
@@ -154,77 +171,108 @@ namespace MANAGER.Pages
                 Height = 16
             });
 
-            nouvelleMarchandise.Bordure = bordure;
-            PanelDevis.Children.Add(bordure);
-            _leDevis.GetList.Add(nouvelleMarchandise);
-            _prixTotal += prixMarchandise;
-            LabelTotalPrix.Content = _prixTotal + "€";
+            //Final stuff
+            newMerchandise.Border = border;
+            PanelDevis.Children.Add(border);
+            _leDevis.GetList.Add(newMerchandise);
+            _totalCost += merchandiseCost;
+            LabelTotalPrix.Content = _totalCost + "€";
             AjouterDevis.IsEnabled = true;
         }
 
+        /// <summary>
+        ///   When the user wants to creat a devis, he clicks on this button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BTNAddDevis_click(object sender, RoutedEventArgs e)
         {
-            var db = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
-            db.Open();
-            var tailleList = ListMarchandise.Count;
+            //Connect to the data base 
+            var dataBaseConnection = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
+            //Open the connection
+            dataBaseConnection.Open();
             try
             {
-                const string query = "SELECT max(ID_DEVIS), max(NUMERODEVIS) FROM DEVIS";
-                var oCommand = ConnectionOracle.OracleCommand(db, query);
-                var resultat = oCommand.ExecuteReader();
-                while(resultat.Read())
+                // AFAIK, Oracle don't have auto-inc, so with this, you get the last id of what you want.
+                const string querySelect = "SELECT max(ID_DEVIS), max(NUMERODEVIS) FROM DEVIS";
+                var oCommand = ConnectionOracle.OracleCommand(dataBaseConnection, querySelect);
+                var result = oCommand.ExecuteReader();
+                var sizeList = ListMerchandise.Count;
+                while(result.Read())
                 {
-                    var idDevis = resultat[0].ToString() == "" ? 1 : Convert.ToInt32(resultat[0]);
-                    var numeroDevis = resultat[1].ToString() == "" ? 1 : Convert.ToInt32(resultat[1]);
-                    for(var i = 0; i < tailleList; i++)
+                    var idDevis = result[0].ToString() == "" ? 1 : Convert.ToInt32(result[0]);
+                    var numeroDevis = result[1].ToString() == "" ? 1 : Convert.ToInt32(result[1]);
+                    var date = "TO_DATE('" + DateTime.Now.ToString("dd/MM/yy") + "', 'DD/MM/RR')";
+                    for(var i = 0; i < sizeList; i++)
                     {
-                        var query2 = "INSERT INTO DEVIS(ID_CLIENT, ID_MARCHANDISE, ID_DEVIS, QUANTITE, JOUR, PRIXMARCHANDISE, NUMERODEVIS)"
-                            + "VALUES (" + _leDevis.Client.GetId + "," + _leDevis[i].GetId + "," 
-                            + ((idDevis) + i + 1) + ","+ _leDevis[i].GetQte 
-                            + ",'" + DateTime.Now.ToString("d/M/yyyy") + "'," + _leDevis[i].GetPrix 
-                            + ",'" + ((numeroDevis) + 1) + "');";
-                        MessageBox.Show(query2);
-                        var oCommand2 = ConnectionOracle.OracleCommand(db, query2);
-                        oCommand2.ExecuteNonQuery();
+                        var queryInsert = "INSERT INTO DEVIS (ID_CLIENT, ID_Merchandise, ID_DEVIS, QUANTITE, JOUR, PRIXMARCHANDISE, NUMERODEVIS)"
+                                          + " VALUES (:1, :2, :3, :4, :5, :6, :7)";
+                        var commandeModif = new OracleCommand {Connection = dataBaseConnection, CommandText = queryInsert};
+                        var paramIdClient = new OracleParameter(":1", OracleDbType.Int32) {Value = _leDevis.Client.GetId};
+                        var paramIdMerchandise = new OracleParameter(":2", OracleDbType.Int32) {Value = _leDevis[i].GetId};
+                        var paramIdDevis = new OracleParameter(":3", OracleDbType.Int32) {Value = ((idDevis) + i + 1)};
+                        var paramQTE = new OracleParameter(":4", OracleDbType.Int32) {Value = _leDevis[i].GetQte};
+                        var paramDate = new OracleParameter(":5", OracleDbType.Int32) {Value = date};
+                        var paramPrice = new OracleParameter(":6", OracleDbType.Int32) {Value = _leDevis[i].GetPrix};
+                        var paramNumDevis = new OracleParameter(":7", OracleDbType.Int32) {Value = ((numeroDevis) + 1)};
+
+                        commandeModif.Parameters.Add(paramIdClient);
+                        commandeModif.Parameters.Add(paramIdMerchandise);
+                        commandeModif.Parameters.Add(paramIdDevis);
+                        commandeModif.Parameters.Add(paramQTE);
+                        commandeModif.Parameters.Add(paramDate);
+                        commandeModif.Parameters.Add(paramPrice);
+                        commandeModif.Parameters.Add(paramNumDevis);
+
+                        //TODO : Makes insert works
+                        // Oracle, why don't you love me ?
+                        MessageBox.Show(commandeModif.CommandText);
+
+                        var rowsUpdated = commandeModif.ExecuteNonQuery();
+                        MessageBox.Show(rowsUpdated == 0 ? "Record not inserted" : "Success!");
                     }
                 }
-                resultat.Close();
+                result.Close();
             }
-            // ReSharper disable once EmptyGeneralCatchClause
-            catch{}
+            catch(Exception caught)
+            {
+                Console.WriteLine(caught.Message);
+                Console.Read();
+            }
             finally
             {
-                db.Close();
+                dataBaseConnection.Close();
             }
 
             //Garder ça
             PanelDevis.Children.Clear();
-            ListMarchandise.Clear();
-            _prixTotal = 0;
+            ListMerchandise.Clear();
+            _totalCost = 0;
             LabelTotalPrix.Content = "";
             AjouterDevis.IsEnabled = false;
         }
 
         private void TextBoxDevisQte_TextChanged(object sender, TextChangedEventArgs e)
         {
-            QteChanged();
+            try
+            {
+                QteChanged();
+            }
+            catch(Exception caught)
+            {
+                Console.WriteLine(caught.Message);
+                Console.Read();
+            }
         }
 
         private void ComboBoxClient_OnInitialized(object sender, EventArgs e)
         {
-            /*
-             *
-             * TODO : Connexion BDD Oracle
-             * 
-             */
-            //var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
-            var db = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
+            var dataBaseConnection = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
             const string query = "SELECT * FROM CLIENT";
-            db.Open();
+            dataBaseConnection.Open();
             try
             {
-                //var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
-                var oCommand = ConnectionOracle.OracleCommand(db,query);
+                var oCommand = ConnectionOracle.OracleCommand(dataBaseConnection, query);
                 var resultat = oCommand.ExecuteReader();
                 while(resultat.Read())
                 {
@@ -243,7 +291,7 @@ namespace MANAGER.Pages
             }
             finally
             {
-                db.Close();
+                dataBaseConnection.Close();
             }
             ComboBoxClient.SelectedIndex = 0;
         }
@@ -255,27 +303,20 @@ namespace MANAGER.Pages
 
         private void ComboBoxProduit_OnInitialized(object sender, EventArgs e)
         {
-            /*
-             *
-             * TODO : Connexion BDD Oracle
-             * 
-             */
-            // var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
-           
-            var db = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
+            var dataBaseConnection = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
             const string query = "SELECT * FROM MARCHANDISE WHERE ENVENTE = 1";
-            db.Open();
+            dataBaseConnection.Open();
             try
             {
-               // var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
-                var oCommand = ConnectionOracle.OracleCommand(db, query);
+                var oCommand = ConnectionOracle.OracleCommand(dataBaseConnection, query);
                 var resultat = oCommand.ExecuteReader();
                 while(resultat.Read())
                 {
-                    ComboBoxProduit.Items.Add(new ComboboxItemMarchandise
+                    ComboBoxProduit.Items.Add(new ComboboxItemMerchandise
                     {
                         Text = resultat[1].ToString(),
-                        Value = new Marchandise(Convert.ToInt32(resultat[0]), resultat[1].ToString(), Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]))
+                        Value =
+                            new Merchandise(Convert.ToInt32(resultat[0]), resultat[1].ToString(), Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]))
                     });
                 }
                 resultat.Close();
@@ -287,7 +328,7 @@ namespace MANAGER.Pages
             }
             finally
             {
-                db.Close();
+                dataBaseConnection.Close();
             }
             ComboBoxProduit.SelectedIndex = 0;
         }
@@ -299,23 +340,27 @@ namespace MANAGER.Pages
                 switch(_qte)
                 {
                     case 0:
-                        ErreurPrix();
+                        ErrorCost();
                         break;
                     default:
-                        LabelPrix.Content = (ComboBoxProduit.SelectedItem as ComboboxItemMarchandise).Value.GetPrix * Convert.ToInt32(TextBoxDevisQte.Text) + "€";
+                        LabelPrix.Content = (ComboBoxProduit.SelectedItem as ComboboxItemMerchandise).Value.GetPrix * Convert.ToInt32(TextBoxDevisQte.Text)
+                                            + "€";
                         break;
                 }
             }
-                // ReSharper disable once EmptyGeneralCatchClause
-            catch {}
+            catch(Exception caught)
+            {
+                Console.WriteLine(caught.Message);
+                Console.Read();
+            }
         }
 
         private void Menu_Loaded(object sender, RoutedEventArgs e)
         {
-            var nbMarchandise = _leDevis.GetList.Count;
-            for(var i = 0; i < nbMarchandise; i++)
+            var nbMerchandise = _leDevis.GetList.Count;
+            for(var i = 0; i < nbMerchandise; i++)
             {
-                _leDevis[i].Bordure.BorderBrush = Ajouter.BorderBrush;
+                _leDevis[i].Border.BorderBrush = Ajouter.BorderBrush;
             }
             QteChanged();
         }
@@ -325,10 +370,10 @@ namespace MANAGER.Pages
             BorderDevis.Width = Menu.ActualWidth - 340;
             BorderDevis.Height = Menu.ActualHeight - 50;
 
-            var nbMarchandise = _leDevis.GetList.Count;
-            for(var i = 0; i < nbMarchandise; i++)
+            var nbMerchandise = _leDevis.GetList.Count;
+            for(var i = 0; i < nbMerchandise; i++)
             {
-                _leDevis[i].Bordure.Width = BorderDevis.Width - 6;
+                _leDevis[i].Border.Width = BorderDevis.Width - 6;
             }
         }
     }

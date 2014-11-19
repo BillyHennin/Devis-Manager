@@ -12,6 +12,7 @@ using System.Windows;
 using System.Windows.Controls;
 
 using MANAGER.Classes;
+using MANAGER.ComboBox;
 using MANAGER.Connection;
 using MANAGER.Properties;
 
@@ -24,8 +25,8 @@ namespace MANAGER.Pages
     /// </summary>
     public partial class AffichageClient
     {
-        private static readonly List<Marchandise> ListMarchandise = new List<Marchandise>();
-        private readonly Devis _leDevis = new Devis(ListMarchandise);
+        private static readonly List<Merchandise> ListMerchandise = new List<Merchandise>();
+        private readonly Devis _leDevis = new Devis(ListMerchandise);
 
         public AffichageClient()
         {
@@ -91,7 +92,7 @@ namespace MANAGER.Pages
                     var query2 = "SELECT ID_MARCHANDISE, PRIXMARCHANDISE FROM DEVIS WHERE NUMERODEVIS = " + resultat[0];
                     var oCommand2 = ConnectionOracle.OracleCommand(db, query2);
                     var resultat2 = oCommand2.ExecuteReader();
-                    var listMarchandise2 = new List<Marchandise>();
+                    var listMarchandise2 = new List<Merchandise>();
                     while(resultat2.Read())
                     {
                         var query3 = "SELECT ID_MARCHANDISE, NOM, QUANTITE, PRIX FROM MARCHANDISE WHERE ID_MARCHANDISE =" + resultat2[0];
@@ -99,7 +100,7 @@ namespace MANAGER.Pages
                         var resultat3 = oCommand3.ExecuteReader();
                         while(resultat3.Read())
                         {
-                            listMarchandise2.Add(new Marchandise(Convert.ToInt32(resultat3[0]), resultat3[1].ToString(), Convert.ToInt32(resultat3[2]), Convert.ToInt32(resultat3[3])));
+                            listMarchandise2.Add(new Merchandise(Convert.ToInt32(resultat3[0]), resultat3[1].ToString(), Convert.ToInt32(resultat3[2]), Convert.ToInt32(resultat3[3])));
                         }
                     }
 
@@ -136,7 +137,7 @@ namespace MANAGER.Pages
                 var text = listMarchandise[i].GetNom;
                 var qte = Convert.ToInt32(listMarchandise[i].GetQte);
                 var prixMarchandise = Convert.ToInt32(listMarchandise[i].GetPrix);
-                var item = new Marchandise(id, text, qte, prixMarchandise);
+                var item = new Merchandise(id, text, qte, prixMarchandise);
                 var panelMarchandise = new StackPanel();
                 var thick = new Thickness(5, 2, 0, 0);
 
@@ -161,7 +162,7 @@ namespace MANAGER.Pages
                 // Quantité
                 panelMarchandise.Children.Add(new TextBlock {Text = prixMarchandise.ToString(CultureInfo.InvariantCulture), Margin = thick, Height = 16});
 
-                item.Bordure = bordure;
+                item.Border = bordure;
                 PanelDevis.Children.Add(bordure);
                 _leDevis.GetList.Add(item);
             }
@@ -176,7 +177,7 @@ namespace MANAGER.Pages
                 var nbMarchandise = _leDevis.GetList.Count;
                 for(var i = 0; i < nbMarchandise; i++)
                 {
-                    ListMarchandise[i].Bordure.Width = BorderDevis.Width - 5;
+                    ListMerchandise[i].Border.Width = BorderDevis.Width - 5;
                 }
             } // ReSharper disable once EmptyGeneralCatchClause
             catch {}
@@ -189,7 +190,7 @@ namespace MANAGER.Pages
                 var nbMarchandise = _leDevis.GetList.Count;
                 for (var i = 0; i < nbMarchandise; i++)
                 {
-                    _leDevis[i].Bordure.BorderBrush = BorderDevis.BorderBrush;
+                    _leDevis[i].Border.BorderBrush = BorderDevis.BorderBrush;
                 }
             } // ReSharper disable once EmptyGeneralCatchClause
             catch { }

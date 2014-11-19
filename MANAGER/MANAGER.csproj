@@ -86,23 +86,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Classes\Client.cs" />
-    <Compile Include="Classes\ComboboxItemClient.cs" />
-    <Compile Include="Classes\ComboboxItemDevis.cs" />
-    <Compile Include="Classes\ComboboxItemMarchandise.cs" />
+    <Compile Include="ComboBox\ComboboxItemClient.cs" />
+    <Compile Include="ComboBox\ComboboxItemDevis.cs" />
     <Compile Include="Classes\Devis.cs" />
-    <Compile Include="Classes\Marchandise.cs" />
-    <Compile Include="Connection\ConnectionLocale.cs" />
-    <Compile Include="Connection\ConnectionMySql.cs" />
+    <Compile Include="Classes\Merchandise.cs" />
+    <Compile Include="ComboBox\ComboboxItemMerchandise.cs" />
     <Compile Include="Connection\ConnectionOracle.cs" />
-    <Compile Include="DatabaseDataSet.cs">
-      <DependentUpon>DatabaseDataSet.xsd</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DatabaseDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DatabaseDataSet.xsd</DependentUpon>
-    </Compile>
     <Compile Include="Pages\about.xaml.cs">
       <DependentUpon>about.xaml</DependentUpon>
     </Compile>
@@ -186,17 +175,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="DatabaseDataSet.xsc">
-      <DependentUpon>DatabaseDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="DatabaseDataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>DatabaseDataSet.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="DatabaseDataSet.xss">
-      <DependentUpon>DatabaseDataSet.xsd</DependentUpon>
-    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -217,9 +195,6 @@
     <Resource Include="Asset\appbar.currency.euro.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Database.sdf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Config.xmls">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

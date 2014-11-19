@@ -25,8 +25,8 @@ namespace MANAGER.Pages
     /// </summary>
     public partial class AffichageProduit
     {
-        private static List<Marchandise> ListMarchandise = new List<Marchandise>();
-        private static readonly List<Marchandise> ListMarchandiseN2 = new List<Marchandise>();
+        private static List<Merchandise> ListMarchandise = new List<Merchandise>();
+        private static readonly List<Merchandise> ListMarchandiseN2 = new List<Merchandise>();
 
         public AffichageProduit()
         {
@@ -47,7 +47,7 @@ namespace MANAGER.Pages
                     var text = ListMarchandise[i].GetNom;
                     var qte = "Quantitée en stock : " + ListMarchandise[i].GetQte;
                     var prixMarchandise = ListMarchandise[i].GetPrix + "€";
-                    var nouvelleMarchandise = new Marchandise(id, text, ListMarchandise[i].GetQte, ListMarchandise[i].GetPrix);
+                    var nouvelleMarchandise = new Merchandise(id, text, ListMarchandise[i].GetQte, ListMarchandise[i].GetPrix);
                     var panelMarchandise = new StackPanel();
                     var thick = new Thickness(5, 2, 0, 0);
 
@@ -79,7 +79,7 @@ namespace MANAGER.Pages
                         Height = 16
                     });
 
-                    nouvelleMarchandise.Bordure = bordure;
+                    nouvelleMarchandise.Border = bordure;
                     ListMarchandiseN2.Add(nouvelleMarchandise);
                 }
                 ListMarchandise = ListMarchandiseN2;
@@ -104,7 +104,7 @@ namespace MANAGER.Pages
                         var text = resultat[1].ToString();
                         var qte = "Quantitée en stock : "+ Convert.ToInt32(resultat[3]);
                         var prixMarchandise = Convert.ToInt32(resultat[2]) + "€";
-                        var nouvelleMarchandise = new Marchandise(id, text, Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]));
+                        var nouvelleMarchandise = new Merchandise(id, text, Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]));
                         var panelMarchandise = new StackPanel();
                         var thick = new Thickness(5, 2, 0, 0);
 
@@ -146,7 +146,7 @@ namespace MANAGER.Pages
                             BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00))
                         });
 
-                        nouvelleMarchandise.Bordure = bordure;
+                        nouvelleMarchandise.Border = bordure;
                         ListMarchandise.Add(nouvelleMarchandise);
                     }
                     resultat.Close();
@@ -184,7 +184,7 @@ namespace MANAGER.Pages
                     var text = resultat[1].ToString();
                     var qte = "Quantitée en stock : " + Convert.ToInt32(resultat[3]);
                     var prixMarchandise = Convert.ToInt32(resultat[2]) + "€";
-                    var nouvelleMarchandise = new Marchandise(id, text, Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]));
+                    var nouvelleMarchandise = new Merchandise(id, text, Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]));
                     var panelMarchandise = new StackPanel();
                     var thick = new Thickness(5, 2, 0, 0);
                     
@@ -231,7 +231,7 @@ namespace MANAGER.Pages
 
                     BTN_Supprimer.Click += bouton_Click;
 
-                    nouvelleMarchandise.Bordure = bordure;
+                    nouvelleMarchandise.Border = bordure;
                     ListMarchandise.Add(nouvelleMarchandise);
                 }
                 resultat.Close();
@@ -257,7 +257,7 @@ namespace MANAGER.Pages
                 var nbMarchandise = ListMarchandise.Count;
                 for(var i = 0; i < nbMarchandise; i++)
                 {
-                    ListMarchandise[i].Bordure.Width = BorderDevis.Width - 5;
+                    ListMarchandise[i].Border.Width = BorderDevis.Width - 5;
                 }
             } // ReSharper disable once EmptyGeneralCatchClause
             catch

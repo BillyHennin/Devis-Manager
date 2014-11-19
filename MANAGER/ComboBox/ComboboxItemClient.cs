@@ -4,12 +4,14 @@
 //  
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
-namespace MANAGER.Classes
+using MANAGER.Classes;
+
+namespace MANAGER.ComboBox
 {
-    internal class ComboboxItemDevis
+    internal class ComboboxItemClient
     {
-        public string Text { get; set; }
-        public Devis Value { get; set; }
+        public string Text { private get; set; }
+        public Client Value { get; set; }
 
         public override string ToString()
         {

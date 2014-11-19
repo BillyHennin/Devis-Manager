@@ -5,6 +5,7 @@
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
 using System;
+
 using Oracle.ManagedDataAccess.Client;
 
 namespace MANAGER.Connection

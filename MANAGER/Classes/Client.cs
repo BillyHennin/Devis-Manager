@@ -10,8 +10,8 @@ namespace MANAGER.Classes
     {
         private readonly string _denomination;
         private readonly string _email;
-        private readonly string _telephone;
         private readonly int _id;
+        private readonly string _telephone;
 
         public Client(int id, string denomination, string telephone, string email)
         {
@@ -21,7 +21,7 @@ namespace MANAGER.Classes
             _email = email;
         }
 
-        public int GetId { get { return _id;  }}
+        public int GetId { get { return _id; } }
 
         public string GetDenomination { get { return _denomination; } }
         /* For future use
