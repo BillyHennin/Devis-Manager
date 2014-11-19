@@ -4,9 +4,10 @@
 //  
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
+//using System.Data.SqlServerCe;
 using System;
 using System.Collections.Generic;
-//using System.Data.SqlServerCe;
+using System.Data;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
@@ -89,7 +90,7 @@ namespace MANAGER.Pages
                 PanelProduit.Children.Clear();
                 ListMarchandise.Clear();
 
-               // var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
+                // var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
                 var db = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
                 var query = "SELECT * FROM MARCHANDISE WHERE NOM LIKE '%" + TextBoxDevisQte.Text + "%'";
                 db.Open();
@@ -102,7 +103,7 @@ namespace MANAGER.Pages
                     {
                         var id = Convert.ToInt32(resultat[0]);
                         var text = resultat[1].ToString();
-                        var qte = "Quantitée en stock : "+ Convert.ToInt32(resultat[3]);
+                        var qte = "Quantitée en stock : " + Convert.ToInt32(resultat[3]);
                         var prixMarchandise = Convert.ToInt32(resultat[2]) + "€";
                         var nouvelleMarchandise = new Merchandise(id, text, Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]));
                         var panelMarchandise = new StackPanel();
@@ -175,7 +176,7 @@ namespace MANAGER.Pages
             db.Open();
             try
             {
-             //   var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
+                //   var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
                 var oCommand = ConnectionOracle.OracleCommand(db, query);
                 var resultat = oCommand.ExecuteReader();
                 while(resultat.Read())
@@ -187,7 +188,7 @@ namespace MANAGER.Pages
                     var nouvelleMarchandise = new Merchandise(id, text, Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]));
                     var panelMarchandise = new StackPanel();
                     var thick = new Thickness(5, 2, 0, 0);
-                    
+
                     //nouvelle bordure
                     var bordure = new Border
                     {
@@ -216,14 +217,13 @@ namespace MANAGER.Pages
                         Height = 16
                     });
 
-                    var BTN_Supprimer=new Button
+                    var BTN_Supprimer = new Button
                     {
                         HorizontalAlignment = HorizontalAlignment.Right,
-                        Name="BTN_Supprimer", 
-                        Content="Supprimer le client",
-                        Margin=new Thickness(9,-30,67,50),
+                        Name = "BTN_Supprimer",
+                        Content = "Supprimer le client",
+                        Margin = new Thickness(9, -30, 67, 50),
                         BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00))
-                        
                     };
 
                     // Suppression
@@ -269,9 +269,9 @@ namespace MANAGER.Pages
         private void bouton_Click(object sender, EventArgs e)
         {
             var con = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
-            var commandeModif = new OracleCommand { CommandType = System.Data.CommandType.StoredProcedure, Connection = con, CommandText = "DELETEPRODUIT" };
+            var commandeModif = new OracleCommand {CommandType = CommandType.StoredProcedure, Connection = con, CommandText = "DELETEPRODUIT"};
             var ID = 1;
-            var param1 = new OracleParameter(":1", OracleDbType.Int32) { Value = ID };
+            var param1 = new OracleParameter(":1", OracleDbType.Int32) {Value = ID};
 
             commandeModif.Parameters.Add(param1);
 
@@ -280,7 +280,7 @@ namespace MANAGER.Pages
                 con.Open();
                 commandeModif.ExecuteNonQuery();
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
@@ -288,6 +288,6 @@ namespace MANAGER.Pages
             {
                 con.Close();
             }
-        } 
+        }
     }
 }

@@ -4,9 +4,10 @@
 //  
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
+//using System.Data.SqlServerCe;
 using System;
 using System.Collections.Generic;
-//using System.Data.SqlServerCe;
+using System.Data;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
@@ -42,7 +43,7 @@ namespace MANAGER.Pages
              */
 
             //var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
-           
+
             var db = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
             const string query = "SELECT * FROM CLIENT";
             db.Open();
@@ -100,7 +101,8 @@ namespace MANAGER.Pages
                         var resultat3 = oCommand3.ExecuteReader();
                         while(resultat3.Read())
                         {
-                            listMarchandise2.Add(new Merchandise(Convert.ToInt32(resultat3[0]), resultat3[1].ToString(), Convert.ToInt32(resultat3[2]), Convert.ToInt32(resultat3[3])));
+                            listMarchandise2.Add(new Merchandise(Convert.ToInt32(resultat3[0]), resultat3[1].ToString(), Convert.ToInt32(resultat3[2]),
+                                Convert.ToInt32(resultat3[3])));
                         }
                     }
 
@@ -188,29 +190,29 @@ namespace MANAGER.Pages
             try
             {
                 var nbMarchandise = _leDevis.GetList.Count;
-                for (var i = 0; i < nbMarchandise; i++)
+                for(var i = 0; i < nbMarchandise; i++)
                 {
                     _leDevis[i].Border.BorderBrush = BorderDevis.BorderBrush;
                 }
             } // ReSharper disable once EmptyGeneralCatchClause
-            catch { }
+            catch {}
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             var con = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
-            var commandeModif = new OracleCommand {CommandType = System.Data.CommandType.StoredProcedure, Connection = con, CommandText = "DELETECLIENT"};
+            var commandeModif = new OracleCommand {CommandType = CommandType.StoredProcedure, Connection = con, CommandText = "DELETECLIENT"};
             var ID = (ComboBoxClient.SelectedItem as ComboboxItemClient).Value.GetId;
             var param1 = new OracleParameter(":1", OracleDbType.Int32) {Value = ID};
 
             commandeModif.Parameters.Add(param1);
- 
+
             try
             {
                 con.Open();
                 commandeModif.ExecuteNonQuery();
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
@@ -218,7 +220,6 @@ namespace MANAGER.Pages
             {
                 con.Close();
             }
- 
         }
     }
 }
