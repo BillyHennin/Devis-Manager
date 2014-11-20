@@ -23,9 +23,9 @@ namespace MANAGER.Connection
             return new OracleCommand {Connection = db, CommandText = query};
         }
 
-        public static OracleCommand OracleCommandStored(CommandType type, OracleConnection db, string query)
+        public static OracleCommand OracleCommandStored(OracleConnection db, string query)
         {
-            return new OracleCommand {CommandType = type, Connection = db, CommandText = query};
+            return new OracleCommand {CommandType = CommandType.StoredProcedure, Connection = db, CommandText = query};
         }
     }
 }

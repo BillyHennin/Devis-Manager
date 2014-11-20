@@ -29,7 +29,7 @@ namespace MANAGER.Pages
         // A empty list of Merchandise, for future use.
         private static readonly List<Merchandise> ListMerchandise = new List<Merchandise>();
         // A Estimate that use the previous list.
-        private readonly Devis _leDevis = new Devis(ListMerchandise);
+        private readonly Estimate estimate = new Estimate(ListMerchandise);
         // The total cost of the devis.
         private int _qte;
         // The quantity of the product you want, for future use.
@@ -54,21 +54,21 @@ namespace MANAGER.Pages
             LabelPrix.Content = "Erreur";
             Ajouter.IsEnabled = false;
             LabelPrix.Foreground =
-                TextBoxDevisQte.CaretBrush = TextBoxDevisQte.SelectionBrush = TextBoxDevisQte.BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00));
+                TextBoxEstimateQte.CaretBrush = TextBoxEstimateQte.SelectionBrush = TextBoxEstimateQte.BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00));
         }
 
         /// <summary>
         ///   When the quantity changes, this method is called.
-        ///   It checks if "TextBoxDevisQte.Text" is a integer or not and call ErrorCost if not.
+        ///   It checks if "TextBoxEstimateQte.Text" is a integer or not and call ErrorCost if not.
         ///   If it is, then it checks if it's more than zero and call ErrorCost if not.
         /// </summary>
         private void QteChanged()
         {
             _qte = 0;
 
-            if(IsInt(TextBoxDevisQte.Text))
+            if(IsInt(TextBoxEstimateQte.Text))
             {
-                var nouvQte = Convert.ToInt32(TextBoxDevisQte.Text);
+                var nouvQte = Convert.ToInt32(TextBoxEstimateQte.Text);
 
                 if(nouvQte <= 0)
                 {
@@ -81,9 +81,9 @@ namespace MANAGER.Pages
                         _qte = nouvQte;
                         LabelPrix.Foreground = new SolidColorBrush(Color.FromRgb(0xC1, 0xC1, 0xC1));
                         LabelPrix.Content = string.Format("{0}€", ((ComboBoxProduit.SelectedItem as ComboboxItemMerchandise).Value.GetPrix * _qte));
-                        TextBoxDevisQte.BorderBrush =
-                            TextBoxDevisQte.CaretBrush =
-                                TextBoxDevisQte.SelectionBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
+                        TextBoxEstimateQte.BorderBrush =
+                            TextBoxEstimateQte.CaretBrush =
+                                TextBoxEstimateQte.SelectionBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
                         Ajouter.IsEnabled = true;
                     }
                     else
@@ -114,10 +114,10 @@ namespace MANAGER.Pages
                 merchandiseCost);
 
             // Check if the merchandise isn't already in the list
-            var nbMerchandise = _leDevis.GetList.Count;
+            var nbMerchandise = estimate.GetList.Count;
             for(var i = 0; i < nbMerchandise; i++)
             {
-                if(_leDevis[i].GetNom == newMerchandise.GetNom)
+                if(estimate[i].GetNom == newMerchandise.GetNom)
                 {
                     return;
                 }
@@ -136,7 +136,7 @@ namespace MANAGER.Pages
                 VerticalAlignment = VerticalAlignment.Top,
                 Margin = new Thickness(2, 2, 1, 0),
                 BorderThickness = new Thickness(1),
-                Width = BorderDevis.Width - 6,
+                Width = BorderEstimate.Width - 6,
                 Child = panelMerchandise,
                 Height = 70
             };
@@ -173,11 +173,11 @@ namespace MANAGER.Pages
 
             //Final stuff
             newMerchandise.Border = border;
-            PanelDevis.Children.Add(border);
-            _leDevis.GetList.Add(newMerchandise);
+            PanelEstimate.Children.Add(border);
+            estimate.GetList.Add(newMerchandise);
             _totalCost += merchandiseCost;
             LabelTotalPrix.Content = _totalCost + "€";
-            AjouterDevis.IsEnabled = true;
+            AjouterEstimate.IsEnabled = true;
         }
 
         /// <summary>
@@ -185,14 +185,14 @@ namespace MANAGER.Pages
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void BTNAddDevis_click(object sender, RoutedEventArgs e)
+        private void BTNAddEstimate_click(object sender, RoutedEventArgs e)
         {
             //Connect to the data base 
             var dataBaseConnection = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
             //Open the connection
-            dataBaseConnection.Open();
             try
             {
+                dataBaseConnection.Open();
                 // AFAIK, Oracle don't have auto-inc, so with this, you get the last id of what you want.
                 const string querySelect = "SELECT max(ID_DEVIS), max(NUMERODEVIS) FROM DEVIS";
                 var oCommand = ConnectionOracle.OracleCommand(dataBaseConnection, querySelect);
@@ -202,45 +202,51 @@ namespace MANAGER.Pages
                 //for each row in result :
                 while(result.Read())
                 {
-                    var idDevis = result[0].ToString() == "" ? 1 : Convert.ToInt32(result[0]);
-                    var numeroDevis = result[1].ToString() == "" ? 1 : Convert.ToInt32(result[1]);
+                    var idEstimate = result[0].ToString() == "" ? 1 : Convert.ToInt32(result[0]);
+                    var numeroEstimate = result[1].ToString() == "" ? 1 : Convert.ToInt32(result[1]);
                     //Get the current date on the Oracle format.
-                    var date = "TO_DATE('" + DateTime.Now.ToString("dd/MM/yy") + "', 'DD/MM/RR')";
+                    //var date = "TO_DATE('" + DateTime.Now.ToString("dd/MM/yy") + "', 'DD/MM/RR')";
+                    var date = DateTime.Now.ToString("dd/MM/yy");
                     for(var i = 0; i < sizeList; i++)
                     {
-                        var queryInsert = "INSERT INTO DEVIS (ID_CLIENT, ID_Merchandise, ID_DEVIS, QUANTITE, JOUR, PRIXMARCHANDISE, NUMERODEVIS)"
-                                          + " VALUES (:1, :2, :3, :4, :5, :6, :7)";
-
-                        var commandeModif = new OracleCommand {Connection = dataBaseConnection, CommandText = queryInsert};
+                        /**
+                         * 
+                         * This might look stupid but I can't insert anything with the app
+                         * 
+                         *                          BUT
+                         *                          
+                         * I can exec stored Procedure, so that's why.
+                         * 
+                         **/
+                        var Insert = ConnectionOracle.OracleCommandStored(dataBaseConnection, "INSERTDEVIS");
                         //Change every parameters with the proper value.
-                        var paramIdClient = new OracleParameter(":1", OracleDbType.Int32) {Value = _leDevis.Client.GetId};
-                        var paramIdMerchandise = new OracleParameter(":2", OracleDbType.Int32) {Value = _leDevis[i].GetId};
-                        var paramIdDevis = new OracleParameter(":3", OracleDbType.Int32) {Value = ((idDevis) + i + 1)};
-                        var paramQTE = new OracleParameter(":4", OracleDbType.Int32) {Value = _leDevis[i].GetQte};
-                        var paramDate = new OracleParameter(":5", OracleDbType.Int32) {Value = date};
-                        var paramPrice = new OracleParameter(":6", OracleDbType.Int32) {Value = _leDevis[i].GetPrix};
-                        var paramNumDevis = new OracleParameter(":7", OracleDbType.Int32) {Value = ((numeroDevis) + 1)};
+                        var paramIdClient = new OracleParameter(":1", OracleDbType.Int32) {Value = estimate.Client.GetId};
+                        var paramIdMerchandise = new OracleParameter(":2", OracleDbType.Int32) {Value = estimate[i].GetId};
+                        var paramIdEstimate = new OracleParameter(":3", OracleDbType.Int32) {Value = ((idEstimate) + i + 1)};
+                        var paramQTE = new OracleParameter(":4", OracleDbType.Int32) {Value = estimate[i].GetQte};
+                        var paramDate = new OracleParameter(":5", OracleDbType.Varchar2) {Value = date};
+                        var paramPrice = new OracleParameter(":6", OracleDbType.Varchar2) {Value = estimate[i].GetPrix};
+                        var paramNumEstimate = new OracleParameter(":7", OracleDbType.Varchar2) {Value = ((numeroEstimate) + 1)};
 
                         //add every parameters that have changed
-                        commandeModif.Parameters.Add(paramIdClient);
-                        commandeModif.Parameters.Add(paramIdMerchandise);
-                        commandeModif.Parameters.Add(paramIdDevis);
-                        commandeModif.Parameters.Add(paramQTE);
-                        commandeModif.Parameters.Add(paramDate);
-                        commandeModif.Parameters.Add(paramPrice);
-                        commandeModif.Parameters.Add(paramNumDevis);
+                        Insert.Parameters.Add(paramIdClient);
+                        Insert.Parameters.Add(paramIdMerchandise);
+                        Insert.Parameters.Add(paramIdEstimate);
+                        Insert.Parameters.Add(paramQTE);
+                        Insert.Parameters.Add(paramDate);
+                        Insert.Parameters.Add(paramPrice);
+                        Insert.Parameters.Add(paramNumEstimate);
 
-                        //TODO : Makes insert works
-                        // Oracle, why don't you love me ?
-                        commandeModif.ExecuteNonQuery();
+                        //Execute the stored command
+                        Insert.ExecuteNonQuery();
                     }
                 }
                 result.Close();
             }
-            catch(Exception caught)
+            catch
             {
-                Console.WriteLine(caught.Message);
-                Console.Read();
+                MessageBox.Show("Connexion à la base de donnée impossible.");
+                return;
             }
             finally
             {
@@ -248,11 +254,11 @@ namespace MANAGER.Pages
             }
 
             //Final stuff, reset everything.
-            PanelDevis.Children.Clear();
+            PanelEstimate.Children.Clear();
             ListMerchandise.Clear();
             _totalCost = 0;
             LabelTotalPrix.Content = "";
-            AjouterDevis.IsEnabled = false;
+            AjouterEstimate.IsEnabled = false;
         }
 
         /// <summary>
@@ -270,7 +276,7 @@ namespace MANAGER.Pages
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void TextBoxDevisQte_TextChanged(object sender, TextChangedEventArgs e)
+        private void TextBoxEstimateQte_TextChanged(object sender, TextChangedEventArgs e)
         {
             try
             {
@@ -332,7 +338,7 @@ namespace MANAGER.Pages
         /// <param name="e"></param>
         private void comboBoxClient_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            _leDevis.Client = (ComboBoxClient.SelectedItem as ComboboxItemClient).Value;
+            estimate.Client = (ComboBoxClient.SelectedItem as ComboboxItemClient).Value;
         }
 
         /// <summary>
@@ -393,7 +399,7 @@ namespace MANAGER.Pages
                         ErrorCost();
                         break;
                     default:
-                        LabelPrix.Content = (ComboBoxProduit.SelectedItem as ComboboxItemMerchandise).Value.GetPrix * Convert.ToInt32(TextBoxDevisQte.Text)
+                        LabelPrix.Content = (ComboBoxProduit.SelectedItem as ComboboxItemMerchandise).Value.GetPrix * Convert.ToInt32(TextBoxEstimateQte.Text)
                                             + "€";
                         break;
                 }
@@ -412,10 +418,10 @@ namespace MANAGER.Pages
         /// <param name="e"></param>
         private void Menu_Loaded(object sender, RoutedEventArgs e)
         {
-            var nbMerchandise = _leDevis.GetList.Count;
+            var nbMerchandise = estimate.GetList.Count;
             for(var i = 0; i < nbMerchandise; i++)
             {
-                _leDevis[i].Border.BorderBrush = Ajouter.BorderBrush;
+                estimate[i].Border.BorderBrush = Ajouter.BorderBrush;
             }
             QteChanged();
         }
@@ -428,14 +434,14 @@ namespace MANAGER.Pages
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             //Change the border size to always match with UserControl.
-            BorderDevis.Width = Menu.ActualWidth - 340;
-            BorderDevis.Height = Menu.ActualHeight - 50;
+            BorderEstimate.Width = Menu.ActualWidth - 340;
+            BorderEstimate.Height = Menu.ActualHeight - 50;
 
             //Do the same with the the sub-borders.
-            var nbMerchandise = _leDevis.GetList.Count;
+            var nbMerchandise = estimate.GetList.Count;
             for(var i = 0; i < nbMerchandise; i++)
             {
-                _leDevis[i].Border.Width = BorderDevis.Width - 6;
+                estimate[i].Border.Width = BorderEstimate.Width - 6;
             }
         }
     }

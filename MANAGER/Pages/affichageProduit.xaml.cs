@@ -92,9 +92,9 @@ namespace MANAGER.Pages
                 // var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
                 var db = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
                 var query = "SELECT * FROM MARCHANDISE WHERE NOM LIKE '%" + TextBoxDevisQte.Text + "%'";
-                db.Open();
                 try
                 {
+                    db.Open();
                     //var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
                     var oCommand = ConnectionOracle.OracleCommand(db, query);
                     var resultat = oCommand.ExecuteReader();
@@ -172,9 +172,9 @@ namespace MANAGER.Pages
 
             var db = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
             const string query = "SELECT * FROM MARCHANDISE WHERE ENVENTE = 1";
-            db.Open();
             try
             {
+                db.Open();
                 //   var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
                 var oCommand = ConnectionOracle.OracleCommand(db, query);
                 var resultat = oCommand.ExecuteReader();
@@ -251,17 +251,16 @@ namespace MANAGER.Pages
             BorderDevis.Width = MenuProduit.ActualWidth - 40;
             BorderDevis.Height = MenuProduit.ActualHeight - 70;
 
-            try
+            var nbMarchandise = ListMarchandise.Count;
+
+            if(nbMarchandise == 0)
             {
-                var nbMarchandise = ListMarchandise.Count;
-                for(var i = 0; i < nbMarchandise; i++)
-                {
-                    ListMarchandise[i].Border.Width = BorderDevis.Width - 5;
-                }
-            } // ReSharper disable once EmptyGeneralCatchClause
-            catch
+                return;
+            }
+
+            for(var i = 0; i < nbMarchandise; i++)
             {
-                /*Bro, do you even try ?*/
+                ListMarchandise[i].Border.Width = BorderDevis.Width - 5;
             }
         }
 
