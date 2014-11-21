@@ -73,16 +73,15 @@ namespace MANAGER.Pages
             var oCommand = ConnectionOracle.OracleCommand(db, query);
             var paramIdClient = new OracleParameter(":1", OracleDbType.Int32) {Value = (ComboBoxClient.SelectedItem as ComboboxItemClient).Value.GetId};
             oCommand.Parameters.Add(paramIdClient);
-
+            var price = 0;
             var i = 1;
-
             try
             {
                 db.Open();
                 var resultat = oCommand.ExecuteReader();
                 while(resultat.Read())
                 {
-                    var query2 = "SELECT ID_MARCHANDISE, PRIXMARCHANDISE FROM DEVIS WHERE NUMERODEVIS = :1";
+                    var query2 = "SELECT ID_MARCHANDISE FROM DEVIS WHERE NUMERODEVIS = :1";
                     var oCommand2 = ConnectionOracle.OracleCommand(db, query2);
                     var paramNumeroDevis = new OracleParameter(":1", OracleDbType.Int32) {Value = resultat[0]};
                     oCommand2.Parameters.Add(paramNumeroDevis);
@@ -100,10 +99,12 @@ namespace MANAGER.Pages
                         {
                             listMarchandise2.Add(new Merchandise(Convert.ToInt32(resultat3[0]), resultat3[1].ToString(), Convert.ToInt32(resultat3[2]),
                                 Convert.ToInt32(resultat3[3])));
+                            price += Convert.ToInt32(resultat3[3]) * Convert.ToInt32(resultat3[2]);
                         }
                     }
-                    ComboBoxDevis.Items.Add(new ComboboxItemDevis {Text = "Devis n°" + i, Value = new Devis(listMarchandise2)});
+                    ComboBoxDevis.Items.Add(new ComboboxItemDevis {Text = "Devis n°" + i + " - "+price+"€", Value = new Devis(listMarchandise2)});
                     i++;
+                    price = 0;
                 }
                 resultat.Close();
             }
@@ -118,6 +119,7 @@ namespace MANAGER.Pages
             }
             BTN_Supprimer.Visibility = Visibility.Visible;
             PanelDevis.Children.Clear();
+           
         }
 
         private void ComboBoxDevis_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -127,7 +129,7 @@ namespace MANAGER.Pages
             {
                 return;
             }
-
+            var price = 0;
             var listMarchandise = (ComboBoxDevis.SelectedItem as ComboboxItemDevis).Value.GetList;
             var taille = listMarchandise.Count;
             for(var i = 0; i < taille; i++)
@@ -156,15 +158,17 @@ namespace MANAGER.Pages
                 panelMarchandise.Children.Add(new TextBlock {Margin = thick, Text = text, Height = 16});
 
                 // Prix
-                panelMarchandise.Children.Add(new TextBlock {Text = qte.ToString(CultureInfo.InvariantCulture), Margin = thick, Height = 16});
+                panelMarchandise.Children.Add(new TextBlock {Text = "Quantité commandée : "+qte.ToString(CultureInfo.InvariantCulture), Margin = thick, Height = 16});
 
                 // Quantité
-                panelMarchandise.Children.Add(new TextBlock {Text = prixMarchandise.ToString(CultureInfo.InvariantCulture), Margin = thick, Height = 16});
+                panelMarchandise.Children.Add(new TextBlock {Text = prixMarchandise.ToString(CultureInfo.InvariantCulture)+"€", Margin = thick, Height = 16});
 
                 item.Border = bordure;
                 PanelDevis.Children.Add(bordure);
                 _leDevis.GetList.Add(item);
+                price += prixMarchandise * qte;
             }
+            TotalTextBlock.Text = "Total du devis : " + price + "€";
         }
 
         private void MenuClient_SizeChanged(object sender, SizeChangedEventArgs e)

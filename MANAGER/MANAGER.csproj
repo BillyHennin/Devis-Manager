@@ -86,6 +86,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Classes\Client.cs" />
+    <Compile Include="Classes\Estimate.cs" />
     <Compile Include="ComboBox\ComboboxItemClient.cs" />
     <Compile Include="ComboBox\ComboboxItemDevis.cs" />
     <Compile Include="Classes\Devis.cs" />
@@ -101,8 +102,8 @@
     <Compile Include="Pages\affichageProduit.xaml.cs">
       <DependentUpon>affichageProduit.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\menu.xaml.cs">
-      <DependentUpon>menu.xaml</DependentUpon>
+    <Compile Include="Pages\EstimateCreator.xaml.cs">
+      <DependentUpon>EstimateCreator.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Parametre.xaml.cs">
       <DependentUpon>Parametre.xaml</DependentUpon>
@@ -134,7 +135,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\menu.xaml">
+    <Page Include="Pages\EstimateCreator.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

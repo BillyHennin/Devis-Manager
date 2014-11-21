@@ -1,10 +1,4 @@
-﻿// This program is a private software, based on c# source code.
-// To sell or change credits of this software is forbidden,
-// except if someone approve it from MANAGER INC. team.
-//  
-// Copyrights (c) 2014 MANAGER INC. All rights reserved.
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
@@ -21,10 +15,9 @@ using Oracle.ManagedDataAccess.Client;
 namespace MANAGER.Pages
 {
     /// <summary>
-    ///   This page is uses to create devis. you can choose a customer and add some ( or every ) product, then insert it in the
-    ///   database.
+    ///  This page is uses to create cost estimate. you can choose a customer and add some ( or every ) product, then insert it in the database.
     /// </summary>
-    public partial class devis
+    public partial class EstimatePage
     {
         // A empty list of Merchandise, for future use.
         private static readonly List<Merchandise> ListMerchandise = new List<Merchandise>();
@@ -51,9 +44,9 @@ namespace MANAGER.Pages
         /// </summary>
         private void ErrorCost()
         {
-            LabelPrix.Content = "Erreur";
+            LabelPrice.Content = "Erreur";
             Ajouter.IsEnabled = false;
-            LabelPrix.Foreground =
+            LabelPrice.Foreground =
                 TextBoxEstimateQte.CaretBrush = TextBoxEstimateQte.SelectionBrush = TextBoxEstimateQte.BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00));
         }
 
@@ -79,8 +72,8 @@ namespace MANAGER.Pages
                     if(ComboBoxProduit.Items.Count != 0)
                     {
                         _qte = nouvQte;
-                        LabelPrix.Foreground = new SolidColorBrush(Color.FromRgb(0xC1, 0xC1, 0xC1));
-                        LabelPrix.Content = string.Format("{0}€", ((ComboBoxProduit.SelectedItem as ComboboxItemMerchandise).Value.GetPrix * _qte));
+                        LabelPrice.Foreground = new SolidColorBrush(Color.FromRgb(0xC1, 0xC1, 0xC1));
+                        LabelPrice.Content = string.Format("{0}€", ((ComboBoxProduit.SelectedItem as ComboboxItemMerchandise).Value.GetPrix * _qte));
                         TextBoxEstimateQte.BorderBrush =
                             TextBoxEstimateQte.CaretBrush =
                                 TextBoxEstimateQte.SelectionBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
@@ -106,7 +99,7 @@ namespace MANAGER.Pages
         private void BTNAddFeed_click(object sender, RoutedEventArgs e)
         {
             // get the cost of the merchandise (without the "€")
-            var merchandiseCost = Convert.ToInt32(LabelPrix.Content.ToString().Substring(0, LabelPrix.Content.ToString().Length - 1));
+            var merchandiseCost = Convert.ToInt32(LabelPrice.Content.ToString().Substring(0, LabelPrice.Content.ToString().Length - 1));
             // Creating a new panel, useful only on menu.xaml
             var panelMerchandise = new StackPanel();
             // Creating a new merchandise with the merchandise selected on the comboBox
@@ -399,7 +392,7 @@ namespace MANAGER.Pages
                         ErrorCost();
                         break;
                     default:
-                        LabelPrix.Content = (ComboBoxProduit.SelectedItem as ComboboxItemMerchandise).Value.GetPrix * Convert.ToInt32(TextBoxEstimateQte.Text)
+                        LabelPrice.Content = (ComboBoxProduit.SelectedItem as ComboboxItemMerchandise).Value.GetPrix * Convert.ToInt32(TextBoxEstimateQte.Text)
                                             + "€";
                         break;
                 }
@@ -416,7 +409,7 @@ namespace MANAGER.Pages
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Menu_Loaded(object sender, RoutedEventArgs e)
+        private void EstimateCreator_Loaded(object sender, RoutedEventArgs e)
         {
             var nbMerchandise = estimate.GetList.Count;
             for(var i = 0; i < nbMerchandise; i++)
@@ -434,8 +427,8 @@ namespace MANAGER.Pages
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             //Change the border size to always match with UserControl.
-            BorderEstimate.Width = Menu.ActualWidth - 340;
-            BorderEstimate.Height = Menu.ActualHeight - 50;
+            BorderEstimate.Width = EstimateCreator.ActualWidth - 340;
+            BorderEstimate.Height = EstimateCreator.ActualHeight - 50;
 
             //Do the same with the the sub-borders.
             var nbMerchandise = estimate.GetList.Count;

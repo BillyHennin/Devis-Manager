@@ -3,9 +3,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    x:Name="Menu" x:Class="MANAGER.Pages.devis"
-    mc:Ignorable="d"
-    d:DesignHeight="300" d:DesignWidth="300" SizeChanged="UserControl_SizeChanged" Loaded="Menu_Loaded">
+    x:Name="EstimateCreator" x:Class="MANAGER.Pages.EstimatePage"    mc:Ignorable="d"
+    d:DesignHeight="300" d:DesignWidth="300" SizeChanged="UserControl_SizeChanged" Loaded="EstimateCreator_Loaded">
     <Grid Style="{StaticResource ContentRoot}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="35*" />
@@ -91,11 +90,11 @@
                                Text="Prix  :" Height="16" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" />
 
                     <Label Margin="46,36,105,-30"
-                           VerticalAlignment="Center" x:Name="LabelPrix" Height="16" Grid.Row="1" Content=""
+                           VerticalAlignment="Center" x:Name="LabelPrice" Height="16" Grid.Row="1" Content=""
                            Grid.ColumnSpan="3"
                            Grid.Column="0" />
                 </Grid>
-                <Grid x:Name="MarchandiseGrid">
+                <Grid>
                     <Border x:Name="BorderEstimate" BorderThickness="1" BorderBrush="{DynamicResource Accent}"
                             HorizontalAlignment="Left"
                             Height="411" Margin="300,-91,-405,0" VerticalAlignment="Top" Width="450" Grid.Column="0">
@@ -117,7 +116,7 @@
                         <ColumnDefinition Width="22*" />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <TextBlock x:Name="TextBlockPrixTotal" Margin="1,-14,0,14"
+                    <TextBlock Margin="1,-14,0,14"
                                Style="{StaticResource Heading2}" TextWrapping="Wrap" Text="Prix total :" Height="22"
                                VerticalAlignment="Bottom" Width="88" HorizontalAlignment="Left" Grid.Column="0" />
                     <Label Margin="0,-10,0,10"

@@ -28,25 +28,26 @@
                       SelectionChanged="ComboBoxClient_SelectionChanged" Grid.Row="0" Grid.Column="1"
                       Grid.ColumnSpan="5" />
             <Button x:Name="BTN_Supprimer" Content="Supprimer le client" Grid.ColumnSpan="3" Grid.Column="0"
-                    Margin="9,5,67,-37" Grid.Row="1" BorderBrush="Red" Click="Button_Click" Visibility="Hidden" />
+                    Margin="9,5,67,-26" Grid.Row="1" BorderBrush="Red" Click="Button_Click" Visibility="Hidden" />
         </Grid>
-        <Grid x:Name="DevisClientGrid" Margin="268,-5,0,0" RenderTransformOrigin="0.488,0.287" Height="80">
+        <Grid Margin="268,-5,0,0" RenderTransformOrigin="0.488,0.287" Height="80">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="25*" />
                 <ColumnDefinition Width="219*" />
             </Grid.ColumnDefinitions>
-            <Border x:Name="BorderClientDevis" BorderThickness="1" HorizontalAlignment="Right"
-                    Height="248" Margin="0,10,10,-178" VerticalAlignment="Top" Width="224" Grid.Column="0"
-                    Grid.ColumnSpan="2">
-                <StackPanel MinWidth="150">
+            <Border BorderThickness="1" HorizontalAlignment="Right"
+        		Height="248" Margin="0,10,10,-178" VerticalAlignment="Top" Width="224" Grid.Column="0"
+        		Grid.ColumnSpan="2">
+                <StackPanel MinWidth="150" Margin="1,-4.5,-1,9">
                     <TextBlock Margin="-250,-27,-50,0" Style="{StaticResource Heading2}" TextWrapping="Wrap"
-                               Text="Ses devis :" />
+        				Text="Ses devis :" />
                     <ComboBox x:Name="ComboBoxDevis" BorderBrush="{DynamicResource Accent}" Margin="-150,-35,239,0"
-                              SelectionChanged="ComboBoxDevis_SelectionChanged" Height="22" />
+        				SelectionChanged="ComboBoxDevis_SelectionChanged" Height="22" />
+                    <TextBlock x:Name="TotalTextBlock" TextWrapping="Wrap" Style="{StaticResource Heading2}" Text="" Margin="-250,0,239,0" Height="19"/>
                 </StackPanel>
             </Border>
         </Grid>
-        <Grid x:Name="DevisGrid">
+        <Grid>
             <Border x:Name="BorderDevis" BorderThickness="1" BorderBrush="{DynamicResource Accent}"
                     HorizontalAlignment="Left"
                     Height="277" Margin="10,-30,0,0" VerticalAlignment="Top" Width="326" Grid.Column="0">
@@ -55,6 +56,7 @@
                 </ScrollViewer>
             </Border>
         </Grid>
+        
 
     </StackPanel>
 </Page>

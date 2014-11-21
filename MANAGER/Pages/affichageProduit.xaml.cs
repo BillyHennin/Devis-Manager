@@ -25,8 +25,8 @@ namespace MANAGER.Pages
     /// </summary>
     public partial class AffichageProduit
     {
-        private static List<Merchandise> ListMarchandise = new List<Merchandise>();
-        private static readonly List<Merchandise> ListMarchandiseN2 = new List<Merchandise>();
+        private static List<Merchandise> ListMerchandise = new List<Merchandise>();
+        private static readonly List<Merchandise> ListMerchandiseN2 = new List<Merchandise>();
 
         public AffichageProduit()
         {
@@ -39,16 +39,16 @@ namespace MANAGER.Pages
 
             if(TextBoxDevisQte.Text == "")
             {
-                var taille = ListMarchandise.Count;
+                var taille = ListMerchandise.Count;
 
                 for(var i = 0; i < taille; i++)
                 {
-                    var id = ListMarchandise[i].GetId;
-                    var text = ListMarchandise[i].GetNom;
-                    var qte = "Quantitée en stock : " + ListMarchandise[i].GetQte;
-                    var prixMarchandise = ListMarchandise[i].GetPrix + "€";
-                    var nouvelleMarchandise = new Merchandise(id, text, ListMarchandise[i].GetQte, ListMarchandise[i].GetPrix);
-                    var panelMarchandise = new StackPanel();
+                    var id = ListMerchandise[i].GetId;
+                    var text = ListMerchandise[i].GetNom;
+                    var qte = "Quantitée en stock : " + ListMerchandise[i].GetQte;
+                    var prixMerchandise = ListMerchandise[i].GetPrix + "€";
+                    var nouvelleMerchandise = new Merchandise(id, text, ListMerchandise[i].GetQte, ListMerchandise[i].GetPrix);
+                    var panelMerchandise = new StackPanel();
                     var thick = new Thickness(5, 2, 0, 0);
 
                     //nouvelle bordure
@@ -59,35 +59,35 @@ namespace MANAGER.Pages
                         Margin = new Thickness(2, 2, 1, 0),
                         BorderThickness = new Thickness(1),
                         Width = BorderDevis.Width - 5,
-                        Child = panelMarchandise,
+                        Child = panelMerchandise,
                         Height = 70
                     };
 
                     PanelProduit.Children.Add(bordure);
 
                     // Nom du produit
-                    panelMarchandise.Children.Add(new TextBlock {Margin = thick, Text = text, Height = 16});
+                    panelMerchandise.Children.Add(new TextBlock {Margin = thick, Text = text, Height = 16});
 
                     // Prix
-                    panelMarchandise.Children.Add(new TextBlock {Text = qte.ToString(CultureInfo.InvariantCulture), Margin = thick, Height = 16});
+                    panelMerchandise.Children.Add(new TextBlock {Text = qte.ToString(CultureInfo.InvariantCulture), Margin = thick, Height = 16});
 
                     // Quantité
-                    panelMarchandise.Children.Add(new TextBlock
+                    panelMerchandise.Children.Add(new TextBlock
                     {
-                        Text = prixMarchandise.ToString(CultureInfo.InvariantCulture),
+                        Text = prixMerchandise.ToString(CultureInfo.InvariantCulture),
                         Margin = new Thickness(5, 2, 0, 0),
                         Height = 16
                     });
 
-                    nouvelleMarchandise.Border = bordure;
-                    ListMarchandiseN2.Add(nouvelleMarchandise);
+                    nouvelleMerchandise.Border = bordure;
+                    ListMerchandiseN2.Add(nouvelleMerchandise);
                 }
-                ListMarchandise = ListMarchandiseN2;
+                ListMerchandise = ListMerchandiseN2;
             }
             else
             {
                 PanelProduit.Children.Clear();
-                ListMarchandise.Clear();
+                ListMerchandise.Clear();
 
                 // var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
                 var db = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
@@ -103,9 +103,9 @@ namespace MANAGER.Pages
                         var id = Convert.ToInt32(resultat[0]);
                         var text = resultat[1].ToString();
                         var qte = "Quantitée en stock : " + Convert.ToInt32(resultat[3]);
-                        var prixMarchandise = Convert.ToInt32(resultat[2]) + "€";
-                        var nouvelleMarchandise = new Merchandise(id, text, Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]));
-                        var panelMarchandise = new StackPanel();
+                        var prixMerchandise = Convert.ToInt32(resultat[2]) + "€";
+                        var nouvelleMerchandise = new Merchandise(id, text, Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]));
+                        var panelMerchandise = new StackPanel();
                         var thick = new Thickness(5, 2, 0, 0);
 
                         //nouvelle bordure
@@ -116,38 +116,38 @@ namespace MANAGER.Pages
                             Margin = new Thickness(2, 2, 1, 0),
                             BorderThickness = new Thickness(1),
                             Width = BorderDevis.Width - 5,
-                            Child = panelMarchandise,
+                            Child = panelMerchandise,
                             Height = 70
                         };
 
                         PanelProduit.Children.Add(bordure);
 
                         // Nom du produit
-                        panelMarchandise.Children.Add(new TextBlock {Margin = thick, Text = text, Height = 16});
+                        panelMerchandise.Children.Add(new TextBlock {Margin = thick, Text = text, Height = 16});
 
                         // Prix
-                        panelMarchandise.Children.Add(new TextBlock {Text = qte.ToString(CultureInfo.InvariantCulture), Margin = thick, Height = 16});
+                        panelMerchandise.Children.Add(new TextBlock {Text = qte.ToString(CultureInfo.InvariantCulture), Margin = thick, Height = 16});
 
                         // Quantité
-                        panelMarchandise.Children.Add(new TextBlock
+                        panelMerchandise.Children.Add(new TextBlock
                         {
-                            Text = prixMarchandise.ToString(CultureInfo.InvariantCulture),
+                            Text = prixMerchandise.ToString(CultureInfo.InvariantCulture),
                             Margin = new Thickness(5, 2, 0, 0),
                             Height = 16
                         });
 
                         // Suppression
-                        panelMarchandise.Children.Add(new Button
+                        panelMerchandise.Children.Add(new Button
                         {
                             HorizontalAlignment = HorizontalAlignment.Right,
                             Name = "BTN_Supprimer",
-                            Content = "Supprimer le client",
+                            Content = "Supprimer le produit",
                             Margin = new Thickness(9, -30, 67, 50),
                             BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00))
                         });
 
-                        nouvelleMarchandise.Border = bordure;
-                        ListMarchandise.Add(nouvelleMarchandise);
+                        nouvelleMerchandise.Border = bordure;
+                        ListMerchandise.Add(nouvelleMerchandise);
                     }
                     resultat.Close();
                 }
@@ -166,7 +166,7 @@ namespace MANAGER.Pages
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             PanelProduit.Children.Clear();
-            ListMarchandise.Clear();
+            ListMerchandise.Clear();
 
             // var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
 
@@ -183,9 +183,9 @@ namespace MANAGER.Pages
                     var id = Convert.ToInt32(resultat[0]);
                     var text = resultat[1].ToString();
                     var qte = "Quantitée en stock : " + Convert.ToInt32(resultat[3]);
-                    var prixMarchandise = Convert.ToInt32(resultat[2]) + "€";
-                    var nouvelleMarchandise = new Merchandise(id, text, Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]));
-                    var panelMarchandise = new StackPanel();
+                    var prixMerchandise = Convert.ToInt32(resultat[2]) + "€";
+                    var nouvelleMerchandise = new Merchandise(id, text, Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]));
+                    var panelMerchandise = new StackPanel();
                     var thick = new Thickness(5, 2, 0, 0);
 
                     //nouvelle bordure
@@ -196,22 +196,22 @@ namespace MANAGER.Pages
                         Margin = new Thickness(2, 2, 1, 0),
                         BorderThickness = new Thickness(1),
                         Width = BorderDevis.Width - 5,
-                        Child = panelMarchandise,
+                        Child = panelMerchandise,
                         Height = 70
                     };
 
                     PanelProduit.Children.Add(bordure);
 
                     // Nom du produit
-                    panelMarchandise.Children.Add(new TextBlock {Margin = thick, Text = text, Height = 16});
+                    panelMerchandise.Children.Add(new TextBlock {Margin = thick, Text = text, Height = 16});
 
                     // Prix
-                    panelMarchandise.Children.Add(new TextBlock {Text = qte.ToString(CultureInfo.InvariantCulture), Margin = thick, Height = 16});
+                    panelMerchandise.Children.Add(new TextBlock {Text = qte.ToString(CultureInfo.InvariantCulture), Margin = thick, Height = 16});
 
                     // Quantité
-                    panelMarchandise.Children.Add(new TextBlock
+                    panelMerchandise.Children.Add(new TextBlock
                     {
-                        Text = prixMarchandise.ToString(CultureInfo.InvariantCulture),
+                        Text = prixMerchandise.ToString(CultureInfo.InvariantCulture),
                         Margin = new Thickness(5, 2, 0, 0),
                         Height = 16
                     });
@@ -222,16 +222,17 @@ namespace MANAGER.Pages
                         Name = "BTN_Supprimer",
                         Content = "Supprimer le client",
                         Margin = new Thickness(9, -30, 67, 50),
-                        BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00))
+                        BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00)),
+                        Tag=id
                     };
 
                     // Suppression
-                    panelMarchandise.Children.Add(BTN_Supprimer);
+                    panelMerchandise.Children.Add(BTN_Supprimer);
 
                     BTN_Supprimer.Click += bouton_Click;
 
-                    nouvelleMarchandise.Border = bordure;
-                    ListMarchandise.Add(nouvelleMarchandise);
+                    nouvelleMerchandise.Border = bordure;
+                    ListMerchandise.Add(nouvelleMerchandise);
                 }
                 resultat.Close();
             }
@@ -251,16 +252,16 @@ namespace MANAGER.Pages
             BorderDevis.Width = MenuProduit.ActualWidth - 40;
             BorderDevis.Height = MenuProduit.ActualHeight - 70;
 
-            var nbMarchandise = ListMarchandise.Count;
+            var nbMerchandise = ListMerchandise.Count;
 
-            if(nbMarchandise == 0)
+            if(nbMerchandise == 0)
             {
                 return;
             }
 
-            for(var i = 0; i < nbMarchandise; i++)
+            for(var i = 0; i < nbMerchandise; i++)
             {
-                ListMarchandise[i].Border.Width = BorderDevis.Width - 5;
+                ListMerchandise[i].Border.Width = BorderDevis.Width - 5;
             }
         }
 
@@ -268,9 +269,8 @@ namespace MANAGER.Pages
         {
             var con = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
             var commandeModif = new OracleCommand {CommandType = CommandType.StoredProcedure, Connection = con, CommandText = "DELETEPRODUIT"};
-            var ID = 1;
-            var param1 = new OracleParameter(":1", OracleDbType.Int32) {Value = ID};
 
+            var param1 = new OracleParameter(":1", OracleDbType.Int32) { Value = ((Button)sender).Tag.ToString()};
             commandeModif.Parameters.Add(param1);
 
             try
