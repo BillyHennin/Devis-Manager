@@ -37,229 +37,34 @@ namespace MANAGER.Pages
         /// </summary>
         private static readonly List<Merchandise> ListMerchandiseN2 = new List<Merchandise>();
 
+        private readonly OracleConnection database = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
+
         /// <summary>
-        ///   If the use wants to search a specific merchandise.
+        /// When a user select a specific marchandise clear everything, then recreate it with what the user wants to see.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void TextBoxDevisQte_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            PanelProduit.Children.Clear();
-
-            if(TextBoxDevisQte.Text == "")
-            {
-                var taille = ListMerchandise.Count;
-
-                for(var i = 0; i < taille; i++)
-                {
-                    var id = ListMerchandise[i].GetId;
-                    var text = ListMerchandise[i].GetNom;
-                    var qte = "Quantitée en stock : " + ListMerchandise[i].GetQte;
-                    var prixMerchandise = ListMerchandise[i].GetPrix + "€";
-                    var newMerchandise = new Merchandise(id, text, ListMerchandise[i].GetQte, ListMerchandise[i].GetPrix);
-                    var panelMerchandise = new StackPanel();
-                    var thick = new Thickness(5, 2, 0, 0);
-
-                    //nouvelle bordure
-                    var bordure = new Border
-                    {
-                        BorderBrush = BorderEstimate.BorderBrush,
-                        HorizontalAlignment = HorizontalAlignment.Left,
-                        Margin = new Thickness(2, 2, 1, 0),
-                        BorderThickness = new Thickness(1),
-                        Width = BorderEstimate.Width - 5,
-                        Child = panelMerchandise,
-                        Height = 70
-                    };
-
-                    PanelProduit.Children.Add(bordure);
-
-                    // Nom du produit
-                    panelMerchandise.Children.Add(new TextBlock {Margin = thick, Text = text, Height = 16});
-
-                    // Prix
-                    panelMerchandise.Children.Add(new TextBlock {Text = qte.ToString(CultureInfo.InvariantCulture), Margin = thick, Height = 16});
-
-                    // Quantité
-                    panelMerchandise.Children.Add(new TextBlock
-                    {
-                        Text = prixMerchandise.ToString(CultureInfo.InvariantCulture),
-                        Margin = new Thickness(5, 2, 0, 0),
-                        Height = 16
-                    });
-
-                    newMerchandise.Border = bordure;
-                    ListMerchandiseN2.Add(newMerchandise);
-                }
-                ListMerchandise = ListMerchandiseN2;
-            }
-            else
-            {
-                PanelProduit.Children.Clear();
-                ListMerchandise.Clear();
-
-                // var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
-                var db = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
-                var query = "SELECT * FROM MARCHANDISE WHERE NOM LIKE '%" + TextBoxDevisQte.Text + "%'";
-                try
-                {
-                    db.Open();
-                    //var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
-                    var oCommand = ConnectionOracle.OracleCommand(db, query);
-                    var resultat = oCommand.ExecuteReader();
-                    while(resultat.Read())
-                    {
-                        var id = Convert.ToInt32(resultat[0]);
-                        var text = resultat[1].ToString();
-                        var qte = "Quantitée en stock : " + Convert.ToInt32(resultat[3]);
-                        var prixMerchandise = Convert.ToInt32(resultat[2]) + "€";
-                        var newMerchandise = new Merchandise(id, text, Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]));
-                        var panelMerchandise = new StackPanel();
-                        var thick = new Thickness(5, 2, 0, 0);
-
-                        //nouvelle bordure
-                        var bordure = new Border
-                        {
-                            BorderBrush = BorderEstimate.BorderBrush,
-                            HorizontalAlignment = HorizontalAlignment.Left,
-                            Margin = new Thickness(2, 2, 1, 0),
-                            BorderThickness = new Thickness(1),
-                            Width = BorderEstimate.Width - 5,
-                            Child = panelMerchandise,
-                            Height = 70
-                        };
-
-                        PanelProduit.Children.Add(bordure);
-
-                        // Nom du produit
-                        panelMerchandise.Children.Add(new TextBlock {Margin = thick, Text = text, Height = 16});
-
-                        // Prix
-                        panelMerchandise.Children.Add(new TextBlock {Text = qte.ToString(CultureInfo.InvariantCulture), Margin = thick, Height = 16});
-
-                        // Quantité
-                        panelMerchandise.Children.Add(new TextBlock
-                        {
-                            Text = prixMerchandise.ToString(CultureInfo.InvariantCulture),
-                            Margin = new Thickness(5, 2, 0, 0),
-                            Height = 16
-                        });
-
-                        // Suppression
-                        panelMerchandise.Children.Add(new Button
-                        {
-                            HorizontalAlignment = HorizontalAlignment.Right,
-                            Name = "BTN_Supprimer",
-                            Content = "Supprimer le produit",
-                            Margin = new Thickness(9, -30, 67, 50),
-                            BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00))
-                        });
-
-                        newMerchandise.Border = bordure;
-                        ListMerchandise.Add(newMerchandise);
-                    }
-                    resultat.Close();
-                }
-                catch(Exception caught)
-                {
-                    Console.WriteLine(caught.Message);
-                    Console.Read();
-                }
-                finally
-                {
-                    db.Close();
-                }
-            }
-        }
-
-        private void Page_Loaded(object sender, RoutedEventArgs e)
+        /// <param name="merchandise"></param>
+        private void SelectMarchandiseLike(string merchandise)
         {
             PanelProduit.Children.Clear();
             ListMerchandise.Clear();
 
-            // var db = new SqlCeConnection(Settings.Default.DatabaseConnectionString);
-
-            var db = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
-            const string query = "SELECT * FROM MARCHANDISE WHERE ENVENTE = 1";
-            try
+            var nbMerchandise = ListMerchandiseN2.Count;
+            for(var i = 0; i < nbMerchandise; i++)
             {
-                db.Open();
-                //   var oCommand = new SqlCeCommand {Connection = db, CommandText = query};
-                var oCommand = ConnectionOracle.OracleCommand(db, query);
-                var resultat = oCommand.ExecuteReader();
-                while(resultat.Read())
+                if(!ListMerchandiseN2[i].GetNom.Contains(merchandise))
                 {
-                    var id = Convert.ToInt32(resultat[0]);
-                    var text = resultat[1].ToString();
-                    var qte = "Quantitée en stock : " + Convert.ToInt32(resultat[3]);
-                    var prixMerchandise = Convert.ToInt32(resultat[2]) + "€";
-                    var newMerchandise = new Merchandise(id, text, Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]));
-                    var panelMerchandise = new StackPanel();
-                    var thick = new Thickness(5, 2, 0, 0);
-
-                    //nouvelle bordure
-                    var bordure = new Border
-                    {
-                        BorderBrush = BorderEstimate.BorderBrush,
-                        HorizontalAlignment = HorizontalAlignment.Left,
-                        Margin = new Thickness(2, 2, 1, 0),
-                        BorderThickness = new Thickness(1),
-                        Width = BorderEstimate.Width - 5,
-                        Child = panelMerchandise,
-                        Height = 70
-                    };
-
-                    PanelProduit.Children.Add(bordure);
-
-                    // Nom du produit
-                    panelMerchandise.Children.Add(new TextBlock {Margin = thick, Text = text, Height = 16});
-
-                    // Prix
-                    panelMerchandise.Children.Add(new TextBlock {Text = qte.ToString(CultureInfo.InvariantCulture), Margin = thick, Height = 16});
-
-                    // Quantité
-                    panelMerchandise.Children.Add(new TextBlock
-                    {
-                        Text = prixMerchandise.ToString(CultureInfo.InvariantCulture),
-                        Margin = new Thickness(5, 2, 0, 0),
-                        Height = 16
-                    });
-
-                    var BTN_Supprimer = new Button
-                    {
-                        HorizontalAlignment = HorizontalAlignment.Right,
-                        Name = "BTN_Supprimer",
-                        Content = "Supprimer le client",
-                        Margin = new Thickness(9, -30, 67, 50),
-                        BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00)),
-                        Tag = id
-                    };
-
-                    // Suppression
-                    panelMerchandise.Children.Add(BTN_Supprimer);
-
-                    BTN_Supprimer.Click += bouton_Click;
-
-                    newMerchandise.Border = bordure;
-                    ListMerchandise.Add(newMerchandise);
+                    continue;
                 }
-                resultat.Close();
-            }
-            catch(Exception caught)
-            {
-                Console.WriteLine(caught.Message);
-                Console.Read();
-            }
-            finally
-            {
-                db.Close();
-            }
-        }
-
-        /*
-        var newMerchandise = new Merchandise(0, "Aucune marchandise n'est en vente actuellement.", 0, 0);
+                var id = ListMerchandiseN2[i].GetId;
+                var text = ListMerchandiseN2[i].GetNom;
+                var qte = "Quantitée en stock : " + ListMerchandiseN2[i].GetQte;
+                var prixMerchandise = ListMerchandiseN2[i].GetPrix + "€";
+                var newMerchandise = new Merchandise(id, text, ListMerchandiseN2[i].GetQte, ListMerchandiseN2[i].GetPrix);
                 var panelMerchandise = new StackPanel();
-                var bordure = new Border
+                var thick = new Thickness(5, 2, 0, 0);
+
+                //new border
+                var border = new Border
                 {
                     BorderBrush = BorderEstimate.BorderBrush,
                     HorizontalAlignment = HorizontalAlignment.Left,
@@ -270,13 +75,131 @@ namespace MANAGER.Pages
                     Height = 70
                 };
 
-                PanelProduit.Children.Add(bordure);
+                PanelProduit.Children.Add(border);
 
                 // Nom du produit
-                panelMerchandise.Children.Add(new TextBlock { Margin = new Thickness(5, 2, 0, 0), Text = "Aucune ùarchandise n'est en vente actuellement.", Height = 16 });
-                newMerchandise.Border = bordure;
+                panelMerchandise.Children.Add(new TextBlock {Margin = thick, Text = text, Height = 16});
+
+                // Prix
+                panelMerchandise.Children.Add(new TextBlock {Text = qte.ToString(CultureInfo.InvariantCulture), Margin = thick, Height = 16});
+
+                // Quantité
+                panelMerchandise.Children.Add(new TextBlock
+                {
+                    Text = prixMerchandise.ToString(CultureInfo.InvariantCulture),
+                    Margin = new Thickness(5, 2, 0, 0),
+                    Height = 16
+                });
+
+                var BTN_Delete = new Button
+                {
+                    HorizontalAlignment = HorizontalAlignment.Right,
+                    Content = "Supprimer le client",
+                    Margin = new Thickness(9, -30, 67, 50),
+                    BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00)),
+                    Tag = newMerchandise
+                };
+
+                // Button deleting
+                panelMerchandise.Children.Add(BTN_Delete);
+
+                BTN_Delete.Click += bouton_Click;
+
+                newMerchandise.Border = border;
                 ListMerchandise.Add(newMerchandise);
-        */
+            }
+        }        
+        
+        /// <summary>
+        ///   If the use wants to search a specific merchandise.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TextBoxDevisQte_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            SelectMarchandiseLike(TextBoxDevisQte.Text == "" ? "" : TextBoxDevisQte.Text);
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            PanelProduit.Children.Clear();
+            ListMerchandise.Clear();
+            ListMerchandiseN2.Clear();
+            
+            const string query = "SELECT * FROM MARCHANDISE WHERE ENVENTE = 1";
+            try
+            {
+                database.Open();
+                var oCommand = ConnectionOracle.OracleCommand(database, query);
+                var resultat = oCommand.ExecuteReader();
+                while (resultat.Read())
+                {
+                    var id = Convert.ToInt32(resultat[0]);
+                    var text = resultat[1].ToString();
+                    var qte = "Quantitée en stock : " + Convert.ToInt32(resultat[3]);
+                    var prixMerchandise = Convert.ToInt32(resultat[2]) + "€";
+                    var newMerchandise = new Merchandise(id, text, Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]));
+                    var panelMerchandise = new StackPanel();
+                    var thick = new Thickness(5, 2, 0, 0);
+
+                    //new border
+                    var border = new Border
+                    {
+                        BorderBrush = BorderEstimate.BorderBrush,
+                        HorizontalAlignment = HorizontalAlignment.Left,
+                        Margin = new Thickness(2, 2, 1, 0),
+                        BorderThickness = new Thickness(1),
+                        Width = BorderEstimate.Width - 5,
+                        Child = panelMerchandise,
+                        Height = 70
+                    };
+
+                    PanelProduit.Children.Add(border);
+
+                    // Nom du produit
+                    panelMerchandise.Children.Add(new TextBlock { Margin = thick, Text = text, Height = 16 });
+
+                    // Prix
+                    panelMerchandise.Children.Add(new TextBlock { Text = qte.ToString(CultureInfo.InvariantCulture), Margin = thick, Height = 16 });
+
+                    // Quantité
+                    panelMerchandise.Children.Add(new TextBlock
+                    {
+                        Text = prixMerchandise.ToString(CultureInfo.InvariantCulture),
+                        Margin = new Thickness(5, 2, 0, 0),
+                        Height = 16
+                    });
+
+                    var BTN_Delete = new Button
+                    {
+                        HorizontalAlignment = HorizontalAlignment.Right,
+                        Content = "Supprimer le client",
+                        Margin = new Thickness(9, -30, 67, 50),
+                        BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00)),
+                        Tag = newMerchandise
+                    };
+
+                    // Suppression
+                    panelMerchandise.Children.Add(BTN_Delete);
+
+                    BTN_Delete.Click += bouton_Click;
+
+                    newMerchandise.Border = border;
+                    ListMerchandise.Add(newMerchandise);
+                    ListMerchandiseN2.Add(newMerchandise);
+                }
+                resultat.Close();
+            }
+            catch (Exception caught)
+            {
+                Console.WriteLine(caught.Message);
+                Console.Read();
+            }
+            finally
+            {
+                database.Close();
+            }
+        }
 
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -292,15 +215,15 @@ namespace MANAGER.Pages
 
         private void bouton_Click(object sender, EventArgs e)
         {
-            var con = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
-            var commandeModif = new OracleCommand {CommandType = CommandType.StoredProcedure, Connection = con, CommandText = "DELETEPRODUIT"};
+            var commandeModif = new OracleCommand { CommandType = CommandType.StoredProcedure, Connection = database, CommandText = "DELETEPRODUIT" };
+            var id = ((Button)sender).Tag.ToString();
 
-            var param1 = new OracleParameter(":1", OracleDbType.Int32) {Value = ((Button) sender).Tag.ToString()};
+            var param1 = new OracleParameter(":1", OracleDbType.Int32) { Value = id };
             commandeModif.Parameters.Add(param1);
 
             try
             {
-                con.Open();
+                database.Open();
                 commandeModif.ExecuteNonQuery();
             }
             catch(Exception ex)
@@ -308,10 +231,19 @@ namespace MANAGER.Pages
                 Console.WriteLine(ex.Message);
             }
             finally
-            {                
-                con.Close();
+            {
+                database.Close();
             }
-            Environment.Exit(255);
+            var nbMerchandise = ListMerchandiseN2.Count;
+            for (var i = 0; i < nbMerchandise; i++)
+            {
+                if (ListMerchandiseN2[i].ToString() == id)
+                {
+                    ListMerchandiseN2.Remove(ListMerchandiseN2[i]);
+                }
+            }
+            SelectMarchandiseLike("");
+            
         }
     }
 }
