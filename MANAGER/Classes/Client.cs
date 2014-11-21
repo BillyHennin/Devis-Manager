@@ -24,9 +24,9 @@ namespace MANAGER.Classes
         public int GetId { get { return _id; } }
 
         public string GetDenomination { get { return _denomination; } }
-        /* For future use
+
         public string GetTelephone { get { return _telephone; } }
 
-        public string GetEmail { get { return _email; } }*/
+        public string GetEmail { get { return _email; } }
     }
 }

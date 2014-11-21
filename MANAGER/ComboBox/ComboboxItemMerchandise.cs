@@ -8,6 +8,9 @@ using MANAGER.Classes;
 
 namespace MANAGER.ComboBox
 {
+    /// <summary>
+    ///   Create it when you want to make a combobox that contains merchandise.
+    /// </summary>
     internal class ComboboxItemMerchandise
     {
         public string Text { private get; set; }

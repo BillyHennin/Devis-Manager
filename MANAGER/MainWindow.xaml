@@ -3,7 +3,7 @@
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                   xmlns:mui="http://firstfloorsoftware.com/ModernUI"
 
-                  Title="Devis"
+                  Title="Manager"
                   Height="600"
                   Width="824"
                   ContentSource="/Pages/about.xaml"
@@ -23,11 +23,11 @@
     </mui:ModernWindow.TitleLinks>
 
     <mui:ModernWindow.MenuLinkGroups>
-        <mui:LinkGroup DisplayName="Createur de devis">
+        <mui:LinkGroup DisplayName="Cost estimate manager">
             <mui:LinkGroup.Links>
-                <mui:Link DisplayName="Create a cost estimate" Source="/Pages/EstimateCreator.xaml" />
-                <mui:Link DisplayName="Client" Source="/Pages/affichageClient.xaml" />
-                <mui:Link DisplayName="Produit" Source="/Pages/affichageProduit.xaml" />
+                <mui:Link DisplayName="Cost estimate" Source="/Pages/EstimateCreator.xaml" />
+                <mui:Link DisplayName="Client" Source="/Pages/DisplayClient.xaml" />
+                <mui:Link DisplayName="Merchandise" Source="/Pages/DisplayMerchandise.xaml" />
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
     </mui:ModernWindow.MenuLinkGroups>

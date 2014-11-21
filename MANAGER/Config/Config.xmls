@@ -1,0 +1,3 @@
+﻿<params encoding="utf-8" IsDatabaseCreated="1" DatabaseType="Oracle"
+        DatabaseConnection="user id=SLAM3;password=pw;data source=localhost:1521/xe">
+</params>

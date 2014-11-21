@@ -21,18 +21,27 @@ using Oracle.ManagedDataAccess.Client;
 namespace MANAGER.Pages
 {
     /// <summary>
-    ///   Logique d'interaction pour affichageProduit.xaml
+    ///   Logique d'interaction pour DisplayMerchandise.xaml
     /// </summary>
-    public partial class AffichageProduit
+    public partial class DisplayMerchandise
     {
+      
+
+        /// <summary>
+        ///   A list of all merchandise that are buyable
+        /// </summary>
         private static List<Merchandise> ListMerchandise = new List<Merchandise>();
+
+        /// <summary>
+        ///   A second list, for future use.
+        /// </summary>
         private static readonly List<Merchandise> ListMerchandiseN2 = new List<Merchandise>();
 
-        public AffichageProduit()
-        {
-            InitializeComponent();
-        }
-
+        /// <summary>
+        ///   If the use wants to search a specific merchandise.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TextBoxDevisQte_TextChanged(object sender, TextChangedEventArgs e)
         {
             PanelProduit.Children.Clear();
@@ -47,18 +56,18 @@ namespace MANAGER.Pages
                     var text = ListMerchandise[i].GetNom;
                     var qte = "Quantitée en stock : " + ListMerchandise[i].GetQte;
                     var prixMerchandise = ListMerchandise[i].GetPrix + "€";
-                    var nouvelleMerchandise = new Merchandise(id, text, ListMerchandise[i].GetQte, ListMerchandise[i].GetPrix);
+                    var newMerchandise = new Merchandise(id, text, ListMerchandise[i].GetQte, ListMerchandise[i].GetPrix);
                     var panelMerchandise = new StackPanel();
                     var thick = new Thickness(5, 2, 0, 0);
 
                     //nouvelle bordure
                     var bordure = new Border
                     {
-                        BorderBrush = BorderDevis.BorderBrush,
+                        BorderBrush = BorderEstimate.BorderBrush,
                         HorizontalAlignment = HorizontalAlignment.Left,
                         Margin = new Thickness(2, 2, 1, 0),
                         BorderThickness = new Thickness(1),
-                        Width = BorderDevis.Width - 5,
+                        Width = BorderEstimate.Width - 5,
                         Child = panelMerchandise,
                         Height = 70
                     };
@@ -79,8 +88,8 @@ namespace MANAGER.Pages
                         Height = 16
                     });
 
-                    nouvelleMerchandise.Border = bordure;
-                    ListMerchandiseN2.Add(nouvelleMerchandise);
+                    newMerchandise.Border = bordure;
+                    ListMerchandiseN2.Add(newMerchandise);
                 }
                 ListMerchandise = ListMerchandiseN2;
             }
@@ -104,18 +113,18 @@ namespace MANAGER.Pages
                         var text = resultat[1].ToString();
                         var qte = "Quantitée en stock : " + Convert.ToInt32(resultat[3]);
                         var prixMerchandise = Convert.ToInt32(resultat[2]) + "€";
-                        var nouvelleMerchandise = new Merchandise(id, text, Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]));
+                        var newMerchandise = new Merchandise(id, text, Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]));
                         var panelMerchandise = new StackPanel();
                         var thick = new Thickness(5, 2, 0, 0);
 
                         //nouvelle bordure
                         var bordure = new Border
                         {
-                            BorderBrush = BorderDevis.BorderBrush,
+                            BorderBrush = BorderEstimate.BorderBrush,
                             HorizontalAlignment = HorizontalAlignment.Left,
                             Margin = new Thickness(2, 2, 1, 0),
                             BorderThickness = new Thickness(1),
-                            Width = BorderDevis.Width - 5,
+                            Width = BorderEstimate.Width - 5,
                             Child = panelMerchandise,
                             Height = 70
                         };
@@ -146,8 +155,8 @@ namespace MANAGER.Pages
                             BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00))
                         });
 
-                        nouvelleMerchandise.Border = bordure;
-                        ListMerchandise.Add(nouvelleMerchandise);
+                        newMerchandise.Border = bordure;
+                        ListMerchandise.Add(newMerchandise);
                     }
                     resultat.Close();
                 }
@@ -184,18 +193,18 @@ namespace MANAGER.Pages
                     var text = resultat[1].ToString();
                     var qte = "Quantitée en stock : " + Convert.ToInt32(resultat[3]);
                     var prixMerchandise = Convert.ToInt32(resultat[2]) + "€";
-                    var nouvelleMerchandise = new Merchandise(id, text, Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]));
+                    var newMerchandise = new Merchandise(id, text, Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]));
                     var panelMerchandise = new StackPanel();
                     var thick = new Thickness(5, 2, 0, 0);
 
                     //nouvelle bordure
                     var bordure = new Border
                     {
-                        BorderBrush = BorderDevis.BorderBrush,
+                        BorderBrush = BorderEstimate.BorderBrush,
                         HorizontalAlignment = HorizontalAlignment.Left,
                         Margin = new Thickness(2, 2, 1, 0),
                         BorderThickness = new Thickness(1),
-                        Width = BorderDevis.Width - 5,
+                        Width = BorderEstimate.Width - 5,
                         Child = panelMerchandise,
                         Height = 70
                     };
@@ -223,7 +232,7 @@ namespace MANAGER.Pages
                         Content = "Supprimer le client",
                         Margin = new Thickness(9, -30, 67, 50),
                         BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00)),
-                        Tag=id
+                        Tag = id
                     };
 
                     // Suppression
@@ -231,8 +240,8 @@ namespace MANAGER.Pages
 
                     BTN_Supprimer.Click += bouton_Click;
 
-                    nouvelleMerchandise.Border = bordure;
-                    ListMerchandise.Add(nouvelleMerchandise);
+                    newMerchandise.Border = bordure;
+                    ListMerchandise.Add(newMerchandise);
                 }
                 resultat.Close();
             }
@@ -247,21 +256,37 @@ namespace MANAGER.Pages
             }
         }
 
+        /*
+        var newMerchandise = new Merchandise(0, "Aucune marchandise n'est en vente actuellement.", 0, 0);
+                var panelMerchandise = new StackPanel();
+                var bordure = new Border
+                {
+                    BorderBrush = BorderEstimate.BorderBrush,
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    Margin = new Thickness(2, 2, 1, 0),
+                    BorderThickness = new Thickness(1),
+                    Width = BorderEstimate.Width - 5,
+                    Child = panelMerchandise,
+                    Height = 70
+                };
+
+                PanelProduit.Children.Add(bordure);
+
+                // Nom du produit
+                panelMerchandise.Children.Add(new TextBlock { Margin = new Thickness(5, 2, 0, 0), Text = "Aucune ùarchandise n'est en vente actuellement.", Height = 16 });
+                newMerchandise.Border = bordure;
+                ListMerchandise.Add(newMerchandise);
+        */
+
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            BorderDevis.Width = MenuProduit.ActualWidth - 40;
-            BorderDevis.Height = MenuProduit.ActualHeight - 70;
+            BorderEstimate.Width = MenuMerchandise.ActualWidth - 40;
+            BorderEstimate.Height = MenuMerchandise.ActualHeight - 70;
 
             var nbMerchandise = ListMerchandise.Count;
-
-            if(nbMerchandise == 0)
-            {
-                return;
-            }
-
             for(var i = 0; i < nbMerchandise; i++)
             {
-                ListMerchandise[i].Border.Width = BorderDevis.Width - 5;
+                ListMerchandise[i].Border.Width = BorderEstimate.Width - 5;
             }
         }
 
@@ -270,7 +295,7 @@ namespace MANAGER.Pages
             var con = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
             var commandeModif = new OracleCommand {CommandType = CommandType.StoredProcedure, Connection = con, CommandText = "DELETEPRODUIT"};
 
-            var param1 = new OracleParameter(":1", OracleDbType.Int32) { Value = ((Button)sender).Tag.ToString()};
+            var param1 = new OracleParameter(":1", OracleDbType.Int32) {Value = ((Button) sender).Tag.ToString()};
             commandeModif.Parameters.Add(param1);
 
             try
@@ -283,9 +308,10 @@ namespace MANAGER.Pages
                 Console.WriteLine(ex.Message);
             }
             finally
-            {
+            {                
                 con.Close();
             }
+            Environment.Exit(255);
         }
     }
 }

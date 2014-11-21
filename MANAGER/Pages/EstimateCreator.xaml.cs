@@ -1,4 +1,10 @@
-﻿using System;
+﻿// This program is a private software, based on c# source code.
+// To sell or change credits of this software is forbidden,
+// except if someone approve it from MANAGER INC. team.
+//  
+// Copyrights (c) 2014 MANAGER INC. All rights reserved.
+
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
@@ -15,18 +21,32 @@ using Oracle.ManagedDataAccess.Client;
 namespace MANAGER.Pages
 {
     /// <summary>
-    ///  This page is uses to create cost estimate. you can choose a customer and add some ( or every ) product, then insert it in the database.
+    ///   This page is uses to create cost estimate. you can choose a customer and add some ( or every ) product, then insert
+    ///   it in the database.
     /// </summary>
     public partial class EstimatePage
     {
         // A empty list of Merchandise, for future use.
         private static readonly List<Merchandise> ListMerchandise = new List<Merchandise>();
+        private readonly OracleConnection dataBaseConnection = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
         // A Estimate that use the previous list.
         private readonly Estimate estimate = new Estimate(ListMerchandise);
         // The total cost of the devis.
-        private int _qte;
+        private int qte;
         // The quantity of the product you want, for future use.
-        private double _totalCost;
+        private double totalCost;
+        // Var to use when you want to creat a query.
+
+        /// <summary>
+        ///   For future use, will allow to change the max length of a string in combobox
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        private static string verifyLength(string text)
+        {
+            // TODO : Put a lentgh limit, or not.
+            return text;
+        }
 
         /// <summary>
         ///   This method checks if "str" is a integer or not and return a boolean.
@@ -47,7 +67,8 @@ namespace MANAGER.Pages
             LabelPrice.Content = "Erreur";
             Ajouter.IsEnabled = false;
             LabelPrice.Foreground =
-                TextBoxEstimateQte.CaretBrush = TextBoxEstimateQte.SelectionBrush = TextBoxEstimateQte.BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00));
+                TextBoxEstimateQte.CaretBrush =
+                    TextBoxEstimateQte.SelectionBrush = TextBoxEstimateQte.BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00));
         }
 
         /// <summary>
@@ -57,7 +78,7 @@ namespace MANAGER.Pages
         /// </summary>
         private void QteChanged()
         {
-            _qte = 0;
+            qte = 0;
 
             if(IsInt(TextBoxEstimateQte.Text))
             {
@@ -71,9 +92,9 @@ namespace MANAGER.Pages
                 {
                     if(ComboBoxProduit.Items.Count != 0)
                     {
-                        _qte = nouvQte;
+                        qte = nouvQte;
                         LabelPrice.Foreground = new SolidColorBrush(Color.FromRgb(0xC1, 0xC1, 0xC1));
-                        LabelPrice.Content = string.Format("{0}€", ((ComboBoxProduit.SelectedItem as ComboboxItemMerchandise).Value.GetPrix * _qte));
+                        LabelPrice.Content = string.Format("{0}€", (((ComboboxItemMerchandise) ComboBoxProduit.SelectedItem).Value.GetPrix * qte));
                         TextBoxEstimateQte.BorderBrush =
                             TextBoxEstimateQte.CaretBrush =
                                 TextBoxEstimateQte.SelectionBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
@@ -92,6 +113,159 @@ namespace MANAGER.Pages
         }
 
         /// <summary>
+        ///   Every time this page is loaded, this method is called.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void EstimateCreator_Loaded(object sender, RoutedEventArgs e)
+        {
+            var nbMerchandise = estimate.GetList.Count;
+            for(var i = 0; i < nbMerchandise; i++)
+            {
+                estimate[i].Border.BorderBrush = Ajouter.BorderBrush;
+            }
+            QteChanged();
+        }
+
+        /// <summary>
+        ///   The first time the page is open, this method is called
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ComboBoxProduit_OnInitialized(object sender, EventArgs e)
+        {
+            // Select every merchandise which is on store
+            const string query = "SELECT * FROM MARCHANDISE WHERE ENVENTE = 1";
+            dataBaseConnection.Open();
+            try
+            {
+                var oCommand = ConnectionOracle.OracleCommand(dataBaseConnection, query);
+                var resultat = oCommand.ExecuteReader();
+                //For each result :
+                while(resultat.Read())
+                {
+                    //Fill the combobox with every result
+                    ComboBoxProduit.Items.Add(new ComboboxItemMerchandise
+                    {
+                        //Show the text + possibly change his length.
+                        Text = verifyLength(resultat[1].ToString()),
+                        //For each items, add a merchandise as a value.
+                        Value =
+                            new Merchandise(Convert.ToInt32(resultat[0]), resultat[1].ToString(), Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]))
+                    });
+                }
+                resultat.Close();
+            }
+            catch(Exception caught)
+            {
+                Console.WriteLine(caught.Message);
+                Console.Read();
+            }
+            finally
+            {
+                dataBaseConnection.Close();
+            }
+            ComboBoxProduit.SelectedIndex = 0;
+        }
+
+        /// <summary>
+        ///   Change the qte and the price when the user change his selection in the combobox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="selectionChangedEventArgs"></param>
+        private void ComboBoxProduit_SelectionChanged(object sender, SelectionChangedEventArgs selectionChangedEventArgs)
+        {
+            try
+            {
+                //If the merchandise price is zero, it's an error.
+                switch(qte)
+                {
+                    case 0:
+                        ErrorCost();
+                        break;
+                    default:
+                        LabelPrice.Content = ((ComboboxItemMerchandise) ComboBoxProduit.SelectedItem).Value.GetPrix * Convert.ToInt32(TextBoxEstimateQte.Text)
+                                             + "€";
+                        break;
+                }
+            }
+            catch(Exception caught)
+            {
+                Console.WriteLine(caught.Message);
+                Console.Read();
+            }
+        }
+
+        /// <summary>
+        ///   The first time the page is open, this method is called
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ComboBoxClient_OnInitialized(object sender, EventArgs e)
+        {
+            //Obtain every client on the database 
+            const string query = "SELECT ID_CLIENT, EMAIL, DENOMINATION, TELEPHONE FROM CLIENT";
+            try
+            {
+                dataBaseConnection.Open();
+                //Execute the query
+                var oCommand = ConnectionOracle.OracleCommand(dataBaseConnection, query);
+                var resultat = oCommand.ExecuteReader();
+                //For each result :
+                while(resultat.Read())
+                {
+                    //Fill the combobox with every result
+                    ComboBoxClient.Items.Add(new ComboboxItemClient
+                    {
+                        //Show the text + possibly change his length.
+                        Text = verifyLength(resultat[2].ToString()),
+                        //For each items, add a client as a value.
+                        Value = new Client(Convert.ToInt32(resultat[0]), resultat[2].ToString(), resultat[1].ToString(), resultat[3].ToString())
+                    });
+                }
+                resultat.Close();
+            }
+            catch(Exception caught)
+            {
+                Console.WriteLine(caught.Message);
+                Console.Read();
+            }
+            finally
+            {
+                dataBaseConnection.Close();
+            }
+            ComboBoxClient.SelectedIndex = 0;
+        }
+
+        /// <summary>
+        ///   Change the client on the devis when the user change his selection in the combobox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void comboBoxClient_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            estimate.Client = ((ComboboxItemClient) ComboBoxClient.SelectedItem).Value;
+        }
+
+        /// <summary>
+        ///   If the quantity changes, verify if it's an integer > 0
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TextBoxEstimateQte_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                QteChanged();
+            }
+            catch(Exception caught)
+            {
+                Console.WriteLine(caught.Message);
+                Console.Read();
+            }
+        }
+
+        /// <summary>
         ///   When the user click on "BTNAddFeed" bouton, the app adding it to the grid.
         /// </summary>
         /// <param name="sender"></param>
@@ -103,7 +277,7 @@ namespace MANAGER.Pages
             // Creating a new panel, useful only on menu.xaml
             var panelMerchandise = new StackPanel();
             // Creating a new merchandise with the merchandise selected on the comboBox
-            var newMerchandise = new Merchandise((ComboBoxProduit.SelectedItem as ComboboxItemMerchandise).Value.GetId, ComboBoxProduit.Text, _qte,
+            var newMerchandise = new Merchandise(((ComboboxItemMerchandise) ComboBoxProduit.SelectedItem).Value.GetId, ComboBoxProduit.Text, qte,
                 merchandiseCost);
 
             // Check if the merchandise isn't already in the list
@@ -157,7 +331,7 @@ namespace MANAGER.Pages
             // Quantity of the merchandise
             panelMerchandise.Children.Add(new TextBlock
             {
-                Text = _qte.ToString(CultureInfo.InvariantCulture),
+                Text = qte.ToString(CultureInfo.InvariantCulture),
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Top,
                 Margin = new Thickness(5, 2, 0, 0),
@@ -168,8 +342,8 @@ namespace MANAGER.Pages
             newMerchandise.Border = border;
             PanelEstimate.Children.Add(border);
             estimate.GetList.Add(newMerchandise);
-            _totalCost += merchandiseCost;
-            LabelTotalPrix.Content = _totalCost + "€";
+            totalCost += merchandiseCost;
+            LabelTotalPrix.Content = totalCost + "€";
             AjouterEstimate.IsEnabled = true;
         }
 
@@ -180,8 +354,6 @@ namespace MANAGER.Pages
         /// <param name="e"></param>
         private void BTNAddEstimate_click(object sender, RoutedEventArgs e)
         {
-            //Connect to the data base 
-            var dataBaseConnection = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
             //Open the connection
             try
             {
@@ -249,174 +421,9 @@ namespace MANAGER.Pages
             //Final stuff, reset everything.
             PanelEstimate.Children.Clear();
             ListMerchandise.Clear();
-            _totalCost = 0;
+            totalCost = 0;
             LabelTotalPrix.Content = "";
             AjouterEstimate.IsEnabled = false;
-        }
-
-        /// <summary>
-        ///   For future use, will allow to change the max length of a string in combobox
-        /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
-        private static string verifyLength(string text)
-        {
-            return text;
-        }
-
-        /// <summary>
-        ///   If the quantity changes, verify if it's an integer > 0
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void TextBoxEstimateQte_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            try
-            {
-                QteChanged();
-            }
-            catch(Exception caught)
-            {
-                Console.WriteLine(caught.Message);
-                Console.Read();
-            }
-        }
-
-        /// <summary>
-        ///   The first time the page is open, this method is called
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ComboBoxClient_OnInitialized(object sender, EventArgs e)
-        {
-            //Obtain every client on the database
-            var dataBaseConnection = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
-            const string query = "SELECT * FROM CLIENT";
-            dataBaseConnection.Open();
-            try
-            {
-                //Execute the query
-                var oCommand = ConnectionOracle.OracleCommand(dataBaseConnection, query);
-                var resultat = oCommand.ExecuteReader();
-                //For each result :
-                while(resultat.Read())
-                {
-                    //Fill the combobox with every result
-                    ComboBoxClient.Items.Add(new ComboboxItemClient
-                    {
-                        //Show the text + possibly change his length.
-                        Text = verifyLength(resultat[2].ToString()),
-                        //For each items, add a client as a value.
-                        Value = new Client(Convert.ToInt32(resultat[0]), resultat[2].ToString(), resultat[1].ToString(), resultat[3].ToString())
-                    });
-                }
-                resultat.Close();
-            }
-            catch(Exception caught)
-            {
-                Console.WriteLine(caught.Message);
-                Console.Read();
-            }
-            finally
-            {
-                dataBaseConnection.Close();
-            }
-            ComboBoxClient.SelectedIndex = 0;
-        }
-
-        /// <summary>
-        ///   Change the client on the devis when the user change his selection in the combobox
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void comboBoxClient_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            estimate.Client = (ComboBoxClient.SelectedItem as ComboboxItemClient).Value;
-        }
-
-        /// <summary>
-        ///   The first time the page is open, this method is called
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ComboBoxProduit_OnInitialized(object sender, EventArgs e)
-        {
-            var dataBaseConnection = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
-            // Select every merchandise which is on store
-            const string query = "SELECT * FROM MARCHANDISE WHERE ENVENTE = 1";
-            dataBaseConnection.Open();
-            try
-            {
-                var oCommand = ConnectionOracle.OracleCommand(dataBaseConnection, query);
-                var resultat = oCommand.ExecuteReader();
-                //For each result :
-                while(resultat.Read())
-                {
-                    //Fill the combobox with every result
-                    ComboBoxProduit.Items.Add(new ComboboxItemMerchandise
-                    {
-                        //Show the text + possibly change his length.
-                        Text = verifyLength(resultat[1].ToString()),
-                        //For each items, add a merchandise as a value.
-                        Value =
-                            new Merchandise(Convert.ToInt32(resultat[0]), resultat[1].ToString(), Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]))
-                    });
-                }
-                resultat.Close();
-            }
-            catch(Exception caught)
-            {
-                Console.WriteLine(caught.Message);
-                Console.Read();
-            }
-            finally
-            {
-                dataBaseConnection.Close();
-            }
-            ComboBoxProduit.SelectedIndex = 0;
-        }
-
-        /// <summary>
-        ///   Change the qte and the price when the user change his selection in the combobox
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="selectionChangedEventArgs"></param>
-        private void ComboBoxProduit_SelectionChanged(object sender, SelectionChangedEventArgs selectionChangedEventArgs)
-        {
-            try
-            {
-                //If the merchandise price is zero, it's an error.
-                switch(_qte)
-                {
-                    case 0:
-                        ErrorCost();
-                        break;
-                    default:
-                        LabelPrice.Content = (ComboBoxProduit.SelectedItem as ComboboxItemMerchandise).Value.GetPrix * Convert.ToInt32(TextBoxEstimateQte.Text)
-                                            + "€";
-                        break;
-                }
-            }
-            catch(Exception caught)
-            {
-                Console.WriteLine(caught.Message);
-                Console.Read();
-            }
-        }
-
-        /// <summary>
-        ///   Every time this page is loaded, this method is called.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void EstimateCreator_Loaded(object sender, RoutedEventArgs e)
-        {
-            var nbMerchandise = estimate.GetList.Count;
-            for(var i = 0; i < nbMerchandise; i++)
-            {
-                estimate[i].Border.BorderBrush = Ajouter.BorderBrush;
-            }
-            QteChanged();
         }
 
         /// <summary>

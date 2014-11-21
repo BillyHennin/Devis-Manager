@@ -56,27 +56,15 @@
     <StartupObject>MANAGER.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Accessibility" />
-    <Reference Include="microsoft.visualbasic" />
     <Reference Include="Oracle.ManagedDataAccess, Version=4.121.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL" />
     <Reference Include="PresentationCore" />
-    <Reference Include="PresentationUI, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="ReachFramework" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
-    <Reference Include="System.Deployment" />
-    <Reference Include="System.Printing" />
     <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="UIAutomationProvider" />
-    <Reference Include="UIAutomationTypes" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationFramework" />
   </ItemGroup>
@@ -88,19 +76,18 @@
     <Compile Include="Classes\Client.cs" />
     <Compile Include="Classes\Estimate.cs" />
     <Compile Include="ComboBox\ComboboxItemClient.cs" />
-    <Compile Include="ComboBox\ComboboxItemDevis.cs" />
-    <Compile Include="Classes\Devis.cs" />
     <Compile Include="Classes\Merchandise.cs" />
+    <Compile Include="ComboBox\ComboboxItemEstimate.cs" />
     <Compile Include="ComboBox\ComboboxItemMerchandise.cs" />
     <Compile Include="Connection\ConnectionOracle.cs" />
     <Compile Include="Pages\about.xaml.cs">
       <DependentUpon>about.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\affichageClient.xaml.cs">
-      <DependentUpon>affichageClient.xaml</DependentUpon>
+    <Compile Include="Pages\DisplayClient.xaml.cs">
+      <DependentUpon>DisplayClient.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\affichageProduit.xaml.cs">
-      <DependentUpon>affichageProduit.xaml</DependentUpon>
+    <Compile Include="Pages\DisplayMerchandise.xaml.cs">
+      <DependentUpon>DisplayMerchandise.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\EstimateCreator.xaml.cs">
       <DependentUpon>EstimateCreator.xaml</DependentUpon>
@@ -127,11 +114,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\affichageClient.xaml">
+    <Page Include="Pages\DisplayClient.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\affichageProduit.xaml">
+    <Page Include="Pages\DisplayMerchandise.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -181,7 +168,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <None Include="Version.xmls" />
+    <None Include="Config\Version.xmls" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -196,7 +183,7 @@
     <Resource Include="Asset\appbar.currency.euro.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Config.xmls">
+    <Content Include="Config\Config.xmls">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

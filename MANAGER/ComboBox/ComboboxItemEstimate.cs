@@ -8,10 +8,13 @@ using MANAGER.Classes;
 
 namespace MANAGER.ComboBox
 {
-    internal class ComboboxItemDevis
+    /// <summary>
+    ///   Create it when you want to make a combobox that contains estimates.
+    /// </summary>
+    internal class ComboboxItemEstimate
     {
         public string Text { private get; set; }
-        public Devis Value { get; set; }
+        public Estimate Value { get; set; }
 
         public override string ToString()
         {

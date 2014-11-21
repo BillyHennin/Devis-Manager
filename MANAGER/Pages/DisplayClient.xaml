@@ -1,4 +1,4 @@
-﻿<Page x:Class="MANAGER.Pages.AffichageClient"
+﻿<Page x:Class="MANAGER.Pages.DisplayClient"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -36,14 +36,15 @@
                 <ColumnDefinition Width="219*" />
             </Grid.ColumnDefinitions>
             <Border BorderThickness="1" HorizontalAlignment="Right"
-        		Height="248" Margin="0,10,10,-178" VerticalAlignment="Top" Width="224" Grid.Column="0"
-        		Grid.ColumnSpan="2">
+                    Height="248" Margin="0,10,10,-178" VerticalAlignment="Top" Width="224" Grid.Column="0"
+                    Grid.ColumnSpan="2">
                 <StackPanel MinWidth="150" Margin="1,-4.5,-1,9">
                     <TextBlock Margin="-250,-27,-50,0" Style="{StaticResource Heading2}" TextWrapping="Wrap"
-        				Text="Ses devis :" />
+                               Text="Ses devis :" />
                     <ComboBox x:Name="ComboBoxDevis" BorderBrush="{DynamicResource Accent}" Margin="-150,-35,239,0"
-        				SelectionChanged="ComboBoxDevis_SelectionChanged" Height="22" />
-                    <TextBlock x:Name="TotalTextBlock" TextWrapping="Wrap" Style="{StaticResource Heading2}" Text="" Margin="-250,0,239,0" Height="19"/>
+                              SelectionChanged="ComboBoxDevis_SelectionChanged" Height="22" />
+                    <TextBlock x:Name="TotalTextBlock" TextWrapping="Wrap" Style="{StaticResource Heading2}" Text=""
+                               Margin="-250,0,239,0" Height="19" />
                 </StackPanel>
             </Border>
         </Grid>
@@ -56,7 +57,7 @@
                 </ScrollViewer>
             </Border>
         </Grid>
-        
+
 
     </StackPanel>
 </Page>
