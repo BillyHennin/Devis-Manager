@@ -243,7 +243,6 @@ namespace MANAGER.Pages
                 }
             }
             SelectMarchandiseLike("");
-            
         }
     }
 }

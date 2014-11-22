@@ -338,6 +338,21 @@ namespace MANAGER.Pages
                 Height = 16
             });
 
+            var BTN_Delete = new Button
+            {
+                HorizontalAlignment = HorizontalAlignment.Right,
+                Content = "Enlever le produit",
+                Margin = new Thickness(9, -30, 67, 50),
+                BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00)),
+                Tag = newMerchandise
+            };
+
+            // Suppression
+            panelMerchandise.Children.Add(BTN_Delete);
+
+            BTN_Delete.Click += bouton_Click;
+
+
             //Final stuff
             newMerchandise.Border = border;
             PanelEstimate.Children.Add(border);
@@ -374,15 +389,6 @@ namespace MANAGER.Pages
                     var date = DateTime.Now.ToString("dd/MM/yy");
                     for(var i = 0; i < sizeList; i++)
                     {
-                        /**
-                         * 
-                         * This might look stupid but I can't insert anything with the app
-                         * 
-                         *                          BUT
-                         *                          
-                         * I can exec stored Procedure, so that's why.
-                         * 
-                         **/
                         var Insert = ConnectionOracle.OracleCommandStored(dataBaseConnection, "INSERTDEVIS");
                         //Change every parameters with the proper value.
                         var paramIdClient = new OracleParameter(":1", OracleDbType.Int32) {Value = estimate.Client.GetId};
@@ -442,6 +448,89 @@ namespace MANAGER.Pages
             for(var i = 0; i < nbMerchandise; i++)
             {
                 estimate[i].Border.Width = BorderEstimate.Width - 6;
+            }
+        }
+
+        private void bouton_Click(object sender, EventArgs e)
+        {
+            var id = ((Button)sender).Tag.ToString();
+            var nbMerchandise = ListMerchandise.Count;
+            for (var i = 0; i < nbMerchandise; i++)
+            {
+                MessageBox.Show(id);
+                if(ListMerchandise[i].ToString() != id)
+                {
+                    continue;
+                }
+                totalCost -= ListMerchandise[i].GetPrix;
+                LabelTotalPrix.Content = totalCost + "€";
+                ListMerchandise.Remove(ListMerchandise[i]);
+            }
+            
+            nbMerchandise-=1;
+            PanelEstimate.Children.Clear();
+            
+            for (var i = 0; i < nbMerchandise; i++)
+            {
+                var merchandiseCost = ListMerchandise[i].GetPrix;
+
+                var panelMerchandise = new StackPanel();
+                var newMerchandise = new Merchandise(ListMerchandise[i].GetId, ListMerchandise[i].GetNom, ListMerchandise[i].GetQte,
+                   merchandiseCost);
+
+                var border = new Border
+                {
+                    BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Settings.Default.AccentColor)),
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    VerticalAlignment = VerticalAlignment.Top,
+                    Margin = new Thickness(2, 2, 1, 0),
+                    BorderThickness = new Thickness(1),
+                    Width = BorderEstimate.Width - 6,
+                    Child = panelMerchandise,
+                    Height = 70
+                };
+                panelMerchandise.Children.Add(new TextBlock
+                {
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    VerticalAlignment = VerticalAlignment.Top,
+                    Margin = new Thickness(5, 2, 0, 0),
+                    Text = ComboBoxProduit.Text,
+                    Height = 16
+                });
+
+                panelMerchandise.Children.Add(new TextBlock
+                {
+                    Text = merchandiseCost.ToString(CultureInfo.InvariantCulture) + "€",
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    VerticalAlignment = VerticalAlignment.Top,
+                    Margin = new Thickness(5, 2, 0, 0),
+                    Height = 16
+                });
+
+                panelMerchandise.Children.Add(new TextBlock
+                {
+                    Text = qte.ToString(CultureInfo.InvariantCulture),
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    VerticalAlignment = VerticalAlignment.Top,
+                    Margin = new Thickness(5, 2, 0, 0),
+                    Height = 16
+                });
+
+                var BTN_Delete = new Button
+                {
+                    HorizontalAlignment = HorizontalAlignment.Right,
+                    Content = "Enlever le produit",
+                    Margin = new Thickness(9, -30, 67, 50),
+                    BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00)),
+                    Tag = newMerchandise
+                };
+
+                panelMerchandise.Children.Add(BTN_Delete);
+                BTN_Delete.Click += bouton_Click;
+
+                newMerchandise.Border = border;
+                PanelEstimate.Children.Add(border);
+                estimate.GetList.Add(newMerchandise);
             }
         }
     }
