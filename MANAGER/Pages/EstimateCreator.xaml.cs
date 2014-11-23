@@ -26,12 +26,11 @@ namespace MANAGER.Pages
     /// </summary>
     public partial class EstimatePage
     {
-        // A empty list of Merchandise, for future use.
+        // An empty list of Merchandise, for future use.
         private static readonly List<Merchandise> ListMerchandise = new List<Merchandise>();
-        /// <summary>
-        ///   A second list, for future use.
-        /// </summary>
+        // A empty second list of Merchandise, for future use.
         private static readonly List<Merchandise> ListMerchandiseN2 = new List<Merchandise>();
+        // database connection to oracle. See /connection/ConnectionOracle for more info.
         private readonly OracleConnection dataBaseConnection = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
         // A Estimate that use the previous list.
         private readonly Estimate estimate = new Estimate(ListMerchandise);
@@ -39,18 +38,6 @@ namespace MANAGER.Pages
         private int qte;
         // The quantity of the product you want, for future use.
         private double totalCost;
-        // Var to use when you want to creat a query.
-
-        /// <summary>
-        ///   For future use, will allow to change the max length of a string in combobox
-        /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
-        private static string verifyLength(string text)
-        {
-            // TODO : Put a lentgh limit, or not.
-            return text;
-        }
 
         /// <summary>
         ///   This method checks if "str" is a integer or not and return a boolean.
@@ -152,7 +139,7 @@ namespace MANAGER.Pages
                     ComboBoxProduit.Items.Add(new ComboboxItemMerchandise
                     {
                         //Show the text + possibly change his length.
-                        Text = verifyLength(resultat[1].ToString()),
+                        Text = resultat[1].ToString(),
                         //For each items, add a merchandise as a value.
                         Value =
                             new Merchandise(Convert.ToInt32(resultat[0]), resultat[1].ToString(), Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]))
@@ -222,7 +209,7 @@ namespace MANAGER.Pages
                     ComboBoxClient.Items.Add(new ComboboxItemClient
                     {
                         //Show the text + possibly change his length.
-                        Text = verifyLength(resultat[2].ToString()),
+                        Text = resultat[2].ToString(),
                         //For each items, add a client as a value.
                         Value = new Client(Convert.ToInt32(resultat[0]), resultat[2].ToString(), resultat[1].ToString(), resultat[3].ToString())
                     });
@@ -283,7 +270,7 @@ namespace MANAGER.Pages
             var nbMerchandise = estimate.GetList.Count;
             for(var i = 0; i < nbMerchandise; i++)
             {
-                if (estimate[i].GetNom == ComboBoxProduit.Text)
+                if(estimate[i].GetNom == ComboBoxProduit.Text)
                 {
                     return;
                 }
@@ -386,25 +373,25 @@ namespace MANAGER.Pages
             totalCost = 0;
             LabelTotalPrix.Content = "";
 
-            var id = ((Button)sender).Tag.ToString();
+            var id = ((Button) sender).Tag.ToString();
             var nbMerchandise = estimate.GetList.Count;
-            for (var i = 0; i < nbMerchandise; i++)
+
+            for(var i = 0; i < nbMerchandise; i++)
             {
-                if(ListMerchandise[i].ToString() == id)
-                {
-                    ListMerchandise.Remove(ListMerchandise[i]);
-                    nbMerchandise -= 1;
-                }
-                else
+                if(ListMerchandise[i].ToString() != id)
                 {
                     ListMerchandiseN2.Add(ListMerchandise[i]);
                 }
             }
+
+            nbMerchandise -= 1;
+
             PanelEstimate.Children.Clear();
             estimate.GetList.Clear();
-            for (var i = 0; i < nbMerchandise; i++)
+
+            for(var i = 0; i < nbMerchandise; i++)
             {
-                addMerchandise(ListMerchandiseN2[i].GetId, ListMerchandiseN2[i].GetNom,ListMerchandiseN2[i].GetQte,ListMerchandiseN2[i].GetPrix);
+                addMerchandise(ListMerchandiseN2[i].GetId, ListMerchandiseN2[i].GetNom, ListMerchandiseN2[i].GetQte, ListMerchandiseN2[i].GetPrix);
             }
             ListMerchandiseN2.Clear();
             if(estimate.GetList.Count == 0)
@@ -416,11 +403,12 @@ namespace MANAGER.Pages
         private void addMerchandise(int id, string name, int qte, double price)
         {
             var panelMerchandise = new StackPanel();
+
             var newMerchandise = new Merchandise(id, name, qte, price);
 
             var border = new Border
             {
-                BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Settings.Default.AccentColor)),
+                BorderBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor)),
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Top,
                 Margin = new Thickness(2, 2, 1, 0),

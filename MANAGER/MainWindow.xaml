@@ -10,9 +10,6 @@
                   MinHeight="500"
                   MinWidth="550"
                   IsTitleVisible="True"
-                  ShowBackButton="True"
-                  ShowForwardButton="True"
-                  ShowRefreshButton="True"
                   ToolTip="{DynamicResource {x:Type ToolTip}}" Icon="Asset/appbar.currency.euro.png"
                   Initialized="                                                                                                                                                                                                                                                                                                                                                                                                       ModernWindow_Initialized">
 
