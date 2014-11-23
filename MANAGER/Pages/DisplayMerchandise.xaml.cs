@@ -30,7 +30,7 @@ namespace MANAGER.Pages
         /// <summary>
         ///   A list of all merchandise that are buyable
         /// </summary>
-        private static List<Merchandise> ListMerchandise = new List<Merchandise>();
+        private static readonly List<Merchandise> ListMerchandise = new List<Merchandise>();
 
         /// <summary>
         ///   A second list, for future use.

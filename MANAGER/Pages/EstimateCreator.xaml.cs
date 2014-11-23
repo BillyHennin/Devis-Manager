@@ -28,6 +28,10 @@ namespace MANAGER.Pages
     {
         // A empty list of Merchandise, for future use.
         private static readonly List<Merchandise> ListMerchandise = new List<Merchandise>();
+        /// <summary>
+        ///   A second list, for future use.
+        /// </summary>
+        private static readonly List<Merchandise> ListMerchandiseN2 = new List<Merchandise>();
         private readonly OracleConnection dataBaseConnection = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
         // A Estimate that use the previous list.
         private readonly Estimate estimate = new Estimate(ListMerchandise);
@@ -274,91 +278,17 @@ namespace MANAGER.Pages
         {
             // get the cost of the merchandise (without the "€")
             var merchandiseCost = Convert.ToInt32(LabelPrice.Content.ToString().Substring(0, LabelPrice.Content.ToString().Length - 1));
-            // Creating a new panel, useful only on menu.xaml
-            var panelMerchandise = new StackPanel();
-            // Creating a new merchandise with the merchandise selected on the comboBox
-            var newMerchandise = new Merchandise(((ComboboxItemMerchandise) ComboBoxProduit.SelectedItem).Value.GetId, ComboBoxProduit.Text, qte,
-                merchandiseCost);
 
             // Check if the merchandise isn't already in the list
             var nbMerchandise = estimate.GetList.Count;
             for(var i = 0; i < nbMerchandise; i++)
             {
-                if(estimate[i].GetNom == newMerchandise.GetNom)
+                if (estimate[i].GetNom == ComboBoxProduit.Text)
                 {
                     return;
                 }
             }
-            /**
-             *  What's following is the visual construction of the merchandise in the list
-             *      - Creation of the visual border
-             *          - Name of the merchandise
-             *          - Price of the merchandise
-             *          - Quantity of the merchandise 
-             **/
-            var border = new Border
-            {
-                BorderBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor)),
-                HorizontalAlignment = HorizontalAlignment.Left,
-                VerticalAlignment = VerticalAlignment.Top,
-                Margin = new Thickness(2, 2, 1, 0),
-                BorderThickness = new Thickness(1),
-                Width = BorderEstimate.Width - 6,
-                Child = panelMerchandise,
-                Height = 70
-            };
-
-            // Name of the merchandise
-            panelMerchandise.Children.Add(new TextBlock
-            {
-                HorizontalAlignment = HorizontalAlignment.Left,
-                VerticalAlignment = VerticalAlignment.Top,
-                Margin = new Thickness(5, 2, 0, 0),
-                Text = ComboBoxProduit.Text,
-                Height = 16
-            });
-
-            // Price of the merchandise
-            panelMerchandise.Children.Add(new TextBlock
-            {
-                Text = merchandiseCost.ToString(CultureInfo.InvariantCulture) + "€",
-                HorizontalAlignment = HorizontalAlignment.Left,
-                VerticalAlignment = VerticalAlignment.Top,
-                Margin = new Thickness(5, 2, 0, 0),
-                Height = 16
-            });
-
-            // Quantity of the merchandise
-            panelMerchandise.Children.Add(new TextBlock
-            {
-                Text = qte.ToString(CultureInfo.InvariantCulture),
-                HorizontalAlignment = HorizontalAlignment.Left,
-                VerticalAlignment = VerticalAlignment.Top,
-                Margin = new Thickness(5, 2, 0, 0),
-                Height = 16
-            });
-
-            var BTN_Delete = new Button
-            {
-                HorizontalAlignment = HorizontalAlignment.Right,
-                Content = "Enlever le produit",
-                Margin = new Thickness(9, -30, 67, 50),
-                BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00)),
-                Tag = newMerchandise
-            };
-
-            // Suppression
-            panelMerchandise.Children.Add(BTN_Delete);
-
-            BTN_Delete.Click += bouton_Click;
-
-
-            //Final stuff
-            newMerchandise.Border = border;
-            PanelEstimate.Children.Add(border);
-            estimate.GetList.Add(newMerchandise);
-            totalCost += merchandiseCost;
-            LabelTotalPrix.Content = totalCost + "€";
+            addMerchandise(((ComboboxItemMerchandise) ComboBoxProduit.SelectedItem).Value.GetId, ComboBoxProduit.Text, qte, merchandiseCost);
             AjouterEstimate.IsEnabled = true;
         }
 
@@ -453,85 +383,100 @@ namespace MANAGER.Pages
 
         private void bouton_Click(object sender, EventArgs e)
         {
+            totalCost = 0;
+            LabelTotalPrix.Content = "";
+
             var id = ((Button)sender).Tag.ToString();
-            var nbMerchandise = ListMerchandise.Count;
+            var nbMerchandise = estimate.GetList.Count;
             for (var i = 0; i < nbMerchandise; i++)
             {
-                MessageBox.Show(id);
-                if(ListMerchandise[i].ToString() != id)
+                if(ListMerchandise[i].ToString() == id)
                 {
-                    continue;
+                    ListMerchandise.Remove(ListMerchandise[i]);
+                    nbMerchandise -= 1;
                 }
-                totalCost -= ListMerchandise[i].GetPrix;
-                LabelTotalPrix.Content = totalCost + "€";
-                ListMerchandise.Remove(ListMerchandise[i]);
+                else
+                {
+                    ListMerchandiseN2.Add(ListMerchandise[i]);
+                }
             }
-            
-            nbMerchandise-=1;
             PanelEstimate.Children.Clear();
-            
+            estimate.GetList.Clear();
             for (var i = 0; i < nbMerchandise; i++)
             {
-                var merchandiseCost = ListMerchandise[i].GetPrix;
-
-                var panelMerchandise = new StackPanel();
-                var newMerchandise = new Merchandise(ListMerchandise[i].GetId, ListMerchandise[i].GetNom, ListMerchandise[i].GetQte,
-                   merchandiseCost);
-
-                var border = new Border
-                {
-                    BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Settings.Default.AccentColor)),
-                    HorizontalAlignment = HorizontalAlignment.Left,
-                    VerticalAlignment = VerticalAlignment.Top,
-                    Margin = new Thickness(2, 2, 1, 0),
-                    BorderThickness = new Thickness(1),
-                    Width = BorderEstimate.Width - 6,
-                    Child = panelMerchandise,
-                    Height = 70
-                };
-                panelMerchandise.Children.Add(new TextBlock
-                {
-                    HorizontalAlignment = HorizontalAlignment.Left,
-                    VerticalAlignment = VerticalAlignment.Top,
-                    Margin = new Thickness(5, 2, 0, 0),
-                    Text = ComboBoxProduit.Text,
-                    Height = 16
-                });
-
-                panelMerchandise.Children.Add(new TextBlock
-                {
-                    Text = merchandiseCost.ToString(CultureInfo.InvariantCulture) + "€",
-                    HorizontalAlignment = HorizontalAlignment.Left,
-                    VerticalAlignment = VerticalAlignment.Top,
-                    Margin = new Thickness(5, 2, 0, 0),
-                    Height = 16
-                });
-
-                panelMerchandise.Children.Add(new TextBlock
-                {
-                    Text = qte.ToString(CultureInfo.InvariantCulture),
-                    HorizontalAlignment = HorizontalAlignment.Left,
-                    VerticalAlignment = VerticalAlignment.Top,
-                    Margin = new Thickness(5, 2, 0, 0),
-                    Height = 16
-                });
-
-                var BTN_Delete = new Button
-                {
-                    HorizontalAlignment = HorizontalAlignment.Right,
-                    Content = "Enlever le produit",
-                    Margin = new Thickness(9, -30, 67, 50),
-                    BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00)),
-                    Tag = newMerchandise
-                };
-
-                panelMerchandise.Children.Add(BTN_Delete);
-                BTN_Delete.Click += bouton_Click;
-
-                newMerchandise.Border = border;
-                PanelEstimate.Children.Add(border);
-                estimate.GetList.Add(newMerchandise);
+                addMerchandise(ListMerchandiseN2[i].GetId, ListMerchandiseN2[i].GetNom,ListMerchandiseN2[i].GetQte,ListMerchandiseN2[i].GetPrix);
             }
+            ListMerchandiseN2.Clear();
+            if(estimate.GetList.Count == 0)
+            {
+                AjouterEstimate.IsEnabled = false;
+            }
+        }
+
+        private void addMerchandise(int id, string name, int qte, double price)
+        {
+            var panelMerchandise = new StackPanel();
+            var newMerchandise = new Merchandise(id, name, qte, price);
+
+            var border = new Border
+            {
+                BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Settings.Default.AccentColor)),
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+                Margin = new Thickness(2, 2, 1, 0),
+                BorderThickness = new Thickness(1),
+                Width = BorderEstimate.Width - 6,
+                Child = panelMerchandise,
+                Height = 70
+            };
+
+            //Name
+            panelMerchandise.Children.Add(new TextBlock
+            {
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+                Margin = new Thickness(5, 2, 0, 0),
+                Text = name,
+                Height = 16
+            });
+
+            // Price
+            panelMerchandise.Children.Add(new TextBlock
+            {
+                Text = price + "€",
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+                Margin = new Thickness(5, 2, 0, 0),
+                Height = 16
+            });
+
+            // Quantity
+            panelMerchandise.Children.Add(new TextBlock
+            {
+                Text = qte.ToString(CultureInfo.InvariantCulture),
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+                Margin = new Thickness(5, 2, 0, 0),
+                Height = 16
+            });
+
+            var BTN_Delete = new Button
+            {
+                HorizontalAlignment = HorizontalAlignment.Right,
+                Content = "Enlever le produit",
+                Margin = new Thickness(9, -30, 67, 50),
+                BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00)),
+                Tag = newMerchandise
+            };
+
+            panelMerchandise.Children.Add(BTN_Delete);
+            BTN_Delete.Click += bouton_Click;
+
+            newMerchandise.Border = border;
+            PanelEstimate.Children.Add(border);
+            estimate.GetList.Add(newMerchandise);
+            totalCost += price;
+            LabelTotalPrix.Content = totalCost + "€";
         }
     }
 }
