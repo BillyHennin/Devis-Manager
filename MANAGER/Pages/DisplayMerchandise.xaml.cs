@@ -49,15 +49,15 @@ namespace MANAGER.Pages
             var nbMerchandise = ListMerchandiseN2.Count;
             for(var i = 0; i < nbMerchandise; i++)
             {
-                if(!ListMerchandiseN2[i].GetNom.Contains(merchandise))
+                if(!ListMerchandiseN2[i].nom.Contains(merchandise))
                 {
                     continue;
                 }
-                var id = ListMerchandiseN2[i].GetId;
-                var text = ListMerchandiseN2[i].GetNom;
-                var qte = "Quantitée en stock : " + ListMerchandiseN2[i].GetQte;
-                var prixMerchandise = ListMerchandiseN2[i].GetPrix + "€";
-                var newMerchandise = new Merchandise(id, text, ListMerchandiseN2[i].GetQte, ListMerchandiseN2[i].GetPrix);
+                var id = ListMerchandiseN2[i].id;
+                var text = ListMerchandiseN2[i].nom;
+                var qte = "Quantitée en stock : " + ListMerchandiseN2[i].quantite;
+                var prixMerchandise = ListMerchandiseN2[i].prix + "€";
+                var newMerchandise = new Merchandise(id, text, ListMerchandiseN2[i].quantite, ListMerchandiseN2[i].prix);
                 var panelMerchandise = new StackPanel();
                 var thick = new Thickness(5, 2, 0, 0);
 

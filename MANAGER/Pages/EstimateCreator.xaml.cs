@@ -85,7 +85,7 @@ namespace MANAGER.Pages
                     {
                         qte = nouvQte;
                         LabelPrice.Foreground = new SolidColorBrush(Color.FromRgb(0xC1, 0xC1, 0xC1));
-                        LabelPrice.Content = string.Format("{0}€", (((ComboboxItemMerchandise) ComboBoxProduit.SelectedItem).Value.GetPrix * qte));
+                        LabelPrice.Content = string.Format("{0}€", (((ComboboxItemMerchandise) ComboBoxProduit.SelectedItem).Value.prix * qte));
                         TextBoxEstimateQte.BorderBrush =
                             TextBoxEstimateQte.CaretBrush =
                                 TextBoxEstimateQte.SelectionBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
@@ -175,7 +175,7 @@ namespace MANAGER.Pages
                         ErrorCost();
                         break;
                     default:
-                        LabelPrice.Content = ((ComboboxItemMerchandise) ComboBoxProduit.SelectedItem).Value.GetPrix * Convert.ToInt32(TextBoxEstimateQte.Text)
+                        LabelPrice.Content = ((ComboboxItemMerchandise) ComboBoxProduit.SelectedItem).Value.prix * Convert.ToInt32(TextBoxEstimateQte.Text)
                                              + "€";
                         break;
                 }
@@ -270,12 +270,12 @@ namespace MANAGER.Pages
             var nbMerchandise = estimate.GetList.Count;
             for(var i = 0; i < nbMerchandise; i++)
             {
-                if(estimate[i].GetNom == ComboBoxProduit.Text)
+                if(estimate[i].nom == ComboBoxProduit.Text)
                 {
                     return;
                 }
             }
-            addMerchandise(((ComboboxItemMerchandise) ComboBoxProduit.SelectedItem).Value.GetId, ComboBoxProduit.Text, qte, merchandiseCost);
+            addMerchandise(((ComboboxItemMerchandise) ComboBoxProduit.SelectedItem).Value.id, ComboBoxProduit.Text, qte, merchandiseCost);
             AjouterEstimate.IsEnabled = true;
         }
 
@@ -308,12 +308,12 @@ namespace MANAGER.Pages
                     {
                         var Insert = ConnectionOracle.OracleCommandStored(dataBaseConnection, "INSERTDEVIS");
                         //Change every parameters with the proper value.
-                        var paramIdClient = new OracleParameter(":1", OracleDbType.Int32) {Value = estimate.Client.GetId};
-                        var paramIdMerchandise = new OracleParameter(":2", OracleDbType.Int32) {Value = estimate[i].GetId};
+                        var paramIdClient = new OracleParameter(":1", OracleDbType.Int32) {Value = estimate.Client.id};
+                        var paramIdMerchandise = new OracleParameter(":2", OracleDbType.Int32) {Value = estimate[i].id};
                         var paramIdEstimate = new OracleParameter(":3", OracleDbType.Int32) {Value = ((idEstimate) + i + 1)};
-                        var paramQTE = new OracleParameter(":4", OracleDbType.Int32) {Value = estimate[i].GetQte};
+                        var paramQTE = new OracleParameter(":4", OracleDbType.Int32) { Value = estimate[i].quantite };
                         var paramDate = new OracleParameter(":5", OracleDbType.Varchar2) {Value = date};
-                        var paramPrice = new OracleParameter(":6", OracleDbType.Varchar2) {Value = estimate[i].GetPrix};
+                        var paramPrice = new OracleParameter(":6", OracleDbType.Varchar2) {Value = estimate[i].prix};
                         var paramNumEstimate = new OracleParameter(":7", OracleDbType.Varchar2) {Value = ((numeroEstimate) + 1)};
 
                         //add every parameters that have changed
@@ -391,7 +391,7 @@ namespace MANAGER.Pages
 
             for(var i = 0; i < nbMerchandise; i++)
             {
-                addMerchandise(ListMerchandiseN2[i].GetId, ListMerchandiseN2[i].GetNom, ListMerchandiseN2[i].GetQte, ListMerchandiseN2[i].GetPrix);
+                addMerchandise(ListMerchandiseN2[i].id, ListMerchandiseN2[i].nom, ListMerchandiseN2[i].quantite, ListMerchandiseN2[i].prix);
             }
             ListMerchandiseN2.Clear();
             if(estimate.GetList.Count == 0)

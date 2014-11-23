@@ -11,11 +11,6 @@ namespace MANAGER.Classes
 {
     public class Merchandise
     {
-        private readonly int id;
-        private readonly string nom;
-        private readonly double prix;
-        private readonly int quantite;
-
         public Merchandise(int id, string nom, int quantite, double prix)
         {
             this.id = id;
@@ -26,17 +21,17 @@ namespace MANAGER.Classes
 
         public Border Border { get; set; }
 
-        public string GetNom { get { return nom; } }
+        public string nom { get; set; }
 
-        public double GetPrix { get { return prix; } }
+        public double prix { get; set; }
 
-        public int GetQte { get { return quantite; } }
+        public int quantite { get; set; }
 
-        public int GetId { get { return id; } }
+        public int id { get; set; }
 
         public override string ToString()
         {
-            return GetId.ToString(CultureInfo.InvariantCulture);
+            return id.ToString(CultureInfo.InvariantCulture);
         }
     }
 }

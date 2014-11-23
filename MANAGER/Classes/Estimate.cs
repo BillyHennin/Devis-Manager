@@ -9,23 +9,22 @@ using System.Collections.Generic;
 
 namespace MANAGER.Classes
 {
-    internal class Estimate
+    public class Estimate
     {
-        private readonly DateTime _date;
         private readonly List<Merchandise> _listMerchandise;
 
         public Estimate(List<Merchandise> list)
         {
             _listMerchandise = list;
             TotalPrix = 0;
-            _date = DateTime.Now;
+            date = DateTime.Now;
         }
 
         public double TotalPrix { get; set; }
 
         public Client Client { get; set; }
 
-        public DateTime GetDate { get { return _date; } }
+        public DateTime date { get; set; }
 
         public List<Merchandise> GetList { get { return _listMerchandise; } }
 

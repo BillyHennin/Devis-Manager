@@ -30,6 +30,9 @@ namespace MANAGER.Pages
         /// </summary>
         private static readonly List<Merchandise> ListMerchandise = new List<Merchandise>();
 
+        /// <summary>
+        /// Database connection, here for future use.
+        /// </summary>
         private readonly OracleConnection database = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
         /// <summary>
         ///   An object "estimate".
@@ -75,43 +78,60 @@ namespace MANAGER.Pages
         {
             ComboBoxDevis.Items.Clear();
             PanelDevis.Children.Clear();
-
-            var query = "SELECT DISTINCT NUMERODEVIS FROM DEVIS WHERE ID_CLIENT = :1";
-            var oCommand = ConnectionOracle.OracleCommand(database, query);
-            var paramIdClient = new OracleParameter(":1", OracleDbType.Int32) {Value = (ComboBoxClient.SelectedItem as ComboboxItemClient).Value.GetId};
-            oCommand.Parameters.Add(paramIdClient);
             var price = 0;
-            var i = 1;
+            var nbEstimate = 1;
             try
             {
+                var query = "SELECT DISTINCT NUMERODEVIS FROM DEVIS WHERE ID_CLIENT = :1";
+                var oCommand = ConnectionOracle.OracleCommand(database, query);
+                var paramIdClient = new OracleParameter(":1", OracleDbType.Int32) { Value = ((ComboboxItemClient)ComboBoxClient.SelectedItem).Value.id };
+
+                oCommand.Parameters.Add(paramIdClient);
                 database.Open();
+
                 var resultat = oCommand.ExecuteReader();
                 while(resultat.Read())
                 {
-                    var query2 = "SELECT ID_MARCHANDISE FROM DEVIS WHERE NUMERODEVIS = :1";
+                    var query2 = "SELECT ID_MARCHANDISE, PRIXMARCHANDISE, QUANTITE, JOUR FROM DEVIS WHERE NUMERODEVIS = :1";
                     var oCommand2 = ConnectionOracle.OracleCommand(database, query2);
-                    var paramNumeroDevis = new OracleParameter(":1", OracleDbType.Int32) {Value = resultat[0]};
+                    var paramNumeroDevis = new OracleParameter(":1", OracleDbType.Int32) { Value = resultat[0] };
                     oCommand2.Parameters.Add(paramNumeroDevis);
                     var resultat2 = oCommand2.ExecuteReader();
-
-                    var listMarchandise2 = new List<Merchandise>();
+                    var listMarchandise = new List<Merchandise>();
                     while(resultat2.Read())
                     {
+                        var idMerchandise = Convert.ToInt32(resultat2[0]);
+                        var priceMerchandise = Convert.ToInt32(resultat2[1]);
+                        var quantity = Convert.ToInt32(resultat2[2]);
+                        var day = resultat2[3];
+                        var merchandise = new Merchandise(idMerchandise, null, quantity, priceMerchandise);
+
                         var query3 = "SELECT ID_MARCHANDISE, NOM, QUANTITE, PRIX FROM MARCHANDISE WHERE ID_MARCHANDISE = :1";
                         var oCommand3 = ConnectionOracle.OracleCommand(database, query3);
-                        var paramIdMarchandise = new OracleParameter(":1", OracleDbType.Int32) {Value = resultat2[0]};
+                        var paramIdMarchandise = new OracleParameter(":1", OracleDbType.Int32) { Value = resultat2[0] };
                         oCommand3.Parameters.Add(paramIdMarchandise);
                         var resultat3 = oCommand3.ExecuteReader();
-                        while(resultat3.Read())
+                        while (resultat3.Read())
                         {
-                            listMarchandise2.Add(new Merchandise(Convert.ToInt32(resultat3[0]), resultat3[1].ToString(), Convert.ToInt32(resultat3[2]),
+                            listMarchandise.Add(new Merchandise(Convert.ToInt32(resultat3[0]), resultat3[1].ToString(), Convert.ToInt32(resultat3[2]),
                                 Convert.ToInt32(resultat3[3])));
-                            price += Convert.ToInt32(resultat3[3]) * Convert.ToInt32(resultat3[2]);
+                            price += priceMerchandise * quantity;
                         }
+
+
+                        
+
+                        ComboBoxDevis.Items.Add(new ComboboxItemEstimate { Text = "Devis n°" + nbEstimate + " - " + price + "€", Value = estimateClient });
+                        ((ComboboxItemClient)ComboBoxClient.SelectedItem).Value.listEstimate.Add(estimateClient);
+                        
                     }
-                    ComboBoxDevis.Items.Add(new ComboboxItemEstimate {Text = "Devis n°" + i + " - " + price + "€", Value = new Estimate(listMarchandise2)});
-                    i++;
+
+                    var estimateClient = new Estimate(listMarchandise) { date = Convert.ToDateTime(day), TotalPrix += priceMerchandise * quantity };
+
+                    nbEstimate++;
                     price = 0;
+
+                    resultat2.Close();
                 }
                 resultat.Close();
             }
@@ -124,6 +144,7 @@ namespace MANAGER.Pages
             {
                 database.Close();
             }
+
             BTN_Supprimer.Visibility = Visibility.Visible;
             PanelDevis.Children.Clear();
         }
@@ -140,10 +161,10 @@ namespace MANAGER.Pages
             var taille = listMarchandise.Count;
             for(var i = 0; i < taille; i++)
             {
-                var id = listMarchandise[i].GetId;
-                var text = listMarchandise[i].GetNom;
-                var qte = Convert.ToInt32(listMarchandise[i].GetQte);
-                var prixMarchandise = Convert.ToInt32(listMarchandise[i].GetPrix);
+                var id = listMarchandise[i].id;
+                var text = listMarchandise[i].nom;
+                var qte = Convert.ToInt32(listMarchandise[i].quantite);
+                var prixMarchandise = Convert.ToInt32(listMarchandise[i].prix);
                 var item = new Merchandise(id, text, qte, prixMarchandise);
                 var panelMarchandise = new StackPanel();
                 var thick = new Thickness(5, 2, 0, 0);
@@ -220,7 +241,7 @@ namespace MANAGER.Pages
         {
             var con = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
             var commandeModif = ConnectionOracle.OracleCommandStored(con, "DELETECLIENT");
-            var ID = (ComboBoxClient.SelectedItem as ComboboxItemClient).Value.GetId;
+            var ID = (ComboBoxClient.SelectedItem as ComboboxItemClient).Value.id;
             var param1 = new OracleParameter(":1", OracleDbType.Int32) {Value = ID};
 
             commandeModif.Parameters.Add(param1);

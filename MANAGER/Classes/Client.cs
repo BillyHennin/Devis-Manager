@@ -4,29 +4,29 @@
 //  
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
+using System.Collections.Generic;
+
 namespace MANAGER.Classes
 {
     public class Client
     {
-        private readonly string _denomination;
-        private readonly string _email;
-        private readonly int _id;
-        private readonly string _telephone;
 
         public Client(int id, string denomination, string telephone, string email)
         {
-            _id = id;
-            _denomination = denomination;
-            _telephone = telephone;
-            _email = email;
+            this.id = id;
+            this.denomination = denomination;
+            this.telephone = telephone;
+            this.email = email;
         }
 
-        public int GetId { get { return _id; } }
+        public int id { get; set; }
 
-        public string GetDenomination { get { return _denomination; } }
+        public string denomination { get; set; }
 
-        public string GetTelephone { get { return _telephone; } }
+        public string telephone { get; set; }
 
-        public string GetEmail { get { return _email; } }
+        public string email { get; set; }
+
+        public List<Estimate> listEstimate { get; set; }
     }
 }
