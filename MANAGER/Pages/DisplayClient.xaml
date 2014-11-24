@@ -41,8 +41,8 @@
                 <StackPanel MinWidth="150" Margin="1,-4.5,-1,9">
                     <TextBlock Margin="-250,-27,-50,0" Style="{StaticResource Heading2}" TextWrapping="Wrap"
                                Text="Ses devis :" />
-                    <ComboBox x:Name="ComboBoxDevis" BorderBrush="{DynamicResource Accent}" Margin="-150,-35,239,0"
-                              SelectionChanged="ComboBoxDevis_SelectionChanged" Height="22" />
+                    <ComboBox x:Name="ComboBoxEstimate" BorderBrush="{DynamicResource Accent}" Margin="-150,-35,239,0"
+                              SelectionChanged="ComboBoxEstimate_SelectionChanged" Height="22" />
                     <TextBlock x:Name="TotalTextBlock" TextWrapping="Wrap" Style="{StaticResource Heading2}" Text=""
                                Margin="-250,0,239,0" Height="19" />
                 </StackPanel>
