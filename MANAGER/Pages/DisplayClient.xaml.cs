@@ -79,7 +79,7 @@ namespace MANAGER.Pages
                         totalPrice += Convert.ToInt32(resultatMerchandise[1]);
                         date = Convert.ToDateTime(resultatMerchandise[3]);
 
-                        var merchandise = new Merchandise(Convert.ToInt32(resultatMerchandise[0]), null, Convert.ToInt32(resultatMerchandise[2]), Convert.ToInt32(resultatMerchandise[1]));
+                        var merchandise = new Merchandise(Convert.ToInt32(resultatMerchandise[0]), null, Convert.ToInt32(resultatMerchandise[2]), Convert.ToInt32(resultatMerchandise[1]) / Convert.ToInt32(resultatMerchandise[2]));
 
                         var oCommand3 = ConnectionOracle.OracleCommand(database, "SELECT NOM, QUANTITE FROM MARCHANDISE WHERE ID_MARCHANDISE = :1");
                         var paramIdMarchandise = new OracleParameter(":1", OracleDbType.Int32) { Value = resultatMerchandise[0] };
