@@ -1,5 +1,12 @@
 Devis manager
-=====
+======
+
+Français
+======
+
+
+English
+======
 
 This is the Devis manager's git's readme. From here you can see how the application works.
 
