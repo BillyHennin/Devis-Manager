@@ -7,6 +7,13 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <mui:BbCodeBlock Initialized="Label_Initialized" x:Name="Text" Margin="5,0,0,0" />
+        <Grid>
+            <StackPanel MinWidth="150">
+                <mui:BbCodeBlock x:Name="Text" Margin="5,0,0,0" Loaded="Text_Loaded" />
+            </StackPanel>
+        </Grid>
+        <Grid>
+            <StackPanel x:Name="PanelMOTD" MinWidth="150" />
+        </Grid>
     </Grid>
 </UserControl>

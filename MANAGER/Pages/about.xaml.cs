@@ -4,9 +4,12 @@
 //  
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
-using System;
 using System.IO;
 using System.Net;
+using System.Windows;
+using System.Windows.Controls;
+
+using FirstFloor.ModernUI.Windows.Controls;
 
 namespace MANAGER.Pages
 {
@@ -20,38 +23,52 @@ namespace MANAGER.Pages
             InitializeComponent();
         }
 
-        private static string Motd()
+        private void Text_Loaded(object sender, RoutedEventArgs e)
         {
-            var webRequest = WebRequest.Create(@"http://billyhennin.github.io/Devis-Manager/motd.html");
-            string msg;
-            using(var response = webRequest.GetResponse())
+            var PreMOTD = "\r\nBienvenue dans l'application SIO2 - MANAGER pour la creation et la visualisation de devis."
+                         + "\r\n\r\nA propos de l'application : "
+                         + "\r\n\r\n\tCette application à été créée dans le cadre d'un projet de MANAGER. Le but était créer un application utilisant une base de données Oracle et de l'exploiter."
+                         + "\r\n\tAvec cette application vous serez capable de creer des devis, de visualiser vos devis et de voir la liste de produit que vous disposez."
+                         + "\r\n\tL'application que vous utilisez actuellement est open-source et est disponible [url='https://github.com/BillyHennin/Devis-Manager']ici (GitHub)[/url]."
+                         + "\r\n\r\nMessage du jour : \r\n \r\n";
+
+            var thick = new Thickness(5, 2, 0, 0);
+
+            var panelMessage = new StackPanel();
+            var bordure = new Border
             {
-                using(var content = response.GetResponseStream())
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+                Margin = new Thickness(2, 2, 1, 0),
+                BorderThickness = new Thickness(1),
+                Child = panelMessage
+            };
+
+            var webRequest = WebRequest.Create(@"http://billyhennin.github.io/Devis-Manager/motd.html");
+            using (var response = webRequest.GetResponse())
+            {
+                using (var content = response.GetResponseStream())
                 {
-                    if(content != null)
+                    if (content != null)
                     {
-                        using(var reader = new StreamReader(content))
+                        using (var MOTD = new StreamReader(content))
                         {
-                            msg = reader.ReadToEnd();
+                            panelMessage.Children.Add(new BbCodeBlock { Margin = thick, BbCode = PreMOTD });
+                            panelMessage.Children.Add(new BbCodeBlock { Margin = thick, BbCode = jsonToString(MOTD.ReadToEnd()) });
                         }
                     }
                     else
                     {
-                        msg = "Erreur dans l'optention du message du jour.";
+                        panelMessage.Children.Add(new TextBlock { Margin = thick, Text = "Erreur dans l'optention du message du jour.", Height = 16 });
                     }
+                    PanelMOTD.Children.Add(bordure);
                 }
             }
-            return msg;
         }
 
-        private void Label_Initialized(object sender, EventArgs e)
+        private string jsonToString(string json)
         {
-            Text.BbCode = "\r\nBienvenue dans l'application SIO2 - MANAGER pour la creation et la visualisation de devis."
-                          + "\r\n\r\nA propos de l'application : "
-                          + "\r\n\r\n\tCette application à été créée dans le cadre d'un projet de MANAGER. Le but était créer un application utilisant une base de données Oracle et de l'exploiter."
-                          + "\r\n\tAvec cette application vous serez capable de creer des devis, de visualiser vos devis et de voir la liste de produit que vous disposez."
-                          + "\r\n\tL'application que vous utilisez actuellement est open-source et est disponible [url='https://github.com/BillyHennin/Devis-Manager']ici (GitHub)[/url]."
-                          + "\r\n\r\nMessage du jour : \r\n \r\n" + Motd();
+            return json;
         }
     }
 }

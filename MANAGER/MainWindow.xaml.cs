@@ -20,6 +20,9 @@ namespace MANAGER
     {
         private void ModernWindow_Initialized(object sender, EventArgs e)
         {
+            //Initialisation de la taille.
+
+            //initialisation de la bdd
             Settings.Default.DatabaseConnectionString = "user id=SLAM3;password=pw;data source=localhost:1521/xe";
 
             var file = Environment.CurrentDirectory + "//Config//Config.xmls";
