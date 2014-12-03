@@ -4,6 +4,8 @@
 //  
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
+#region
+
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Media;
@@ -11,6 +13,8 @@ using System.Windows.Media;
 using FirstFloor.ModernUI.Presentation;
 
 using MANAGER.Properties;
+
+#endregion
 
 namespace MANAGER.ViewModels
 {

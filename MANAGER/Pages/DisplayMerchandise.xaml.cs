@@ -4,6 +4,8 @@
 //  
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -17,6 +19,8 @@ using MANAGER.Connection;
 using MANAGER.Properties;
 
 using Oracle.ManagedDataAccess.Client;
+
+#endregion
 
 namespace MANAGER.Pages
 {

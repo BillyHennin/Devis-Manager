@@ -4,8 +4,12 @@
 //  
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
+#region
+
 using System;
 using System.Collections.Generic;
+
+#endregion
 
 namespace MANAGER.Classes
 {

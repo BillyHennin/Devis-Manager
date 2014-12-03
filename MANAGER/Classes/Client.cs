@@ -4,13 +4,16 @@
 //  
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
+#region
+
 using System.Collections.Generic;
+
+#endregion
 
 namespace MANAGER.Classes
 {
     public class Client
     {
-
         public Client(int id, string denomination, string telephone, string email)
         {
             this.id = id;

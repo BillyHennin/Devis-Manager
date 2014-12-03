@@ -4,6 +4,8 @@
 //  
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -16,6 +18,8 @@ using MANAGER.Connection;
 using MANAGER.Properties;
 
 using Oracle.ManagedDataAccess.Client;
+
+#endregion
 
 namespace MANAGER.Pages
 {
@@ -31,7 +35,7 @@ namespace MANAGER.Pages
         private static readonly List<Merchandise> ListMerchandise = new List<Merchandise>();
 
         /// <summary>
-        /// Database connection, here for future use.
+        ///   Database connection, here for future use.
         /// </summary>
         private readonly OracleConnection database = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
         /// <summary>
@@ -61,7 +65,7 @@ namespace MANAGER.Pages
             try
             {
                 var OracleCommand = ConnectionOracle.OracleCommand(database, "SELECT DISTINCT NUMERODEVIS FROM DEVIS WHERE ID_CLIENT = :1");
-                var paramIdClient = new OracleParameter(":1", OracleDbType.Int32) { Value = ((ComboboxItemClient)ComboBoxClient.SelectedItem).Value.id };
+                var paramIdClient = new OracleParameter(":1", OracleDbType.Int32) {Value = ((ComboboxItemClient) ComboBoxClient.SelectedItem).Value.id};
 
                 OracleCommand.Parameters.Add(paramIdClient);
                 database.Open();
@@ -69,24 +73,26 @@ namespace MANAGER.Pages
                 var resultatNumeroDevis = OracleCommand.ExecuteReader();
                 while(resultatNumeroDevis.Read())
                 {
-                    var OracleCommand2 = ConnectionOracle.OracleCommand(database,"SELECT ID_MARCHANDISE, PRIXMARCHANDISE, QUANTITE, JOUR FROM DEVIS WHERE NUMERODEVIS = :1");
-                    var paramNumeroDevis = new OracleParameter(":1", OracleDbType.Int32) { Value = resultatNumeroDevis[0] };
+                    var OracleCommand2 = ConnectionOracle.OracleCommand(database,
+                        "SELECT ID_MARCHANDISE, PRIXMARCHANDISE, QUANTITE, JOUR FROM DEVIS WHERE NUMERODEVIS = :1");
+                    var paramNumeroDevis = new OracleParameter(":1", OracleDbType.Int32) {Value = resultatNumeroDevis[0]};
                     OracleCommand2.Parameters.Add(paramNumeroDevis);
                     var resultatMerchandise = OracleCommand2.ExecuteReader();
                     var ListMerchandise2 = new List<Merchandise>();
-                    while (resultatMerchandise.Read())
+                    while(resultatMerchandise.Read())
                     {
                         totalPrice += Convert.ToInt32(resultatMerchandise[1]);
                         date = Convert.ToDateTime(resultatMerchandise[3]);
 
-                        var merchandise = new Merchandise(Convert.ToInt32(resultatMerchandise[0]), null, Convert.ToInt32(resultatMerchandise[2]), Convert.ToInt32(resultatMerchandise[1]) / Convert.ToInt32(resultatMerchandise[2]));
+                        var merchandise = new Merchandise(Convert.ToInt32(resultatMerchandise[0]), null, Convert.ToInt32(resultatMerchandise[2]),
+                            Convert.ToInt32(resultatMerchandise[1]) / Convert.ToInt32(resultatMerchandise[2]));
 
                         var oCommand3 = ConnectionOracle.OracleCommand(database, "SELECT NOM, QUANTITE FROM MARCHANDISE WHERE ID_MARCHANDISE = :1");
-                        var paramIdMarchandise = new OracleParameter(":1", OracleDbType.Int32) { Value = resultatMerchandise[0] };
+                        var paramIdMarchandise = new OracleParameter(":1", OracleDbType.Int32) {Value = resultatMerchandise[0]};
 
                         oCommand3.Parameters.Add(paramIdMarchandise);
                         var resultat3 = oCommand3.ExecuteReader();
-                        while (resultat3.Read())
+                        while(resultat3.Read())
                         {
                             merchandise.nom = resultat3[0].ToString();
                         }
@@ -94,14 +100,14 @@ namespace MANAGER.Pages
                         ListMerchandise2.Add(merchandise);
                     }
                     resultatMerchandise.Close();
-                    var estimate2 = new Estimate(ListMerchandise2) { TotalPrix = totalPrice, date = date};
-                    ComboBoxEstimate.Items.Add(new ComboboxItemEstimate { Text = "Devis n°" + nbEstimate + " - " + totalPrice + "€", Value = estimate2 });
+                    var estimate2 = new Estimate(ListMerchandise2) {TotalPrix = totalPrice, date = date};
+                    ComboBoxEstimate.Items.Add(new ComboboxItemEstimate {Text = "Devis n°" + nbEstimate + " - " + totalPrice + "€", Value = estimate2});
                     nbEstimate++;
                     totalPrice = 0;
                 }
                 resultatNumeroDevis.Close();
             }
-            catch (Exception caught)
+            catch(Exception caught)
             {
                 Console.WriteLine(caught.Message);
                 Console.Read();
@@ -147,11 +153,11 @@ namespace MANAGER.Pages
         private void ComboBoxEstimate_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             PanelDevis.Children.Clear();
-            if (ComboBoxEstimate.Items.Count == 0)
+            if(ComboBoxEstimate.Items.Count == 0)
             {
                 return;
             }
-            var listMarchandise = ((ComboboxItemEstimate)ComboBoxEstimate.SelectedItem).Value.GetList;
+            var listMarchandise = ((ComboboxItemEstimate) ComboBoxEstimate.SelectedItem).Value.GetList;
             var taille = listMarchandise.Count;
             for(var i = 0; i < taille; i++)
             {
@@ -193,7 +199,7 @@ namespace MANAGER.Pages
                 PanelDevis.Children.Add(bordure);
                 estimate.GetList.Add(item);
             }
-            TotalTextBlock.Text = "Total du devis : " + ((ComboboxItemEstimate)ComboBoxEstimate.SelectedItem).Value.TotalPrix + "€";
+            TotalTextBlock.Text = "Total du devis : " + ((ComboboxItemEstimate) ComboBoxEstimate.SelectedItem).Value.TotalPrix + "€";
         }
 
         private void MenuClient_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -235,8 +241,8 @@ namespace MANAGER.Pages
             try
             {
                 var commandeModif = ConnectionOracle.OracleCommandStored(database, "DELETECLIENT");
-                var ID = ((ComboboxItemClient)ComboBoxClient.SelectedItem).Value.id;
-                var param1 = new OracleParameter(":1", OracleDbType.Int32) { Value = ID };
+                var ID = ((ComboboxItemClient) ComboBoxClient.SelectedItem).Value.id;
+                var param1 = new OracleParameter(":1", OracleDbType.Int32) {Value = ID};
                 commandeModif.Parameters.Add(param1);
                 database.Open();
                 commandeModif.ExecuteNonQuery();

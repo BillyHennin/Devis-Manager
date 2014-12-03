@@ -3,13 +3,13 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      mc:Ignorable="d"
       x:Name="MenuParametre"
-      d:DesignHeight="300" d:DesignWidth="300"
-      Title="Parametre">
+      Title="Parametre"
+      mc:Ignorable="d" d:DesignHeight="300"
+      d:DesignWidth="300">
 
     <StackPanel x:Name="Panel" MinWidth="150" Margin="10,10,-222,-10">
-        <Grid HorizontalAlignment="Left" Width="252">
+        <Grid Width="252" HorizontalAlignment="Left">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="93" />
                 <ColumnDefinition Width="17" />
@@ -22,17 +22,17 @@
                 <RowDefinition Height="8*" />
                 <RowDefinition Height="67*" />
             </Grid.RowDefinitions>
-            <TextBlock Margin="0,10,0,0" Style="{StaticResource Heading2}" TextWrapping="Wrap"
-                       Text="La base de donnée :"
-                       Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Left" Width="161" />
-            <ComboBox x:Name="ComboBoxClient" BorderBrush="{DynamicResource Accent}" Margin="54,10,-61,0" Grid.Row="0"
-                      Grid.Column="2"
-                      Grid.ColumnSpan="4" />
+            <TextBlock Grid.Column="0" Grid.ColumnSpan="3" Width="161"
+                       Margin="0,10,0,0"
+                       HorizontalAlignment="Left" Style="{StaticResource Heading2}" TextWrapping="Wrap" Text="La base de donnée :" />
+            <ComboBox x:Name="ComboBoxClient" Grid.Column="2" Grid.ColumnSpan="4" Grid.Row="0"
+                      Margin="54,10,-61,0"
+                      BorderBrush="{DynamicResource Accent}" />
         </Grid>
         <Grid x:Name="DevisGrid">
-            <Border x:Name="BorderDevis" BorderBrush="{DynamicResource Accent}" BorderThickness="1"
-                    HorizontalAlignment="Left"
-                    Height="267" Margin="0,10,0,-59" VerticalAlignment="Top" Width="326" Grid.Column="0">
+            <Border x:Name="BorderDevis" Grid.Column="0" Width="326"
+                    Height="267"
+                    Margin="0,10,0,-59" HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="{DynamicResource Accent}" BorderThickness="1">
                 <ScrollViewer Margin="9">
                     <StackPanel x:Name="PanelDevis" MinWidth="150" />
                 </ScrollViewer>

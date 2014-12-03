@@ -4,7 +4,11 @@
 //  
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
+#region
+
 using System.Windows.Controls;
+
+#endregion
 
 namespace MANAGER.Pages
 {

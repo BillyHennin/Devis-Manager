@@ -1,9 +1,9 @@
 ﻿<UserControl
+    x:Class="MANAGER.Pages.EstimatePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    x:Name="EstimateCreator" x:Class="MANAGER.Pages.EstimatePage" mc:Ignorable="d"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" x:Name="EstimateCreator" mc:Ignorable="d"
     d:DesignHeight="300" d:DesignWidth="300" SizeChanged="UserControl_SizeChanged" Loaded="EstimateCreator_Loaded">
     <Grid Style="{StaticResource ContentRoot}">
         <Grid.ColumnDefinitions>
@@ -14,7 +14,7 @@
             <RowDefinition Height="119*" />
             <RowDefinition Height="137*" />
         </Grid.RowDefinitions>
-        <ScrollViewer Grid.RowSpan="2" Margin="0,0,-94,-15" Grid.ColumnSpan="2">
+        <ScrollViewer Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="0,0,-94,-15">
             <StackPanel x:Name="Panel" MinWidth="150">
                 <TextBlock Margin="0,0,0,8"
                            Style="{StaticResource Heading2}"
@@ -54,56 +54,56 @@
                         <RowDefinition />
                     </Grid.RowDefinitions>
 
-                    <TextBlock Margin="0,3,101,7"
-                               VerticalAlignment="Center"
-                               Text="Ajouter un produit :" Height="16" Grid.ColumnSpan="3" />
-                    <ComboBox x:Name="ComboBoxProduit" Grid.Column="2" BorderBrush="{DynamicResource Accent}"
-                              Text="Produit" Grid.Row="0" Grid.ColumnSpan="3"
-                              Margin="25,0,-57,3" TabIndex="2"
-                              Grid.IsSharedSizeScope="True" Height="23" VerticalAlignment="Bottom"
+                    <TextBlock Grid.ColumnSpan="3"
+                               Height="16"
+                               Margin="0,3,101,7" VerticalAlignment="Center" Text="Ajouter un produit :" />
+                    <ComboBox x:Name="ComboBoxProduit" Grid.Column="2" Grid.ColumnSpan="3"
+                              Grid.Row="0" Height="23" Margin="25,0,-57,3"
+                              VerticalAlignment="Bottom" BorderBrush="{DynamicResource Accent}"
+                              Text="Produit" TabIndex="2" Grid.IsSharedSizeScope="True"
                               SelectionChanged="ComboBoxProduit_SelectionChanged"
                               Initialized="ComboBoxProduit_OnInitialized" />
-                    <Button x:Name="Ajouter" Content="Ajouter" BorderBrush="{DynamicResource Accent}" Grid.Row="1"
-                            Grid.Column="2" HorizontalAlignment="Left"
-                            Margin="70,32,-57,-36" Width="97" Click="BTNAddFeed_click" Height="26"
-                            VerticalAlignment="Top" Grid.ColumnSpan="3" IsEnabled="False" />
+                    <Button x:Name="Ajouter" Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="1"
+                            Width="97" Height="26"
+                            Margin="70,32,-57,-36" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Ajouter"
+                            BorderBrush="{DynamicResource Accent}" Click="BTNAddFeed_click" IsEnabled="False" />
 
 
-                    <TextBlock Grid.Row="1" Margin="0,73,101,-72"
-                               Style="{StaticResource Heading2}" TextWrapping="Wrap" Text="Le client"
-                               Grid.ColumnSpan="3"
-                               Grid.Column="0" />
-                    <ComboBox x:Name="ComboBoxClient" BorderBrush="{DynamicResource Accent}" Grid.ColumnSpan="3"
-                              Grid.Column="2" Margin="25,68,-57,-72"
-                              Grid.Row="1" Initialized="ComboBoxClient_OnInitialized"
+                    <TextBlock Grid.Column="0" Grid.ColumnSpan="3"
+                               Grid.Row="1" Margin="0,73,101,-72" Style="{StaticResource Heading2}"
+                               TextWrapping="Wrap"
+                               Text="Le client" />
+                    <ComboBox x:Name="ComboBoxClient" Grid.Column="2" Grid.ColumnSpan="3"
+                              Grid.Row="1" Margin="25,68,-57,-72"
+                              BorderBrush="{DynamicResource Accent}" Initialized="ComboBoxClient_OnInitialized"
                               SelectionChanged="comboBoxClient_SelectionChanged" />
-                    <TextBlock x:Name="Couleur" Margin="0,6,101,0"
-                               VerticalAlignment="Center"
-                               Text="Quantité :" Height="16" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1" />
-                    <TextBox x:Name="TextBoxEstimateQte" BorderBrush="{DynamicResource Accent}" Grid.Row="1"
-                             Grid.Column="2" MaxLength="8" TextWrapping="Wrap"
-                             Text="1" Grid.ColumnSpan="3" Margin="25,0,-57,-4" TabIndex="2"
-                             TextChanged="TextBoxEstimateQte_TextChanged" TextAlignment="Right" MaxLines="1"
-                             Grid.IsSharedSizeScope="True" Height="23" VerticalAlignment="Bottom" />
-                    <TextBlock Margin="0,36,96,-30"
-                               VerticalAlignment="Center"
-                               Text="Prix  :" Height="16" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" />
+                    <TextBlock x:Name="Couleur" Grid.Column="0"
+                               Grid.ColumnSpan="3"
+                               Grid.Row="1" Height="16" Margin="0,6,101,0" VerticalAlignment="Center" Text="Quantité :" />
+                    <TextBox x:Name="TextBoxEstimateQte" Grid.Column="2" Grid.ColumnSpan="3"
+                             Grid.Row="1" Height="23" Margin="25,0,-57,-4"
+                             VerticalAlignment="Bottom" BorderBrush="{DynamicResource Accent}" MaxLength="8" TextWrapping="Wrap"
+                             Text="1" TabIndex="2" TextChanged="TextBoxEstimateQte_TextChanged"
+                             TextAlignment="Right" MaxLines="1" Grid.IsSharedSizeScope="True" />
+                    <TextBlock Grid.Column="0"
+                               Grid.ColumnSpan="3"
+                               Grid.Row="1" Height="16" Margin="0,36,96,-30" VerticalAlignment="Center" Text="Prix  :" />
 
-                    <Label Margin="46,36,105,-30"
-                           VerticalAlignment="Center" x:Name="LabelPrice" Height="16" Grid.Row="1" Content=""
-                           Grid.ColumnSpan="3"
-                           Grid.Column="0" />
+                    <Label x:Name="LabelPrice"
+                           Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" Height="16" Margin="46,36,105,-30"
+                           VerticalAlignment="Center"
+                           Content="" />
                 </Grid>
                 <Grid>
-                    <Border x:Name="BorderEstimate" BorderThickness="1" BorderBrush="{DynamicResource Accent}"
-                            HorizontalAlignment="Left"
-                            Height="411" Margin="300,-91,-405,0" VerticalAlignment="Top" Width="450" Grid.Column="0">
+                    <Border x:Name="BorderEstimate" Grid.Column="0" Width="450"
+                            Height="411"
+                            Margin="300,-91,-405,0" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="1" BorderBrush="{DynamicResource Accent}">
                         <ScrollViewer Margin="0,0,-94,0">
                             <StackPanel x:Name="PanelEstimate" MinWidth="150" />
                         </ScrollViewer>
                     </Border>
                 </Grid>
-                <Grid HorizontalAlignment="Left" Width="267">
+                <Grid Width="267" HorizontalAlignment="Left">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="0*" />
                         <RowDefinition />
@@ -116,17 +116,17 @@
                         <ColumnDefinition Width="22*" />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <TextBlock Margin="1,-14,0,14"
-                               Style="{StaticResource Heading2}" TextWrapping="Wrap" Text="Prix total :" Height="22"
-                               VerticalAlignment="Bottom" Width="88" HorizontalAlignment="Left" Grid.Column="0" />
-                    <Label Margin="0,-10,0,10"
-                           VerticalAlignment="Bottom" Width="83" HorizontalAlignment="Left" x:Name="LabelTotalPrix"
-                           Height="22" Content="" Grid.Row="0" Grid.ColumnSpan="3" Grid.Column="1" />
-                    <Button x:Name="AjouterEstimate" BorderBrush="{DynamicResource Accent}" Content="Ajouter"
-                            HorizontalAlignment="Left"
-                            Margin="51,-18,-7,14" Width="97" Click="BTNAddEstimate_click" Height="26"
-                            VerticalAlignment="Bottom" IsEnabled="False" Grid.Column="3" Grid.Row="0"
-                            Grid.ColumnSpan="3" />
+                    <TextBlock Grid.Column="0"
+                               Width="88" Height="22" Margin="1,-14,0,14" HorizontalAlignment="Left"
+                               VerticalAlignment="Bottom" Style="{StaticResource Heading2}" TextWrapping="Wrap" Text="Prix total :" />
+                    <Label x:Name="LabelTotalPrix"
+                           Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="0" Width="83"
+                           Height="22" Margin="0,-10,0,10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Content="" />
+                    <Button x:Name="AjouterEstimate" Grid.Column="3" Grid.ColumnSpan="3"
+                            Grid.Row="0"
+                            Width="97" Height="26" Margin="51,-18,-7,14" HorizontalAlignment="Left"
+                            VerticalAlignment="Bottom" BorderBrush="{DynamicResource Accent}" Content="Ajouter" Click="BTNAddEstimate_click"
+                            IsEnabled="False" />
                 </Grid>
             </StackPanel>
         </ScrollViewer>

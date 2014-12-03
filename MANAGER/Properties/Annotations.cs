@@ -4,7 +4,11 @@
 //  
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
+#region
+
 using System;
+
+#endregion
 
 #pragma warning disable 1591
 // ReSharper disable UnusedMember.Global

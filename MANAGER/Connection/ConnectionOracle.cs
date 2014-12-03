@@ -4,10 +4,14 @@
 //  
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
+#region
+
 using System;
 using System.Data;
 
 using Oracle.ManagedDataAccess.Client;
+
+#endregion
 
 namespace MANAGER.Connection
 {

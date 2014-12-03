@@ -4,6 +4,8 @@
 //  
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -17,6 +19,8 @@ using MANAGER.Connection;
 using MANAGER.Properties;
 
 using Oracle.ManagedDataAccess.Client;
+
+#endregion
 
 namespace MANAGER.Pages
 {
@@ -311,7 +315,7 @@ namespace MANAGER.Pages
                         var paramIdClient = new OracleParameter(":1", OracleDbType.Int32) {Value = estimate.Client.id};
                         var paramIdMerchandise = new OracleParameter(":2", OracleDbType.Int32) {Value = estimate[i].id};
                         var paramIdEstimate = new OracleParameter(":3", OracleDbType.Int32) {Value = ((idEstimate) + i + 1)};
-                        var paramQTE = new OracleParameter(":4", OracleDbType.Int32) { Value = estimate[i].quantite };
+                        var paramQTE = new OracleParameter(":4", OracleDbType.Int32) {Value = estimate[i].quantite};
                         var paramDate = new OracleParameter(":5", OracleDbType.Varchar2) {Value = date};
                         var paramPrice = new OracleParameter(":6", OracleDbType.Varchar2) {Value = estimate[i].prix};
                         var paramNumEstimate = new OracleParameter(":7", OracleDbType.Varchar2) {Value = ((numeroEstimate) + 1)};

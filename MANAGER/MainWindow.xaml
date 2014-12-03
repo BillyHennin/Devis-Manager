@@ -4,12 +4,13 @@
                   xmlns:mui="http://firstfloorsoftware.com/ModernUI"
 
                   Title="Manager"
-                  ContentSource="/Pages/about.xaml"
-                  MinHeight="500"
                   MinWidth="550"
+                  MinHeight="500"
+                  ContentSource="/Pages/about.xaml"
                   IsTitleVisible="True"
                   ToolTip="{DynamicResource {x:Type ToolTip}}" Icon="Asset/appbar.currency.euro.png"
-                  Initialized="                                                                                                                                                                                                                                                                                                                                                                                                       ModernWindow_Initialized" WindowState="Maximized">
+                  Initialized="                                                                                                                                                                                                                                                                                                                                                                                                       ModernWindow_Initialized"
+                  WindowState="Maximized">
 
     <mui:ModernWindow.TitleLinks>
         <mui:Link DisplayName="A propos" Source="/Pages/about.xaml" />

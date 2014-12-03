@@ -4,12 +4,16 @@
 //  
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
+#region
+
 using System;
 using System.IO;
 using System.Windows;
 using System.Xml;
 
 using MANAGER.Properties;
+
+#endregion
 
 namespace MANAGER
 {

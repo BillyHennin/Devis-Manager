@@ -4,8 +4,12 @@
 //  
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
+#region
+
 using FirstFloor.ModernUI;
 using FirstFloor.ModernUI.Windows;
+
+#endregion
 
 namespace MANAGER.ViewModels
 {
