@@ -24,13 +24,11 @@ namespace MANAGER
     {
         private void ModernWindow_Initialized(object sender, EventArgs e)
         {
-            //Initialisation de la taille.
 
-            //initialisation de la bdd
+            //Initialisation de la bdd
             Settings.Default.DatabaseConnectionString = "user id=SLAM3;password=pw;data source=localhost:1521/xe";
 
             var file = Environment.CurrentDirectory + "//Config//Config.xmls";
-
             if(File.Exists(file))
             {
                 var xmlDoc = new XmlDocument();
@@ -49,7 +47,6 @@ namespace MANAGER
                 ContentSource = new Uri(@"/Pages/Parametre.xaml", UriKind.Relative);
                 MessageBox.Show("Le fichier de base de donnée (Config.xmls) est manquant dans la dossier de l'executable", "Erreur");
             }
-            Settings.Default.DatabaseConnectionString = "user id=SLAM3;password=pw;data source=localhost:1521/xe";
         }
     }
 }
