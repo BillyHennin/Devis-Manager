@@ -225,7 +225,7 @@ namespace MANAGER.Pages
                     var numberEstimate = result[1].ToString() == "" ? 1 : Convert.ToInt32(result[1]);
                     for(var i = 0; i < sizeList; i++)
                     {
-                        CommandOracle.Insert(estimate.Client.id, estimate[i], idEstimate, numberEstimate, date);
+                        CommandOracle.Insert(estimate.Client.id, estimate[i], idEstimate, numberEstimate, date, i );
                     }
                 }
                 result.Close();
