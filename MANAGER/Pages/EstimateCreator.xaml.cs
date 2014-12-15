@@ -218,32 +218,14 @@ namespace MANAGER.Pages
                 var oCommand = ConnectionOracle.OracleCommand(dataBaseConnection, querySelect);
                 var result = oCommand.ExecuteReader();
                 var sizeList = ListMerchandise.Count;
+                var date = DateTime.Now.ToString("dd/MM/yy");
                 while(result.Read())
                 {
                     var idEstimate = result[0].ToString() == "" ? 1 : Convert.ToInt32(result[0]);
                     var numberEstimate = result[1].ToString() == "" ? 1 : Convert.ToInt32(result[1]);
-                    var date = DateTime.Now.ToString("dd/MM/yy");
                     for(var i = 0; i < sizeList; i++)
                     {
-                        var Insert = ConnectionOracle.OracleCommandStored(dataBaseConnection, "INSERTDEVIS");
-
-                        var paramIdClient = new OracleParameter(":1", OracleDbType.Int32) {Value = estimate.Client.id};
-                        var paramIdMerchandise = new OracleParameter(":2", OracleDbType.Int32) {Value = estimate[i].id};
-                        var paramIdEstimate = new OracleParameter(":3", OracleDbType.Int32) {Value = ((idEstimate) + i + 1)};
-                        var paramQTE = new OracleParameter(":4", OracleDbType.Int32) {Value = estimate[i].quantite};
-                        var paramDate = new OracleParameter(":5", OracleDbType.Varchar2) {Value = date};
-                        var paramPrice = new OracleParameter(":6", OracleDbType.Varchar2) {Value = estimate[i].prix};
-                        var paramNumEstimate = new OracleParameter(":7", OracleDbType.Varchar2) {Value = ((numberEstimate) + 1)};
-
-                        Insert.Parameters.Add(paramIdClient);
-                        Insert.Parameters.Add(paramIdMerchandise);
-                        Insert.Parameters.Add(paramIdEstimate);
-                        Insert.Parameters.Add(paramQTE);
-                        Insert.Parameters.Add(paramDate);
-                        Insert.Parameters.Add(paramPrice);
-                        Insert.Parameters.Add(paramNumEstimate);
-
-                        Insert.ExecuteNonQuery();
+                        CommandOracle.Insert(estimate.Client.id, estimate[i], idEstimate, numberEstimate, date);
                     }
                 }
                 result.Close();
