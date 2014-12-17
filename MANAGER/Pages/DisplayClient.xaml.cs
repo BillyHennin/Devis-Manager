@@ -43,38 +43,23 @@ namespace MANAGER.Pages
             var date = DateTime.Now;
             try
             {
-                var OracleCommand = ConnectionOracle.OracleCommand("SELECT DISTINCT NUMERODEVIS FROM DEVIS WHERE ID_CLIENT = :1");
-                var paramIdClient = new OracleParameter(":1", OracleDbType.Int32) {Value = ((ComboboxItemClient) ComboBoxClient.SelectedItem).Value.id};
+                var Command = ConnectionOracle.OracleCommand("SELECT DISTINCT NUMERODEVIS FROM DEVIS WHERE ID_CLIENT = :1");
+                Command.Parameters.Add(new OracleParameter(":1", OracleDbType.Int32) {Value = ((ComboboxItemClient) ComboBoxClient.SelectedItem).Value.id});
+                var resultatNumeroDevis = Command.ExecuteReader();
 
-                OracleCommand.Parameters.Add(paramIdClient);
-
-                var resultatNumeroDevis = OracleCommand.ExecuteReader();
                 while(resultatNumeroDevis.Read())
                 {
-                    var OracleCommand2 =
-                        ConnectionOracle.OracleCommand("SELECT ID_MARCHANDISE, PRIXMARCHANDISE, QUANTITE, JOUR FROM DEVIS WHERE NUMERODEVIS = :1");
-                    var paramNumeroDevis = new OracleParameter(":1", OracleDbType.Int32) {Value = resultatNumeroDevis[0]};
-                    OracleCommand2.Parameters.Add(paramNumeroDevis);
-                    var resultatMerchandise = OracleCommand2.ExecuteReader();
+                    var Command2 =
+                        ConnectionOracle.OracleCommand("SELECT MARCHANDISE.ID_MARCHANDISE, MARCHANDISE.NOM, DEVIS.PRIXMARCHANDISE, DEVIS.QUANTITE, DEVIS.JOUR FROM MARCHANDISE, DEVIS WHERE DEVIS.ID_MARCHANDISE=MARCHANDISE.ID_MARCHANDISE AND DEVIS.NUMERODEVIS= :1");
+                    Command2.Parameters.Add(new OracleParameter(":1", OracleDbType.Int32) {Value = resultatNumeroDevis[0]});
+                    var resultatMerchandise = Command2.ExecuteReader();
                     var ListMerchandise2 = new List<Merchandise>();
                     while(resultatMerchandise.Read())
                     {
-                        totalPrice += Convert.ToInt32(resultatMerchandise[1]);
-                        date = Convert.ToDateTime(resultatMerchandise[3]);
-
-                        var merchandise = new Merchandise(Convert.ToInt32(resultatMerchandise[0]), null, Convert.ToInt32(resultatMerchandise[2]),
-                            Convert.ToInt32(resultatMerchandise[1]) / Convert.ToInt32(resultatMerchandise[2]));
-
-                        var oCommand3 = ConnectionOracle.OracleCommand("SELECT NOM, QUANTITE FROM MARCHANDISE WHERE ID_MARCHANDISE = :1");
-                        var paramIdMarchandise = new OracleParameter(":1", OracleDbType.Int32) {Value = resultatMerchandise[0]};
-
-                        oCommand3.Parameters.Add(paramIdMarchandise);
-                        var resultat3 = oCommand3.ExecuteReader();
-                        while(resultat3.Read())
-                        {
-                            merchandise.nom = resultat3[0].ToString();
-                        }
-                        resultat3.Close();
+                        totalPrice += Convert.ToInt32(resultatMerchandise[2]);
+                        date = Convert.ToDateTime(resultatMerchandise[4]);
+                        var merchandise = new Merchandise(Convert.ToInt32(resultatMerchandise[0]), resultatMerchandise[1].ToString(), Convert.ToInt32(resultatMerchandise[3]),
+                            Convert.ToInt32(resultatMerchandise[2]) / Convert.ToInt32(resultatMerchandise[3]));
                         ListMerchandise2.Add(merchandise);
                     }
                     resultatMerchandise.Close();
