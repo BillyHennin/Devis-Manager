@@ -7,9 +7,6 @@
 #region
 
 using System;
-using System.IO;
-using System.Windows;
-using System.Xml;
 
 using MANAGER.Properties;
 
@@ -27,6 +24,7 @@ namespace MANAGER
             //Initialisation de la bdd
             Settings.Default.DatabaseConnectionString = "user id=SLAM3;password=pw;data source=localhost:1521/xe";
 
+            /*
             var file = Environment.CurrentDirectory + "//Config//Config.xmls";
             if(File.Exists(file))
             {
@@ -45,7 +43,7 @@ namespace MANAGER
             {
                 ContentSource = new Uri(@"/Pages/Parametre.xaml", UriKind.Relative);
                 MessageBox.Show("Le fichier de base de donnée (Config.xmls) est manquant dans la dossier de l'executable", "Erreur");
-            }
+            }*/
         }
     }
 }

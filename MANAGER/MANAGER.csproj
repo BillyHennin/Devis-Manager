@@ -169,7 +169,6 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <None Include="Config\Version.xmls" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -182,11 +181,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Asset\appbar.currency.euro.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Config\Config.xmls">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">

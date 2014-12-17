@@ -32,11 +32,7 @@ namespace MANAGER.Pages
         private double TotalCost;
         private int qte;
 
-        private static bool IsInt(string str)
-        {
-            int value;
-            return (str.Trim() != string.Empty) && int.TryParse(str, out value);
-        }
+
 
         private void EstimateCreator_Loaded(object sender, RoutedEventArgs e)
         {
@@ -251,7 +247,6 @@ namespace MANAGER.Pages
             {
                 BorderBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor)),
                 HorizontalAlignment = HorizontalAlignment.Left,
-                VerticalAlignment = VerticalAlignment.Top,
                 Margin = new Thickness(2, 2, 1, 0),
                 BorderThickness = new Thickness(1),
                 Width = BorderEstimate.Width - 6,
@@ -263,7 +258,6 @@ namespace MANAGER.Pages
             panelMerchandise.Children.Add(new TextBlock
             {
                 HorizontalAlignment = HorizontalAlignment.Left,
-                VerticalAlignment = VerticalAlignment.Top,
                 Margin = thick,
                 Text = name,
                 Height = 16
@@ -274,7 +268,6 @@ namespace MANAGER.Pages
             {
                 Text = price + "€",
                 HorizontalAlignment = HorizontalAlignment.Left,
-                VerticalAlignment = VerticalAlignment.Top,
                 Margin = thick,
                 Height = 16
             });
@@ -284,7 +277,6 @@ namespace MANAGER.Pages
             {
                 Text = qte.ToString(CultureInfo.InvariantCulture),
                 HorizontalAlignment = HorizontalAlignment.Left,
-                VerticalAlignment = VerticalAlignment.Top,
                 Margin = thick,
                 Height = 16
             });
@@ -351,6 +343,12 @@ namespace MANAGER.Pages
             {
                 ErrorCost();
             }
+        }
+
+        private static bool IsInt(string str)
+        {
+            int value;
+            return (str.Trim() != string.Empty) && int.TryParse(str, out value);
         }
     }
 }
