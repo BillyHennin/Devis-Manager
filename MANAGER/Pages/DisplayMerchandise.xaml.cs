@@ -50,7 +50,7 @@ namespace MANAGER.Pages
             var nbMerchandise = ListMerchandiseN2.Count;
             for(var i = 0; i < nbMerchandise; i++)
             {
-                if(!ListMerchandiseN2[i].nom.Contains(merchandise))
+                if(!ListMerchandiseN2[i].nom.ToLower().Contains(merchandise.ToLower()))
                 {
                     continue;
                 }
