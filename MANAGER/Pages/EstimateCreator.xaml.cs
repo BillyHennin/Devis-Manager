@@ -32,8 +32,6 @@ namespace MANAGER.Pages
         private double TotalCost;
         private int qte;
 
-
-
         private void EstimateCreator_Loaded(object sender, RoutedEventArgs e)
         {
             var nbMerchandise = estimate.GetList.Count;
