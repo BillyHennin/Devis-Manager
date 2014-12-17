@@ -15,7 +15,6 @@ using System.Windows.Controls;
 using MANAGER.Classes;
 using MANAGER.ComboBox;
 using MANAGER.Connection;
-using MANAGER.Properties;
 
 using Oracle.ManagedDataAccess.Client;
 
@@ -23,32 +22,12 @@ using Oracle.ManagedDataAccess.Client;
 
 namespace MANAGER.Pages
 {
-    /// <summary>
-    ///   Logique d'interaction pour DisplayClient.xaml
-    /// </summary>
     public partial class DisplayClient
     {
-        /// <summary>
-        ///   A list of every merchandise contains in the cost estimate,
-        ///   changes every time the user change a value from a combobox (ComboBoxClient or ComboBoxDevis).
-        /// </summary>
         private static readonly List<Merchandise> ListMerchandise = new List<Merchandise>();
 
-        /// <summary>
-        ///   Database connection, here for future use.
-        /// </summary>
-        private readonly OracleConnection database = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
-        /// <summary>
-        ///   An object "estimate".
-        ///   changes every time the user change a value from a combobox (ComboBoxClient or ComboBoxDevis).
-        /// </summary>
         private readonly Estimate estimate = new Estimate(ListMerchandise);
 
-        /// <summary>
-        ///   When the user loaded the page, this methode is called.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void ComboBoxClient_OnInitialized(object sender, EventArgs e)
         {
             initComboClient();
@@ -64,17 +43,16 @@ namespace MANAGER.Pages
             var date = DateTime.Now;
             try
             {
-                var OracleCommand = ConnectionOracle.OracleCommand(database, "SELECT DISTINCT NUMERODEVIS FROM DEVIS WHERE ID_CLIENT = :1");
+                var OracleCommand = ConnectionOracle.OracleCommand("SELECT DISTINCT NUMERODEVIS FROM DEVIS WHERE ID_CLIENT = :1");
                 var paramIdClient = new OracleParameter(":1", OracleDbType.Int32) {Value = ((ComboboxItemClient) ComboBoxClient.SelectedItem).Value.id};
 
                 OracleCommand.Parameters.Add(paramIdClient);
-                database.Open();
 
                 var resultatNumeroDevis = OracleCommand.ExecuteReader();
                 while(resultatNumeroDevis.Read())
                 {
-                    var OracleCommand2 = ConnectionOracle.OracleCommand(database,
-                        "SELECT ID_MARCHANDISE, PRIXMARCHANDISE, QUANTITE, JOUR FROM DEVIS WHERE NUMERODEVIS = :1");
+                    var OracleCommand2 =
+                        ConnectionOracle.OracleCommand("SELECT ID_MARCHANDISE, PRIXMARCHANDISE, QUANTITE, JOUR FROM DEVIS WHERE NUMERODEVIS = :1");
                     var paramNumeroDevis = new OracleParameter(":1", OracleDbType.Int32) {Value = resultatNumeroDevis[0]};
                     OracleCommand2.Parameters.Add(paramNumeroDevis);
                     var resultatMerchandise = OracleCommand2.ExecuteReader();
@@ -87,7 +65,7 @@ namespace MANAGER.Pages
                         var merchandise = new Merchandise(Convert.ToInt32(resultatMerchandise[0]), null, Convert.ToInt32(resultatMerchandise[2]),
                             Convert.ToInt32(resultatMerchandise[1]) / Convert.ToInt32(resultatMerchandise[2]));
 
-                        var oCommand3 = ConnectionOracle.OracleCommand(database, "SELECT NOM, QUANTITE FROM MARCHANDISE WHERE ID_MARCHANDISE = :1");
+                        var oCommand3 = ConnectionOracle.OracleCommand("SELECT NOM, QUANTITE FROM MARCHANDISE WHERE ID_MARCHANDISE = :1");
                         var paramIdMarchandise = new OracleParameter(":1", OracleDbType.Int32) {Value = resultatMerchandise[0]};
 
                         oCommand3.Parameters.Add(paramIdMarchandise);
@@ -106,17 +84,15 @@ namespace MANAGER.Pages
                     totalPrice = 0;
                 }
                 resultatNumeroDevis.Close();
+               
             }
             catch(Exception caught)
             {
                 Console.WriteLine(caught.Message);
                 Console.Read();
             }
-            finally
-            {
-                database.Close();
-            }
 
+            PanelClientEstimate.Visibility = Visibility.Visible;
             BTN_Supprimer.Visibility = Visibility.Visible;
             PanelDevis.Children.Clear();
         }
@@ -126,8 +102,7 @@ namespace MANAGER.Pages
             const string query = "SELECT ID_CLIENT, EMAIL, DENOMINATION, TELEPHONE FROM CLIENT";
             try
             {
-                database.Open();
-                var oCommand = ConnectionOracle.OracleCommand(database, query);
+                var oCommand = ConnectionOracle.OracleCommand(query);
                 var resultat = oCommand.ExecuteReader();
                 while(resultat.Read())
                 {
@@ -144,19 +119,17 @@ namespace MANAGER.Pages
                 Console.WriteLine(caught.Message);
                 Console.Read();
             }
-            finally
-            {
-                database.Close();
-            }
         }
 
         private void ComboBoxEstimate_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             PanelDevis.Children.Clear();
+
             if(ComboBoxEstimate.Items.Count == 0)
             {
                 return;
             }
+
             var listMarchandise = ((ComboboxItemEstimate) ComboBoxEstimate.SelectedItem).Value.GetList;
             var taille = listMarchandise.Count;
             for(var i = 0; i < taille; i++)
@@ -184,7 +157,7 @@ namespace MANAGER.Pages
                 // Nom du produit
                 panelMarchandise.Children.Add(new TextBlock {Margin = thick, Text = text, Height = 16});
 
-                // Prix
+                // Quantité
                 panelMarchandise.Children.Add(new TextBlock
                 {
                     Text = "Quantité commandée : " + qte.ToString(CultureInfo.InvariantCulture),
@@ -192,13 +165,14 @@ namespace MANAGER.Pages
                     Height = 16
                 });
 
-                // Quantité
+                // Prix
                 panelMarchandise.Children.Add(new TextBlock {Text = prixMarchandise.ToString(CultureInfo.InvariantCulture) + "€", Margin = thick, Height = 16});
 
                 item.Border = bordure;
                 PanelDevis.Children.Add(bordure);
                 estimate.GetList.Add(item);
             }
+
             TotalTextBlock.Text = "Total du devis : " + ((ComboboxItemEstimate) ComboBoxEstimate.SelectedItem).Value.TotalPrix + "€";
         }
 
@@ -240,21 +214,16 @@ namespace MANAGER.Pages
         {
             try
             {
-                var commandeModif = ConnectionOracle.OracleCommandStored(database, "DELETECLIENT");
+                var commandeModif = ConnectionOracle.OracleCommandStored("DELETECLIENT");
                 var ID = ((ComboboxItemClient) ComboBoxClient.SelectedItem).Value.id;
                 var param1 = new OracleParameter(":1", OracleDbType.Int32) {Value = ID};
                 commandeModif.Parameters.Add(param1);
-                database.Open();
                 commandeModif.ExecuteNonQuery();
             }
             catch(Exception caught)
             {
                 Console.WriteLine(caught.Message);
                 Console.Read();
-            }
-            finally
-            {
-                database.Close();
             }
 
             ComboBoxClient.Items.Clear();

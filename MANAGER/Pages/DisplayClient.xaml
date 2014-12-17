@@ -25,10 +25,12 @@
                        Text="Le client :" />
             <ComboBox x:Name="ComboBoxClient" Grid.Column="1" Grid.ColumnSpan="5"
                       Grid.Row="0"
-                      Margin="0,10,0,0" BorderBrush="{DynamicResource Accent}" Initialized="ComboBoxClient_OnInitialized"
+                      Margin="0,10,0,0" BorderBrush="{DynamicResource Accent}"
+                      Initialized="ComboBoxClient_OnInitialized"
                       SelectionChanged="ComboBoxClient_SelectionChanged" />
             <Button x:Name="BTN_Supprimer" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1"
-                    Margin="9,5,67,-26" Content="Supprimer le client" BorderBrush="Red" Click="Button_Click" Visibility="Hidden" />
+                    Margin="9,5,67,-26" Content="Supprimer le client" BorderBrush="Red" Click="Button_Click"
+                    Visibility="Hidden" />
         </Grid>
         <Grid Height="80" Margin="268,-5,0,0" RenderTransformOrigin="0.488,0.287">
             <Grid.ColumnDefinitions>
@@ -38,11 +40,12 @@
             <Border Grid.Column="0" Grid.ColumnSpan="2"
                     Width="224" Height="248" Margin="0,10,10,-178" HorizontalAlignment="Right" VerticalAlignment="Top"
                     BorderThickness="1">
-                <StackPanel MinWidth="150" Margin="1,-4.5,-1,9">
+                <StackPanel x:Name="PanelClientEstimate" MinWidth="150" Margin="1,-4.5,-1,9" Visibility="Hidden">
                     <TextBlock Margin="-250,-27,-50,0" Style="{StaticResource Heading2}" TextWrapping="Wrap"
                                Text="Ses devis :" />
                     <ComboBox x:Name="ComboBoxEstimate" Height="22" Margin="-150,-35,239,0"
-                              BorderBrush="{DynamicResource Accent}" SelectionChanged="ComboBoxEstimate_SelectionChanged" />
+                              BorderBrush="{DynamicResource Accent}"
+                              SelectionChanged="ComboBoxEstimate_SelectionChanged" />
                     <TextBlock x:Name="TotalTextBlock" Height="19" Margin="-250,0,239,0" TextWrapping="Wrap"
                                Style="{StaticResource Heading2}" Text="" />
                 </StackPanel>
@@ -51,7 +54,8 @@
         <Grid>
             <Border x:Name="BorderDevis" Grid.Column="0" Width="326"
                     Height="277"
-                    Margin="10,-30,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="1" BorderBrush="{DynamicResource Accent}">
+                    Margin="10,-30,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="1"
+                    BorderBrush="{DynamicResource Accent}">
                 <ScrollViewer Margin="-1,-1,-94,1">
                     <StackPanel x:Name="PanelDevis" MinWidth="150" />
                 </ScrollViewer>

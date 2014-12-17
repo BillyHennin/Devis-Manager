@@ -28,14 +28,16 @@
                        Text="Le produit :" />
             <TextBox x:Name="TextBoxDevisQte" Grid.Column="1" Grid.ColumnSpan="5" Grid.Row="0"
                      Grid.RowSpan="2"
-                     Height="23" Margin="13,0,-26,0" VerticalAlignment="Bottom" BorderBrush="{DynamicResource Accent}" MaxLength="8" TextWrapping="Wrap"
+                     Height="23" Margin="13,0,-26,0" VerticalAlignment="Bottom" BorderBrush="{DynamicResource Accent}"
+                     MaxLength="8" TextWrapping="Wrap"
                      Text="" TabIndex="2" TextAlignment="Right" MaxLines="1" Grid.IsSharedSizeScope="True"
                      TextChanged="TextBoxDevisQte_TextChanged" />
         </Grid>
         <Grid>
             <Border x:Name="BorderEstimate" Grid.Column="0" Width="326"
                     Height="277"
-                    Margin="10,10,0,-69" HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="{DynamicResource Accent}" BorderThickness="1">
+                    Margin="10,10,0,-69" HorizontalAlignment="Left" VerticalAlignment="Top"
+                    BorderBrush="{DynamicResource Accent}" BorderThickness="1">
                 <ScrollViewer Margin="-1,-1,-94,1">
                     <StackPanel x:Name="PanelProduit" MinWidth="150" />
                 </ScrollViewer>

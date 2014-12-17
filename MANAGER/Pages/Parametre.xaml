@@ -24,7 +24,8 @@
             </Grid.RowDefinitions>
             <TextBlock Grid.Column="0" Grid.ColumnSpan="3" Width="161"
                        Margin="0,10,0,0"
-                       HorizontalAlignment="Left" Style="{StaticResource Heading2}" TextWrapping="Wrap" Text="La base de donnée :" />
+                       HorizontalAlignment="Left" Style="{StaticResource Heading2}" TextWrapping="Wrap"
+                       Text="La base de donnée :" />
             <ComboBox x:Name="ComboBoxClient" Grid.Column="2" Grid.ColumnSpan="4" Grid.Row="0"
                       Margin="54,10,-61,0"
                       BorderBrush="{DynamicResource Accent}" />
@@ -32,7 +33,8 @@
         <Grid x:Name="DevisGrid">
             <Border x:Name="BorderDevis" Grid.Column="0" Width="326"
                     Height="267"
-                    Margin="0,10,0,-59" HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="{DynamicResource Accent}" BorderThickness="1">
+                    Margin="0,10,0,-59" HorizontalAlignment="Left" VerticalAlignment="Top"
+                    BorderBrush="{DynamicResource Accent}" BorderThickness="1">
                 <ScrollViewer Margin="9">
                     <StackPanel x:Name="PanelDevis" MinWidth="150" />
                 </ScrollViewer>

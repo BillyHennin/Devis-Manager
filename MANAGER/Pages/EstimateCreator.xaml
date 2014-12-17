@@ -82,7 +82,8 @@
                                Grid.Row="1" Height="16" Margin="0,6,101,0" VerticalAlignment="Center" Text="Quantité :" />
                     <TextBox x:Name="TextBoxEstimateQte" Grid.Column="2" Grid.ColumnSpan="3"
                              Grid.Row="1" Height="23" Margin="25,0,-57,-4"
-                             VerticalAlignment="Bottom" BorderBrush="{DynamicResource Accent}" MaxLength="8" TextWrapping="Wrap"
+                             VerticalAlignment="Bottom" BorderBrush="{DynamicResource Accent}" MaxLength="8"
+                             TextWrapping="Wrap"
                              Text="1" TabIndex="2" TextChanged="TextBoxEstimateQte_TextChanged"
                              TextAlignment="Right" MaxLines="1" Grid.IsSharedSizeScope="True" />
                     <TextBlock Grid.Column="0"
@@ -97,7 +98,8 @@
                 <Grid>
                     <Border x:Name="BorderEstimate" Grid.Column="0" Width="450"
                             Height="411"
-                            Margin="300,-91,-405,0" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="1" BorderBrush="{DynamicResource Accent}">
+                            Margin="300,-91,-405,0" HorizontalAlignment="Left" VerticalAlignment="Top"
+                            BorderThickness="1" BorderBrush="{DynamicResource Accent}">
                         <ScrollViewer Margin="0,0,-94,0">
                             <StackPanel x:Name="PanelEstimate" MinWidth="150" />
                         </ScrollViewer>
@@ -118,14 +120,17 @@
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0"
                                Width="88" Height="22" Margin="1,-14,0,14" HorizontalAlignment="Left"
-                               VerticalAlignment="Bottom" Style="{StaticResource Heading2}" TextWrapping="Wrap" Text="Prix total :" />
+                               VerticalAlignment="Bottom" Style="{StaticResource Heading2}" TextWrapping="Wrap"
+                               Text="Prix total :" />
                     <Label x:Name="LabelTotalPrix"
                            Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="0" Width="83"
-                           Height="22" Margin="0,-10,0,10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Content="" />
+                           Height="22" Margin="0,-10,0,10" HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                           Content="" />
                     <Button x:Name="AjouterEstimate" Grid.Column="3" Grid.ColumnSpan="3"
                             Grid.Row="0"
                             Width="97" Height="26" Margin="51,-18,-7,14" HorizontalAlignment="Left"
-                            VerticalAlignment="Bottom" BorderBrush="{DynamicResource Accent}" Content="Ajouter" Click="BTNAddEstimate_click"
+                            VerticalAlignment="Bottom" BorderBrush="{DynamicResource Accent}" Content="Ajouter"
+                            Click="BTNAddEstimate_click"
                             IsEnabled="False" />
                 </Grid>
             </StackPanel>

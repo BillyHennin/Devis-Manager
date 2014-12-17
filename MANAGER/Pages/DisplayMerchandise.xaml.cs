@@ -16,7 +16,6 @@ using System.Windows.Media;
 
 using MANAGER.Classes;
 using MANAGER.Connection;
-using MANAGER.Properties;
 
 using Oracle.ManagedDataAccess.Client;
 
@@ -38,8 +37,6 @@ namespace MANAGER.Pages
         ///   A second list, for future use.
         /// </summary>
         private static readonly List<Merchandise> ListMerchandiseN2 = new List<Merchandise>();
-
-        private readonly OracleConnection database = ConnectionOracle.OracleDatabase(Settings.Default.DatabaseConnectionString);
 
         /// <summary>
         ///   When a user select a specific marchandise clear everything, then recreate it with what the user wants to see.
@@ -112,11 +109,6 @@ namespace MANAGER.Pages
             }
         }
 
-        /// <summary>
-        ///   If the use wants to search a specific merchandise.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void TextBoxDevisQte_TextChanged(object sender, TextChangedEventArgs e)
         {
             SelectMarchandiseLike(TextBoxDevisQte.Text == "" ? "" : TextBoxDevisQte.Text);
@@ -131,8 +123,7 @@ namespace MANAGER.Pages
             const string query = "SELECT * FROM MARCHANDISE WHERE ENVENTE = 1";
             try
             {
-                database.Open();
-                var oCommand = ConnectionOracle.OracleCommand(database, query);
+                var oCommand = ConnectionOracle.OracleCommand(query);
                 var resultat = oCommand.ExecuteReader();
                 while(resultat.Read())
                 {
@@ -197,10 +188,6 @@ namespace MANAGER.Pages
                 Console.WriteLine(caught.Message);
                 Console.Read();
             }
-            finally
-            {
-                database.Close();
-            }
         }
 
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -217,7 +204,7 @@ namespace MANAGER.Pages
 
         private void bouton_Click(object sender, EventArgs e)
         {
-            var commandeModif = new OracleCommand {CommandType = CommandType.StoredProcedure, Connection = database, CommandText = "DELETEPRODUIT"};
+            var commandeModif = new OracleCommand {CommandType = CommandType.StoredProcedure, CommandText = "DELETEPRODUIT"};
             var id = ((Button) sender).Tag.ToString();
 
             var param1 = new OracleParameter(":1", OracleDbType.Int32) {Value = id};
@@ -225,17 +212,13 @@ namespace MANAGER.Pages
 
             try
             {
-                database.Open();
                 commandeModif.ExecuteNonQuery();
             }
             catch(Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
-            finally
-            {
-                database.Close();
-            }
+
             var nbMerchandise = ListMerchandiseN2.Count;
             for(var i = 0; i < nbMerchandise; i++)
             {

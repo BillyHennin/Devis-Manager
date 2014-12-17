@@ -9,27 +9,43 @@
 using System;
 using System.Data;
 
+using MANAGER.Properties;
+
 using Oracle.ManagedDataAccess.Client;
 
 #endregion
 
 namespace MANAGER.Connection
 {
-    internal static class ConnectionOracle
+    public class ConnectionOracle
     {
-        public static OracleConnection OracleDatabase(String DatabaseConnectionString)
+        private static OracleConnection Connection;
+        private static Boolean ConnectionIsStarted;
+
+        private ConnectionOracle()
         {
-            return new OracleConnection(DatabaseConnectionString);
+            Connection = new OracleConnection(Settings.Default.DatabaseConnectionString);
+            Connection.Open();
+            ConnectionIsStarted = true;
         }
 
-        public static OracleCommand OracleCommand(OracleConnection db, string query)
+        public static OracleCommand OracleCommand(string query)
         {
-            return new OracleCommand {Connection = db, CommandText = query};
+            return new OracleCommand {Connection = GetConnection(), CommandText = query};
         }
 
-        public static OracleCommand OracleCommandStored(OracleConnection db, string query)
+        public static OracleCommand OracleCommandStored(string query)
         {
-            return new OracleCommand {CommandType = CommandType.StoredProcedure, Connection = db, CommandText = query};
+            return new OracleCommand {CommandType = CommandType.StoredProcedure, Connection = GetConnection(), CommandText = query};
+        }
+
+        private static OracleConnection GetConnection()
+        {
+            if(!ConnectionIsStarted)
+            {
+                new ConnectionOracle();
+            }
+            return Connection;
         }
     }
 }

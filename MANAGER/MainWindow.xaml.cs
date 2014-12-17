@@ -24,7 +24,6 @@ namespace MANAGER
     {
         private void ModernWindow_Initialized(object sender, EventArgs e)
         {
-
             //Initialisation de la bdd
             Settings.Default.DatabaseConnectionString = "user id=SLAM3;password=pw;data source=localhost:1521/xe";
 

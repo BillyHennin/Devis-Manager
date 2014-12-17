@@ -6,8 +6,6 @@
 
 #region
 
-using System.IO;
-using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -21,6 +19,7 @@ namespace MANAGER.Pages
     {
         private void Text_Loaded(object sender, RoutedEventArgs e)
         {
+            PanelMOTD.Children.Clear();
             var PreMOTD = "\r\nBienvenue dans l'application SIO2 - MANAGER pour la creation et la visualisation de devis."
                           + "\r\n\r\nA propos de l'application : "
                           + "\r\n\r\n\tCette application à été créée dans le cadre d'un projet de MANAGER. Le but était créer un application utilisant une base de données Oracle et de l'exploiter."
@@ -39,32 +38,9 @@ namespace MANAGER.Pages
                 BorderThickness = new Thickness(1),
                 Child = panelMessage
             };
-
-            var webRequest = WebRequest.Create(@"http://billyhennin.github.io/Devis-Manager/MOTD.json");
-            using(var response = webRequest.GetResponse())
-            {
-                using(var content = response.GetResponseStream())
-                {
-                    if(content != null)
-                    {
-                        using(var MOTD = new StreamReader(content))
-                        {
-                            panelMessage.Children.Add(new BbCodeBlock {Margin = thick, BbCode = PreMOTD});
-                            panelMessage.Children.Add(new BbCodeBlock {Margin = thick, BbCode = jsonToString(MOTD.ReadToEnd())});
-                        }
-                    }
-                    else
-                    {
-                        panelMessage.Children.Add(new TextBlock {Margin = thick, Text = "Erreur dans l'obtention du message du jour.", Height = 16});
-                    }
-                    PanelMOTD.Children.Add(border);
-                }
-            }
+            panelMessage.Children.Add(new BbCodeBlock { Margin = thick, BbCode = PreMOTD });
+            PanelMOTD.Children.Add(border);
         }
 
-        private static string jsonToString(string json)
-        {
-            return json;
-        }
     }
 }
