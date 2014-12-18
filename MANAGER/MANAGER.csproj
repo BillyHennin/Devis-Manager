@@ -80,6 +80,11 @@
     <Compile Include="Classes\Merchandise.cs" />
     <Compile Include="ComboBox\ComboboxItemEstimate.cs" />
     <Compile Include="ComboBox\ComboboxItemMerchandise.cs" />
+    <Compile Include="Connection\Connection.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Connection.settings</DependentUpon>
+    </Compile>
     <Compile Include="Connection\ConnectionOracle.cs" />
     <Compile Include="Pages\about.xaml.cs">
       <DependentUpon>about.xaml</DependentUpon>
@@ -164,6 +169,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Connection\Connection.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Connection.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -203,6 +212,9 @@
       <ProductName>SQL Server Compact 4.0 SP1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Config.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

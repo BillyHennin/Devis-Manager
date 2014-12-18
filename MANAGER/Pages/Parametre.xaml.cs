@@ -15,5 +15,10 @@ namespace MANAGER.Pages
         {
             InitializeComponent();
         }
+
+        private void ComboBoxDatabase_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        {
+
+        }
     }
 }

@@ -26,17 +26,17 @@
                        Margin="0,10,0,0"
                        HorizontalAlignment="Left" Style="{StaticResource Heading2}" TextWrapping="Wrap"
                        Text="La base de donnée :" />
-            <ComboBox x:Name="ComboBoxClient" Grid.Column="2" Grid.ColumnSpan="4" Grid.Row="0"
+            <ComboBox x:Name="ComboBoxDatabase" Grid.Column="2" Grid.ColumnSpan="4" Grid.Row="0"
                       Margin="54,10,-61,0"
-                      BorderBrush="{DynamicResource Accent}" />
+                      BorderBrush="{DynamicResource Accent}" Loaded="ComboBoxDatabase_Loaded" />
         </Grid>
-        <Grid x:Name="DevisGrid">
-            <Border x:Name="BorderDevis" Grid.Column="0" Width="326"
+        <Grid x:Name="DatabaseGrid">
+            <Border x:Name="DatabaseBorder" Grid.Column="0" Width="326"
                     Height="267"
                     Margin="0,10,0,-59" HorizontalAlignment="Left" VerticalAlignment="Top"
                     BorderBrush="{DynamicResource Accent}" BorderThickness="1">
                 <ScrollViewer Margin="9">
-                    <StackPanel x:Name="PanelDevis" MinWidth="150" />
+                    <StackPanel x:Name="DatabasePanel" MinWidth="150" />
                 </ScrollViewer>
             </Border>
         </Grid>

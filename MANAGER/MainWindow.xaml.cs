@@ -7,6 +7,9 @@
 #region
 
 using System;
+using System.IO;
+using System.Windows;
+using System.Xml;
 
 using MANAGER.Properties;
 
@@ -25,13 +28,13 @@ namespace MANAGER
             Settings.Default.DatabaseConnectionString = "user id=SLAM3;password=pw;data source=localhost:1521/xe";
 
             /*
-            var file = Environment.CurrentDirectory + "//Config//Config.xmls";
+            var file = Environment.CurrentDirectory + "//Config.xml";
             if(File.Exists(file))
             {
                 var xmlDoc = new XmlDocument();
                 xmlDoc.Load(file);
                 var node = xmlDoc.SelectSingleNode("/params");
-                node.Attributes["DatabaseType"].Value = "test";
+                node.Attributes["DatabaseType"].Value = "Oracle";
                 xmlDoc.Save(file);
 
                 if(Convert.ToInt32(node.Attributes["IsDatabaseCreated"].Value) == 0)
