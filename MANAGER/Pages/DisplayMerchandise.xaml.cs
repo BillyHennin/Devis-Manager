@@ -93,7 +93,7 @@ namespace MANAGER.Pages
                 var BTN_Delete = new Button
                 {
                     HorizontalAlignment = HorizontalAlignment.Right,
-                    Content = "Supprimer le client",
+                    Content = "Supprimer le produit",
                     Margin = new Thickness(9, -30, 67, 50),
                     BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00)),
                     Tag = newMerchandise
@@ -166,7 +166,7 @@ namespace MANAGER.Pages
                     var BTN_Delete = new Button
                     {
                         HorizontalAlignment = HorizontalAlignment.Right,
-                        Content = "Supprimer le client",
+                        Content = "Supprimer le produit",
                         Margin = new Thickness(9, -30, 67, 50),
                         BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00)),
                         Tag = newMerchandise
