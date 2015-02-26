@@ -2,14 +2,14 @@
                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                   xmlns:mui="http://firstfloorsoftware.com/ModernUI"
-
                   Title="Manager"
-                  MinWidth="550"
+                  MinWidth="750"
                   MinHeight="500"
                   ContentSource="/Pages/about.xaml"
-                  IsTitleVisible="True"
-                  ToolTip="{DynamicResource {x:Type ToolTip}}" Icon="Asset/appbar.currency.euro.png"
+                  Icon="Asset/appbar.currency.euro.png"
                   Initialized="                                                                                                                                                                                                                                                                                                                                                                                                       ModernWindow_Initialized"
+                  IsTitleVisible="True"
+                  ToolTip="{DynamicResource {x:Type ToolTip}}"
                   WindowState="Maximized">
 
     <mui:ModernWindow.TitleLinks>
