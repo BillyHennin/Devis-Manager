@@ -44,7 +44,7 @@ namespace MANAGER.Pages
 
         private void ComboBoxProduct_OnInitialized(object sender, EventArgs e)
         {
-            const string query = "SELECT * FROM MARCHANDISE WHERE ENVENTE = 1";
+            const string query = "SELECT * FROM MARCHANDISE WHERE ENVENTE = 1 AND QUANTITE > 0";
             try
             {
                 var oCommand = ConnectionOracle.OracleCommand(query);

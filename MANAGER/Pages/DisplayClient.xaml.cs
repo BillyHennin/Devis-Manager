@@ -41,6 +41,7 @@ namespace MANAGER.Pages
             var totalPrice = 0;
             var nbEstimate = 1;
             var date = DateTime.Now;
+            IFormatProvider culture = new System.Globalization.CultureInfo("fr-FR", true);
             try
             {
                 var Command = ConnectionOracle.OracleCommand("SELECT DISTINCT NUMERODEVIS FROM DEVIS WHERE ID_CLIENT = :1");
@@ -65,7 +66,11 @@ namespace MANAGER.Pages
                     }
                     resultatMerchandise.Close();
                     var estimate2 = new Estimate(ListMerchandise2) {TotalPrix = totalPrice, date = date};
-                    ComboBoxEstimate.Items.Add(new ComboboxItemEstimate {Text = "Devis n°" + nbEstimate + " - " + totalPrice + "€", Value = estimate2});
+                    ComboBoxEstimate.Items.Add(new ComboboxItemEstimate
+                    {
+                        Text = string.Format("Devis n° {0} - Date : {1} - Total : {2}€", nbEstimate, date.ToShortDateString(), totalPrice),
+                        Value = estimate2
+                    });
                     nbEstimate++;
                     totalPrice = 0;
                 }
