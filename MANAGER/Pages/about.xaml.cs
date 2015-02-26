@@ -38,9 +38,8 @@ namespace MANAGER.Pages
                 BorderThickness = new Thickness(1),
                 Child = panelMessage
             };
-            panelMessage.Children.Add(new BbCodeBlock { Margin = thick, BbCode = PreMOTD });
+            panelMessage.Children.Add(new BbCodeBlock {Margin = thick, BbCode = PreMOTD});
             PanelMOTD.Children.Add(border);
         }
-
     }
 }

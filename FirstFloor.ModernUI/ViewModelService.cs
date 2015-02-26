@@ -59,16 +59,8 @@ namespace FirstFloor.ModernUI
             var canAdd = true;
             var vms = vModels.Where(m => m.Value == type).Select(m => m.Key);
 
-            foreach(var vmTemp in vms)
-            {
-                if(vmTemp is IViewModel)
-                {
-                    var vm = vmTemp as IViewModel;
-                    if(vm.VmName == name)
-                    {
-                        canAdd = false;
-                    }
-                }
+            foreach(var vm in vms.OfType<IViewModel>().Select(vmTemp => vmTemp as IViewModel).Where(vm => vm.VmName == name)) {
+                canAdd = false;
             }
 
             if(canAdd)

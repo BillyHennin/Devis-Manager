@@ -208,7 +208,7 @@ namespace MANAGER.Pages
             TotalCost = 0;
             LabelTotalPrix.Content = "";
 
-            var id = ((Button)sender).Tag.ToString();
+            var id = ((Button) sender).Tag.ToString();
             var nbMerchandise = estimate.GetList.Count;
 
             for(var i = 0; i < nbMerchandise; i++)
@@ -253,22 +253,10 @@ namespace MANAGER.Pages
             };
 
             //Name
-            panelMerchandise.Children.Add(new TextBlock
-            {
-                HorizontalAlignment = HorizontalAlignment.Left,
-                Margin = thick,
-                Text = name,
-                Height = 16
-            });
+            panelMerchandise.Children.Add(new TextBlock {HorizontalAlignment = HorizontalAlignment.Left, Margin = thick, Text = name, Height = 16});
 
             // Price
-            panelMerchandise.Children.Add(new TextBlock
-            {
-                Text = price + "€",
-                HorizontalAlignment = HorizontalAlignment.Left,
-                Margin = thick,
-                Height = 16
-            });
+            panelMerchandise.Children.Add(new TextBlock {Text = price + "€", HorizontalAlignment = HorizontalAlignment.Left, Margin = thick, Height = 16});
 
             // Quantity
             panelMerchandise.Children.Add(new TextBlock

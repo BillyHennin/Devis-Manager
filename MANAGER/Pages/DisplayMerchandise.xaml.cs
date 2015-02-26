@@ -127,11 +127,8 @@ namespace MANAGER.Pages
                 var resultat = oCommand.ExecuteReader();
                 while(resultat.Read())
                 {
-                    var id = Convert.ToInt32(resultat[0]);
                     var text = resultat[1].ToString();
-                    var qte = "Quantitée en stock : " + Convert.ToInt32(resultat[3]);
-                    var prixMerchandise = Convert.ToInt32(resultat[2]) + "€";
-                    var newMerchandise = new Merchandise(id, text, Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]));
+                    var newMerchandise = new Merchandise(Convert.ToInt32(resultat[0]), text, Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]));
                     var panelMerchandise = new StackPanel();
                     var thick = new Thickness(5, 2, 0, 0);
 
@@ -153,12 +150,12 @@ namespace MANAGER.Pages
                     panelMerchandise.Children.Add(new TextBlock {Margin = thick, Text = text, Height = 16});
 
                     // Prix
-                    panelMerchandise.Children.Add(new TextBlock {Text = qte.ToString(CultureInfo.InvariantCulture), Margin = thick, Height = 16});
+                    panelMerchandise.Children.Add(new TextBlock {Text = "Quantitée en stock : " + Convert.ToInt32(resultat[3]), Margin = thick, Height = 16});
 
                     // Quantité
                     panelMerchandise.Children.Add(new TextBlock
                     {
-                        Text = prixMerchandise.ToString(CultureInfo.InvariantCulture),
+                        Text = Convert.ToInt32(resultat[2]) + "€",
                         Margin = new Thickness(5, 2, 0, 0),
                         Height = 16
                     });

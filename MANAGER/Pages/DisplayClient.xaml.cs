@@ -50,7 +50,8 @@ namespace MANAGER.Pages
                 while(resultatNumeroDevis.Read())
                 {
                     var Command2 =
-                        ConnectionOracle.OracleCommand("SELECT MARCHANDISE.ID_MARCHANDISE, MARCHANDISE.NOM, DEVIS.PRIXMARCHANDISE, DEVIS.QUANTITE, DEVIS.JOUR FROM MARCHANDISE, DEVIS WHERE DEVIS.ID_MARCHANDISE=MARCHANDISE.ID_MARCHANDISE AND DEVIS.NUMERODEVIS= :1");
+                        ConnectionOracle.OracleCommand(
+                            "SELECT MARCHANDISE.ID_MARCHANDISE, MARCHANDISE.NOM, DEVIS.PRIXMARCHANDISE, DEVIS.QUANTITE, DEVIS.JOUR FROM MARCHANDISE, DEVIS WHERE DEVIS.ID_MARCHANDISE=MARCHANDISE.ID_MARCHANDISE AND DEVIS.NUMERODEVIS= :1");
                     Command2.Parameters.Add(new OracleParameter(":1", OracleDbType.Int32) {Value = resultatNumeroDevis[0]});
                     var resultatMerchandise = Command2.ExecuteReader();
                     var ListMerchandise2 = new List<Merchandise>();
@@ -58,8 +59,8 @@ namespace MANAGER.Pages
                     {
                         totalPrice += Convert.ToInt32(resultatMerchandise[2]);
                         date = Convert.ToDateTime(resultatMerchandise[4]);
-                        var merchandise = new Merchandise(Convert.ToInt32(resultatMerchandise[0]), resultatMerchandise[1].ToString(), Convert.ToInt32(resultatMerchandise[3]),
-                            Convert.ToInt32(resultatMerchandise[2]) / Convert.ToInt32(resultatMerchandise[3]));
+                        var merchandise = new Merchandise(Convert.ToInt32(resultatMerchandise[0]), resultatMerchandise[1].ToString(),
+                            Convert.ToInt32(resultatMerchandise[3]), Convert.ToInt32(resultatMerchandise[2]) / Convert.ToInt32(resultatMerchandise[3]));
                         ListMerchandise2.Add(merchandise);
                     }
                     resultatMerchandise.Close();
@@ -69,7 +70,6 @@ namespace MANAGER.Pages
                     totalPrice = 0;
                 }
                 resultatNumeroDevis.Close();
-               
             }
             catch(Exception caught)
             {

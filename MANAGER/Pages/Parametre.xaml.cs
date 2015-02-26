@@ -4,6 +4,8 @@
 //  
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
+using System.Windows;
+
 namespace MANAGER.Pages
 {
     /// <summary>
@@ -16,9 +18,6 @@ namespace MANAGER.Pages
             InitializeComponent();
         }
 
-        private void ComboBoxDatabase_Loaded(object sender, System.Windows.RoutedEventArgs e)
-        {
-
-        }
+        private void ComboBoxDatabase_Loaded(object sender, RoutedEventArgs e) {}
     }
 }
