@@ -13,17 +13,29 @@
                   WindowState="Maximized">
 
     <mui:ModernWindow.TitleLinks>
-        <mui:Link DisplayName="A propos" Source="/Pages/about.xaml" />
+        <mui:Link DisplayName="About" Source="/Pages/about.xaml" />
         <mui:Link DisplayName="Apparence" Source="Pages/Appearance.xaml" />
         <mui:Link DisplayName="Parametres" Source="Pages/Parametre.xaml" />
     </mui:ModernWindow.TitleLinks>
 
     <mui:ModernWindow.MenuLinkGroups>
-        <mui:LinkGroup DisplayName="Cost estimate manager">
+        <mui:LinkGroup DisplayName="Cost estimate">
             <mui:LinkGroup.Links>
-                <mui:Link DisplayName="Cost estimate" Source="/Pages/EstimateCreator.xaml" />
-                <mui:Link DisplayName="Client" Source="/Pages/DisplayClient.xaml" />
-                <mui:Link DisplayName="Merchandise" Source="/Pages/DisplayMerchandise.xaml" />
+                <mui:Link DisplayName="Create a new cost estimate" Source="/Pages/EstimateCreator.xaml"/>
+                <mui:Link DisplayName="Display every cost estimate" Source="/Pages/DisplayMerchandise.xaml" />
+            </mui:LinkGroup.Links>
+        </mui:LinkGroup>
+
+        <mui:LinkGroup DisplayName="Client">
+            <mui:LinkGroup.Links>
+                <mui:Link DisplayName="Display clients" Source="/Pages/DisplayClient.xaml" />
+                <mui:Link DisplayName="Add a new client to the database" Source="/Pages/AddClient.xaml" />
+            </mui:LinkGroup.Links>
+        </mui:LinkGroup>
+        <mui:LinkGroup DisplayName="Merchandise">
+            <mui:LinkGroup.Links>
+                <mui:Link DisplayName="Display every merchandise" Source="/Pages/DisplayMerchandise.xaml" />
+                <mui:Link DisplayName="Add a new merchandise to the database" Source="/Pages/AddMerchandise.xaml" />
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
     </mui:ModernWindow.MenuLinkGroups>

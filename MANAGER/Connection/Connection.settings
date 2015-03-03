@@ -1,7 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)"
-              GeneratedClassNamespace="MANAGER.Connection" GeneratedClassName="Connection">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="MANAGER.Connection" GeneratedClassName="Connection">
   <Profiles />
   <Settings>
     <Setting Name="UserId" Type="System.String" Scope="User">
@@ -15,6 +13,9 @@
     </Setting>
     <Setting Name="Datasource" Type="System.String" Scope="User">
       <Value Profile="(Default)">localhost:1521/xe</Value>
+    </Setting>
+    <Setting Name="IsDatabaseSet" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

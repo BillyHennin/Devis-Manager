@@ -23,13 +23,9 @@ namespace MANAGER.Classes
         }
 
         public int id { get; set; }
-
         public string denomination { get; set; }
-
         public string telephone { get; set; }
-
         public string email { get; set; }
-
         public List<Estimate> listEstimate { get; set; }
     }
 }

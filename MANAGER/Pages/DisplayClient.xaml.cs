@@ -11,11 +11,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
-
 using MANAGER.Classes;
 using MANAGER.ComboBox;
 using MANAGER.Connection;
-
 using Oracle.ManagedDataAccess.Client;
 
 #endregion
@@ -25,12 +23,11 @@ namespace MANAGER.Pages
     public partial class DisplayClient
     {
         private static readonly List<Merchandise> ListMerchandise = new List<Merchandise>();
-
         private readonly Estimate estimate = new Estimate(ListMerchandise);
 
         private void ComboBoxClient_OnInitialized(object sender, EventArgs e)
         {
-            initComboClient();
+            InitComboClient();
         }
 
         private void ComboBoxClient_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -41,34 +38,45 @@ namespace MANAGER.Pages
             var totalPrice = 0;
             var nbEstimate = 1;
             var date = DateTime.Now;
-            IFormatProvider culture = new System.Globalization.CultureInfo("fr-FR", true);
             try
             {
-                var Command = ConnectionOracle.OracleCommand("SELECT DISTINCT NUMERODEVIS FROM DEVIS WHERE ID_CLIENT = :1");
-                Command.Parameters.Add(new OracleParameter(":1", OracleDbType.Int32) {Value = ((ComboboxItemClient) ComboBoxClient.SelectedItem).Value.id});
+                var Command =
+                    ConnectionOracle.OracleCommand("SELECT DISTINCT NUMERODEVIS FROM DEVIS WHERE ID_CLIENT = :ID_CLIENT");
+                Command.Parameters.Add(new OracleParameter(":ID_CLIENT", OracleDbType.Int32)
+                {
+                    Value = ((ComboboxItemClient) ComboBoxClient.SelectedItem).Value.id
+                });
                 var resultatNumeroDevis = Command.ExecuteReader();
 
-                while(resultatNumeroDevis.Read())
+                while (resultatNumeroDevis.Read())
                 {
                     var Command2 =
                         ConnectionOracle.OracleCommand(
-                            "SELECT MARCHANDISE.ID_MARCHANDISE, MARCHANDISE.NOM, DEVIS.PRIXMARCHANDISE, DEVIS.QUANTITE, DEVIS.JOUR FROM MARCHANDISE, DEVIS WHERE DEVIS.ID_MARCHANDISE=MARCHANDISE.ID_MARCHANDISE AND DEVIS.NUMERODEVIS= :1");
-                    Command2.Parameters.Add(new OracleParameter(":1", OracleDbType.Int32) {Value = resultatNumeroDevis[0]});
+                            "SELECT MARCHANDISE.ID_MARCHANDISE, MARCHANDISE.NOM, DEVIS.PRIXMARCHANDISE, DEVIS.QUANTITE, DEVIS.JOUR FROM MARCHANDISE, DEVIS WHERE DEVIS.ID_MARCHANDISE=MARCHANDISE.ID_MARCHANDISE AND DEVIS.NUMERODEVIS= :NUMERODEVIS");
+                    Command2.Parameters.Add(new OracleParameter(":NUMERODEVIS", OracleDbType.Int32)
+                    {
+                        Value = resultatNumeroDevis[0]
+                    });
                     var resultatMerchandise = Command2.ExecuteReader();
                     var ListMerchandise2 = new List<Merchandise>();
-                    while(resultatMerchandise.Read())
+                    while (resultatMerchandise.Read())
                     {
                         totalPrice += Convert.ToInt32(resultatMerchandise[2]);
                         date = Convert.ToDateTime(resultatMerchandise[4]);
-                        var merchandise = new Merchandise(Convert.ToInt32(resultatMerchandise[0]), resultatMerchandise[1].ToString(),
-                            Convert.ToInt32(resultatMerchandise[3]), Convert.ToInt32(resultatMerchandise[2]) / Convert.ToInt32(resultatMerchandise[3]));
+                        var merchandise = new Merchandise(Convert.ToInt32(resultatMerchandise[0]),
+                            resultatMerchandise[1].ToString(),
+                            Convert.ToInt32(resultatMerchandise[3]),
+                            // ReSharper disable once PossibleLossOfFraction
+                            Convert.ToInt32(resultatMerchandise[2])/Convert.ToInt32(resultatMerchandise[3]));
                         ListMerchandise2.Add(merchandise);
                     }
                     resultatMerchandise.Close();
                     var estimate2 = new Estimate(ListMerchandise2) {TotalPrix = totalPrice, date = date};
                     ComboBoxEstimate.Items.Add(new ComboboxItemEstimate
                     {
-                        Text = string.Format("Devis n° {0} - Date : {1} - Total : {2}€", nbEstimate, date.ToShortDateString(), totalPrice),
+                        Text =
+                            string.Format("Devis n° {0} - Date : {1} - Total : {2}€", nbEstimate,
+                                date.ToShortDateString(), totalPrice),
                         Value = estimate2
                     });
                     nbEstimate++;
@@ -76,7 +84,7 @@ namespace MANAGER.Pages
                 }
                 resultatNumeroDevis.Close();
             }
-            catch(Exception caught)
+            catch (Exception caught)
             {
                 Console.WriteLine(caught.Message);
                 Console.Read();
@@ -87,24 +95,26 @@ namespace MANAGER.Pages
             PanelDevis.Children.Clear();
         }
 
-        private void initComboClient()
+        private void InitComboClient()
         {
             const string query = "SELECT ID_CLIENT, EMAIL, DENOMINATION, TELEPHONE FROM CLIENT";
             try
             {
                 var oCommand = ConnectionOracle.OracleCommand(query);
                 var resultat = oCommand.ExecuteReader();
-                while(resultat.Read())
+                while (resultat.Read())
                 {
                     ComboBoxClient.Items.Add(new ComboboxItemClient
                     {
                         Text = resultat[2].ToString(),
-                        Value = new Client(Convert.ToInt32(resultat[0]), resultat[2].ToString(), resultat[1].ToString(), resultat[3].ToString())
+                        Value =
+                            new Client(Convert.ToInt32(resultat[0]), resultat[2].ToString(), resultat[1].ToString(),
+                                resultat[3].ToString())
                     });
                 }
                 resultat.Close();
             }
-            catch(Exception caught)
+            catch (Exception caught)
             {
                 Console.WriteLine(caught.Message);
                 Console.Read();
@@ -115,14 +125,14 @@ namespace MANAGER.Pages
         {
             PanelDevis.Children.Clear();
 
-            if(ComboBoxEstimate.Items.Count == 0)
+            if (ComboBoxEstimate.Items.Count == 0)
             {
                 return;
             }
 
             var listMarchandise = ((ComboboxItemEstimate) ComboBoxEstimate.SelectedItem).Value.GetList;
             var taille = listMarchandise.Count;
-            for(var i = 0; i < taille; i++)
+            for (var i = 0; i < taille; i++)
             {
                 var id = listMarchandise[i].id;
                 var text = listMarchandise[i].nom;
@@ -156,14 +166,20 @@ namespace MANAGER.Pages
                 });
 
                 // Prix
-                panelMarchandise.Children.Add(new TextBlock {Text = prixMarchandise.ToString(CultureInfo.InvariantCulture) + "€", Margin = thick, Height = 16});
+                panelMarchandise.Children.Add(new TextBlock
+                {
+                    Text = prixMarchandise.ToString(CultureInfo.InvariantCulture) + "€",
+                    Margin = thick,
+                    Height = 16
+                });
 
                 item.Border = bordure;
                 PanelDevis.Children.Add(bordure);
                 estimate.GetList.Add(item);
             }
 
-            TotalTextBlock.Text = "Total du devis : " + ((ComboboxItemEstimate) ComboBoxEstimate.SelectedItem).Value.TotalPrix + "€";
+            TotalTextBlock.Text = "Total du devis : " +
+                                  ((ComboboxItemEstimate) ComboBoxEstimate.SelectedItem).Value.TotalPrix + "€";
         }
 
         private void MenuClient_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -173,12 +189,12 @@ namespace MANAGER.Pages
             try
             {
                 var nbMarchandise = estimate.GetList.Count;
-                for(var i = 0; i < nbMarchandise; i++)
+                for (var i = 0; i < nbMarchandise; i++)
                 {
                     ListMerchandise[i].Border.Width = BorderDevis.Width - 5;
                 }
             }
-            catch(Exception caught)
+            catch (Exception caught)
             {
                 Console.WriteLine(caught.Message);
                 Console.Read();
@@ -189,12 +205,12 @@ namespace MANAGER.Pages
         {
             var nbMarchandise = estimate.GetList.Count;
 
-            if(nbMarchandise == 0)
+            if (nbMarchandise == 0)
             {
                 return;
             }
 
-            for(var i = 0; i < nbMarchandise; i++)
+            for (var i = 0; i < nbMarchandise; i++)
             {
                 estimate[i].Border.BorderBrush = BorderDevis.BorderBrush;
             }
@@ -210,14 +226,14 @@ namespace MANAGER.Pages
                 commandeModif.Parameters.Add(param1);
                 commandeModif.ExecuteNonQuery();
             }
-            catch(Exception caught)
+            catch (Exception caught)
             {
                 Console.WriteLine(caught.Message);
                 Console.Read();
             }
 
             ComboBoxClient.Items.Clear();
-            initComboClient();
+            InitComboClient();
         }
     }
 }

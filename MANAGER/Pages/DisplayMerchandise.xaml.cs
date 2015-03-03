@@ -13,10 +13,8 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-
 using MANAGER.Classes;
 using MANAGER.Connection;
-
 using Oracle.ManagedDataAccess.Client;
 
 #endregion
@@ -24,22 +22,22 @@ using Oracle.ManagedDataAccess.Client;
 namespace MANAGER.Pages
 {
     /// <summary>
-    ///   Logique d'interaction pour DisplayMerchandise.xaml
+    ///     Logique d'interaction pour DisplayMerchandise.xaml
     /// </summary>
     public partial class DisplayMerchandise
     {
         /// <summary>
-        ///   A list of all merchandise that are buyable
+        ///     A list of all merchandise that are buyable
         /// </summary>
         private static readonly List<Merchandise> ListMerchandise = new List<Merchandise>();
 
         /// <summary>
-        ///   A second list, for future use.
+        ///     A second list, for future use.
         /// </summary>
         private static readonly List<Merchandise> ListMerchandiseN2 = new List<Merchandise>();
 
         /// <summary>
-        ///   When a user select a specific marchandise clear everything, then recreate it with what the user wants to see.
+        ///     When a user select a specific marchandise clear everything, then recreate it with what the user wants to see.
         /// </summary>
         /// <param name="merchandise"></param>
         private void SelectMarchandiseLike(string merchandise)
@@ -48,9 +46,9 @@ namespace MANAGER.Pages
             ListMerchandise.Clear();
 
             var nbMerchandise = ListMerchandiseN2.Count;
-            for(var i = 0; i < nbMerchandise; i++)
+            for (var i = 0; i < nbMerchandise; i++)
             {
-                if(!ListMerchandiseN2[i].nom.ToLower().Contains(merchandise.ToLower()))
+                if (!ListMerchandiseN2[i].nom.ToLower().Contains(merchandise.ToLower()))
                 {
                     continue;
                 }
@@ -80,7 +78,12 @@ namespace MANAGER.Pages
                 panelMerchandise.Children.Add(new TextBlock {Margin = thick, Text = text, Height = 16});
 
                 // Prix
-                panelMerchandise.Children.Add(new TextBlock {Text = qte.ToString(CultureInfo.InvariantCulture), Margin = thick, Height = 16});
+                panelMerchandise.Children.Add(new TextBlock
+                {
+                    Text = qte.ToString(CultureInfo.InvariantCulture),
+                    Margin = thick,
+                    Height = 16
+                });
 
                 // Quantité
                 panelMerchandise.Children.Add(new TextBlock
@@ -125,10 +128,11 @@ namespace MANAGER.Pages
             {
                 var oCommand = ConnectionOracle.OracleCommand(query);
                 var resultat = oCommand.ExecuteReader();
-                while(resultat.Read())
+                while (resultat.Read())
                 {
                     var text = resultat[1].ToString();
-                    var newMerchandise = new Merchandise(Convert.ToInt32(resultat[0]), text, Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]));
+                    var newMerchandise = new Merchandise(Convert.ToInt32(resultat[0]), text,
+                        Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]));
                     var panelMerchandise = new StackPanel();
                     var thick = new Thickness(5, 2, 0, 0);
 
@@ -150,7 +154,12 @@ namespace MANAGER.Pages
                     panelMerchandise.Children.Add(new TextBlock {Margin = thick, Text = text, Height = 16});
 
                     // Prix
-                    panelMerchandise.Children.Add(new TextBlock {Text = "Quantitée en stock : " + Convert.ToInt32(resultat[3]), Margin = thick, Height = 16});
+                    panelMerchandise.Children.Add(new TextBlock
+                    {
+                        Text = "Quantitée en stock : " + Convert.ToInt32(resultat[3]),
+                        Margin = thick,
+                        Height = 16
+                    });
 
                     // Quantité
                     panelMerchandise.Children.Add(new TextBlock
@@ -180,7 +189,7 @@ namespace MANAGER.Pages
                 }
                 resultat.Close();
             }
-            catch(Exception caught)
+            catch (Exception caught)
             {
                 Console.WriteLine(caught.Message);
                 Console.Read();
@@ -193,7 +202,7 @@ namespace MANAGER.Pages
             BorderEstimate.Height = MenuMerchandise.ActualHeight - 70;
 
             var nbMerchandise = ListMerchandise.Count;
-            for(var i = 0; i < nbMerchandise; i++)
+            for (var i = 0; i < nbMerchandise; i++)
             {
                 ListMerchandise[i].Border.Width = BorderEstimate.Width - 5;
             }
@@ -201,7 +210,11 @@ namespace MANAGER.Pages
 
         private void bouton_Click(object sender, EventArgs e)
         {
-            var commandeModif = new OracleCommand {CommandType = CommandType.StoredProcedure, CommandText = "DELETEPRODUIT"};
+            var commandeModif = new OracleCommand
+            {
+                CommandType = CommandType.StoredProcedure,
+                CommandText = "DELETEPRODUIT"
+            };
             var id = ((Button) sender).Tag.ToString();
 
             var param1 = new OracleParameter(":1", OracleDbType.Int32) {Value = id};
@@ -211,15 +224,15 @@ namespace MANAGER.Pages
             {
                 commandeModif.ExecuteNonQuery();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
 
             var nbMerchandise = ListMerchandiseN2.Count;
-            for(var i = 0; i < nbMerchandise; i++)
+            for (var i = 0; i < nbMerchandise; i++)
             {
-                if(ListMerchandiseN2[i].ToString() == id)
+                if (ListMerchandiseN2[i].ToString() == id)
                 {
                     ListMerchandiseN2.Remove(ListMerchandiseN2[i]);
                 }

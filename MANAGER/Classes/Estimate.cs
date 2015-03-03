@@ -25,13 +25,17 @@ namespace MANAGER.Classes
         }
 
         public double TotalPrix { get; set; }
-
         public Client Client { get; set; }
-
         public DateTime date { get; set; }
 
-        public List<Merchandise> GetList { get { return _listMerchandise; } }
+        public List<Merchandise> GetList
+        {
+            get { return _listMerchandise; }
+        }
 
-        public Merchandise this[int i] { get { return GetList[i]; } }
+        public Merchandise this[int i]
+        {
+            get { return GetList[i]; }
+        }
     }
 }

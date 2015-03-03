@@ -1,13 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// This program is a private software, based on c# source code.
+// To sell or change credits of this software is forbidden,
+// except if someone approve it from MANAGER INC. team.
+//  
+// Copyrights (c) 2014 MANAGER INC. All rights reserved.
+
+using System;
 using System.Data;
-using System.Linq;
-using MANAGER.Properties;
 using System.Data.SqlClient;
+using MANAGER.Properties;
 
 namespace MANAGER.Connection
 {
-    class ConnectionSql
+    internal class ConnectionSql
     {
         private static SqlConnection Connection;
         private static Boolean ConnectionIsStarted;
@@ -26,12 +30,17 @@ namespace MANAGER.Connection
 
         public static SqlCommand SqlCommandStored(string query)
         {
-            return new SqlCommand {CommandType = CommandType.StoredProcedure, Connection = GetConnection(), CommandText = query};
+            return new SqlCommand
+            {
+                CommandType = CommandType.StoredProcedure,
+                Connection = GetConnection(),
+                CommandText = query
+            };
         }
 
         private static SqlConnection GetConnection()
         {
-            if(!ConnectionIsStarted)
+            if (!ConnectionIsStarted)
             {
                 new ConnectionSql();
             }

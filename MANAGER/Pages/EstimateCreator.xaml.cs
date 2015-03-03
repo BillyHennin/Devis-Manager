@@ -12,13 +12,12 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-
 using MANAGER.Classes;
 using MANAGER.ComboBox;
 using MANAGER.Connection;
 using MANAGER.Properties;
-
 using Oracle.ManagedDataAccess.Client;
+
 
 #endregion
 
@@ -29,13 +28,13 @@ namespace MANAGER.Pages
         private static readonly List<Merchandise> ListMerchandise = new List<Merchandise>();
         private static readonly List<Merchandise> ListMerchandiseN2 = new List<Merchandise>();
         private readonly Estimate estimate = new Estimate(ListMerchandise);
-        private double TotalCost;
         private int qte;
+        private double TotalCost;
 
         private void EstimateCreator_Loaded(object sender, RoutedEventArgs e)
         {
             var nbMerchandise = estimate.GetList.Count;
-            for(var i = 0; i < nbMerchandise; i++)
+            for (var i = 0; i < nbMerchandise; i++)
             {
                 estimate[i].Border.BorderBrush = Ajouter.BorderBrush;
             }
@@ -49,18 +48,19 @@ namespace MANAGER.Pages
             {
                 var oCommand = ConnectionOracle.OracleCommand(query);
                 var resultat = oCommand.ExecuteReader();
-                while(resultat.Read())
+                while (resultat.Read())
                 {
                     ComboBoxProduct.Items.Add(new ComboboxItemMerchandise
                     {
                         Text = resultat[1].ToString(),
                         Value =
-                            new Merchandise(Convert.ToInt32(resultat[0]), resultat[1].ToString(), Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]))
+                            new Merchandise(Convert.ToInt32(resultat[0]), resultat[1].ToString(),
+                                Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]))
                     });
                 }
                 resultat.Close();
             }
-            catch(Exception caught)
+            catch (Exception caught)
             {
                 Console.WriteLine(caught.Message);
                 Console.Read();
@@ -72,18 +72,19 @@ namespace MANAGER.Pages
         {
             try
             {
-                switch(qte)
+                switch (qte)
                 {
                     case 0:
                         ErrorCost();
                         break;
                     default:
-                        LabelPrice.Content = ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.prix * Convert.ToInt32(TextBoxEstimateQte.Text)
+                        LabelPrice.Content = ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.prix*
+                                             Convert.ToInt32(TextBoxEstimateQte.Text)
                                              + "€";
                         break;
                 }
             }
-            catch(Exception caught)
+            catch (Exception caught)
             {
                 Console.WriteLine(caught.Message);
                 Console.Read();
@@ -97,17 +98,19 @@ namespace MANAGER.Pages
             {
                 var Command = ConnectionOracle.OracleCommand(query);
                 var resultat = Command.ExecuteReader();
-                while(resultat.Read())
+                while (resultat.Read())
                 {
                     ComboBoxClient.Items.Add(new ComboboxItemClient
                     {
                         Text = resultat[2].ToString(),
-                        Value = new Client(Convert.ToInt32(resultat[0]), resultat[2].ToString(), resultat[1].ToString(), resultat[3].ToString())
+                        Value =
+                            new Client(Convert.ToInt32(resultat[0]), resultat[2].ToString(), resultat[1].ToString(),
+                                resultat[3].ToString())
                     });
                 }
                 resultat.Close();
             }
-            catch(Exception caught)
+            catch (Exception caught)
             {
                 Console.WriteLine(caught.Message);
                 Console.Read();
@@ -126,7 +129,7 @@ namespace MANAGER.Pages
             {
                 QteChanged();
             }
-            catch(Exception caught)
+            catch (Exception caught)
             {
                 Console.WriteLine(caught.Message);
                 Console.Read();
@@ -135,16 +138,18 @@ namespace MANAGER.Pages
 
         private void BTNAddFeed_click(object sender, RoutedEventArgs e)
         {
-            var merchandiseCost = Convert.ToInt32(LabelPrice.Content.ToString().Substring(0, LabelPrice.Content.ToString().Length - 1));
+            var merchandiseCost =
+                Convert.ToInt32(LabelPrice.Content.ToString().Substring(0, LabelPrice.Content.ToString().Length - 1));
             var nbMerchandise = estimate.GetList.Count;
-            for(var i = 0; i < nbMerchandise; i++)
+            for (var i = 0; i < nbMerchandise; i++)
             {
-                if(estimate[i].nom == ComboBoxProduct.Text)
+                if (estimate[i].nom == ComboBoxProduct.Text)
                 {
                     return;
                 }
             }
-            AddMerchandise(((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.id, ComboBoxProduct.Text, qte, merchandiseCost);
+            AddMerchandise(((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.id, ComboBoxProduct.Text, qte,
+                merchandiseCost);
             AjouterEstimate.IsEnabled = true;
         }
 
@@ -156,23 +161,20 @@ namespace MANAGER.Pages
                 var OracleCommand = ConnectionOracle.OracleCommand(querySelect);
                 var result = OracleCommand.ExecuteReader();
                 var sizeList = ListMerchandise.Count;
-                var date = DateTime.Now.ToString("dd/MM/yy");
-                while(result.Read())
+                while (result.Read())
                 {
                     var idEstimate = result[0].ToString() == "" ? 1 : Convert.ToInt32(result[0]) + 1;
                     var numberEstimate = result[1].ToString() == "" ? 1 : Convert.ToInt32(result[1]) + 1;
-                    for(var i = 0; i < sizeList; i++)
+                    for (var i = 0; i < sizeList; i++)
                     {
                         var Insert = ConnectionOracle.OracleCommandStored("INSERTDEVIS");
-
                         Insert.Parameters.Add(new OracleParameter(":1", OracleDbType.Int32) {Value = estimate.Client.id});
                         Insert.Parameters.Add(new OracleParameter(":2", OracleDbType.Int32) {Value = estimate[i].id});
                         Insert.Parameters.Add(new OracleParameter(":3", OracleDbType.Int32) {Value = ((idEstimate) + i)});
                         Insert.Parameters.Add(new OracleParameter(":4", OracleDbType.Int32) {Value = estimate[i].quantite});
-                        Insert.Parameters.Add(new OracleParameter(":5", OracleDbType.Varchar2) {Value = date});
+                        Insert.Parameters.Add(new OracleParameter(":5", OracleDbType.Varchar2) {Value = DateTime.Now.ToString("dd/MM/yy")});
                         Insert.Parameters.Add(new OracleParameter(":6", OracleDbType.Varchar2) {Value = estimate[i].prix});
                         Insert.Parameters.Add(new OracleParameter(":7", OracleDbType.Varchar2) {Value = (numberEstimate)});
-
                         Insert.ExecuteNonQuery();
                     }
                 }
@@ -197,7 +199,7 @@ namespace MANAGER.Pages
             BorderEstimate.Height = EstimateCreator.ActualHeight - 50;
 
             var nbMerchandise = estimate.GetList.Count;
-            for(var i = 0; i < nbMerchandise; i++)
+            for (var i = 0; i < nbMerchandise; i++)
             {
                 estimate[i].Border.Width = BorderEstimate.Width - 6;
             }
@@ -211,9 +213,9 @@ namespace MANAGER.Pages
             var id = ((Button) sender).Tag.ToString();
             var nbMerchandise = estimate.GetList.Count;
 
-            for(var i = 0; i < nbMerchandise; i++)
+            for (var i = 0; i < nbMerchandise; i++)
             {
-                if(ListMerchandise[i].ToString() != id)
+                if (ListMerchandise[i].ToString() != id)
                 {
                     ListMerchandiseN2.Add(ListMerchandise[i]);
                 }
@@ -224,26 +226,29 @@ namespace MANAGER.Pages
             PanelEstimate.Children.Clear();
             estimate.GetList.Clear();
 
-            for(var i = 0; i < nbMerchandise; i++)
+            for (var i = 0; i < nbMerchandise; i++)
             {
-                AddMerchandise(ListMerchandiseN2[i].id, ListMerchandiseN2[i].nom, ListMerchandiseN2[i].quantite, ListMerchandiseN2[i].prix);
+                AddMerchandise(ListMerchandiseN2[i].id, ListMerchandiseN2[i].nom, ListMerchandiseN2[i].quantite,
+                    ListMerchandiseN2[i].prix);
             }
             ListMerchandiseN2.Clear();
-            if(estimate.GetList.Count == 0)
+            if (estimate.GetList.Count == 0)
             {
                 AjouterEstimate.IsEnabled = false;
             }
         }
 
-        private void AddMerchandise(int id, string name, int qte, double price)
+        private void AddMerchandise(int id, string name, int quantity, double price)
         {
             var panelMerchandise = new StackPanel();
-            var newMerchandise = new Merchandise(id, name, qte, price);
+            var newMerchandise = new Merchandise(id, name, quantity, price);
             var thick = new Thickness(5, 2, 0, 0);
 
             var border = new Border
             {
-                BorderBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor)),
+                BorderBrush =
+                    // ReSharper disable once PossibleNullReferenceException
+                    new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor)),
                 HorizontalAlignment = HorizontalAlignment.Left,
                 Margin = new Thickness(2, 2, 1, 0),
                 BorderThickness = new Thickness(1),
@@ -253,15 +258,27 @@ namespace MANAGER.Pages
             };
 
             //Name
-            panelMerchandise.Children.Add(new TextBlock {HorizontalAlignment = HorizontalAlignment.Left, Margin = thick, Text = name, Height = 16});
+            panelMerchandise.Children.Add(new TextBlock
+            {
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Margin = thick,
+                Text = name,
+                Height = 16
+            });
 
             // Price
-            panelMerchandise.Children.Add(new TextBlock {Text = price + "€", HorizontalAlignment = HorizontalAlignment.Left, Margin = thick, Height = 16});
+            panelMerchandise.Children.Add(new TextBlock
+            {
+                Text = price + "€",
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Margin = thick,
+                Height = 16
+            });
 
             // Quantity
             panelMerchandise.Children.Add(new TextBlock
             {
-                Text = qte.ToString(CultureInfo.InvariantCulture),
+                Text = quantity.ToString(CultureInfo.InvariantCulture),
                 HorizontalAlignment = HorizontalAlignment.Left,
                 Margin = thick,
                 Height = 16
@@ -292,31 +309,36 @@ namespace MANAGER.Pages
             Ajouter.IsEnabled = false;
             LabelPrice.Foreground =
                 TextBoxEstimateQte.CaretBrush =
-                    TextBoxEstimateQte.SelectionBrush = TextBoxEstimateQte.BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00));
+                    TextBoxEstimateQte.SelectionBrush =
+                        TextBoxEstimateQte.BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00));
         }
 
         private void QteChanged()
         {
             qte = 0;
 
-            if(IsInt(TextBoxEstimateQte.Text))
+            if (IsInt(TextBoxEstimateQte.Text))
             {
                 var newQte = Convert.ToInt32(TextBoxEstimateQte.Text);
 
-                if(newQte <= 0)
+                if (newQte <= 0)
                 {
                     ErrorCost();
                 }
                 else
                 {
-                    if(ComboBoxProduct.Items.Count != 0)
+                    if (ComboBoxProduct.Items.Count != 0)
                     {
                         qte = newQte;
                         LabelPrice.Foreground = new SolidColorBrush(Color.FromRgb(0xC1, 0xC1, 0xC1));
-                        LabelPrice.Content = string.Format("{0}€", (((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.prix * qte));
+                        LabelPrice.Content = string.Format("{0}€",
+                            (((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.prix*qte));
                         TextBoxEstimateQte.BorderBrush =
                             TextBoxEstimateQte.CaretBrush =
-                                TextBoxEstimateQte.SelectionBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
+                                TextBoxEstimateQte.SelectionBrush =
+                                    new SolidColorBrush(
+                                        // ReSharper disable once PossibleNullReferenceException
+                                        (Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
                         Ajouter.IsEnabled = true;
                     }
                     else

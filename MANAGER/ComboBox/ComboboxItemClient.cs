@@ -13,7 +13,7 @@ using MANAGER.Classes;
 namespace MANAGER.ComboBox
 {
     /// <summary>
-    ///   Create it when you want to make a combobox that contains clients.
+    ///     Create it when you want to make a combobox that contains clients.
     /// </summary>
     internal class ComboboxItemClient
     {

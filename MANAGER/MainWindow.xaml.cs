@@ -7,43 +7,25 @@
 #region
 
 using System;
-
-using MANAGER.Properties;
+using System.Windows;
 
 #endregion
 
 namespace MANAGER
 {
     /// <summary>
-    ///   Logique d'interaction pour MainWindow.xaml
+    ///     Logique d'interaction pour MainWindow.xaml
     /// </summary>
     public partial class MainWindow
     {
         private void ModernWindow_Initialized(object sender, EventArgs e)
         {
             //Initialisation de la bdd
-            Settings.Default.DatabaseConnectionString = "user id=SLAM3;password=pw;data source=localhost:1521/xe";
+            Connection.Connection.Default.DatabaseConnectionString = "user id=SLAM3;password=pw;data source=localhost:1521/xe";
 
-            /*
-            var file = Environment.CurrentDirectory + "//Config.xml";
-            if(File.Exists(file))
-            {
-                var xmlDoc = new XmlDocument();
-                xmlDoc.Load(file);
-                var node = xmlDoc.SelectSingleNode("/params");
-                node.Attributes["DatabaseType"].Value = "Oracle";
-                xmlDoc.Save(file);
-
-                if(Convert.ToInt32(node.Attributes["IsDatabaseCreated"].Value) == 0)
-                {
-                    ContentSource = new Uri(@"/Pages/Parametre.xaml", UriKind.Relative);
-                }
-            }
-            else
-            {
-                ContentSource = new Uri(@"/Pages/Parametre.xaml", UriKind.Relative);
-                MessageBox.Show("Le fichier de base de donnée (Config.xmls) est manquant dans la dossier de l'executable", "Erreur");
-            }*/
+            if (Connection.Connection.Default.IsDatabaseSet) return;
+            ContentSource = new Uri(@"/Pages/Parametre.xaml", UriKind.Relative);
+            MessageBox.Show("La base de données utilisée pour l'application est introuvable, veuillez en choisir une", "Erreur");
         }
     }
 }

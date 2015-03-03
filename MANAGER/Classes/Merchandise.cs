@@ -24,13 +24,9 @@ namespace MANAGER.Classes
         }
 
         public Border Border { get; set; }
-
         public string nom { get; set; }
-
         public double prix { get; set; }
-
         public int quantite { get; set; }
-
         public int id { get; set; }
 
         public override string ToString()
