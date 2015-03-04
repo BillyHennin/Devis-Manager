@@ -21,9 +21,9 @@ namespace MANAGER
         private void ModernWindow_Initialized(object sender, EventArgs e)
         {
             //Initialisation de la bdd
-            Connection.Connection.Default.DatabaseConnectionString = "user id=SLAM3;password=pw;data source=localhost:1521/xe";
+            Properties.Connection.Default.DatabaseConnectionString = "user id=SLAM3;password=pw;data source=localhost:1521/xe";
 
-            if (Connection.Connection.Default.IsDatabaseSet) return;
+            if (Properties.Connection.Default.IsDatabaseSet) return;
             ContentSource = new Uri(@"/Pages/Parametre.xaml", UriKind.Relative);
             MessageBox.Show("La base de données utilisée pour l'application est introuvable, veuillez en choisir une", "Erreur");
         }

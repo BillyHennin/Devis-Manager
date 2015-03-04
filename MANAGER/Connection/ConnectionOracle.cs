@@ -22,7 +22,7 @@ namespace MANAGER.Connection
 
         private ConnectionOracle()
         {
-            Connection = new OracleConnection(Connection.Default.DatabaseConnectionString);
+            Connection = new OracleConnection(Properties.Connection.Default.DatabaseConnectionString);
             Connection.Open();
             ConnectionIsStarted = true;
         }

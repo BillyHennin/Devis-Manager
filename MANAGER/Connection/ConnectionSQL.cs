@@ -18,7 +18,7 @@ namespace MANAGER.Connection
 
         private ConnectionSql()
         {
-            Connection = new SqlConnection(Settings.Default.DatabaseConnectionString);
+            Connection = new SqlConnection(Properties.Connection.Default.DatabaseConnectionString);
             Connection.Open();
             ConnectionIsStarted = true;
         }
