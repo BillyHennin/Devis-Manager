@@ -189,10 +189,9 @@ namespace MANAGER.Pages
                 }
                 resultat.Close();
             }
-            catch (Exception caught)
+            catch
             {
-                Console.WriteLine(caught.Message);
-                Console.Read();
+                MessageBox.Show("Unable to connect to the database", "Error");
             }
         }
 
@@ -215,18 +214,18 @@ namespace MANAGER.Pages
                 CommandType = CommandType.StoredProcedure,
                 CommandText = "DELETEPRODUIT"
             };
-            var id = ((Button) sender).Tag.ToString();
+            var id = ((Button)sender).Tag.ToString();
 
-            var param1 = new OracleParameter(":1", OracleDbType.Int32) {Value = id};
-            commandeModif.Parameters.Add(param1);
+            var paramID = new OracleParameter(":1", OracleDbType.Int32) {Value = id};
+            commandeModif.Parameters.Add(paramID);
 
             try
             {
                 commandeModif.ExecuteNonQuery();
             }
-            catch (Exception ex)
+            catch
             {
-                Console.WriteLine(ex.Message);
+                MessageBox.Show("Unable to delete the merchandise", "Error");
             }
 
             var nbMerchandise = ListMerchandiseN2.Count;
