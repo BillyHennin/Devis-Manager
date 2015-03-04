@@ -27,7 +27,7 @@
             <TextBlock Grid.Column="0"
                        Margin="0,10,0,0"
                        Style="{StaticResource Heading2}"
-                       Text="Le client :"
+                       Text="Customer :"
                        TextWrapping="Wrap" />
             <ComboBox x:Name="ComboBoxClient"
                       Grid.Row="0"
@@ -41,10 +41,10 @@
                     Grid.Row="1"
                     Grid.Column="0"
                     Grid.ColumnSpan="3"
-                    Margin="9,5,67,-26"
+                    Margin="9,5,43,-26"
                     BorderBrush="Red"
                     Click="Button_Click"
-                    Content="Supprimer le client"
+                    Content="Delete the customer"
                     Visibility="Hidden" />
         </Grid>
         <Grid Height="80"
@@ -66,9 +66,9 @@
                             MinWidth="150"
                             Margin="1,-4.5,-1,9"
                             Visibility="Hidden">
-                    <TextBlock Margin="-450,-27,-50,0"
+                    <TextBlock Margin="-500,-27,-50,0"
                                Style="{StaticResource Heading2}"
-                               Text="Ses devis :"
+                               Text="His costs estimate :"
                                TextWrapping="Wrap" />
                     <ComboBox x:Name="ComboBoxEstimate"
                               Height="22"
@@ -77,7 +77,8 @@
                               SelectionChanged="ComboBoxEstimate_SelectionChanged" />
                     <TextBlock x:Name="TotalTextBlock"
                                Height="19"
-                               Margin="-250,0,239,0"
+                               Margin="-150,0,239,0"
+                               HorizontalAlignment="Right"
                                Style="{StaticResource Heading2}"
                                Text=""
                                TextWrapping="Wrap" />

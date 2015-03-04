@@ -21,15 +21,15 @@
     <mui:ModernWindow.MenuLinkGroups>
         <mui:LinkGroup DisplayName="Cost estimate">
             <mui:LinkGroup.Links>
-                <mui:Link DisplayName="Create a new cost estimate" Source="/Pages/EstimateCreator.xaml"/>
+                <mui:Link DisplayName="Create a new cost estimate" Source="/Pages/EstimateCreator.xaml" />
                 <mui:Link DisplayName="Display every cost estimate" Source="/Pages/DisplayEstimate.xaml" />
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
 
-        <mui:LinkGroup DisplayName="Client">
+        <mui:LinkGroup DisplayName="Customer">
             <mui:LinkGroup.Links>
-                <mui:Link DisplayName="Display clients" Source="/Pages/DisplayClient.xaml" />
-                <mui:Link DisplayName="Add a new client to the database" Source="/Pages/AddClient.xaml" />
+                <mui:Link DisplayName="Display customers" Source="/Pages/DisplayClient.xaml" />
+                <mui:Link DisplayName="Add a new customer to the database" Source="/Pages/AddClient.xaml" />
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
         <mui:LinkGroup DisplayName="Merchandise">

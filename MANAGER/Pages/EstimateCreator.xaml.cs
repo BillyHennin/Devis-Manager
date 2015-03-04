@@ -60,10 +60,10 @@ namespace MANAGER.Pages
                 }
                 resultat.Close();
             }
-            catch (Exception caught)
+            catch
             {
-                Console.WriteLine(caught.Message);
-                Console.Read();
+                MessageBox.Show("Unable to connect to the database", "Error");
+                return;
             }
             ComboBoxProduct.SelectedIndex = 0;
         }
@@ -78,9 +78,8 @@ namespace MANAGER.Pages
                         ErrorCost();
                         break;
                     default:
-                        LabelPrice.Content = ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.prix*
-                                             Convert.ToInt32(TextBoxEstimateQte.Text)
-                                             + "€";
+                        LabelPrice.Content = string.Format("{0}€", ((ComboboxItemMerchandise)ComboBoxProduct.SelectedItem).Value.prix *
+                                             Convert.ToInt32(TextBoxEstimateQte.Text));
                         break;
                 }
             }
@@ -110,10 +109,10 @@ namespace MANAGER.Pages
                 }
                 resultat.Close();
             }
-            catch (Exception caught)
+            catch
             {
-                Console.WriteLine(caught.Message);
-                Console.Read();
+                MessageBox.Show("Unable to connect to the database", "Error");
+                return;
             }
             ComboBoxClient.SelectedIndex = 0;
         }
@@ -131,6 +130,7 @@ namespace MANAGER.Pages
             }
             catch (Exception caught)
             {
+
                 Console.WriteLine(caught.Message);
                 Console.Read();
             }
@@ -182,14 +182,14 @@ namespace MANAGER.Pages
             }
             catch
             {
-                MessageBox.Show("Connexion à la base de donnée impossible.");
+                MessageBox.Show("Unable to connect to the Database.");
                 return;
             }
 
             PanelEstimate.Children.Clear();
             ListMerchandise.Clear();
             TotalCost = 0;
-            LabelTotalPrix.Content = "";
+            LabelTotalPrix.Text = "";
             AjouterEstimate.IsEnabled = false;
         }
 
@@ -208,7 +208,7 @@ namespace MANAGER.Pages
         private void BTN_Delete_Click(object sender, EventArgs e)
         {
             TotalCost = 0;
-            LabelTotalPrix.Content = "";
+            LabelTotalPrix.Text = "";
 
             var id = ((Button) sender).Tag.ToString();
             var nbMerchandise = estimate.GetList.Count;
@@ -269,7 +269,7 @@ namespace MANAGER.Pages
             // Price
             panelMerchandise.Children.Add(new TextBlock
             {
-                Text = price + "€",
+                Text = string.Format("{0}€", price),
                 HorizontalAlignment = HorizontalAlignment.Left,
                 Margin = thick,
                 Height = 16
@@ -287,7 +287,7 @@ namespace MANAGER.Pages
             var BTN_Delete = new Button
             {
                 HorizontalAlignment = HorizontalAlignment.Right,
-                Content = "Enlever le produit",
+                Content = "Delete the merchandise",
                 Margin = new Thickness(9, -30, 67, 50),
                 BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00)),
                 Tag = newMerchandise
@@ -300,12 +300,12 @@ namespace MANAGER.Pages
             PanelEstimate.Children.Add(border);
             estimate.GetList.Add(newMerchandise);
             TotalCost += price;
-            LabelTotalPrix.Content = TotalCost + "€";
+            LabelTotalPrix.Text = string.Format("Total : {0}€", TotalCost);
         }
 
         private void ErrorCost()
         {
-            LabelPrice.Content = "Erreur";
+            LabelPrice.Content = "Error";
             Ajouter.IsEnabled = false;
             LabelPrice.Foreground =
                 TextBoxEstimateQte.CaretBrush =

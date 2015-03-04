@@ -54,8 +54,8 @@ namespace MANAGER.Pages
                 }
                 var id = ListMerchandiseN2[i].id;
                 var text = ListMerchandiseN2[i].nom;
-                var qte = "Quantitée en stock : " + ListMerchandiseN2[i].quantite;
-                var prixMerchandise = ListMerchandiseN2[i].prix + "€";
+                var qte = string.Format("Quantity in stock : {0}", ListMerchandiseN2[i].quantite);
+                var prixMerchandise = string.Format("{0}€", ListMerchandiseN2[i].prix);
                 var newMerchandise = new Merchandise(id, text, ListMerchandiseN2[i].quantite, ListMerchandiseN2[i].prix);
                 var panelMerchandise = new StackPanel();
                 var thick = new Thickness(5, 2, 0, 0);
@@ -96,7 +96,7 @@ namespace MANAGER.Pages
                 var BTN_Delete = new Button
                 {
                     HorizontalAlignment = HorizontalAlignment.Right,
-                    Content = "Supprimer le produit",
+                    Content = "Delete the merchandise",
                     Margin = new Thickness(9, -30, 67, 50),
                     BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00)),
                     Tag = newMerchandise
@@ -156,7 +156,7 @@ namespace MANAGER.Pages
                     // Prix
                     panelMerchandise.Children.Add(new TextBlock
                     {
-                        Text = "Quantitée en stock : " + Convert.ToInt32(resultat[3]),
+                        Text = string.Format("Quantity in stock : {0}", resultat[3]),
                         Margin = thick,
                         Height = 16
                     });
@@ -164,7 +164,7 @@ namespace MANAGER.Pages
                     // Quantité
                     panelMerchandise.Children.Add(new TextBlock
                     {
-                        Text = Convert.ToInt32(resultat[2]) + "€",
+                        Text = string.Format("{0}€", resultat[2]),
                         Margin = new Thickness(5, 2, 0, 0),
                         Height = 16
                     });
@@ -172,7 +172,7 @@ namespace MANAGER.Pages
                     var BTN_Delete = new Button
                     {
                         HorizontalAlignment = HorizontalAlignment.Right,
-                        Content = "Supprimer le produit",
+                        Content = "Delete the merchandise",
                         Margin = new Thickness(9, -30, 67, 50),
                         BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00)),
                         Tag = newMerchandise

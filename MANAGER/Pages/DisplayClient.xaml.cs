@@ -46,16 +46,17 @@ namespace MANAGER.Pages
                 {
                     Value = ((ComboboxItemClient) ComboBoxClient.SelectedItem).Value.id
                 });
-                var resultatNumeroDevis = Command.ExecuteReader();
+                var resultCommand = Command.ExecuteReader();
 
-                while (resultatNumeroDevis.Read())
+                while (resultCommand.Read())
                 {
                     var Command2 =
                         ConnectionOracle.OracleCommand(
-                            "SELECT MARCHANDISE.ID_MARCHANDISE, MARCHANDISE.NOM, DEVIS.PRIXMARCHANDISE, DEVIS.QUANTITE, DEVIS.JOUR FROM MARCHANDISE, DEVIS WHERE DEVIS.ID_MARCHANDISE=MARCHANDISE.ID_MARCHANDISE AND DEVIS.NUMERODEVIS= :NUMERODEVIS");
+                            "SELECT MARCHANDISE.ID_MARCHANDISE, MARCHANDISE.NOM, DEVIS.PRIXMARCHANDISE, DEVIS.QUANTITE, DEVIS.JOUR "
+                            + "FROM MARCHANDISE, DEVIS WHERE DEVIS.ID_MARCHANDISE=MARCHANDISE.ID_MARCHANDISE AND DEVIS.NUMERODEVIS= :NUMERODEVIS");
                     Command2.Parameters.Add(new OracleParameter(":NUMERODEVIS", OracleDbType.Int32)
                     {
-                        Value = resultatNumeroDevis[0]
+                        Value = resultCommand[0]
                     });
                     var resultatMerchandise = Command2.ExecuteReader();
                     var ListMerchandise2 = new List<Merchandise>();
@@ -66,7 +67,6 @@ namespace MANAGER.Pages
                         var merchandise = new Merchandise(Convert.ToInt32(resultatMerchandise[0]),
                             resultatMerchandise[1].ToString(),
                             Convert.ToInt32(resultatMerchandise[3]),
-                            // ReSharper disable once PossibleLossOfFraction
                             Convert.ToInt32(resultatMerchandise[2])/Convert.ToInt32(resultatMerchandise[3]));
                         ListMerchandise2.Add(merchandise);
                     }
@@ -74,20 +74,17 @@ namespace MANAGER.Pages
                     var estimate2 = new Estimate(ListMerchandise2) {TotalPrix = totalPrice, date = date};
                     ComboBoxEstimate.Items.Add(new ComboboxItemEstimate
                     {
-                        Text =
-                            string.Format("Devis n° {0} - Date : {1} - Total : {2}€", nbEstimate,
-                                date.ToShortDateString(), totalPrice),
+                        Text = string.Format("Devis n° {0} - Date : {1} - Total : {2}€", nbEstimate, date.ToShortDateString(), totalPrice),
                         Value = estimate2
                     });
                     nbEstimate++;
                     totalPrice = 0;
                 }
-                resultatNumeroDevis.Close();
+                resultCommand.Close();
             }
-            catch (Exception caught)
+            catch
             {
-                Console.WriteLine(caught.Message);
-                Console.Read();
+                MessageBox.Show("Unable to connect to the database", "Error");
             }
 
             PanelClientEstimate.Visibility = Visibility.Visible;
@@ -114,10 +111,9 @@ namespace MANAGER.Pages
                 }
                 resultat.Close();
             }
-            catch (Exception caught)
+            catch
             {
-                Console.WriteLine(caught.Message);
-                Console.Read();
+                MessageBox.Show("Unable to connect to the database", "Error");
             }
         }
 
@@ -160,7 +156,7 @@ namespace MANAGER.Pages
                 // Quantité
                 panelMarchandise.Children.Add(new TextBlock
                 {
-                    Text = "Quantité commandée : " + qte.ToString(CultureInfo.InvariantCulture),
+                    Text = string.Format("Quantity Commanded : {0}",qte.ToString(CultureInfo.InvariantCulture)),
                     Margin = thick,
                     Height = 16
                 });
@@ -168,7 +164,7 @@ namespace MANAGER.Pages
                 // Prix
                 panelMarchandise.Children.Add(new TextBlock
                 {
-                    Text = prixMarchandise.ToString(CultureInfo.InvariantCulture) + "€",
+                    Text = string.Format("{0}€" ,prixMarchandise.ToString(CultureInfo.InvariantCulture)),
                     Margin = thick,
                     Height = 16
                 });
@@ -178,8 +174,7 @@ namespace MANAGER.Pages
                 estimate.GetList.Add(item);
             }
 
-            TotalTextBlock.Text = "Total du devis : " +
-                                  ((ComboboxItemEstimate) ComboBoxEstimate.SelectedItem).Value.TotalPrix + "€";
+            TotalTextBlock.Text = string.Format("Total : {0}€",((ComboboxItemEstimate) ComboBoxEstimate.SelectedItem).Value.TotalPrix);
         }
 
         private void MenuClient_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -196,6 +191,8 @@ namespace MANAGER.Pages
             }
             catch (Exception caught)
             {
+                //On initialisation it don't works so here's a try/catch.
+                    //Need to figure out how to bypass it since it's not useful.
                 Console.WriteLine(caught.Message);
                 Console.Read();
             }
@@ -221,15 +218,13 @@ namespace MANAGER.Pages
             try
             {
                 var commandeModif = ConnectionOracle.OracleCommandStored("DELETECLIENT");
-                var ID = ((ComboboxItemClient) ComboBoxClient.SelectedItem).Value.id;
-                var param1 = new OracleParameter(":1", OracleDbType.Int32) {Value = ID};
-                commandeModif.Parameters.Add(param1);
+                var CustomerId = new OracleParameter(":1", OracleDbType.Int32) {Value = ((ComboboxItemClient) ComboBoxClient.SelectedItem).Value.id};
+                commandeModif.Parameters.Add(CustomerId);
                 commandeModif.ExecuteNonQuery();
             }
-            catch (Exception caught)
+            catch
             {
-                Console.WriteLine(caught.Message);
-                Console.Read();
+                MessageBox.Show("Unable to delete the customer", "Error");
             }
 
             ComboBoxClient.Items.Clear();
