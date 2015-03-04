@@ -22,7 +22,7 @@
         <mui:LinkGroup DisplayName="Cost estimate">
             <mui:LinkGroup.Links>
                 <mui:Link DisplayName="Create a new cost estimate" Source="/Pages/EstimateCreator.xaml"/>
-                <mui:Link DisplayName="Display every cost estimate" Source="/Pages/DisplayMerchandise.xaml" />
+                <mui:Link DisplayName="Display every cost estimate" Source="/Pages/DisplayEstimate.xaml" />
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
 

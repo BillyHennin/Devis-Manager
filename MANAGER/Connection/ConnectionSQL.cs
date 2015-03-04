@@ -7,7 +7,6 @@
 using System;
 using System.Data;
 using System.Data.SqlClient;
-using MANAGER.Properties;
 
 namespace MANAGER.Connection
 {
