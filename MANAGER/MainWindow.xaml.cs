@@ -14,7 +14,7 @@ using System.Windows;
 namespace MANAGER
 {
     /// <summary>
-    ///     Logique d'interaction pour MainWindow.xaml
+    ///   Logique d'interaction pour MainWindow.xaml
     /// </summary>
     public partial class MainWindow
     {
@@ -23,9 +23,12 @@ namespace MANAGER
             //Initialisation de la bdd
             Properties.Connection.Default.DatabaseConnectionString = "user id=SLAM3;password=pw;data source=localhost:1521/xe";
 
-            if (Properties.Connection.Default.IsDatabaseSet) return;
+            if(Properties.Connection.Default.IsDatabaseSet)
+            {
+                return;
+            }
             ContentSource = new Uri(@"/Pages/Parametre.xaml", UriKind.Relative);
-            MessageBox.Show("La base de données utilisée pour l'application est introuvable, veuillez en choisir une", "Erreur");
+            //MessageBox.Show(Localisation.Localisation.Box_DBFail, Localisation.Localisation.Box_Error, MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }

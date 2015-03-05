@@ -1,6 +1,7 @@
 ﻿<Page x:Class="MANAGER.Pages.DisplayMerchandise"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:LocalResources="clr-namespace:MANAGER.Localisation"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       x:Name="MenuMerchandise"
@@ -29,7 +30,7 @@
                        Grid.ColumnSpan="3"
                        Margin="0,10,78,0"
                        Style="{StaticResource Heading2}"
-                       Text="The merchandise :"
+                       Text="{x:Static LocalResources:Localisation.DM_Merchandise}"
                        TextWrapping="Wrap" />
             <TextBox x:Name="TextBoxDevisQte"
                      Grid.Row="0"

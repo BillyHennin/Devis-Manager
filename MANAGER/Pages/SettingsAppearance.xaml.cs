@@ -13,7 +13,7 @@ using MANAGER.ViewModels;
 namespace MANAGER.Pages
 {
     /// <summary>
-    ///     Logique d'interaction pour SettingsAppearance.xaml
+    ///   Logique d'interaction pour SettingsAppearance.xaml
     /// </summary>
     public partial class SettingsAppearance
     {

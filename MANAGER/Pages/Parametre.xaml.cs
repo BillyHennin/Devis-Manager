@@ -9,7 +9,7 @@ using System.Windows;
 namespace MANAGER.Pages
 {
     /// <summary>
-    ///     Logique d'interaction pour Parametre.xaml
+    ///   Logique d'interaction pour Parametre.xaml
     /// </summary>
     public partial class Parametre
     {
@@ -18,8 +18,6 @@ namespace MANAGER.Pages
             InitializeComponent();
         }
 
-        private void ComboBoxDatabase_Loaded(object sender, RoutedEventArgs e)
-        {
-        }
+        private void ComboBoxDatabase_Loaded(object sender, RoutedEventArgs e) {}
     }
 }

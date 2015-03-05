@@ -49,8 +49,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>Asset\ico.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>MANAGER.App</StartupObject>
@@ -86,6 +85,16 @@
     <Compile Include="Classes\Merchandise.cs" />
     <Compile Include="ComboBox\ComboboxItemEstimate.cs" />
     <Compile Include="ComboBox\ComboboxItemMerchandise.cs" />
+    <Compile Include="Localisation\LocalisationEn.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LocalisationEn.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Localisation\Localisation.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Localisation.resx</DependentUpon>
+    </Compile>
     <Compile Include="Pages\AddClient.xaml.cs">
       <DependentUpon>AddClient.xaml</DependentUpon>
     </Compile>
@@ -102,8 +111,8 @@
     </Compile>
     <Compile Include="Connection\ConnectionOracle.cs" />
     <Compile Include="Connection\ConnectionSQL.cs" />
-    <Compile Include="Pages\about.xaml.cs">
-      <DependentUpon>about.xaml</DependentUpon>
+    <Compile Include="Pages\About.xaml.cs">
+      <DependentUpon>About.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\DisplayClient.xaml.cs">
       <DependentUpon>DisplayClient.xaml</DependentUpon>
@@ -132,7 +141,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Pages\about.xaml">
+    <Page Include="Pages\About.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -193,8 +202,16 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
+    <EmbeddedResource Include="Localisation\Localisation.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Localisation.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Localisation\LocalisationEn.resx">
       <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>LocalisationEn.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="Properties\Connection.settings">
@@ -241,6 +258,9 @@
       <ProductName>SQL Server Compact 4.0 SP1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Asset\ico.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

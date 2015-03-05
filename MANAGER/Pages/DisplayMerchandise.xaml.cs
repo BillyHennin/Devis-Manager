@@ -13,8 +13,10 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+
 using MANAGER.Classes;
 using MANAGER.Connection;
+
 using Oracle.ManagedDataAccess.Client;
 
 #endregion
@@ -22,22 +24,22 @@ using Oracle.ManagedDataAccess.Client;
 namespace MANAGER.Pages
 {
     /// <summary>
-    ///     Logique d'interaction pour DisplayMerchandise.xaml
+    ///   Logique d'interaction pour DisplayMerchandise.xaml
     /// </summary>
     public partial class DisplayMerchandise
     {
         /// <summary>
-        ///     A list of all merchandise that are buyable
+        ///   A list of all merchandise that are buyable
         /// </summary>
         private static readonly List<Merchandise> ListMerchandise = new List<Merchandise>();
 
         /// <summary>
-        ///     A second list, for future use.
+        ///   A second list, for future use.
         /// </summary>
         private static readonly List<Merchandise> ListMerchandiseN2 = new List<Merchandise>();
 
         /// <summary>
-        ///     When a user select a specific marchandise clear everything, then recreate it with what the user wants to see.
+        ///   When a user select a specific marchandise clear everything, then recreate it with what the user wants to see.
         /// </summary>
         /// <param name="merchandise"></param>
         private void SelectMarchandiseLike(string merchandise)
@@ -46,15 +48,15 @@ namespace MANAGER.Pages
             ListMerchandise.Clear();
 
             var nbMerchandise = ListMerchandiseN2.Count;
-            for (var i = 0; i < nbMerchandise; i++)
+            for(var i = 0; i < nbMerchandise; i++)
             {
-                if (!ListMerchandiseN2[i].nom.ToLower().Contains(merchandise.ToLower()))
+                if(!ListMerchandiseN2[i].nom.ToLower().Contains(merchandise.ToLower()))
                 {
                     continue;
                 }
                 var id = ListMerchandiseN2[i].id;
                 var text = ListMerchandiseN2[i].nom;
-                var qte = string.Format("Quantity in stock : {0}", ListMerchandiseN2[i].quantite);
+                var qte = string.Format(Localisation.Localisation.DM_Stock, ListMerchandiseN2[i].quantite);
                 var prixMerchandise = string.Format("{0}€", ListMerchandiseN2[i].prix);
                 var newMerchandise = new Merchandise(id, text, ListMerchandiseN2[i].quantite, ListMerchandiseN2[i].prix);
                 var panelMerchandise = new StackPanel();
@@ -78,12 +80,7 @@ namespace MANAGER.Pages
                 panelMerchandise.Children.Add(new TextBlock {Margin = thick, Text = text, Height = 16});
 
                 // Prix
-                panelMerchandise.Children.Add(new TextBlock
-                {
-                    Text = qte.ToString(CultureInfo.InvariantCulture),
-                    Margin = thick,
-                    Height = 16
-                });
+                panelMerchandise.Children.Add(new TextBlock {Text = qte.ToString(CultureInfo.InvariantCulture), Margin = thick, Height = 16});
 
                 // Quantité
                 panelMerchandise.Children.Add(new TextBlock
@@ -96,7 +93,7 @@ namespace MANAGER.Pages
                 var BTN_Delete = new Button
                 {
                     HorizontalAlignment = HorizontalAlignment.Right,
-                    Content = "Delete the merchandise",
+                    Content = Localisation.Localisation.EC_DeleteMerchandise,
                     Margin = new Thickness(9, -30, 67, 50),
                     BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00)),
                     Tag = newMerchandise
@@ -128,11 +125,10 @@ namespace MANAGER.Pages
             {
                 var oCommand = ConnectionOracle.OracleCommand(query);
                 var resultat = oCommand.ExecuteReader();
-                while (resultat.Read())
+                while(resultat.Read())
                 {
                     var text = resultat[1].ToString();
-                    var newMerchandise = new Merchandise(Convert.ToInt32(resultat[0]), text,
-                        Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]));
+                    var newMerchandise = new Merchandise(Convert.ToInt32(resultat[0]), text, Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]));
                     var panelMerchandise = new StackPanel();
                     var thick = new Thickness(5, 2, 0, 0);
 
@@ -154,25 +150,15 @@ namespace MANAGER.Pages
                     panelMerchandise.Children.Add(new TextBlock {Margin = thick, Text = text, Height = 16});
 
                     // Prix
-                    panelMerchandise.Children.Add(new TextBlock
-                    {
-                        Text = string.Format("Quantity in stock : {0}", resultat[3]),
-                        Margin = thick,
-                        Height = 16
-                    });
+                    panelMerchandise.Children.Add(new TextBlock {Text = string.Format("Quantity in stock : {0}", resultat[3]), Margin = thick, Height = 16});
 
                     // Quantité
-                    panelMerchandise.Children.Add(new TextBlock
-                    {
-                        Text = string.Format("{0}€", resultat[2]),
-                        Margin = new Thickness(5, 2, 0, 0),
-                        Height = 16
-                    });
+                    panelMerchandise.Children.Add(new TextBlock {Text = string.Format("{0}€", resultat[2]), Margin = new Thickness(5, 2, 0, 0), Height = 16});
 
                     var BTN_Delete = new Button
                     {
                         HorizontalAlignment = HorizontalAlignment.Right,
-                        Content = "Delete the merchandise",
+                        Content = Localisation.Localisation.EC_DeleteMerchandise,
                         Margin = new Thickness(9, -30, 67, 50),
                         BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00)),
                         Tag = newMerchandise
@@ -191,7 +177,7 @@ namespace MANAGER.Pages
             }
             catch
             {
-                MessageBox.Show("Unable to connect to the database", "Error");
+                MessageBox.Show(Localisation.Localisation.Box_DBFail, Localisation.Localisation.Box_Error, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -201,7 +187,7 @@ namespace MANAGER.Pages
             BorderEstimate.Height = MenuMerchandise.ActualHeight - 70;
 
             var nbMerchandise = ListMerchandise.Count;
-            for (var i = 0; i < nbMerchandise; i++)
+            for(var i = 0; i < nbMerchandise; i++)
             {
                 ListMerchandise[i].Border.Width = BorderEstimate.Width - 5;
             }
@@ -209,12 +195,8 @@ namespace MANAGER.Pages
 
         private void bouton_Click(object sender, EventArgs e)
         {
-            var commandeModif = new OracleCommand
-            {
-                CommandType = CommandType.StoredProcedure,
-                CommandText = "DELETEPRODUIT"
-            };
-            var id = ((Button)sender).Tag.ToString();
+            var commandeModif = new OracleCommand {CommandType = CommandType.StoredProcedure, CommandText = "DELETEPRODUIT"};
+            var id = ((Button) sender).Tag.ToString();
 
             var paramID = new OracleParameter(":1", OracleDbType.Int32) {Value = id};
             commandeModif.Parameters.Add(paramID);
@@ -225,13 +207,13 @@ namespace MANAGER.Pages
             }
             catch
             {
-                MessageBox.Show("Unable to delete the merchandise", "Error");
+                MessageBox.Show(Localisation.Localisation.Box_DBFail, Localisation.Localisation.Box_Error, MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             var nbMerchandise = ListMerchandiseN2.Count;
-            for (var i = 0; i < nbMerchandise; i++)
+            for(var i = 0; i < nbMerchandise; i++)
             {
-                if (ListMerchandiseN2[i].ToString() == id)
+                if(ListMerchandiseN2[i].ToString() == id)
                 {
                     ListMerchandiseN2.Remove(ListMerchandiseN2[i]);
                 }

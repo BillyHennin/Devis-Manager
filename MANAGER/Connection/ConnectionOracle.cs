@@ -8,6 +8,7 @@
 
 using System;
 using System.Data;
+
 using Oracle.ManagedDataAccess.Client;
 
 #endregion
@@ -33,17 +34,12 @@ namespace MANAGER.Connection
 
         public static OracleCommand OracleCommandStored(string query)
         {
-            return new OracleCommand
-            {
-                CommandType = CommandType.StoredProcedure,
-                Connection = GetConnection(),
-                CommandText = query
-            };
+            return new OracleCommand {CommandType = CommandType.StoredProcedure, Connection = GetConnection(), CommandText = query};
         }
 
         private static OracleConnection GetConnection()
         {
-            if (!ConnectionIsStarted)
+            if(!ConnectionIsStarted)
             {
                 new ConnectionOracle();
             }

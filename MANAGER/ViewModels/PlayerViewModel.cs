@@ -24,7 +24,7 @@ namespace MANAGER.ViewModels
         public PlayerViewModel(string fragment)
         {
             VmName = fragment;
-            ViewModelService.Current.AddViewModel(this, typeof (PlayerViewModel));
+            ViewModelService.Current.AddViewModel(this, typeof(PlayerViewModel));
         }
 
         public string ImageSource
@@ -32,7 +32,7 @@ namespace MANAGER.ViewModels
             get { return imageSource; }
             set
             {
-                if (imageSource == value)
+                if(imageSource == value)
                 {
                     return;
                 }
@@ -46,7 +46,7 @@ namespace MANAGER.ViewModels
             get { return titleSource; }
             set
             {
-                if (titleSource == value)
+                if(titleSource == value)
                 {
                     return;
                 }
@@ -60,7 +60,7 @@ namespace MANAGER.ViewModels
             get { return descSource; }
             set
             {
-                if (descSource == value)
+                if(descSource == value)
                 {
                     return;
                 }
@@ -74,7 +74,7 @@ namespace MANAGER.ViewModels
             get { return infoSource; }
             set
             {
-                if (infoSource == value)
+                if(infoSource == value)
                 {
                     return;
                 }
@@ -88,7 +88,7 @@ namespace MANAGER.ViewModels
             get { return installSource; }
             set
             {
-                if (installSource == value)
+                if(installSource == value)
                 {
                     return;
                 }

@@ -29,17 +29,12 @@ namespace MANAGER.Connection
 
         public static SqlCommand SqlCommandStored(string query)
         {
-            return new SqlCommand
-            {
-                CommandType = CommandType.StoredProcedure,
-                Connection = GetConnection(),
-                CommandText = query
-            };
+            return new SqlCommand {CommandType = CommandType.StoredProcedure, Connection = GetConnection(), CommandText = query};
         }
 
         private static SqlConnection GetConnection()
         {
-            if (!ConnectionIsStarted)
+            if(!ConnectionIsStarted)
             {
                 new ConnectionSql();
             }
