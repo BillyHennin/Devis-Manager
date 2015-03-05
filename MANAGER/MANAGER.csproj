@@ -89,11 +89,13 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>LocalisationEn.resx</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Localisation\Localisation.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Localisation.resx</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Pages\AddClient.xaml.cs">
       <DependentUpon>AddClient.xaml</DependentUpon>
@@ -205,10 +207,12 @@
     <EmbeddedResource Include="Localisation\Localisation.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Localisation.Designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Localisation\LocalisationEn.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>LocalisationEn.Designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
