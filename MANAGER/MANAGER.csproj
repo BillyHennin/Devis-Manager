@@ -55,9 +55,8 @@
     <StartupObject>MANAGER.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DocumentFormat.OpenXml">
-      <HintPath>..\packages\DocumentFormat.OpenXml.2.5\lib\DocumentFormat.OpenXml.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="INIFileParser">
+      <HintPath>..\packages\ini-parser.2.1.1\lib\INIFileParser.dll</HintPath>
     </Reference>
     <Reference Include="Oracle.ManagedDataAccess">
       <HintPath>..\packages\odp.net.managed.121.1.2\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
@@ -85,23 +84,10 @@
     <Compile Include="Classes\Merchandise.cs" />
     <Compile Include="ComboBox\ComboboxItemEstimate.cs" />
     <Compile Include="ComboBox\ComboboxItemMerchandise.cs" />
-    <Compile Include="Localisation\Language\LocalisationFr.Designer.cs">
-      <DependentUpon>LocalisationFr.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Localisation\Language\LocalisationEn.Designer.cs">
-      <DependentUpon>LocalisationEn.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Localisation\Localisation.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Localisation.resx</DependentUpon>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Pages\AddClient.xaml.cs">
       <DependentUpon>AddClient.xaml</DependentUpon>
@@ -210,25 +196,17 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Localisation\Language\LocalisationFr.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>LocalisationFr.Designer.cs</LastGenOutput>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Localisation\Language\LocalisationEn.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>LocalisationEn.Designer.cs</LastGenOutput>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
     <EmbeddedResource Include="Localisation\Localisation.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Localisation.Designer.cs</LastGenOutput>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Language\English.lang">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\Connection.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Connection.Designer.cs</LastGenOutput>
@@ -277,6 +255,7 @@
   <ItemGroup>
     <Resource Include="Asset\ico.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

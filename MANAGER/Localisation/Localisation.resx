@@ -213,4 +213,22 @@
   <data name="PM_SelectLanguage" xml:space="preserve">
     <value>Select your language : </value>
   </data>
+  <data name="AB_MOTD1" xml:space="preserve">
+    <value>Welcome to the SIO-MANAGER application for the creation and viewing of esrimates.</value>
+  </data>
+  <data name="AB_MOTD2" xml:space="preserve">
+    <value>About this app :</value>
+  </data>
+  <data name="AB_MOTD3" xml:space="preserve">
+    <value>This application was created as part of a MANAGER project.</value>
+  </data>
+  <data name="AB_MOTD4" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AB_MOTD5" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AB_MOTD6" xml:space="preserve">
+    <value />
+  </data>
 </root>

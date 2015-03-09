@@ -61,6 +61,60 @@ namespace MANAGER.Localisation {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Welcome to the SIO-MANAGER application for the creation and viewing of esrimates..
+        /// </summary>
+        public static string AB_MOTD1 {
+            get {
+                return ResourceManager.GetString("AB_MOTD1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à About this app :.
+        /// </summary>
+        public static string AB_MOTD2 {
+            get {
+                return ResourceManager.GetString("AB_MOTD2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à This application was created as part of a MANAGER project..
+        /// </summary>
+        public static string AB_MOTD3 {
+            get {
+                return ResourceManager.GetString("AB_MOTD3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à .
+        /// </summary>
+        public static string AB_MOTD4 {
+            get {
+                return ResourceManager.GetString("AB_MOTD4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à .
+        /// </summary>
+        public static string AB_MOTD5 {
+            get {
+                return ResourceManager.GetString("AB_MOTD5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à .
+        /// </summary>
+        public static string AB_MOTD6 {
+            get {
+                return ResourceManager.GetString("AB_MOTD6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à English.
         /// </summary>
         public static string ActiveLangage {

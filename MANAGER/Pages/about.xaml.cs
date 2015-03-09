@@ -20,13 +20,12 @@ namespace MANAGER.Pages
         private void Text_Loaded(object sender, RoutedEventArgs e)
         {
             PanelMOTD.Children.Clear();
-            var PreMOTD = "\r\nBienvenue dans l'application SIO2 - MANAGER pour la creation et la visualisation de devis."
-                          + "\r\n\r\nA propos de l'application : "
-                          + "\r\n\r\n\tCette application à été créée dans le cadre d'un projet de MANAGER. Le but était créer un application utilisant une base de données Oracle et de l'exploiter."
-                          + "\r\n\tAvec cette application vous serez capable de creer des devis, de visualiser vos devis et de voir la liste de produit que vous disposez."
-                          + "\r\n\tL'application que vous utilisez actuellement est open-source et est disponible [url='https://github.com/BillyHennin/Devis-Manager']ici (GitHub)[/url]."
-                          + "\r\n\r\nMessage du jour : \r\n \r\n";
 
+            var PreMOTD = string.Format("\r\n{0}\r\n\r\n{1}\r\n\r\n\t{2}\r\n\t{3}{4}\r\n\t{5}\r\n\r\n{6}"
+                , Localisation.Localisation.AB_MOTD1, Localisation.Localisation.AB_MOTD2, 
+                Localisation.Localisation.AB_MOTD3, Localisation.Localisation.AB_MOTD4, Localisation.Localisation.AB_MOTD5, 
+                "[url='https://github.com/BillyHennin/Devis-Manager']GitHub[/url].", Localisation.Localisation.AB_MOTD6);
+            
             var thick = new Thickness(5, 2, 0, 0);
 
             var panelMessage = new StackPanel();
