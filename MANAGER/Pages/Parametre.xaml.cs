@@ -38,8 +38,13 @@ namespace MANAGER.Pages
             //TODO : Changer les strings
             var parser = new FileIniDataParser();
             var data = parser.ReadFile(Directory.GetCurrentDirectory() + "\\Language\\"+ComboBoxLang.SelectedItem+".lang");
+            MessageBox.Show(data["Localisation"]["PM_SelectLanguage"]);
+            MessageBox.Show(Localisation.Localisation.PM_SelectLanguage);
+            
+            Localisation.Localisation.PM_SelectLanguage = data["Localisation"]["PM_SelectLanguage"];
 
-            MessageBox.Show(data.ToString());
+            MessageBox.Show(Localisation.Localisation.PM_SelectLanguage);
+
         }
     }
 }

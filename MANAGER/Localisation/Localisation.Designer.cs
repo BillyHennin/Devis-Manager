@@ -36,7 +36,8 @@ namespace MANAGER.Localisation {
         ///   Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager
+        {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MANAGER.Localisation.Localisation", typeof(Localisation).Assembly);
@@ -63,7 +64,7 @@ namespace MANAGER.Localisation {
         /// <summary>
         ///   Recherche une chaîne localisée semblable à Welcome to the SIO-MANAGER application for the creation and viewing of esrimates..
         /// </summary>
-        public static string AB_MOTD1 {
+        public static string AB_MOTD1 { set{}
             get {
                 return ResourceManager.GetString("AB_MOTD1", resourceCulture);
             }
@@ -397,9 +398,11 @@ namespace MANAGER.Localisation {
         ///   Recherche une chaîne localisée semblable à Select your language : .
         /// </summary>
         public static string PM_SelectLanguage {
+            
             get {
                 return ResourceManager.GetString("PM_SelectLanguage", resourceCulture);
             }
+            set { this["PM_SelectLanguage"] = value; }
         }
     }
 }
