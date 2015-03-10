@@ -37,11 +37,9 @@ namespace MANAGER.Pages
             //TODO : Recuperer les valeurs .ini
             //TODO : Changer les strings
             var parser = new FileIniDataParser();
-            var data = parser.ReadFile(Directory.GetCurrentDirectory() + "\\Language"+ComboBoxLang.SelectedItem+".lang");
-            foreach(var test in data)
-            {
-                
-            }
+            var data = parser.ReadFile(Directory.GetCurrentDirectory() + "\\Language\\"+ComboBoxLang.SelectedItem+".lang");
+
+            MessageBox.Show(data.ToString());
         }
     }
 }
