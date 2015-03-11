@@ -398,11 +398,9 @@ namespace MANAGER.Localisation {
         ///   Recherche une chaîne localisée semblable à Select your language : .
         /// </summary>
         public static string PM_SelectLanguage {
-            
             get {
                 return ResourceManager.GetString("PM_SelectLanguage", resourceCulture);
             }
-            set { this["PM_SelectLanguage"] = value; }
         }
     }
 }
