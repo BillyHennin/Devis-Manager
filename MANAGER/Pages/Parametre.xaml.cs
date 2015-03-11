@@ -25,7 +25,7 @@ namespace MANAGER.Pages
 
         private void ComboBoxLang_Loaded(object sender, RoutedEventArgs e)
         {
-            var files = Directory.GetFiles(Directory.GetCurrentDirectory()+"\\Language", "*.lang");
+            var files = Directory.GetFiles(Directory.GetCurrentDirectory() + "\\Language", "*.lang");
             foreach(var file in files)
             {
                 ComboBoxLang.Items.Add(file.Split('.')[0].Split('\\').Last());
@@ -37,7 +37,7 @@ namespace MANAGER.Pages
             //TODO : Recuperer les valeurs .ini
             //TODO : Changer les strings
             var parser = new FileIniDataParser();
-            var data = parser.ReadFile(Directory.GetCurrentDirectory() + "\\Language\\"+ComboBoxLang.SelectedItem+".lang");
+            var data = parser.ReadFile(Directory.GetCurrentDirectory() + "\\Language\\" + ComboBoxLang.SelectedItem + ".lang");
             MessageBox.Show(data["Localisation"]["PM_SelectLanguage"]);
             MessageBox.Show(Localisation.Localisation.PM_SelectLanguage);
 

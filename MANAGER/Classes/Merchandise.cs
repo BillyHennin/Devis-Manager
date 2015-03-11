@@ -15,7 +15,7 @@ namespace MANAGER.Classes
 {
     public class Merchandise
     {
-        public Merchandise(int id, string nom, int quantite, double price, int categoryID )
+        public Merchandise(int id, string nom, int quantite, double price, int categoryID)
         {
             this.id = id;
             this.nom = nom;

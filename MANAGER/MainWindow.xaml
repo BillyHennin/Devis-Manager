@@ -22,21 +22,27 @@
     <mui:ModernWindow.MenuLinkGroups>
         <mui:LinkGroup DisplayName="{x:Static LocalResources:Localisation.Link_CE}">
             <mui:LinkGroup.Links>
-                <mui:Link DisplayName="{x:Static LocalResources:Localisation.Link_CreateCE}" Source="/Pages/EstimateCreator.xaml" />
-                <mui:Link DisplayName="{x:Static LocalResources:Localisation.Link_DisplayCE}" Source="/Pages/DisplayEstimate.xaml" />
+                <mui:Link DisplayName="{x:Static LocalResources:Localisation.Link_CreateCE}"
+                          Source="/Pages/EstimateCreator.xaml" />
+                <mui:Link DisplayName="{x:Static LocalResources:Localisation.Link_DisplayCE}"
+                          Source="/Pages/DisplayEstimate.xaml" />
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
 
         <mui:LinkGroup DisplayName="{x:Static LocalResources:Localisation.Link_Customer}">
             <mui:LinkGroup.Links>
-                <mui:Link DisplayName="{x:Static LocalResources:Localisation.Link_DisplayCustomer}" Source="/Pages/DisplayClient.xaml" />
-                <mui:Link DisplayName="{x:Static LocalResources:Localisation.Link_CreateCustomer}" Source="/Pages/AddClient.xaml" />
+                <mui:Link DisplayName="{x:Static LocalResources:Localisation.Link_DisplayCustomer}"
+                          Source="/Pages/DisplayClient.xaml" />
+                <mui:Link DisplayName="{x:Static LocalResources:Localisation.Link_CreateCustomer}"
+                          Source="/Pages/AddClient.xaml" />
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
         <mui:LinkGroup DisplayName="{x:Static LocalResources:Localisation.Link_Merchandise}">
             <mui:LinkGroup.Links>
-                <mui:Link DisplayName="{x:Static LocalResources:Localisation.Link_DisplayMerchandise}" Source="/Pages/DisplayMerchandise.xaml" />
-                <mui:Link DisplayName="{x:Static LocalResources:Localisation.Link_CreateMerchandise}" Source="/Pages/AddMerchandise.xaml" />
+                <mui:Link DisplayName="{x:Static LocalResources:Localisation.Link_DisplayMerchandise}"
+                          Source="/Pages/DisplayMerchandise.xaml" />
+                <mui:Link DisplayName="{x:Static LocalResources:Localisation.Link_CreateMerchandise}"
+                          Source="/Pages/AddMerchandise.xaml" />
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
     </mui:ModernWindow.MenuLinkGroups>

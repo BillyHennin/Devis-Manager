@@ -27,11 +27,13 @@ namespace MANAGER.Pages
     public partial class EstimatePage
     {
         #region attributes
+
         private static readonly List<Merchandise> ListMerchandise = new List<Merchandise>();
         private static readonly List<Merchandise> ListMerchandiseN2 = new List<Merchandise>();
         private readonly Estimate estimate = new Estimate(ListMerchandise);
         private double TotalCost;
         private int qte;
+
         #endregion
 
         private void EstimateCreator_Loaded(object sender, RoutedEventArgs e)
@@ -51,13 +53,12 @@ namespace MANAGER.Pages
             {
                 var oCommand = ConnectionOracle.OracleCommand(query);
                 var resultat = oCommand.ExecuteReader();
-                while (resultat.Read())
+                while(resultat.Read())
                 {
                     ComboBoxCategory.Items.Add(new ComboboxItemCategory
                     {
                         Text = resultat[1].ToString(),
-                        Value =
-                            new Category(Convert.ToInt32(resultat[0]), resultat[1].ToString())
+                        Value = new Category(Convert.ToInt32(resultat[0]), resultat[1].ToString())
                     });
                 }
                 resultat.Close();
@@ -76,17 +77,17 @@ namespace MANAGER.Pages
                 var Command = ConnectionOracle.OracleCommand("SELECT * FROM MARCHANDISE WHERE ENVENTE = 1 AND QUANTITE > 0 AND ID_CATEGORIE=:CATEGORIE");
                 Command.Parameters.Add(new OracleParameter(":ID_CLIENT", OracleDbType.Int32)
                 {
-                    Value = ((ComboboxItemCategory)ComboBoxCategory.SelectedItem).Value.ID
+                    Value = ((ComboboxItemCategory) ComboBoxCategory.SelectedItem).Value.ID
                 });
                 var resultat = Command.ExecuteReader();
-                while (resultat.Read())
+                while(resultat.Read())
                 {
                     ComboBoxProduct.Items.Add(new ComboboxItemMerchandise
                     {
                         Text = resultat[1].ToString(),
                         Value =
-                            new Merchandise(Convert.ToInt32(resultat[0]), resultat[1].ToString(), 
-                                Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]), ((ComboboxItemCategory)ComboBoxCategory.SelectedItem).Value.ID)
+                            new Merchandise(Convert.ToInt32(resultat[0]), resultat[1].ToString(), Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]),
+                                ((ComboboxItemCategory) ComboBoxCategory.SelectedItem).Value.ID)
                     });
                 }
                 resultat.Close();
@@ -175,7 +176,8 @@ namespace MANAGER.Pages
                     return;
                 }
             }
-            AddMerchandise(((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.id, Text, qte, merchandiseCost,((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.categoryID );
+            AddMerchandise(((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.id, Text, qte, merchandiseCost,
+                ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.categoryID);
             AjouterEstimate.IsEnabled = true;
         }
 
@@ -257,7 +259,8 @@ namespace MANAGER.Pages
 
             for(var i = 0; i < nbMerchandise; i++)
             {
-                AddMerchandise(ListMerchandiseN2[i].id, ListMerchandiseN2[i].nom, ListMerchandiseN2[i].quantite, ListMerchandiseN2[i].price, ListMerchandiseN2[i].categoryID);
+                AddMerchandise(ListMerchandiseN2[i].id, ListMerchandiseN2[i].nom, ListMerchandiseN2[i].quantite, ListMerchandiseN2[i].price,
+                    ListMerchandiseN2[i].categoryID);
             }
             ListMerchandiseN2.Clear();
             if(estimate.GetList.Count == 0)

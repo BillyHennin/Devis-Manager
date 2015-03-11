@@ -21,11 +21,10 @@ namespace MANAGER.Pages
         {
             PanelMOTD.Children.Clear();
 
-            var PreMOTD = string.Format("\r\n{0}\r\n\r\n{1}\r\n\r\n\t{2}\r\n\t{3}{4}\r\n\t{5}\r\n\r\n{6}"
-                , Localisation.Localisation.AB_MOTD1, Localisation.Localisation.AB_MOTD2, 
-                Localisation.Localisation.AB_MOTD3, Localisation.Localisation.AB_MOTD4, Localisation.Localisation.AB_MOTD5, 
+            var PreMOTD = string.Format("\r\n{0}\r\n\r\n{1}\r\n\r\n\t{2}\r\n\t{3}{4}\r\n\t{5}\r\n\r\n{6}", Localisation.Localisation.AB_MOTD1,
+                Localisation.Localisation.AB_MOTD2, Localisation.Localisation.AB_MOTD3, Localisation.Localisation.AB_MOTD4, Localisation.Localisation.AB_MOTD5,
                 "[url='https://github.com/BillyHennin/Devis-Manager']GitHub[/url].", Localisation.Localisation.AB_MOTD6);
-            
+
             var thick = new Thickness(5, 2, 0, 0);
 
             var panelMessage = new StackPanel();

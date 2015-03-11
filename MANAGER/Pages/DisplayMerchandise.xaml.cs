@@ -129,17 +129,15 @@ namespace MANAGER.Pages
                 {
                     var category = string.Empty;
                     var CommandCategory = ConnectionOracle.OracleCommand("SELECT LIBELLE FROM CATEGORIE WHERE ID_CATEGORIE=:ID_CATEGORIE");
-                    CommandCategory.Parameters.Add(new OracleParameter(":ID_CATEGORIE", OracleDbType.Int32)
-                    {
-                        Value = Convert.ToInt32(resultat[5])
-                    });
+                    CommandCategory.Parameters.Add(new OracleParameter(":ID_CATEGORIE", OracleDbType.Int32) {Value = Convert.ToInt32(resultat[5])});
                     var resultatCategory = CommandCategory.ExecuteReader();
-                    while (resultatCategory.Read())
+                    while(resultatCategory.Read())
                     {
                         category = resultatCategory[0].ToString();
                     }
                     var text = string.Format("{0} - {1}", category, resultat[1].ToString());
-                    var newMerchandise = new Merchandise(Convert.ToInt32(resultat[0]), text, Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]), Convert.ToInt32(resultat[5]));
+                    var newMerchandise = new Merchandise(Convert.ToInt32(resultat[0]), text, Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]),
+                        Convert.ToInt32(resultat[5]));
                     var panelMerchandise = new StackPanel();
                     var thick = new Thickness(5, 2, 0, 0);
 

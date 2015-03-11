@@ -52,8 +52,9 @@ namespace MANAGER.Pages
                 while(resultCommand.Read())
                 {
                     var Command2 =
-                        ConnectionOracle.OracleCommand("SELECT MARCHANDISE.ID_MARCHANDISE, MARCHANDISE.NOM, DEVIS.PRIXMARCHANDISE, DEVIS.QUANTITE, DEVIS.JOUR, MARCHANDISE.ID_CATEGORIE "
-                                                       + "FROM MARCHANDISE, DEVIS WHERE DEVIS.ID_MARCHANDISE=MARCHANDISE.ID_MARCHANDISE AND DEVIS.NUMERODEVIS= :NUMERODEVIS");
+                        ConnectionOracle.OracleCommand(
+                            "SELECT MARCHANDISE.ID_MARCHANDISE, MARCHANDISE.NOM, DEVIS.PRIXMARCHANDISE, DEVIS.QUANTITE, DEVIS.JOUR, MARCHANDISE.ID_CATEGORIE "
+                            + "FROM MARCHANDISE, DEVIS WHERE DEVIS.ID_MARCHANDISE=MARCHANDISE.ID_MARCHANDISE AND DEVIS.NUMERODEVIS= :NUMERODEVIS");
                     Command2.Parameters.Add(new OracleParameter(":NUMERODEVIS", OracleDbType.Int32) {Value = resultCommand[0]});
                     var resultatMerchandise = Command2.ExecuteReader();
                     var ListMerchandise2 = new List<Merchandise>();
@@ -127,12 +128,9 @@ namespace MANAGER.Pages
             {
                 var categoryString = string.Empty;
                 var CommandCategory = ConnectionOracle.OracleCommand("SELECT LIBELLE FROM CATEGORIE WHERE ID_CATEGORIE=:ID_CATEGORIE");
-                CommandCategory.Parameters.Add(new OracleParameter(":ID_CATEGORIE", OracleDbType.Int32)
-                {
-                    Value = Convert.ToInt32(listMarchandise[i].categoryID)
-                });
+                CommandCategory.Parameters.Add(new OracleParameter(":ID_CATEGORIE", OracleDbType.Int32) {Value = Convert.ToInt32(listMarchandise[i].categoryID)});
                 var resultatCategory = CommandCategory.ExecuteReader();
-                while (resultatCategory.Read())
+                while(resultatCategory.Read())
                 {
                     categoryString = resultatCategory[0].ToString();
                 }
