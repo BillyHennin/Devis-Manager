@@ -1,7 +1,7 @@
 ﻿
 namespace MANAGER.Classes
 {
-    class Category
+    public class Category
     {
         public Category(int ID, string Description)
         {

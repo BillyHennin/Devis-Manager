@@ -36,8 +36,7 @@ namespace MANAGER.Localisation {
         ///   Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager
-        {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MANAGER.Localisation.Localisation", typeof(Localisation).Assembly);
@@ -64,7 +63,7 @@ namespace MANAGER.Localisation {
         /// <summary>
         ///   Recherche une chaîne localisée semblable à Welcome to the SIO-MANAGER application for the creation and viewing of esrimates..
         /// </summary>
-        public static string AB_MOTD1 { set{}
+        public static string AB_MOTD1 {
             get {
                 return ResourceManager.GetString("AB_MOTD1", resourceCulture);
             }
@@ -260,11 +259,20 @@ namespace MANAGER.Localisation {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Add a merchandise.
+        ///   Recherche une chaîne localisée semblable à Add a merchandise :.
         /// </summary>
         public static string EC_AddMerchandise {
             get {
                 return ResourceManager.GetString("EC_AddMerchandise", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Choose a category :.
+        /// </summary>
+        public static string EC_ChooseCategory {
+            get {
+                return ResourceManager.GetString("EC_ChooseCategory", resourceCulture);
             }
         }
         
@@ -278,11 +286,29 @@ namespace MANAGER.Localisation {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à The customer :.
+        /// </summary>
+        public static string EC_Customer {
+            get {
+                return ResourceManager.GetString("EC_Customer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Delete the merchandise.
         /// </summary>
         public static string EC_DeleteMerchandise {
             get {
                 return ResourceManager.GetString("EC_DeleteMerchandise", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Create a cost estimate.
+        /// </summary>
+        public static string EC_Title {
+            get {
+                return ResourceManager.GetString("EC_Title", resourceCulture);
             }
         }
         

@@ -77,9 +77,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\Category.cs" />
     <Compile Include="Classes\Client.cs" />
     <Compile Include="Classes\Estimate.cs" />
     <Compile Include="Classes\Print.cs" />
+    <Compile Include="ComboBox\ComboboxItemCategory.cs" />
     <Compile Include="ComboBox\ComboboxItemClient.cs" />
     <Compile Include="Classes\Merchandise.cs" />
     <Compile Include="ComboBox\ComboboxItemEstimate.cs" />

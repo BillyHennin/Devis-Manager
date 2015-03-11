@@ -44,14 +44,42 @@ namespace MANAGER.Pages
             QteChanged();
         }
 
-        private void ComboBoxProduct_OnInitialized(object sender, EventArgs e)
+        private void ComboBoxCategory_Initialized(object sender, EventArgs e)
         {
-            const string query = "SELECT * FROM MARCHANDISE WHERE ENVENTE = 1 AND QUANTITE > 0";
+            const string query = "SELECT * FROM CATEGORIE";
             try
             {
                 var oCommand = ConnectionOracle.OracleCommand(query);
                 var resultat = oCommand.ExecuteReader();
-                while(resultat.Read())
+                while (resultat.Read())
+                {
+                    ComboBoxCategory.Items.Add(new ComboboxItemCategory
+                    {
+                        Text = resultat[1].ToString(),
+                        Value =
+                            new Category(Convert.ToInt32(resultat[0]), resultat[1].ToString())
+                    });
+                }
+                resultat.Close();
+            }
+            catch
+            {
+                MessageBox.Show(Localisation.Localisation.Box_DBFail, Localisation.Localisation.Box_Error, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void ComboBoxCategory_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                ComboBoxProduct.Items.Clear();
+                var Command = ConnectionOracle.OracleCommand("SELECT * FROM MARCHANDISE WHERE ENVENTE = 1 AND QUANTITE > 0 AND ID_CATEGORIE=:CATEGORIE");
+                Command.Parameters.Add(new OracleParameter(":ID_CLIENT", OracleDbType.Int32)
+                {
+                    Value = ((ComboboxItemCategory)ComboBoxCategory.SelectedItem).Value.ID
+                });
+                var resultat = Command.ExecuteReader();
+                while (resultat.Read())
                 {
                     ComboBoxProduct.Items.Add(new ComboboxItemMerchandise
                     {
@@ -61,13 +89,12 @@ namespace MANAGER.Pages
                     });
                 }
                 resultat.Close();
+                ComboBoxProduct.SelectedIndex = 0;
             }
             catch
             {
                 MessageBox.Show(Localisation.Localisation.Box_DBFail, Localisation.Localisation.Box_Error, MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
             }
-            ComboBoxProduct.SelectedIndex = 0;
         }
 
         private void ComboBoxProduct_SelectionChanged(object sender, SelectionChangedEventArgs selectionChangedEventArgs)
@@ -196,7 +223,7 @@ namespace MANAGER.Pages
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             BorderEstimate.Width = EstimateCreator.ActualWidth - 340;
-            BorderEstimate.Height = EstimateCreator.ActualHeight - 50;
+            BorderEstimate.Height = EstimateCreator.ActualHeight - 70;
 
             var nbMerchandise = estimate.GetList.Count;
             for(var i = 0; i < nbMerchandise; i++)

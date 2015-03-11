@@ -166,7 +166,7 @@
     <value>Quantity in stock : {0}</value>
   </data>
   <data name="EC_AddMerchandise" xml:space="preserve">
-    <value>Add a merchandise</value>
+    <value>Add a merchandise :</value>
   </data>
   <data name="EC_CreateCE" xml:space="preserve">
     <value>Create a cost estimate</value>
@@ -230,5 +230,14 @@
   </data>
   <data name="AB_MOTD6" xml:space="preserve">
     <value />
+  </data>
+  <data name="EC_ChooseCategory" xml:space="preserve">
+    <value>Choose a category :</value>
+  </data>
+  <data name="EC_Customer" xml:space="preserve">
+    <value>The customer :</value>
+  </data>
+  <data name="EC_Title" xml:space="preserve">
+    <value>Create a cost estimate</value>
   </data>
 </root>

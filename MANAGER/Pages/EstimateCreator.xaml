@@ -1,6 +1,7 @@
 ﻿<UserControl x:Class="MANAGER.Pages.EstimatePage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:LocalResources="clr-namespace:MANAGER.Localisation"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              x:Name="EstimateCreator"
@@ -24,12 +25,23 @@
             <StackPanel x:Name="Panel" MinWidth="150">
                 <TextBlock Margin="0,0,0,8"
                            Style="{StaticResource Heading2}"
-                           Text="Create a cost estimate" />
+                           Text="{x:Static LocalResources:Localisation.EC_Title}"
+                           TextWrapping="Wrap" />
 
-                <ListBox Margin="0,0,0,16"
+                <ListBox Height="16"
+                         Margin="0,0,0,16"
                          ItemsSource="{Binding AccentColors}"
+                         RenderTransformOrigin="0.5,0.5"
                          SelectedItem="{Binding SelectedAccentColor,
                                                 Mode=TwoWay}">
+                    <ListBox.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleY="-1" />
+                            <SkewTransform />
+                            <RotateTransform />
+                            <TranslateTransform />
+                        </TransformGroup>
+                    </ListBox.RenderTransform>
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel MaxWidth="{Binding ActualWidth, ElementName=Panel}" />
@@ -52,7 +64,8 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="93" />
                         <ColumnDefinition Width="17" />
-                        <ColumnDefinition Width="110" />
+                        <ColumnDefinition Width="92" />
+                        <ColumnDefinition Width="18" />
                         <ColumnDefinition Width="0*" />
                         <ColumnDefinition Width="0*" />
                     </Grid.ColumnDefinitions>
@@ -60,52 +73,68 @@
                         <RowDefinition />
                         <RowDefinition />
                     </Grid.RowDefinitions>
-
                     <TextBlock Grid.ColumnSpan="3"
                                Height="16"
-                               Margin="0,3,101,7"
+                               Margin="0,3,83,7"
                                VerticalAlignment="Center"
-                               Text="Add a merchandise :" />
+                               Text="{x:Static LocalResources:Localisation.EC_AddMerchandise}" />
+                    <ComboBox x:Name="ComboBoxCategory"
+                              Grid.Row="0"
+                              Grid.Column="2"
+                              Grid.ColumnSpan="4"
+                              Height="23"
+                              Margin="25,-28,-57,31"
+                              VerticalAlignment="Bottom"
+                              BorderBrush="{DynamicResource Accent}"
+                              Grid.IsSharedSizeScope="True"
+                              Initialized="ComboBoxCategory_Initialized"
+                              SelectionChanged="ComboBoxCategory_SelectionChanged"
+                              TabIndex="2" />
+                    <TextBlock Grid.Row="0"
+                               Grid.Column="0"
+                               Grid.ColumnSpan="3"
+                               Height="16"
+                               Margin="0,-23,83,33"
+                               VerticalAlignment="Center"
+                               Text="{x:Static LocalResources:Localisation.EC_ChooseCategory}" />
                     <ComboBox x:Name="ComboBoxProduct"
                               Grid.Row="0"
                               Grid.Column="2"
-                              Grid.ColumnSpan="3"
+                              Grid.ColumnSpan="4"
                               Height="23"
                               Margin="25,0,-57,3"
                               VerticalAlignment="Bottom"
                               BorderBrush="{DynamicResource Accent}"
                               Grid.IsSharedSizeScope="True"
-                              Initialized="ComboBoxProduct_OnInitialized"
                               SelectionChanged="ComboBoxProduct_SelectionChanged"
-                              TabIndex="2"
-                              Text="Merchandise" />
+                              TabIndex="2" />
                     <Button x:Name="Ajouter"
                             Grid.Row="1"
                             Grid.Column="2"
-                            Grid.ColumnSpan="3"
+                            Grid.ColumnSpan="4"
                             Width="97"
                             Height="26"
-                            Margin="70,32,-57,-36"
+                            Margin="70,32,-57,-15"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Top"
                             BorderBrush="{DynamicResource Accent}"
                             Click="BTNAddFeed_click"
-                            Content="Add"
+                            Content="{x:Static LocalResources:Localisation.BTN_Add}"
                             IsEnabled="False" />
 
 
                     <TextBlock Grid.Row="1"
                                Grid.Column="0"
                                Grid.ColumnSpan="3"
-                               Margin="0,73,101,-72"
+                               Margin="0,73,83,-51"
                                Style="{StaticResource Heading2}"
-                               Text="The customer"
+                               Text="{x:Static LocalResources:Localisation.EC_Customer}"
                                TextWrapping="Wrap" />
                     <ComboBox x:Name="ComboBoxClient"
                               Grid.Row="1"
                               Grid.Column="2"
-                              Grid.ColumnSpan="3"
-                              Margin="25,68,-57,-72"
+                              Grid.ColumnSpan="4"
+                              Margin="25,68,-57,-51"
                               BorderBrush="{DynamicResource Accent}"
                               Initialized="ComboBoxClient_OnInitialized"
                               SelectionChanged="comboBoxClient_SelectionChanged" />
@@ -113,22 +142,22 @@
                                Grid.Column="0"
                                Grid.ColumnSpan="3"
                                Height="16"
-                               Margin="0,6,101,0"
+                               Margin="0,6,83,21"
                                VerticalAlignment="Center"
-                               Text="Quantity :" />
+                               Text="{x:Static LocalResources:Localisation.All_QTE}" />
                     <TextBox x:Name="TextBoxEstimateQte"
                              Grid.Row="1"
                              Grid.Column="2"
-                             Grid.ColumnSpan="3"
+                             Grid.ColumnSpan="4"
                              Height="23"
-                             Margin="25,0,-57,-4"
+                             Margin="25,0,-57,17"
                              VerticalAlignment="Bottom"
                              BorderBrush="{DynamicResource Accent}"
                              Grid.IsSharedSizeScope="True"
                              MaxLength="8"
                              MaxLines="1"
                              TabIndex="2"
-                             Text="1"
+                             Text="0"
                              TextAlignment="Right"
                              TextChanged="TextBoxEstimateQte_TextChanged"
                              TextWrapping="Wrap" />
@@ -136,16 +165,16 @@
                                Grid.Column="0"
                                Grid.ColumnSpan="3"
                                Height="16"
-                               Margin="0,36,96,-30"
+                               Margin="0,36,78,-9"
                                VerticalAlignment="Center"
-                               Text="Price  :" />
+                               Text="{x:Static LocalResources:Localisation.All_Price}" />
 
                     <Label x:Name="LabelPrice"
                            Grid.Row="1"
                            Grid.Column="0"
                            Grid.ColumnSpan="3"
                            Height="16"
-                           Margin="46,36,105,-30"
+                           Margin="46,36,87,-9"
                            VerticalAlignment="Center"
                            Content="" />
                 </Grid>
@@ -154,7 +183,7 @@
                             Grid.Column="0"
                             Width="450"
                             Height="411"
-                            Margin="300,-91,-405,0"
+                            Margin="300,-105,-405,0"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Top"
                             BorderBrush="{DynamicResource Accent}"
@@ -164,7 +193,9 @@
                         </ScrollViewer>
                     </Border>
                 </Grid>
-                <Grid Width="267" HorizontalAlignment="Left" RenderTransformOrigin="0.494,0.455">
+                <Grid Width="267"
+                      HorizontalAlignment="Left"
+                      RenderTransformOrigin="0.494,0.455">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="0*" />
                         <RowDefinition />
@@ -189,6 +220,7 @@
                     <Button x:Name="AjouterEstimate"
                             Grid.Row="0"
                             Grid.Column="2"
+                            Grid.ColumnSpan="2"
                             Width="96"
                             Height="26"
                             Margin="39,-18,0,14"
@@ -196,8 +228,8 @@
                             VerticalAlignment="Bottom"
                             BorderBrush="{DynamicResource Accent}"
                             Click="BTNAddEstimate_click"
-                            Content="Create"
-                            IsEnabled="False" Grid.ColumnSpan="2" />
+                            Content="{x:Static LocalResources:Localisation.BTN_Create}"
+                            IsEnabled="False" />
                 </Grid>
             </StackPanel>
         </ScrollViewer>
