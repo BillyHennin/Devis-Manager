@@ -57,8 +57,8 @@ namespace MANAGER.Pages
                 var id = ListMerchandiseN2[i].id;
                 var text = ListMerchandiseN2[i].nom;
                 var qte = string.Format(Localisation.Localisation.DM_Stock, ListMerchandiseN2[i].quantite);
-                var prixMerchandise = string.Format("{0}€", ListMerchandiseN2[i].prix);
-                var newMerchandise = new Merchandise(id, text, ListMerchandiseN2[i].quantite, ListMerchandiseN2[i].prix);
+                var prixMerchandise = string.Format("{0}€", ListMerchandiseN2[i].price);
+                var newMerchandise = new Merchandise(id, text, ListMerchandiseN2[i].quantite, ListMerchandiseN2[i].price, ListMerchandiseN2[i].categoryID);
                 var panelMerchandise = new StackPanel();
                 var thick = new Thickness(5, 2, 0, 0);
 
@@ -128,7 +128,7 @@ namespace MANAGER.Pages
                 while(resultat.Read())
                 {
                     var text = resultat[1].ToString();
-                    var newMerchandise = new Merchandise(Convert.ToInt32(resultat[0]), text, Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]));
+                    var newMerchandise = new Merchandise(Convert.ToInt32(resultat[0]), text, Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]), Convert.ToInt32(resultat[5]));
                     var panelMerchandise = new StackPanel();
                     var thick = new Thickness(5, 2, 0, 0);
 

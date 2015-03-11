@@ -85,7 +85,8 @@ namespace MANAGER.Pages
                     {
                         Text = resultat[1].ToString(),
                         Value =
-                            new Merchandise(Convert.ToInt32(resultat[0]), resultat[1].ToString(), Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]))
+                            new Merchandise(Convert.ToInt32(resultat[0]), resultat[1].ToString(), 
+                                Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]), ((ComboboxItemCategory)ComboBoxCategory.SelectedItem).Value.ID)
                     });
                 }
                 resultat.Close();
@@ -108,7 +109,7 @@ namespace MANAGER.Pages
                         break;
                     default:
                         LabelPrice.Content = string.Format("{0}€",
-                            ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.prix * Convert.ToInt32(TextBoxEstimateQte.Text));
+                            ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.price * Convert.ToInt32(TextBoxEstimateQte.Text));
                         break;
                 }
             }
@@ -173,7 +174,7 @@ namespace MANAGER.Pages
                     return;
                 }
             }
-            AddMerchandise(((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.id, ComboBoxProduct.Text, qte, merchandiseCost);
+            AddMerchandise(((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.id, ComboBoxProduct.Text, qte, merchandiseCost,((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.categoryID );
             AjouterEstimate.IsEnabled = true;
         }
 
@@ -198,7 +199,7 @@ namespace MANAGER.Pages
                         Insert.Parameters.Add(new OracleParameter(":3", OracleDbType.Int32) {Value = ((idEstimate) + i)});
                         Insert.Parameters.Add(new OracleParameter(":4", OracleDbType.Int32) {Value = estimate[i].quantite});
                         Insert.Parameters.Add(new OracleParameter(":5", OracleDbType.Varchar2) {Value = DateTime.Now.ToString("dd/MM/yy")});
-                        Insert.Parameters.Add(new OracleParameter(":6", OracleDbType.Varchar2) {Value = estimate[i].prix});
+                        Insert.Parameters.Add(new OracleParameter(":6", OracleDbType.Varchar2) {Value = estimate[i].price});
                         Insert.Parameters.Add(new OracleParameter(":7", OracleDbType.Varchar2) {Value = (numberEstimate)});
                         Insert.ExecuteNonQuery();
                     }
@@ -255,7 +256,7 @@ namespace MANAGER.Pages
 
             for(var i = 0; i < nbMerchandise; i++)
             {
-                AddMerchandise(ListMerchandiseN2[i].id, ListMerchandiseN2[i].nom, ListMerchandiseN2[i].quantite, ListMerchandiseN2[i].prix);
+                AddMerchandise(ListMerchandiseN2[i].id, ListMerchandiseN2[i].nom, ListMerchandiseN2[i].quantite, ListMerchandiseN2[i].price, ListMerchandiseN2[i].categoryID);
             }
             ListMerchandiseN2.Clear();
             if(estimate.GetList.Count == 0)
@@ -264,10 +265,10 @@ namespace MANAGER.Pages
             }
         }
 
-        private void AddMerchandise(int id, string name, int quantity, double price)
+        private void AddMerchandise(int id, string name, int quantity, double price, int category)
         {
             var panelMerchandise = new StackPanel();
-            var newMerchandise = new Merchandise(id, name, quantity, price);
+            var newMerchandise = new Merchandise(id, name, quantity, price, category);
             var thick = new Thickness(5, 2, 0, 0);
 
             var border = new Border
@@ -348,7 +349,7 @@ namespace MANAGER.Pages
                     {
                         qte = newQte;
                         LabelPrice.Foreground = new SolidColorBrush(Color.FromRgb(0xC1, 0xC1, 0xC1));
-                        LabelPrice.Content = string.Format("{0}€", (((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.prix * qte));
+                        LabelPrice.Content = string.Format("{0}€", (((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.price * qte));
                         TextBoxEstimateQte.BorderBrush =
                             TextBoxEstimateQte.CaretBrush =
                                 TextBoxEstimateQte.SelectionBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));

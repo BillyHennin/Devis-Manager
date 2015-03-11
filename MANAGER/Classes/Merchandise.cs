@@ -15,19 +15,21 @@ namespace MANAGER.Classes
 {
     public class Merchandise
     {
-        public Merchandise(int id, string nom, int quantite, double prix)
+        public Merchandise(int id, string nom, int quantite, double price, int categoryID )
         {
             this.id = id;
             this.nom = nom;
             this.quantite = quantite;
-            this.prix = prix;
+            this.price = price;
+            this.categoryID = categoryID;
         }
 
         public Border Border { get; set; }
         public string nom { get; set; }
-        public double prix { get; set; }
+        public double price { get; set; }
         public int quantite { get; set; }
         public int id { get; set; }
+        public int categoryID { get; set; }
 
         public override string ToString()
         {

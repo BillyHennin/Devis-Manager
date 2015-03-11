@@ -52,7 +52,7 @@ namespace MANAGER.Pages
                 while(resultCommand.Read())
                 {
                     var Command2 =
-                        ConnectionOracle.OracleCommand("SELECT MARCHANDISE.ID_MARCHANDISE, MARCHANDISE.NOM, DEVIS.PRIXMARCHANDISE, DEVIS.QUANTITE, DEVIS.JOUR "
+                        ConnectionOracle.OracleCommand("SELECT MARCHANDISE.ID_MARCHANDISE, MARCHANDISE.NOM, DEVIS.PRIXMARCHANDISE, DEVIS.QUANTITE, DEVIS.JOUR, MARCHANDISE.ID_CATEGORIE "
                                                        + "FROM MARCHANDISE, DEVIS WHERE DEVIS.ID_MARCHANDISE=MARCHANDISE.ID_MARCHANDISE AND DEVIS.NUMERODEVIS= :NUMERODEVIS");
                     Command2.Parameters.Add(new OracleParameter(":NUMERODEVIS", OracleDbType.Int32) {Value = resultCommand[0]});
                     var resultatMerchandise = Command2.ExecuteReader();
@@ -62,7 +62,8 @@ namespace MANAGER.Pages
                         totalPrice += Convert.ToInt32(resultatMerchandise[2]);
                         date = Convert.ToDateTime(resultatMerchandise[4]);
                         var merchandise = new Merchandise(Convert.ToInt32(resultatMerchandise[0]), resultatMerchandise[1].ToString(),
-                            Convert.ToInt32(resultatMerchandise[3]), Convert.ToInt32(resultatMerchandise[2]) / Convert.ToInt32(resultatMerchandise[3]));
+                            Convert.ToInt32(resultatMerchandise[3]), Convert.ToInt32(resultatMerchandise[2]) / Convert.ToInt32(resultatMerchandise[3]),
+                            Convert.ToInt32(resultatMerchandise[5]));
                         ListMerchandise2.Add(merchandise);
                     }
                     resultatMerchandise.Close();
@@ -127,8 +128,9 @@ namespace MANAGER.Pages
                 var id = listMarchandise[i].id;
                 var text = listMarchandise[i].nom;
                 var qte = listMarchandise[i].quantite;
-                var prixMarchandise = listMarchandise[i].prix;
-                var item = new Merchandise(id, text, qte, prixMarchandise);
+                var prixMarchandise = listMarchandise[i].price;
+                var category = listMarchandise[i].categoryID;
+                var item = new Merchandise(id, text, qte, prixMarchandise, category);
                 var panelMarchandise = new StackPanel();
                 var thick = new Thickness(5, 2, 0, 0);
 
