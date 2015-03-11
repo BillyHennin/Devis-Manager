@@ -125,8 +125,19 @@ namespace MANAGER.Pages
             var taille = listMarchandise.Count;
             for(var i = 0; i < taille; i++)
             {
+                var categoryString = string.Empty;
+                var CommandCategory = ConnectionOracle.OracleCommand("SELECT LIBELLE FROM CATEGORIE WHERE ID_CATEGORIE=:ID_CATEGORIE");
+                CommandCategory.Parameters.Add(new OracleParameter(":ID_CATEGORIE", OracleDbType.Int32)
+                {
+                    Value = Convert.ToInt32(listMarchandise[i].categoryID)
+                });
+                var resultatCategory = CommandCategory.ExecuteReader();
+                while (resultatCategory.Read())
+                {
+                    categoryString = resultatCategory[0].ToString();
+                }
                 var id = listMarchandise[i].id;
-                var text = listMarchandise[i].nom;
+                var text = String.Format("{0} - {1}", categoryString, listMarchandise[i].nom);
                 var qte = listMarchandise[i].quantite;
                 var prixMarchandise = listMarchandise[i].price;
                 var category = listMarchandise[i].categoryID;

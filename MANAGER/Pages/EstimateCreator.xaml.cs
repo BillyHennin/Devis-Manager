@@ -165,6 +165,7 @@ namespace MANAGER.Pages
 
         private void BTNAddFeed_click(object sender, RoutedEventArgs e)
         {
+            var Text = string.Format("{0} - {1}", ComboBoxCategory.Text, ComboBoxProduct.Text);
             var merchandiseCost = Convert.ToInt32(LabelPrice.Content.ToString().Substring(0, LabelPrice.Content.ToString().Length - 1));
             var nbMerchandise = estimate.GetList.Count;
             for(var i = 0; i < nbMerchandise; i++)
@@ -174,7 +175,7 @@ namespace MANAGER.Pages
                     return;
                 }
             }
-            AddMerchandise(((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.id, ComboBoxProduct.Text, qte, merchandiseCost,((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.categoryID );
+            AddMerchandise(((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.id, Text, qte, merchandiseCost,((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.categoryID );
             AjouterEstimate.IsEnabled = true;
         }
 
