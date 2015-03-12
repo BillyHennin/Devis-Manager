@@ -108,7 +108,7 @@ namespace MANAGER.Pages
                 Content = Localisation.Localisation.EC_DeleteMerchandise,
                 Margin = new Thickness(9, -30, 67, 50),
                 BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00)),
-                Tag = newMerchandise
+                Tag = newMerchandise.id
             };
 
             // Button deleting
@@ -172,28 +172,32 @@ namespace MANAGER.Pages
 
         private void bouton_Click(object sender, EventArgs e)
         {
-            var commandeModif = new OracleCommand {CommandType = CommandType.StoredProcedure, CommandText = "DELETEPRODUIT"};
-            var id = ((Button) sender).Tag.ToString();
-
-            var paramID = new OracleParameter(":1", OracleDbType.Int32) {Value = id};
-            commandeModif.Parameters.Add(paramID);
-
+            
+            var id = ((Button)sender).Tag.ToString();
             try
             {
-                commandeModif.ExecuteNonQuery();
+                var commandeModif = new OracleCommand("UPDATE MARCHANDISE SET ENVENTE=0 WHERE ID_MARCHANDISE=:ID_MARCHANDISE");
+                commandeModif.Parameters.Add(new OracleParameter(":ID_CLIENT", OracleDbType.Int32)
+                {
+                    Value = Convert.ToInt32(id)
+                });
+               commandeModif.ExecuteNonQuery();
             }
             catch
             {
                 MessageBox.Show(Localisation.Localisation.Box_DBFail, Localisation.Localisation.Box_Error, MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-            var nbMerchandise = ListMerchandiseN2.Count;
+            var nbMerchandise = ListMerchandise.Count;
+            
             for(var i = 0; i < nbMerchandise; i++)
             {
-                if(ListMerchandiseN2[i].ToString() == id)
+                if(ListMerchandise[i].ToString() != id)
                 {
-                    ListMerchandiseN2.Remove(ListMerchandiseN2[i]);
+                    continue;
                 }
+                ListMerchandise.Remove(ListMerchandise[i]);
+                nbMerchandise -= 1;
             }
             SelectMarchandiseLike("");
         }
