@@ -142,6 +142,15 @@ namespace MANAGER.Localisation {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Total.
+        /// </summary>
+        public static string All_Total {
+            get {
+                return ResourceManager.GetString("All_Total", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Unable to connect to the database.
         /// </summary>
         public static string Box_DBFail {

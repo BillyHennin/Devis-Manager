@@ -179,7 +179,7 @@ namespace MANAGER.Pages
                 estimate.GetList.Add(item);
             }
 
-            TotalTextBlock.Text = string.Format("Total : {0}€", ((ComboboxItemEstimate) ComboBoxEstimate.SelectedItem).Value.TotalPrix);
+            TotalTextBlock.Text = string.Format("{0} : {1}€",Localisation.Localisation.All_Total, ((ComboboxItemEstimate) ComboBoxEstimate.SelectedItem).Value.TotalPrix);
         }
 
         private void MenuClient_SizeChanged(object sender, SizeChangedEventArgs e)

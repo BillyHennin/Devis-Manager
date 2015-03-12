@@ -243,6 +243,9 @@
   <data name="BTN_Modify" xml:space="preserve">
     <value>Update</value>
   </data>
+  <data name="All_Total" xml:space="preserve">
+    <value>Total</value>
+  </data>
   <data name="EC_Quantity" xml:space="preserve">
     <value>Quantity</value>
   </data>

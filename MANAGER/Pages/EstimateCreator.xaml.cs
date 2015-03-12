@@ -304,7 +304,7 @@ namespace MANAGER.Pages
             PanelEstimate.Children.Add(border);
             estimate.GetList.Add(newMerchandise);
             TotalCost += price;
-            LabelTotalPrix.Text = string.Format("Total : {0}€", TotalCost);
+            LabelTotalPrix.Text = string.Format("{0} : {1}€",Localisation.Localisation.All_Total, TotalCost);
         }
 
         private void ErrorCost()
