@@ -26,15 +26,11 @@ namespace MANAGER.Pages
 {
     public partial class EstimatePage
     {
-        #region attributes
-
         private static readonly List<Merchandise> ListMerchandise = new List<Merchandise>();
         private static readonly List<Merchandise> ListMerchandiseN2 = new List<Merchandise>();
         private readonly Estimate estimate = new Estimate(ListMerchandise);
         private double TotalCost;
         private int qte;
-
-        #endregion
 
         private void EstimateCreator_Loaded(object sender, RoutedEventArgs e)
         {
@@ -220,6 +216,7 @@ namespace MANAGER.Pages
                     }
                 }
                 result.Close();
+                BtnAdd.Content = Localisation.Localisation.BTN_Add;
                 var message = string.Format(Localisation.Localisation.Box_SuccessAdd, numberEstimate, TotalCost);
                 MessageBox.Show(message, Localisation.Localisation.Box_Success, MessageBoxButton.OK, MessageBoxImage.Information);
             }
@@ -285,7 +282,7 @@ namespace MANAGER.Pages
             // Quantity
             panelMerchandise.Children.Add(new TextBlock
             {
-                Text = quantity.ToString(CultureInfo.InvariantCulture),
+                Text = string.Format("{0} {1}", Localisation.Localisation.EC_Quantity, quantity.ToString(CultureInfo.InvariantCulture)),
                 HorizontalAlignment = HorizontalAlignment.Left,
                 Margin = thick,
                 Height = 16
@@ -364,7 +361,6 @@ namespace MANAGER.Pages
         private void UpdateEstimate(int? merchandise, int? id)
         {
             BtnAdd.Content = Localisation.Localisation.BTN_Add;
-
             TotalCost = 0;
             LabelTotalPrix.Text = "";
 
@@ -409,7 +405,6 @@ namespace MANAGER.Pages
 
             PanelEstimate.Children.Clear();
             estimate.GetList.Clear();
-
 
             for (var i = 0; i < nbMerchandise; i++)
             {

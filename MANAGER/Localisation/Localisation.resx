@@ -223,13 +223,13 @@
     <value>This application was created as part of a MANAGER project.</value>
   </data>
   <data name="AB_MOTD4" xml:space="preserve">
-    <value />
+    <value>blablabla. </value>
   </data>
   <data name="AB_MOTD5" xml:space="preserve">
-    <value />
+    <value>The source code can be found on {0}.</value>
   </data>
   <data name="AB_MOTD6" xml:space="preserve">
-    <value />
+    <value>Message of the day :</value>
   </data>
   <data name="EC_ChooseCategory" xml:space="preserve">
     <value>Choose a category :</value>
@@ -241,6 +241,9 @@
     <value>Create a cost estimate</value>
   </data>
   <data name="BTN_Modify" xml:space="preserve">
-    <value>Modify</value>
+    <value>Update</value>
+  </data>
+  <data name="EC_Quantity" xml:space="preserve">
+    <value>Quantity :</value>
   </data>
 </root>

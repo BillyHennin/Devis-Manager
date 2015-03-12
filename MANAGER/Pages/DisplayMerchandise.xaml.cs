@@ -52,6 +52,7 @@ namespace MANAGER.Pages
             {
                 if(!ListMerchandiseN2[i].nom.ToLower().Contains(merchandise.ToLower()))
                 {
+                   
                     continue;
                 }
                 var id = ListMerchandiseN2[i].id;
@@ -59,53 +60,8 @@ namespace MANAGER.Pages
                 var qte = string.Format(Localisation.Localisation.DM_Stock, ListMerchandiseN2[i].quantite);
                 var prixMerchandise = string.Format("{0}€", ListMerchandiseN2[i].price);
                 var newMerchandise = new Merchandise(id, text, ListMerchandiseN2[i].quantite, ListMerchandiseN2[i].price, ListMerchandiseN2[i].categoryID);
-                var panelMerchandise = new StackPanel();
-                var thick = new Thickness(5, 2, 0, 0);
-
-                //new border
-                var border = new Border
-                {
-                    BorderBrush = BorderEstimate.BorderBrush,
-                    HorizontalAlignment = HorizontalAlignment.Left,
-                    Margin = new Thickness(2, 2, 1, 0),
-                    BorderThickness = new Thickness(1),
-                    Width = BorderEstimate.Width - 5,
-                    Child = panelMerchandise,
-                    Height = 70
-                };
-
-                PanelProduit.Children.Add(border);
-
-                // Nom du produit
-                panelMerchandise.Children.Add(new TextBlock {Margin = thick, Text = text, Height = 16});
-
-                // Prix
-                panelMerchandise.Children.Add(new TextBlock {Text = qte.ToString(CultureInfo.InvariantCulture), Margin = thick, Height = 16});
-
-                // Quantité
-                panelMerchandise.Children.Add(new TextBlock
-                {
-                    Text = prixMerchandise.ToString(CultureInfo.InvariantCulture),
-                    Margin = new Thickness(5, 2, 0, 0),
-                    Height = 16
-                });
-
-                var BTN_Delete = new Button
-                {
-                    HorizontalAlignment = HorizontalAlignment.Right,
-                    Content = Localisation.Localisation.EC_DeleteMerchandise,
-                    Margin = new Thickness(9, -30, 67, 50),
-                    BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00)),
-                    Tag = newMerchandise
-                };
-
-                // Button deleting
-                panelMerchandise.Children.Add(BTN_Delete);
-
-                BTN_Delete.Click += bouton_Click;
-
-                newMerchandise.Border = border;
-                ListMerchandise.Add(newMerchandise);
+               
+                Display(text, qte, prixMerchandise, newMerchandise);
             }
         }
 
@@ -113,6 +69,60 @@ namespace MANAGER.Pages
         {
             SelectMarchandiseLike(TextBoxDevisQte.Text == "" ? "" : TextBoxDevisQte.Text);
         }
+
+        private void Display(string text, string qte, string prixMerchandise, Merchandise newMerchandise)
+        {
+            var panelMerchandise = new StackPanel();
+            var thick = new Thickness(5, 2, 0, 0);
+
+            //new border
+            var border = new Border
+            {
+                BorderBrush = BorderEstimate.BorderBrush,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Margin = new Thickness(2, 3, 1, 1),
+                BorderThickness = new Thickness(1),
+                Width = BorderEstimate.Width - 5,
+                Child = panelMerchandise,
+                Height = 70
+            };
+
+            PanelProduit.Children.Add(border);
+
+            // Nom du produit
+            panelMerchandise.Children.Add(new TextBlock { Margin = thick, Text = text, Height = 16 });
+
+            // Prix
+            panelMerchandise.Children.Add(new TextBlock { Text = qte.ToString(CultureInfo.InvariantCulture), Margin = thick, Height = 16 });
+
+            // Quantité
+            panelMerchandise.Children.Add(new TextBlock
+            {
+                Text = prixMerchandise.ToString(CultureInfo.InvariantCulture),
+                Margin = new Thickness(5, 2, 0, 0),
+                Height = 16
+            });
+
+            var BTN_Delete = new Button
+            {
+                HorizontalAlignment = HorizontalAlignment.Right,
+                Content = Localisation.Localisation.EC_DeleteMerchandise,
+                Margin = new Thickness(9, -30, 67, 50),
+                BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00)),
+                Tag = newMerchandise
+            };
+
+            // Button deleting
+            panelMerchandise.Children.Add(BTN_Delete);
+
+            BTN_Delete.Click += bouton_Click;
+
+            newMerchandise.Border = border;
+            ListMerchandise.Add(newMerchandise);
+            
+        }
+
+
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
@@ -138,48 +148,10 @@ namespace MANAGER.Pages
                     var text = string.Format("{0} - {1}", category, resultat[1].ToString());
                     var newMerchandise = new Merchandise(Convert.ToInt32(resultat[0]), text, Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]),
                         Convert.ToInt32(resultat[5]));
-                    var panelMerchandise = new StackPanel();
-                    var thick = new Thickness(5, 2, 0, 0);
 
-                    //new border
-                    var border = new Border
-                    {
-                        BorderBrush = BorderEstimate.BorderBrush,
-                        HorizontalAlignment = HorizontalAlignment.Left,
-                        Margin = new Thickness(2, 2, 1, 0),
-                        BorderThickness = new Thickness(1),
-                        Width = BorderEstimate.Width - 5,
-                        Child = panelMerchandise,
-                        Height = 70
-                    };
-
-                    PanelProduit.Children.Add(border);
-
-                    // Nom du produit
-                    panelMerchandise.Children.Add(new TextBlock {Margin = thick, Text = text, Height = 16});
-
-                    // Prix
-                    panelMerchandise.Children.Add(new TextBlock {Text = string.Format("Quantity in stock : {0}", resultat[3]), Margin = thick, Height = 16});
-
-                    // Quantité
-                    panelMerchandise.Children.Add(new TextBlock {Text = string.Format("{0}€", resultat[2]), Margin = new Thickness(5, 2, 0, 0), Height = 16});
-
-                    var BTN_Delete = new Button
-                    {
-                        HorizontalAlignment = HorizontalAlignment.Right,
-                        Content = Localisation.Localisation.EC_DeleteMerchandise,
-                        Margin = new Thickness(9, -30, 67, 50),
-                        BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00)),
-                        Tag = newMerchandise
-                    };
-
-                    // Suppression
-                    panelMerchandise.Children.Add(BTN_Delete);
-
-                    BTN_Delete.Click += bouton_Click;
-
-                    newMerchandise.Border = border;
-                    ListMerchandise.Add(newMerchandise);
+                    var price = string.Format("Quantity in stock : {0}", resultat[3]);
+                    var qte = string.Format("{0}€", resultat[2]);
+                    Display(text, qte, price, newMerchandise);
                     ListMerchandiseN2.Add(newMerchandise);
                 }
                 resultat.Close();

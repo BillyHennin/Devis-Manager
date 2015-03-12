@@ -88,7 +88,7 @@ namespace MANAGER.Localisation {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à .
+        ///   Recherche une chaîne localisée semblable à blablabla. .
         /// </summary>
         public static string AB_MOTD4 {
             get {
@@ -97,7 +97,7 @@ namespace MANAGER.Localisation {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à .
+        ///   Recherche une chaîne localisée semblable à The source code can be found on {0}..
         /// </summary>
         public static string AB_MOTD5 {
             get {
@@ -106,7 +106,7 @@ namespace MANAGER.Localisation {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à .
+        ///   Recherche une chaîne localisée semblable à Message of the day :.
         /// </summary>
         public static string AB_MOTD6 {
             get {
@@ -196,7 +196,7 @@ namespace MANAGER.Localisation {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Modify.
+        ///   Recherche une chaîne localisée semblable à Update.
         /// </summary>
         public static string BTN_Modify {
             get {
@@ -309,6 +309,15 @@ namespace MANAGER.Localisation {
         public static string EC_DeleteMerchandise {
             get {
                 return ResourceManager.GetString("EC_DeleteMerchandise", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Quantity :.
+        /// </summary>
+        public static string EC_Quantity {
+            get {
+                return ResourceManager.GetString("EC_Quantity", resourceCulture);
             }
         }
         

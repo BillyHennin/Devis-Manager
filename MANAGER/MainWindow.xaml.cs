@@ -28,7 +28,7 @@ namespace MANAGER
             {
                 return;
             }
-            ContentSource = new Uri(@"/Pages/Parametre.xaml", UriKind.Relative);
+            //ContentSource = new Uri(@"/Pages/Parametre.xaml", UriKind.Relative);
             //MessageBox.Show(Localisation.Localisation.Box_DBFail, Localisation.Localisation.Box_Error, MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
