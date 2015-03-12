@@ -108,7 +108,7 @@
                               Grid.IsSharedSizeScope="True"
                               SelectionChanged="ComboBoxProduct_SelectionChanged"
                               TabIndex="2" />
-                    <Button x:Name="Ajouter"
+                    <Button x:Name="BtnAdd"
                             Grid.Row="1"
                             Grid.Column="2"
                             Grid.ColumnSpan="4"

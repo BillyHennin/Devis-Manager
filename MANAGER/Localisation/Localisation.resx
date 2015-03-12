@@ -240,4 +240,7 @@
   <data name="EC_Title" xml:space="preserve">
     <value>Create a cost estimate</value>
   </data>
+  <data name="BTN_Modify" xml:space="preserve">
+    <value>Modify</value>
+  </data>
 </root>

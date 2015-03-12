@@ -196,6 +196,15 @@ namespace MANAGER.Localisation {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Modify.
+        /// </summary>
+        public static string BTN_Modify {
+            get {
+                return ResourceManager.GetString("BTN_Modify", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Choose a customer :.
         /// </summary>
         public static string DC_ChooseCustomer {

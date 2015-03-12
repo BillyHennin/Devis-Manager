@@ -41,7 +41,7 @@ namespace MANAGER.Pages
             var nbMerchandise = estimate.GetList.Count;
             for(var i = 0; i < nbMerchandise; i++)
             {
-                estimate[i].Border.BorderBrush = Ajouter.BorderBrush;
+                estimate[i].Border.BorderBrush = BtnAdd.BorderBrush;
             }
             QteChanged();
         }
@@ -99,8 +99,10 @@ namespace MANAGER.Pages
             }
         }
 
-        private void ComboBoxProduct_SelectionChanged(object sender, SelectionChangedEventArgs selectionChangedEventArgs)
+        private void ComboBoxProduct_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            BtnAdd.Content = Localisation.Localisation.BTN_Add;
+            
             try
             {
                 switch(qte)
@@ -111,6 +113,14 @@ namespace MANAGER.Pages
                     default:
                         LabelPrice.Content = string.Format("{0}€",
                             ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.price * Convert.ToInt32(TextBoxEstimateQte.Text));
+                        var nbMerchandise = estimate.GetList.Count;
+                        for (var i = 0; i < nbMerchandise; i++)
+                        {
+                            if (estimate[i].id == ((ComboboxItemMerchandise)ComboBoxProduct.SelectedItem).Value.id)
+                            {
+                                BtnAdd.Content = Localisation.Localisation.BTN_Modify;
+                            }
+                        }
                         break;
                 }
             }
@@ -137,13 +147,12 @@ namespace MANAGER.Pages
                     });
                 }
                 resultat.Close();
+                ComboBoxClient.SelectedIndex = 0;
             }
             catch
             {
                 MessageBox.Show(Localisation.Localisation.Box_DBFail, Localisation.Localisation.Box_Error, MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
             }
-            ComboBoxClient.SelectedIndex = 0;
         }
 
         private void comboBoxClient_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -171,14 +180,17 @@ namespace MANAGER.Pages
             var nbMerchandise = estimate.GetList.Count;
             for(var i = 0; i < nbMerchandise; i++)
             {
-                if(estimate[i].nom == ComboBoxProduct.Text)
+                if (estimate[i].nom == Text)
                 {
+                    UpdateEstimate(i, null);
                     return;
                 }
             }
             AddMerchandise(((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.id, Text, qte, merchandiseCost,
                 ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.categoryID);
             AjouterEstimate.IsEnabled = true;
+
+            BtnAdd.Content = Localisation.Localisation.BTN_Modify;
         }
 
         private void BTNAddEstimate_click(object sender, RoutedEventArgs e)
@@ -238,35 +250,7 @@ namespace MANAGER.Pages
 
         private void BTN_Delete_Click(object sender, EventArgs e)
         {
-            TotalCost = 0;
-            LabelTotalPrix.Text = "";
-
-            var id = ((Button) sender).Tag.ToString();
-            var nbMerchandise = estimate.GetList.Count;
-
-            for(var i = 0; i < nbMerchandise; i++)
-            {
-                if(ListMerchandise[i].ToString() != id)
-                {
-                    ListMerchandiseN2.Add(ListMerchandise[i]);
-                }
-            }
-
-            nbMerchandise -= 1;
-
-            PanelEstimate.Children.Clear();
-            estimate.GetList.Clear();
-
-            for(var i = 0; i < nbMerchandise; i++)
-            {
-                AddMerchandise(ListMerchandiseN2[i].id, ListMerchandiseN2[i].nom, ListMerchandiseN2[i].quantite, ListMerchandiseN2[i].price,
-                    ListMerchandiseN2[i].categoryID);
-            }
-            ListMerchandiseN2.Clear();
-            if(estimate.GetList.Count == 0)
-            {
-                AjouterEstimate.IsEnabled = false;
-            }
+            UpdateEstimate(null, Convert.ToInt32(((Button)sender).Tag.ToString()));
         }
 
         private void AddMerchandise(int id, string name, int quantity, double price, int category)
@@ -329,7 +313,7 @@ namespace MANAGER.Pages
         private void ErrorCost()
         {
             LabelPrice.Content = Localisation.Localisation.Box_Error;
-            Ajouter.IsEnabled = false;
+            BtnAdd.IsEnabled = false;
             LabelPrice.Foreground =
                 TextBoxEstimateQte.CaretBrush =
                     TextBoxEstimateQte.SelectionBrush = TextBoxEstimateQte.BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00));
@@ -357,7 +341,7 @@ namespace MANAGER.Pages
                         TextBoxEstimateQte.BorderBrush =
                             TextBoxEstimateQte.CaretBrush =
                                 TextBoxEstimateQte.SelectionBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
-                        Ajouter.IsEnabled = true;
+                        BtnAdd.IsEnabled = true;
                     }
                     else
                     {
@@ -375,6 +359,68 @@ namespace MANAGER.Pages
         {
             int value;
             return (str.Trim() != string.Empty) && int.TryParse(str, out value);
+        }
+
+        private void UpdateEstimate(int? merchandise, int? id)
+        {
+            BtnAdd.Content = Localisation.Localisation.BTN_Add;
+
+            TotalCost = 0;
+            LabelTotalPrix.Text = "";
+
+            var nbMerchandise = estimate.GetList.Count;
+            for (var i = 0; i < nbMerchandise; i++)
+            {
+                if (merchandise.HasValue)
+                {
+                    if(i == merchandise)
+                    {
+                        var Text = string.Format("{0} - {1}", ComboBoxCategory.Text, ComboBoxProduct.Text);
+                        var merchandiseCost = Convert.ToInt32(LabelPrice.Content.ToString().Substring(0, LabelPrice.Content.ToString().Length - 1));
+                        ListMerchandiseN2.Add(new Merchandise(((ComboboxItemMerchandise)ComboBoxProduct.SelectedItem).Value.id, Text, qte, merchandiseCost,
+                            ((ComboboxItemMerchandise)ComboBoxProduct.SelectedItem).Value.categoryID));
+                    }
+                    else
+                    {
+                        ListMerchandiseN2.Add(ListMerchandise[i]);
+                    }
+                }
+                else
+                {
+                    if(ListMerchandise[i].ToString() != id.ToString())
+                    {
+                        ListMerchandiseN2.Add(ListMerchandise[i]);
+                    }
+                    
+                }
+            }
+            if(id.HasValue)
+            {
+                nbMerchandise -= 1;
+            }
+
+            for (var i = 0; i < nbMerchandise; i++)
+            {
+                if (ListMerchandiseN2[i].id == ((ComboboxItemMerchandise)ComboBoxProduct.SelectedItem).Value.id)
+                {
+                    BtnAdd.Content = Localisation.Localisation.BTN_Modify;
+                }
+            }
+
+            PanelEstimate.Children.Clear();
+            estimate.GetList.Clear();
+
+
+            for (var i = 0; i < nbMerchandise; i++)
+            {
+                AddMerchandise(ListMerchandiseN2[i].id, ListMerchandiseN2[i].nom, ListMerchandiseN2[i].quantite, ListMerchandiseN2[i].price,
+                    ListMerchandiseN2[i].categoryID);
+            }
+            ListMerchandiseN2.Clear();
+            if (estimate.GetList.Count == 0)
+            {
+                AjouterEstimate.IsEnabled = false;
+            }
         }
     }
 }
