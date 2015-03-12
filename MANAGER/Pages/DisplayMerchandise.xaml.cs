@@ -80,7 +80,7 @@ namespace MANAGER.Pages
             {
                 BorderBrush = BorderEstimate.BorderBrush,
                 HorizontalAlignment = HorizontalAlignment.Left,
-                Margin = new Thickness(2, 3, 1, 1),
+                Margin = new Thickness(2, 2, 1, 0),
                 BorderThickness = new Thickness(1),
                 Width = BorderEstimate.Width - 5,
                 Child = panelMerchandise,
