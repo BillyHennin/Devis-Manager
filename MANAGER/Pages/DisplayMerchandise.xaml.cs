@@ -52,7 +52,6 @@ namespace MANAGER.Pages
             {
                 if(!ListMerchandiseN2[i].nom.ToLower().Contains(merchandise.ToLower()))
                 {
-                   
                     continue;
                 }
                 var id = ListMerchandiseN2[i].id;
@@ -60,7 +59,7 @@ namespace MANAGER.Pages
                 var qte = string.Format(Localisation.Localisation.DM_Stock, ListMerchandiseN2[i].quantite);
                 var prixMerchandise = string.Format("{0}€", ListMerchandiseN2[i].price);
                 var newMerchandise = new Merchandise(id, text, ListMerchandiseN2[i].quantite, ListMerchandiseN2[i].price, ListMerchandiseN2[i].categoryID);
-               
+
                 Display(text, qte, prixMerchandise, newMerchandise);
             }
         }
@@ -90,10 +89,10 @@ namespace MANAGER.Pages
             PanelProduit.Children.Add(border);
 
             // Nom du produit
-            panelMerchandise.Children.Add(new TextBlock { Margin = thick, Text = text, Height = 16 });
+            panelMerchandise.Children.Add(new TextBlock {Margin = thick, Text = text, Height = 16});
 
             // Prix
-            panelMerchandise.Children.Add(new TextBlock { Text = qte.ToString(CultureInfo.InvariantCulture), Margin = thick, Height = 16 });
+            panelMerchandise.Children.Add(new TextBlock {Text = qte.ToString(CultureInfo.InvariantCulture), Margin = thick, Height = 16});
 
             // Quantité
             panelMerchandise.Children.Add(new TextBlock
@@ -119,10 +118,7 @@ namespace MANAGER.Pages
 
             newMerchandise.Border = border;
             ListMerchandise.Add(newMerchandise);
-            
         }
-
-
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {

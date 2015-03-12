@@ -313,7 +313,7 @@ namespace MANAGER.Localisation {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Quantity :.
+        ///   Recherche une chaîne localisée semblable à Quantity.
         /// </summary>
         public static string EC_Quantity {
             get {
