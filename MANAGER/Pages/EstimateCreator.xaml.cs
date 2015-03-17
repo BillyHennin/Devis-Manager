@@ -176,11 +176,12 @@ namespace MANAGER.Pages
             var nbMerchandise = estimate.GetList.Count;
             for(var i = 0; i < nbMerchandise; i++)
             {
-                if(estimate[i].nom == Text)
+                if(estimate[i].nom != Text)
                 {
-                    UpdateEstimate(i, null);
-                    return;
+                    continue;
                 }
+                UpdateEstimate(i, null);
+                return;
             }
             AddMerchandise(((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.id, Text, qte, merchandiseCost,
                 ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.categoryID);
@@ -223,14 +224,15 @@ namespace MANAGER.Pages
             catch
             {
                 MessageBox.Show(Localisation.Localisation.Box_DBFail, Localisation.Localisation.Box_Error, MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
             }
-
-            PanelEstimate.Children.Clear();
-            ListMerchandise.Clear();
-            TotalCost = 0;
-            LabelTotalPrix.Text = "";
-            AjouterEstimate.IsEnabled = false;
+            finally
+            {
+                PanelEstimate.Children.Clear();
+                ListMerchandise.Clear();
+                TotalCost = 0;
+                LabelTotalPrix.Text = "";
+                AjouterEstimate.IsEnabled = false;
+            }
         }
 
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -304,7 +306,7 @@ namespace MANAGER.Pages
             PanelEstimate.Children.Add(border);
             estimate.GetList.Add(newMerchandise);
             TotalCost += price;
-            LabelTotalPrix.Text = string.Format("{0} : {1}€",Localisation.Localisation.All_Total, TotalCost);
+            LabelTotalPrix.Text = string.Format("{0} : {1}€", Localisation.Localisation.All_Total, TotalCost);
         }
 
         private void ErrorCost()

@@ -54,7 +54,10 @@ namespace MANAGER.Pages
                 }
                 var id = ListMerchandiseN2[i].id;
                 var text = ListMerchandiseN2[i].nom;
-                var newMerchandise = new Merchandise(id, text, ListMerchandiseN2[i].quantite, ListMerchandiseN2[i].price, ListMerchandiseN2[i].categoryID) { onSale = ListMerchandiseN2[i].onSale };
+                var newMerchandise = new Merchandise(id, text, ListMerchandiseN2[i].quantite, ListMerchandiseN2[i].price, ListMerchandiseN2[i].categoryID)
+                {
+                    onSale = ListMerchandiseN2[i].onSale
+                };
 
                 Display(text, newMerchandise);
             }
@@ -85,25 +88,15 @@ namespace MANAGER.Pages
             PanelProduit.Children.Add(border);
 
             // Nom du produit
-            panelMerchandise.Children.Add(new TextBlock
-            {
-                Text = text,
-                Margin = thick, 
-                Height = 16
-            });
+            panelMerchandise.Children.Add(new TextBlock {Text = text, Margin = thick, Height = 16});
 
             // Prix
-            panelMerchandise.Children.Add(new TextBlock
-            {
-                Text = string.Format("{0}€", newMerchandise.price), 
-                Margin = thick, 
-                Height = 16
-            });
+            panelMerchandise.Children.Add(new TextBlock {Text = string.Format("{0}€", newMerchandise.price), Margin = thick, Height = 16});
 
             // Quantité
             panelMerchandise.Children.Add(new TextBlock
             {
-                Text =  string.Format(Localisation.Localisation.DM_Stock , newMerchandise.price),
+                Text = string.Format(Localisation.Localisation.DM_Stock, newMerchandise.price),
                 Margin = new Thickness(5, 2, 0, 0),
                 Height = 16
             });
@@ -113,7 +106,8 @@ namespace MANAGER.Pages
                 HorizontalAlignment = HorizontalAlignment.Right,
                 Content = newMerchandise.onSale ? Localisation.Localisation.DM_OnSale : Localisation.Localisation.DM_NotOnSale,
                 Margin = new Thickness(9, -30, 67, 50),
-                BorderBrush = newMerchandise.onSale ? new SolidColorBrush(Color.FromRgb(0x7c, 0xfc, 0x00)) : new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00)),
+                BorderBrush =
+                    newMerchandise.onSale ? new SolidColorBrush(Color.FromRgb(0x7c, 0xfc, 0x00)) : new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00)),
                 Tag = newMerchandise.id
             };
 
@@ -175,8 +169,7 @@ namespace MANAGER.Pages
 
         private void bouton_Click(object sender, EventArgs e)
         {
-            
-            var id = ((Button)sender).Tag.ToString();
+            var id = ((Button) sender).Tag.ToString();
             try
             {
                 var commandeModif = new OracleCommand("UPDATE MARCHANDISE SET ENVENTE=0 WHERE ID_MARCHANDISE=:ID_MARCHANDISE");
@@ -191,9 +184,9 @@ namespace MANAGER.Pages
             {
                 var nbMerchandise = ListMerchandiseN2.Count;
 
-                for (var i = 0; i < nbMerchandise; i++)
+                for(var i = 0; i < nbMerchandise; i++)
                 {
-                    if (ListMerchandiseN2[i].ToString() != id)
+                    if(ListMerchandiseN2[i].ToString() != id)
                     {
                         continue;
                     }
