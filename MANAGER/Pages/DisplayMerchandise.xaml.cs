@@ -8,7 +8,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -55,7 +54,7 @@ namespace MANAGER.Pages
                 }
                 var id = ListMerchandiseN2[i].id;
                 var text = ListMerchandiseN2[i].nom;
-                var newMerchandise = new Merchandise(id, text, ListMerchandiseN2[i].quantite, ListMerchandiseN2[i].price, ListMerchandiseN2[i].categoryID);
+                var newMerchandise = new Merchandise(id, text, ListMerchandiseN2[i].quantite, ListMerchandiseN2[i].price, ListMerchandiseN2[i].categoryID) { onSale = ListMerchandiseN2[i].onSale };
 
                 Display(text, newMerchandise);
             }
@@ -112,9 +111,9 @@ namespace MANAGER.Pages
             var BTN_Delete = new Button
             {
                 HorizontalAlignment = HorizontalAlignment.Right,
-                Content = newMerchandise.onSale == 1 ? Localisation.Localisation.DM_OnSale : Localisation.Localisation.DM_NotOnSale,
+                Content = newMerchandise.onSale ? Localisation.Localisation.DM_OnSale : Localisation.Localisation.DM_NotOnSale,
                 Margin = new Thickness(9, -30, 67, 50),
-                BorderBrush = newMerchandise.onSale == 1 ? new SolidColorBrush(Color.FromRgb(0x7c, 0xfc, 0x00)) : new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00)),
+                BorderBrush = newMerchandise.onSale ? new SolidColorBrush(Color.FromRgb(0x7c, 0xfc, 0x00)) : new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00)),
                 Tag = newMerchandise.id
             };
 
@@ -150,7 +149,7 @@ namespace MANAGER.Pages
                     }
                     var text = string.Format("{0} - {1}", category, resultat[1].ToString());
                     var newMerchandise = new Merchandise(Convert.ToInt32(resultat[0]), text, Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]),
-                        Convert.ToInt32(resultat[5])) {onSale = Convert.ToInt32(resultat[4])};
+                        Convert.ToInt32(resultat[5])) {onSale = Convert.ToBoolean(resultat[4])};
                     Display(text, newMerchandise);
                     ListMerchandiseN2.Add(newMerchandise);
                 }
@@ -181,31 +180,30 @@ namespace MANAGER.Pages
             try
             {
                 var commandeModif = new OracleCommand("UPDATE MARCHANDISE SET ENVENTE=0 WHERE ID_MARCHANDISE=:ID_MARCHANDISE");
-                commandeModif.Parameters.Add(new OracleParameter(":ID_MARCHANDISE", OracleDbType.Int32)
-                {
-                    Value = Convert.ToInt32(id)
-                });
-
-                
-                commandeModif.ExecuteNonQuery();
+                commandeModif.Parameters.Add(new OracleParameter(":ID_MARCHANDISE", OracleDbType.Int32) {Value = Convert.ToInt32(id)});
+                //commandeModif.ExecuteNonQuery();
             }
             catch
             {
                 MessageBox.Show(Localisation.Localisation.Box_DBFail, Localisation.Localisation.Box_Error, MessageBoxButton.OK, MessageBoxImage.Error);
             }
-
-            var nbMerchandise = ListMerchandiseN2.Count;
-            
-            for(var i = 0; i < nbMerchandise; i++)
+            finally
             {
-                if (ListMerchandiseN2[i].ToString() != id)
+                var nbMerchandise = ListMerchandiseN2.Count;
+
+                for (var i = 0; i < nbMerchandise; i++)
                 {
-                    continue;
+                    if (ListMerchandiseN2[i].ToString() != id)
+                    {
+                        continue;
+                    }
+                    ListMerchandiseN2[i].onSale = !ListMerchandiseN2[i].onSale;
+                    /*
+                    ListMerchandiseN2.Remove(ListMerchandiseN2[i]);
+                    nbMerchandise -= 1;*/
                 }
-                ListMerchandiseN2.Remove(ListMerchandiseN2[i]);
-                nbMerchandise -= 1;
+                SelectMarchandiseLike("");
             }
-            SelectMarchandiseLike("");
         }
     }
 }
