@@ -81,6 +81,7 @@
     <Compile Include="Classes\Customer.cs" />
     <Compile Include="Classes\Estimate.cs" />
     <Compile Include="Classes\Print.cs" />
+    <Compile Include="Classes\Transharp.cs" />
     <Compile Include="ComboBox\ComboboxItemCategory.cs" />
     <Compile Include="Classes\Merchandise.cs" />
     <Compile Include="ComboBox\ComboboxItemCustomer.cs" />
