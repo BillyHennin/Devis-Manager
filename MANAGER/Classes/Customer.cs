@@ -1,20 +1,10 @@
-﻿// This program is a private software, based on c# source code.
-// To sell or change credits of this software is forbidden,
-// except if someone approve it from MANAGER INC. team.
-//  
-// Copyrights (c) 2014 MANAGER INC. All rights reserved.
-
-#region
-
-using System.Collections.Generic;
-
-#endregion
+﻿using System.Collections.Generic;
 
 namespace MANAGER.Classes
 {
-    public class Client
+    public class Customer
     {
-        public Client(int id, string denomination, string telephone, string email)
+        public Customer(int id, string denomination, string telephone, string email)
         {
             this.id = id;
             this.denomination = denomination;

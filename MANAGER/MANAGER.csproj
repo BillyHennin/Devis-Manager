@@ -78,12 +78,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Classes\Category.cs" />
-    <Compile Include="Classes\Client.cs" />
+    <Compile Include="Classes\Customer.cs" />
     <Compile Include="Classes\Estimate.cs" />
     <Compile Include="Classes\Print.cs" />
     <Compile Include="ComboBox\ComboboxItemCategory.cs" />
-    <Compile Include="ComboBox\ComboboxItemClient.cs" />
     <Compile Include="Classes\Merchandise.cs" />
+    <Compile Include="ComboBox\ComboboxItemCustomer.cs" />
     <Compile Include="ComboBox\ComboboxItemEstimate.cs" />
     <Compile Include="ComboBox\ComboboxItemMerchandise.cs" />
     <Compile Include="Localisation\Localisation.Designer.cs">
@@ -91,11 +91,14 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Localisation.resx</DependentUpon>
     </Compile>
-    <Compile Include="Pages\AddClient.xaml.cs">
-      <DependentUpon>AddClient.xaml</DependentUpon>
+    <Compile Include="Pages\AddCustomer.xaml.cs">
+      <DependentUpon>AddCustomer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\AddMerchandise.xaml.cs">
       <DependentUpon>AddMerchandise.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\DisplayCustomer.xaml.cs">
+      <DependentUpon>DisplayCustomer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\DisplayEstimate.xaml.cs">
       <DependentUpon>DisplayEstimate.xaml</DependentUpon>
@@ -109,9 +112,6 @@
     <Compile Include="Connection\ConnectionSQL.cs" />
     <Compile Include="Pages\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\DisplayClient.xaml.cs">
-      <DependentUpon>DisplayClient.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\DisplayMerchandise.xaml.cs">
       <DependentUpon>DisplayMerchandise.xaml</DependentUpon>
@@ -141,7 +141,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\AddClient.xaml">
+    <Page Include="Pages\AddCustomer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -149,7 +149,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\DisplayClient.xaml">
+    <Page Include="Pages\DisplayCustomer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

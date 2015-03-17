@@ -15,19 +15,19 @@ namespace MANAGER.Classes
 {
     public class Merchandise
     {
-        public Merchandise(int id, string nom, int quantite, double price, int categoryID)
+        public Merchandise(int id, string name, int quantity, double price, int categoryID)
         {
             this.id = id;
-            this.nom = nom;
-            this.quantite = quantite;
+            this.name = name;
+            this.quantity = quantity;
             this.price = price;
             this.categoryID = categoryID;
         }
 
         public Border Border { get; set; }
-        public string nom { get; set; }
+        public string name { get; set; }
         public double price { get; set; }
-        public int quantite { get; set; }
+        public int quantity { get; set; }
         public int id { get; set; }
         public int categoryID { get; set; }
         public bool onSale { get; set; }

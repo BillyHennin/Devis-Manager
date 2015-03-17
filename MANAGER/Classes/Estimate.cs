@@ -25,7 +25,7 @@ namespace MANAGER.Classes
         }
 
         public double TotalPrix { get; set; }
-        public Client Client { get; set; }
+        public Customer Customer { get; set; }
         public DateTime date { get; set; }
 
         public List<Merchandise> GetList { get { return _listMerchandise; } }

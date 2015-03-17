@@ -48,13 +48,13 @@ namespace MANAGER.Pages
             var nbMerchandise = ListMerchandiseN2.Count;
             for(var i = 0; i < nbMerchandise; i++)
             {
-                if(!ListMerchandiseN2[i].nom.ToLower().Contains(merchandise.ToLower()))
+                if(!ListMerchandiseN2[i].name.ToLower().Contains(merchandise.ToLower()))
                 {
                     continue;
                 }
                 var id = ListMerchandiseN2[i].id;
-                var text = ListMerchandiseN2[i].nom;
-                var newMerchandise = new Merchandise(id, text, ListMerchandiseN2[i].quantite, ListMerchandiseN2[i].price, ListMerchandiseN2[i].categoryID)
+                var text = ListMerchandiseN2[i].name;
+                var newMerchandise = new Merchandise(id, text, ListMerchandiseN2[i].quantity, ListMerchandiseN2[i].price, ListMerchandiseN2[i].categoryID)
                 {
                     onSale = ListMerchandiseN2[i].onSale
                 };

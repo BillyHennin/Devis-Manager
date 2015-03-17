@@ -136,10 +136,10 @@ namespace MANAGER.Pages
                 var resultat = Command.ExecuteReader();
                 while(resultat.Read())
                 {
-                    ComboBoxClient.Items.Add(new ComboboxItemClient
+                    ComboBoxClient.Items.Add(new ComboboxItemCustomer
                     {
                         Text = resultat[2].ToString(),
-                        Value = new Client(Convert.ToInt32(resultat[0]), resultat[2].ToString(), resultat[1].ToString(), resultat[3].ToString())
+                        Value = new Customer(Convert.ToInt32(resultat[0]), resultat[2].ToString(), resultat[1].ToString(), resultat[3].ToString())
                     });
                 }
                 resultat.Close();
@@ -153,7 +153,7 @@ namespace MANAGER.Pages
 
         private void comboBoxClient_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            estimate.Client = ((ComboboxItemClient) ComboBoxClient.SelectedItem).Value;
+            estimate.Customer = ((ComboboxItemCustomer)ComboBoxClient.SelectedItem).Value;
         }
 
         private void TextBoxEstimateQte_TextChanged(object sender, TextChangedEventArgs e)
@@ -176,7 +176,7 @@ namespace MANAGER.Pages
             var nbMerchandise = estimate.GetList.Count;
             for(var i = 0; i < nbMerchandise; i++)
             {
-                if(estimate[i].nom != Text)
+                if(estimate[i].name != Text)
                 {
                     continue;
                 }
@@ -206,10 +206,10 @@ namespace MANAGER.Pages
                     for(var i = 0; i < sizeList; i++)
                     {
                         var Insert = ConnectionOracle.OracleCommandStored("INSERTDEVIS");
-                        Insert.Parameters.Add(new OracleParameter(":1", OracleDbType.Int32) {Value = estimate.Client.id});
+                        Insert.Parameters.Add(new OracleParameter(":1", OracleDbType.Int32) { Value = estimate.Customer.id });
                         Insert.Parameters.Add(new OracleParameter(":2", OracleDbType.Int32) {Value = estimate[i].id});
                         Insert.Parameters.Add(new OracleParameter(":3", OracleDbType.Int32) {Value = ((idEstimate) + i)});
-                        Insert.Parameters.Add(new OracleParameter(":4", OracleDbType.Int32) {Value = estimate[i].quantite});
+                        Insert.Parameters.Add(new OracleParameter(":4", OracleDbType.Int32) {Value = estimate[i].quantity});
                         Insert.Parameters.Add(new OracleParameter(":5", OracleDbType.Varchar2) {Value = DateTime.Now.ToString("dd/MM/yy")});
                         Insert.Parameters.Add(new OracleParameter(":6", OracleDbType.Varchar2) {Value = estimate[i].price});
                         Insert.Parameters.Add(new OracleParameter(":7", OracleDbType.Varchar2) {Value = (numberEstimate)});
@@ -371,7 +371,7 @@ namespace MANAGER.Pages
             {
                 if(merchandise.HasValue)
                 {
-                    if(i == merchandise)
+                    if(i == merchandise.Value)
                     {
                         var Text = string.Format("{0} - {1}", ComboBoxCategory.Text, ComboBoxProduct.Text);
                         var merchandiseCost = Convert.ToInt32(LabelPrice.Content.ToString().Substring(0, LabelPrice.Content.ToString().Length - 1));
@@ -409,7 +409,7 @@ namespace MANAGER.Pages
 
             for(var i = 0; i < nbMerchandise; i++)
             {
-                AddMerchandise(ListMerchandiseN2[i].id, ListMerchandiseN2[i].nom, ListMerchandiseN2[i].quantite, ListMerchandiseN2[i].price,
+                AddMerchandise(ListMerchandiseN2[i].id, ListMerchandiseN2[i].name, ListMerchandiseN2[i].quantity, ListMerchandiseN2[i].price,
                     ListMerchandiseN2[i].categoryID);
             }
             ListMerchandiseN2.Clear();
