@@ -32,7 +32,7 @@
                        Style="{StaticResource Heading2}"
                        Text="{x:Static LocalResources:Localisation.DM_Merchandise}"
                        TextWrapping="Wrap" />
-            <TextBox x:Name="TextBoxDevisQte"
+            <TextBox x:Name="TextBoxEstimateQte"
                      Grid.Row="0"
                      Grid.Column="2"
                      Grid.ColumnSpan="4"
@@ -45,7 +45,7 @@
                      TabIndex="2"
                      Text=""
                      TextAlignment="Right"
-                     TextChanged="TextBoxDevisQte_TextChanged"
+                     TextChanged="TextBoxEstimateQte_TextChanged"
                      TextWrapping="Wrap" />
         </Grid>
         <Grid>
@@ -59,7 +59,7 @@
                     BorderBrush="{DynamicResource Accent}"
                     BorderThickness="1">
                 <ScrollViewer Margin="-1,-1,-94,1">
-                    <StackPanel x:Name="PanelProduit" MinWidth="150" />
+                    <StackPanel x:Name="PanelMerchandise" MinWidth="150" />
                 </ScrollViewer>
             </Border>
         </Grid>

@@ -39,20 +39,20 @@ namespace MANAGER.Pages
                 var Command = ConnectionOracle.OracleCommand("SELECT DISTINCT NUMERODEVIS FROM DEVIS WHERE ID_CLIENT = :ID_CLIENT ORDER BY NUMERODEVIS");
                 Command.Parameters.Add(new OracleParameter(":ID_CLIENT", OracleDbType.Int32)
                 {
-                    Value = ((ComboboxItemCustomer)ComboBoxCustomer.SelectedItem).Value.id
+                    Value = ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.id
                 });
                 var resultCommand = Command.ExecuteReader();
 
-                while (resultCommand.Read())
+                while(resultCommand.Read())
                 {
                     var Command2 =
                         ConnectionOracle.OracleCommand(
                             "SELECT MARCHANDISE.ID_MARCHANDISE, MARCHANDISE.NOM, DEVIS.PRIXMARCHANDISE, DEVIS.QUANTITE, DEVIS.JOUR, MARCHANDISE.ID_CATEGORIE "
                             + "FROM MARCHANDISE, DEVIS WHERE DEVIS.ID_MARCHANDISE=MARCHANDISE.ID_MARCHANDISE AND DEVIS.NUMERODEVIS= :NUMERODEVIS");
-                    Command2.Parameters.Add(new OracleParameter(":NUMERODEVIS", OracleDbType.Int32) { Value = resultCommand[0] });
+                    Command2.Parameters.Add(new OracleParameter(":NUMERODEVIS", OracleDbType.Int32) {Value = resultCommand[0]});
                     var resultatMerchandise = Command2.ExecuteReader();
                     var ListMerchandise2 = new List<Merchandise>();
-                    while (resultatMerchandise.Read())
+                    while(resultatMerchandise.Read())
                     {
                         totalPrice += Convert.ToInt32(resultatMerchandise[2]);
                         date = Convert.ToDateTime(resultatMerchandise[4]);
@@ -62,7 +62,7 @@ namespace MANAGER.Pages
                         ListMerchandise2.Add(merchandise);
                     }
                     resultatMerchandise.Close();
-                    var estimate2 = new Estimate(ListMerchandise2) { TotalPrix = totalPrice, date = date };
+                    var estimate2 = new Estimate(ListMerchandise2) {TotalPrice = totalPrice, date = date};
                     ComboBoxEstimate.Items.Add(new ComboboxItemEstimate
                     {
                         Text = string.Format(Localisation.Localisation.DC_ComboBoxCustomer, nbEstimate, date.ToShortDateString(), totalPrice),
@@ -76,12 +76,13 @@ namespace MANAGER.Pages
             catch
             {
                 MessageBox.Show(Localisation.Localisation.Box_DBFail, Localisation.Localisation.Box_Error, MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
             }
-
-            PanelClientEstimate.Visibility = Visibility.Visible;
-            BTN_Supprimer.Visibility = Visibility.Visible;
-            PanelDevis.Children.Clear();
+            finally
+            {
+                PanelClientEstimate.Visibility = Visibility.Visible;
+                BTN_Delete.Visibility = Visibility.Visible;
+                PanelDevis.Children.Clear();
+            }
         }
 
         private void InitComboClient()
@@ -137,6 +138,7 @@ namespace MANAGER.Pages
                 var panelMarchandise = new StackPanel();
                 var thick = new Thickness(5, 2, 0, 0);
 
+                // New border
                 var bordure = new Border
                 {
                     BorderBrush = ComboBoxCustomer.BorderBrush,
@@ -149,10 +151,10 @@ namespace MANAGER.Pages
                     Height = 70
                 };
 
-                // Nom du produit
+                // Merchandise's name
                 panelMarchandise.Children.Add(new TextBlock { Margin = thick, Text = text, Height = 16 });
 
-                // Quantité
+                // Quantity
                 panelMarchandise.Children.Add(new TextBlock
                 {
                     Text = string.Format(Localisation.Localisation.DC_Command, qte.ToString(CultureInfo.InvariantCulture)),
@@ -160,7 +162,7 @@ namespace MANAGER.Pages
                     Height = 16
                 });
 
-                // Prix
+                // Price
                 panelMarchandise.Children.Add(new TextBlock
                 {
                     Text = string.Format("{0}€", prixMarchandise.ToString(CultureInfo.InvariantCulture)),
@@ -174,7 +176,7 @@ namespace MANAGER.Pages
             }
 
             TotalTextBlock.Text = string.Format("{0} : {1}€", Localisation.Localisation.All_Total,
-                ((ComboboxItemEstimate)ComboBoxEstimate.SelectedItem).Value.TotalPrix);
+                ((ComboboxItemEstimate)ComboBoxEstimate.SelectedItem).Value.TotalPrice);
         }
 
         private void MenuCustomer_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -200,20 +202,20 @@ namespace MANAGER.Pages
 
         private void MenuCustomer_Loaded(object sender, RoutedEventArgs e)
         {
-            var nbMarchandise = estimate.GetList.Count;
+            var nbMerchandise = estimate.GetList.Count;
 
-            if (nbMarchandise == 0)
+            if (nbMerchandise == 0)
             {
                 return;
             }
 
-            for (var i = 0; i < nbMarchandise; i++)
+            for (var i = 0; i < nbMerchandise; i++)
             {
                 estimate[i].Border.BorderBrush = BorderDevis.BorderBrush;
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void ButtonDelete_Click(object sender, RoutedEventArgs e)
         {
             try
             {

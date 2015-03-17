@@ -4,17 +4,17 @@ namespace MANAGER.Classes
 {
     public class Customer
     {
-        public Customer(int id, string denomination, string telephone, string email)
+        public Customer(int id, string name, string cellphone, string email)
         {
             this.id = id;
-            this.denomination = denomination;
-            this.telephone = telephone;
+            this.name = name;
+            this.cellphone = cellphone;
             this.email = email;
         }
 
         public int id { get; set; }
-        public string denomination { get; set; }
-        public string telephone { get; set; }
+        public string name { get; set; }
+        public string cellphone { get; set; }
         public string email { get; set; }
         public List<Estimate> listEstimate { get; set; }
     }

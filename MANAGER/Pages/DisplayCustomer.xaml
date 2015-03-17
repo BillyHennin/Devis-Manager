@@ -40,13 +40,13 @@
                       BorderBrush="{DynamicResource Accent}"
                       Initialized="ComboBoxCustomer_OnInitialized"
                       SelectionChanged="ComboBoxCustomer_SelectionChanged" />
-            <Button x:Name="BTN_Supprimer"
+            <Button x:Name="BTN_Delete"
                     Grid.Row="1"
                     Grid.Column="1"
                     Grid.ColumnSpan="3"
                     Margin="0,5,43,-26"
                     BorderBrush="Red"
-                    Click="Button_Click"
+                    Click="ButtonDelete_Click"
                     Content="{x:Static LocalResources:Localisation.DC_DeleteCustomer}"
                     Visibility="Hidden" />
         </Grid>

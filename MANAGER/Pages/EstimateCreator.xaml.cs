@@ -30,7 +30,7 @@ namespace MANAGER.Pages
         private static readonly List<Merchandise> ListMerchandiseN2 = new List<Merchandise>();
         private readonly Estimate estimate = new Estimate(ListMerchandise);
         private double TotalCost;
-        private int qte;
+        private int quantity;
 
         private void EstimateCreator_Loaded(object sender, RoutedEventArgs e)
         {
@@ -39,7 +39,7 @@ namespace MANAGER.Pages
             {
                 estimate[i].Border.BorderBrush = BtnAdd.BorderBrush;
             }
-            QteChanged();
+            quantityChanged();
         }
 
         private void ComboBoxCategory_Initialized(object sender, EventArgs e)
@@ -101,7 +101,7 @@ namespace MANAGER.Pages
 
             try
             {
-                switch(qte)
+                switch(quantity)
                 {
                     case 0:
                         ErrorCost();
@@ -160,7 +160,7 @@ namespace MANAGER.Pages
         {
             try
             {
-                QteChanged();
+                quantityChanged();
             }
             catch(Exception caught)
             {
@@ -183,7 +183,7 @@ namespace MANAGER.Pages
                 UpdateEstimate(i, null);
                 return;
             }
-            AddMerchandise(((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.id, Text, qte, merchandiseCost,
+            AddMerchandise(((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.id, Text, quantity, merchandiseCost,
                 ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.categoryID);
             AjouterEstimate.IsEnabled = true;
 
@@ -318,15 +318,15 @@ namespace MANAGER.Pages
                     TextBoxEstimateQte.SelectionBrush = TextBoxEstimateQte.BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00));
         }
 
-        private void QteChanged()
+        private void quantityChanged()
         {
-            qte = 0;
+            quantity = 0;
 
             if(IsInt(TextBoxEstimateQte.Text))
             {
-                var newQte = Convert.ToInt32(TextBoxEstimateQte.Text);
+                var newQuantity = Convert.ToInt32(TextBoxEstimateQte.Text);
 
-                if(newQte <= 0)
+                if(newQuantity <= 0)
                 {
                     ErrorCost();
                 }
@@ -334,9 +334,9 @@ namespace MANAGER.Pages
                 {
                     if(ComboBoxProduct.Items.Count != 0)
                     {
-                        qte = newQte;
+                        quantity = newQuantity;
                         LabelPrice.Foreground = new SolidColorBrush(Color.FromRgb(0xC1, 0xC1, 0xC1));
-                        LabelPrice.Content = string.Format("{0}€", (((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.price * qte));
+                        LabelPrice.Content = string.Format("{0}€", (((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.price * quantity));
                         TextBoxEstimateQte.BorderBrush =
                             TextBoxEstimateQte.CaretBrush =
                                 TextBoxEstimateQte.SelectionBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
@@ -375,7 +375,7 @@ namespace MANAGER.Pages
                     {
                         var Text = string.Format("{0} - {1}", ComboBoxCategory.Text, ComboBoxProduct.Text);
                         var merchandiseCost = Convert.ToInt32(LabelPrice.Content.ToString().Substring(0, LabelPrice.Content.ToString().Length - 1));
-                        ListMerchandiseN2.Add(new Merchandise(((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.id, Text, qte, merchandiseCost,
+                        ListMerchandiseN2.Add(new Merchandise(((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.id, Text, quantity, merchandiseCost,
                             ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.categoryID));
                     }
                     else

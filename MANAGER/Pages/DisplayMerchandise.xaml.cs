@@ -42,7 +42,7 @@ namespace MANAGER.Pages
         /// <param name="merchandise"></param>
         private void SelectMarchandiseLike(string merchandise)
         {
-            PanelProduit.Children.Clear();
+            PanelMerchandise.Children.Clear();
             ListMerchandise.Clear();
 
             var nbMerchandise = ListMerchandiseN2.Count;
@@ -63,9 +63,9 @@ namespace MANAGER.Pages
             }
         }
 
-        private void TextBoxDevisQte_TextChanged(object sender, TextChangedEventArgs e)
+        private void TextBoxEstimateQte_TextChanged(object sender, TextChangedEventArgs e)
         {
-            SelectMarchandiseLike(TextBoxDevisQte.Text == "" ? "" : TextBoxDevisQte.Text);
+            SelectMarchandiseLike(TextBoxEstimateQte.Text == "" ? "" : TextBoxEstimateQte.Text);
         }
 
         private void Display(string text, Merchandise newMerchandise)
@@ -73,7 +73,7 @@ namespace MANAGER.Pages
             var panelMerchandise = new StackPanel();
             var thick = new Thickness(5, 2, 0, 0);
 
-            //new border
+            // New border
             var border = new Border
             {
                 BorderBrush = BorderEstimate.BorderBrush,
@@ -85,15 +85,17 @@ namespace MANAGER.Pages
                 Height = 70
             };
 
-            PanelProduit.Children.Add(border);
+            PanelMerchandise.Children.Add(border);
 
-            // Nom du produit
-            panelMerchandise.Children.Add(new TextBlock {Text = text, Margin = thick, Height = 16});
+            // Merchandise's name
+            panelMerchandise.Children.Add(new TextBlock
+            {
+                Text = text, 
+                Margin = thick, 
+                Height = 16
+            });
 
-            // Prix
-            panelMerchandise.Children.Add(new TextBlock {Text = string.Format("{0}€", newMerchandise.price), Margin = thick, Height = 16});
-
-            // Quantité
+            // Quantity
             panelMerchandise.Children.Add(new TextBlock
             {
                 Text = string.Format(Localisation.Localisation.DM_Stock, newMerchandise.price),
@@ -101,7 +103,15 @@ namespace MANAGER.Pages
                 Height = 16
             });
 
-            var BTN_Delete = new Button
+            // Price
+            panelMerchandise.Children.Add(new TextBlock
+            {
+                Text = string.Format("{0}€", newMerchandise.price),
+                Margin = thick, 
+                Height = 16
+            });
+
+            var BTN_Sale = new Button
             {
                 HorizontalAlignment = HorizontalAlignment.Right,
                 Content = newMerchandise.onSale ? Localisation.Localisation.DM_OnSale : Localisation.Localisation.DM_NotOnSale,
@@ -111,10 +121,10 @@ namespace MANAGER.Pages
                 Tag = newMerchandise.id
             };
 
-            // Button deleting
-            panelMerchandise.Children.Add(BTN_Delete);
+            // Delete button
+            panelMerchandise.Children.Add(BTN_Sale);
 
-            BTN_Delete.Click += bouton_Click;
+            BTN_Sale.Click += BTN_Sale_Click;
 
             newMerchandise.Border = border;
             ListMerchandise.Add(newMerchandise);
@@ -122,7 +132,7 @@ namespace MANAGER.Pages
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            PanelProduit.Children.Clear();
+            PanelMerchandise.Children.Clear();
             ListMerchandise.Clear();
             ListMerchandiseN2.Clear();
 
@@ -167,13 +177,14 @@ namespace MANAGER.Pages
             }
         }
 
-        private void bouton_Click(object sender, EventArgs e)
+        private void BTN_Sale_Click(object sender, EventArgs e)
         {
             var id = ((Button) sender).Tag.ToString();
             try
             {
                 var commandeModif = new OracleCommand("UPDATE MARCHANDISE SET ENVENTE=0 WHERE ID_MARCHANDISE=:ID_MARCHANDISE");
                 commandeModif.Parameters.Add(new OracleParameter(":ID_MARCHANDISE", OracleDbType.Int32) {Value = Convert.ToInt32(id)});
+                //TODO : Make this works
                 //commandeModif.ExecuteNonQuery();
             }
             catch

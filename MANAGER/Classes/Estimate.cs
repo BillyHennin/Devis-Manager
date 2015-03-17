@@ -20,11 +20,11 @@ namespace MANAGER.Classes
         public Estimate(List<Merchandise> list)
         {
             _listMerchandise = list;
-            TotalPrix = 0;
+            TotalPrice = 0;
             date = DateTime.Now;
         }
 
-        public double TotalPrix { get; set; }
+        public double TotalPrice { get; set; }
         public Customer Customer { get; set; }
         public DateTime date { get; set; }
 
