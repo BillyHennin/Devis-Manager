@@ -8,7 +8,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
@@ -56,11 +55,9 @@ namespace MANAGER.Pages
                 }
                 var id = ListMerchandiseN2[i].id;
                 var text = ListMerchandiseN2[i].nom;
-                var qte = string.Format(Localisation.Localisation.DM_Stock, ListMerchandiseN2[i].quantite);
-                var prixMerchandise = string.Format("{0}€", ListMerchandiseN2[i].price);
                 var newMerchandise = new Merchandise(id, text, ListMerchandiseN2[i].quantite, ListMerchandiseN2[i].price, ListMerchandiseN2[i].categoryID);
 
-                Display(text, qte, prixMerchandise, newMerchandise);
+                Display(text, newMerchandise);
             }
         }
 
@@ -69,7 +66,7 @@ namespace MANAGER.Pages
             SelectMarchandiseLike(TextBoxDevisQte.Text == "" ? "" : TextBoxDevisQte.Text);
         }
 
-        private void Display(string text, string qte, string prixMerchandise, Merchandise newMerchandise)
+        private void Display(string text, Merchandise newMerchandise)
         {
             var panelMerchandise = new StackPanel();
             var thick = new Thickness(5, 2, 0, 0);
@@ -89,15 +86,25 @@ namespace MANAGER.Pages
             PanelProduit.Children.Add(border);
 
             // Nom du produit
-            panelMerchandise.Children.Add(new TextBlock {Margin = thick, Text = text, Height = 16});
+            panelMerchandise.Children.Add(new TextBlock
+            {
+                Text = text,
+                Margin = thick, 
+                Height = 16
+            });
 
             // Prix
-            panelMerchandise.Children.Add(new TextBlock {Text = qte.ToString(CultureInfo.InvariantCulture), Margin = thick, Height = 16});
+            panelMerchandise.Children.Add(new TextBlock
+            {
+                Text = string.Format("{0}€", newMerchandise.price), 
+                Margin = thick, 
+                Height = 16
+            });
 
             // Quantité
             panelMerchandise.Children.Add(new TextBlock
             {
-                Text = prixMerchandise.ToString(CultureInfo.InvariantCulture),
+                Text =  string.Format(Localisation.Localisation.DM_Stock , newMerchandise.price),
                 Margin = new Thickness(5, 2, 0, 0),
                 Height = 16
             });
@@ -105,9 +112,9 @@ namespace MANAGER.Pages
             var BTN_Delete = new Button
             {
                 HorizontalAlignment = HorizontalAlignment.Right,
-                Content = Localisation.Localisation.EC_DeleteMerchandise,
+                Content = newMerchandise.onSale == 1 ? Localisation.Localisation.DM_OnSale : Localisation.Localisation.DM_NotOnSale,
                 Margin = new Thickness(9, -30, 67, 50),
-                BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00)),
+                BorderBrush = newMerchandise.onSale == 1 ? new SolidColorBrush(Color.FromRgb(0x7c, 0xfc, 0x00)) : new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00)),
                 Tag = newMerchandise.id
             };
 
@@ -126,7 +133,7 @@ namespace MANAGER.Pages
             ListMerchandise.Clear();
             ListMerchandiseN2.Clear();
 
-            const string query = "SELECT * FROM MARCHANDISE WHERE ENVENTE = 1";
+            const string query = "SELECT * FROM MARCHANDISE";
             try
             {
                 var oCommand = ConnectionOracle.OracleCommand(query);
@@ -143,11 +150,8 @@ namespace MANAGER.Pages
                     }
                     var text = string.Format("{0} - {1}", category, resultat[1].ToString());
                     var newMerchandise = new Merchandise(Convert.ToInt32(resultat[0]), text, Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]),
-                        Convert.ToInt32(resultat[5]));
-
-                    var price = string.Format("Quantity in stock : {0}", resultat[3]);
-                    var qte = string.Format("{0}€", resultat[2]);
-                    Display(text, qte, price, newMerchandise);
+                        Convert.ToInt32(resultat[5])) {onSale = Convert.ToInt32(resultat[4])};
+                    Display(text, newMerchandise);
                     ListMerchandiseN2.Add(newMerchandise);
                 }
                 resultat.Close();
@@ -177,26 +181,28 @@ namespace MANAGER.Pages
             try
             {
                 var commandeModif = new OracleCommand("UPDATE MARCHANDISE SET ENVENTE=0 WHERE ID_MARCHANDISE=:ID_MARCHANDISE");
-                commandeModif.Parameters.Add(new OracleParameter(":ID_CLIENT", OracleDbType.Int32)
+                commandeModif.Parameters.Add(new OracleParameter(":ID_MARCHANDISE", OracleDbType.Int32)
                 {
                     Value = Convert.ToInt32(id)
                 });
-               commandeModif.ExecuteNonQuery();
+
+                
+                commandeModif.ExecuteNonQuery();
             }
             catch
             {
                 MessageBox.Show(Localisation.Localisation.Box_DBFail, Localisation.Localisation.Box_Error, MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-            var nbMerchandise = ListMerchandise.Count;
+            var nbMerchandise = ListMerchandiseN2.Count;
             
             for(var i = 0; i < nbMerchandise; i++)
             {
-                if(ListMerchandise[i].ToString() != id)
+                if (ListMerchandiseN2[i].ToString() != id)
                 {
                     continue;
                 }
-                ListMerchandise.Remove(ListMerchandise[i]);
+                ListMerchandiseN2.Remove(ListMerchandiseN2[i]);
                 nbMerchandise -= 1;
             }
             SelectMarchandiseLike("");

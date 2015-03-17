@@ -268,6 +268,24 @@ namespace MANAGER.Localisation {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Not on sale.
+        /// </summary>
+        public static string DM_NotOnSale {
+            get {
+                return ResourceManager.GetString("DM_NotOnSale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à On sale.
+        /// </summary>
+        public static string DM_OnSale {
+            get {
+                return ResourceManager.GetString("DM_OnSale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Quantity in stock : {0}.
         /// </summary>
         public static string DM_Stock {

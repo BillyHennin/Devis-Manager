@@ -30,6 +30,7 @@ namespace MANAGER.Classes
         public int quantite { get; set; }
         public int id { get; set; }
         public int categoryID { get; set; }
+        public int onSale { get; set; }
 
         public override string ToString()
         {

@@ -171,8 +171,8 @@
   <data name="EC_CreateCE" xml:space="preserve">
     <value>Create a cost estimate</value>
   </data>
-  <data name="EC_DeleteMerchandise" xml:space="preserve">
-    <value>Delete the merchandise</value>
+  <data name="DM_OnSale" xml:space="preserve">
+    <value>On sale</value>
   </data>
   <data name="Link_About" xml:space="preserve">
     <value>About</value>
@@ -248,5 +248,11 @@
   </data>
   <data name="EC_Quantity" xml:space="preserve">
     <value>Quantity</value>
+  </data>
+  <data name="DM_NotOnSale" xml:space="preserve">
+    <value>Not on sale</value>
+  </data>
+  <data name="EC_DeleteMerchandise" xml:space="preserve">
+    <value>Delete the merchandise</value>
   </data>
 </root>
