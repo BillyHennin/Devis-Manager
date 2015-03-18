@@ -14,11 +14,11 @@ namespace MANAGER.Classes
     public class Transharp
     {
         public enum LangsEnum
-        {
+        {   
+            Deutsch,
             English,
             French,
-            Spanish,
-            Deutsch
+            Spanish
         }
 
         private const String LangsFolder = "Language"; // langs folder
