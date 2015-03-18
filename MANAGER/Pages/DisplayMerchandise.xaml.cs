@@ -88,12 +88,7 @@ namespace MANAGER.Pages
             PanelMerchandise.Children.Add(border);
 
             // Merchandise's name
-            panelMerchandise.Children.Add(new TextBlock
-            {
-                Text = text, 
-                Margin = thick, 
-                Height = 16
-            });
+            panelMerchandise.Children.Add(new TextBlock {Text = text, Margin = thick, Height = 16});
 
             // Quantity
             panelMerchandise.Children.Add(new TextBlock
@@ -104,12 +99,7 @@ namespace MANAGER.Pages
             });
 
             // Price
-            panelMerchandise.Children.Add(new TextBlock
-            {
-                Text = string.Format("{0}€", newMerchandise.price),
-                Margin = thick, 
-                Height = 16
-            });
+            panelMerchandise.Children.Add(new TextBlock {Text = string.Format("{0}€", newMerchandise.price), Margin = thick, Height = 16});
 
             var BTN_Sale = new Button
             {

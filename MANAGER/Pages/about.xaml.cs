@@ -28,18 +28,16 @@ namespace MANAGER.Pages
             {
                 var json =
                     new WebClient().DownloadString(string.Format("http://billyhennin.github.io/Devis-Manager/MOTD{0}.json", Transharp.getCurrentLanguage()));
-
             }
             catch
             {
                 JsonMOTD = Transharp.GetTranslation("Curl_Fail_MOTD");
             }
 
-
             var PreMOTD = string.Format("\r\n{0}\r\n\r\n{1}\r\n\r\n\t{2}\r\n\t{3}\r\n\t{4}\r\n\r\n{5}\r\n\r\n\t{6}", Transharp.GetTranslation("AB_MOTD1"),
                 Transharp.GetTranslation("AB_MOTD2"), Transharp.GetTranslation("AB_MOTD3"), Transharp.GetTranslation("AB_MOTD4"),
-                Transharp.GetTranslation("AB_MOTD5", "[url='https://github.com/BillyHennin/Devis-Manager']GitHub[/url]"),
-                Transharp.GetTranslation("AB_MOTD6"), JsonMOTD);
+                Transharp.GetTranslation("AB_MOTD5", "[url='https://github.com/BillyHennin/Devis-Manager']GitHub[/url]"), Transharp.GetTranslation("AB_MOTD6"),
+                JsonMOTD);
 
             var thick = new Thickness(5, 2, 0, 0);
 

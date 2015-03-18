@@ -26,7 +26,7 @@ namespace MANAGER.Pages
 
         private void ComboBoxLang_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            switch (ComboBoxLang.SelectedItem.ToString())
+            switch(ComboBoxLang.SelectedItem.ToString())
             {
                 case "French":
                     Transharp.SetCurrentLanguage(Transharp.LangsEnum.French);
@@ -39,13 +39,14 @@ namespace MANAGER.Pages
                     break;
             }
             SelectionTextBlock.Text = Transharp.GetTranslation("PM_SelectionLanguage");
-            MessageBox.Show(Transharp.GetTranslation("PM_LanguageSelected"), Transharp.GetTranslation("Box_Lang_Success"), MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(Transharp.GetTranslation("PM_LanguageSelected"), Transharp.GetTranslation("Box_Lang_Success"), MessageBoxButton.OK,
+                MessageBoxImage.Information);
         }
 
         private void ComboBoxLang_Initialized(object sender, EventArgs e)
         {
             var files = Directory.GetFiles(Directory.GetCurrentDirectory() + "\\Language", "*.lang");
-            foreach (var file in files)
+            foreach(var file in files)
             {
                 ComboBoxLang.Items.Add(file.Split('.')[0].Split('\\').Last());
             }

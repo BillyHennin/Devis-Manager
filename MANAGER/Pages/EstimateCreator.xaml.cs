@@ -153,7 +153,7 @@ namespace MANAGER.Pages
 
         private void comboBoxClient_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            estimate.Customer = ((ComboboxItemCustomer)ComboBoxClient.SelectedItem).Value;
+            estimate.Customer = ((ComboboxItemCustomer) ComboBoxClient.SelectedItem).Value;
         }
 
         private void TextBoxEstimateQte_TextChanged(object sender, TextChangedEventArgs e)
@@ -218,7 +218,8 @@ namespace MANAGER.Pages
                 }
                 result.Close();
                 BtnAdd.Content = Transharp.GetTranslation("BTN_Add");
-                MessageBox.Show(Transharp.GetTranslation("Box_SuccessAdd", numberEstimate, TotalCost), Transharp.GetTranslation("Box_CE_Success"), MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(Transharp.GetTranslation("Box_SuccessAdd", numberEstimate, TotalCost), Transharp.GetTranslation("Box_CE_Success"),
+                    MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch
             {

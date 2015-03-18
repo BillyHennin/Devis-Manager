@@ -1,9 +1,14 @@
-﻿using System;
+﻿// This program is a private software, based on c# source code.
+// To sell or change credits of this software is forbidden,
+// except if someone approve it from MANAGER INC. team.
+//  
+// Copyrights (c) 2014 MANAGER INC. All rights reserved.
+
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
-
 
 using MANAGER.Classes;
 using MANAGER.ComboBox;
@@ -14,7 +19,7 @@ using Oracle.ManagedDataAccess.Client;
 namespace MANAGER.Pages
 {
     /// <summary>
-    /// Logique d'interaction pour DisplayCustomer.xaml
+    ///   Logique d'interaction pour DisplayCustomer.xaml
     /// </summary>
     public partial class DisplayCustomer
     {
@@ -92,7 +97,7 @@ namespace MANAGER.Pages
             {
                 var oCommand = ConnectionOracle.OracleCommand(query);
                 var resultat = oCommand.ExecuteReader();
-                while (resultat.Read())
+                while(resultat.Read())
                 {
                     ComboBoxCustomer.Items.Add(new ComboboxItemCustomer
                     {
@@ -112,20 +117,20 @@ namespace MANAGER.Pages
         {
             PanelDevis.Children.Clear();
 
-            if (ComboBoxEstimate.Items.Count == 0)
+            if(ComboBoxEstimate.Items.Count == 0)
             {
                 return;
             }
 
-            var listMarchandise = ((ComboboxItemEstimate)ComboBoxEstimate.SelectedItem).Value.GetList;
+            var listMarchandise = ((ComboboxItemEstimate) ComboBoxEstimate.SelectedItem).Value.GetList;
             var taille = listMarchandise.Count;
-            for (var i = 0; i < taille; i++)
+            for(var i = 0; i < taille; i++)
             {
                 var categoryString = string.Empty;
                 var CommandCategory = ConnectionOracle.OracleCommand("SELECT LIBELLE FROM CATEGORIE WHERE ID_CATEGORIE=:ID_CATEGORIE");
-                CommandCategory.Parameters.Add(new OracleParameter(":ID_CATEGORIE", OracleDbType.Int32) { Value = Convert.ToInt32(listMarchandise[i].categoryID) });
+                CommandCategory.Parameters.Add(new OracleParameter(":ID_CATEGORIE", OracleDbType.Int32) {Value = Convert.ToInt32(listMarchandise[i].categoryID)});
                 var resultatCategory = CommandCategory.ExecuteReader();
-                while (resultatCategory.Read())
+                while(resultatCategory.Read())
                 {
                     categoryString = resultatCategory[0].ToString();
                 }
@@ -152,7 +157,7 @@ namespace MANAGER.Pages
                 };
 
                 // Merchandise's name
-                panelMarchandise.Children.Add(new TextBlock { Margin = thick, Text = text, Height = 16 });
+                panelMarchandise.Children.Add(new TextBlock {Margin = thick, Text = text, Height = 16});
 
                 // Quantity
                 panelMarchandise.Children.Add(new TextBlock
@@ -176,7 +181,7 @@ namespace MANAGER.Pages
             }
 
             TotalTextBlock.Text = string.Format("{0} : {1}€", Transharp.GetTranslation("All_Total"),
-                ((ComboboxItemEstimate)ComboBoxEstimate.SelectedItem).Value.TotalPrice);
+                ((ComboboxItemEstimate) ComboBoxEstimate.SelectedItem).Value.TotalPrice);
         }
 
         private void MenuCustomer_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -186,12 +191,12 @@ namespace MANAGER.Pages
             try
             {
                 var nbMarchandise = estimate.GetList.Count;
-                for (var i = 0; i < nbMarchandise; i++)
+                for(var i = 0; i < nbMarchandise; i++)
                 {
                     ListMerchandise[i].Border.Width = BorderDevis.Width - 5;
                 }
             }
-            catch (Exception caught)
+            catch(Exception caught)
             {
                 //On initialisation it don't works so here's a try/catch.
                 //Need to figure out how to bypass it since it's not useful.
@@ -204,12 +209,12 @@ namespace MANAGER.Pages
         {
             var nbMerchandise = estimate.GetList.Count;
 
-            if (nbMerchandise == 0)
+            if(nbMerchandise == 0)
             {
                 return;
             }
 
-            for (var i = 0; i < nbMerchandise; i++)
+            for(var i = 0; i < nbMerchandise; i++)
             {
                 estimate[i].Border.BorderBrush = BorderDevis.BorderBrush;
             }
@@ -220,7 +225,7 @@ namespace MANAGER.Pages
             try
             {
                 var commandeModif = ConnectionOracle.OracleCommandStored("DELETECLIENT");
-                var CustomerId = new OracleParameter(":1", OracleDbType.Int32) { Value = ((ComboboxItemCustomer)ComboBoxCustomer.SelectedItem).Value.id };
+                var CustomerId = new OracleParameter(":1", OracleDbType.Int32) {Value = ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.id};
                 commandeModif.Parameters.Add(CustomerId);
                 commandeModif.ExecuteNonQuery();
             }
