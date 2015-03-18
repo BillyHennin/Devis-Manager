@@ -34,8 +34,6 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-
-
             </StackPanel>
         </ScrollViewer>
     </Grid>

@@ -98,7 +98,7 @@ namespace MANAGER.Pages
             // Quantity
             panelMerchandise.Children.Add(new TextBlock
             {
-                Text = string.Format(Localisation.Localisation.DM_Stock, newMerchandise.price),
+                Text = Transharp.GetTranslation("DM_Stock", newMerchandise.price),
                 Margin = new Thickness(5, 2, 0, 0),
                 Height = 16
             });
@@ -114,7 +114,7 @@ namespace MANAGER.Pages
             var BTN_Sale = new Button
             {
                 HorizontalAlignment = HorizontalAlignment.Right,
-                Content = newMerchandise.onSale ? Localisation.Localisation.DM_OnSale : Localisation.Localisation.DM_NotOnSale,
+                Content = newMerchandise.onSale ? Transharp.GetTranslation("DM_OnSale") : Transharp.GetTranslation("DM_NotOnSale"),
                 Margin = new Thickness(9, -30, 67, 50),
                 BorderBrush =
                     newMerchandise.onSale ? new SolidColorBrush(Color.FromRgb(0x7c, 0xfc, 0x00)) : new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00)),
@@ -161,7 +161,7 @@ namespace MANAGER.Pages
             }
             catch
             {
-                MessageBox.Show(Localisation.Localisation.Box_DBFail, Localisation.Localisation.Box_Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -189,7 +189,7 @@ namespace MANAGER.Pages
             }
             catch
             {
-                MessageBox.Show(Localisation.Localisation.Box_DBFail, Localisation.Localisation.Box_Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
             {

@@ -9,14 +9,14 @@ namespace MANAGER.Classes
 	{
 		public enum LangsEnum
 		{
-			En,
-			Fr,
-			Es,
-			De
+			English,
+			French,
+			Spanish,
+			Deutsch
 		}
 
-		private static LangsEnum _currentLanguage = LangsEnum.En; //Default
-		private const String LangsFolder = "language"; // langs folder
+		private static LangsEnum _currentLanguage = LangsEnum.English; //Default
+		private const String LangsFolder = "Language"; // langs folder
 		private const String LangFileExt = ".lang"; // File extension
 		private const char Separator = '=';
 		private const String Placeholder = "%x";
@@ -36,7 +36,7 @@ namespace MANAGER.Classes
 			return GetTranslation(key, _currentLanguage, values);
 		}
 
-		public static String GetTranslation(String key, LangsEnum lang, params Object[] values)
+	    public static String GetTranslation(String key, LangsEnum lang, params Object[] values)
 		{
 			var strToFormat = GetTranslation(key, lang);
 		    if(strToFormat == null)
@@ -49,7 +49,7 @@ namespace MANAGER.Classes
 		    return String.Format(strToFormat, values); // Format and return the translation
 		}
 
-		public static String GetTranslation(String key, LangsEnum lang)
+	    public static String GetTranslation(String key, LangsEnum lang)
 		{
 			var filePath = GetLangFilePath(lang);
 			const Int32 bufferSize = 1024;

@@ -65,7 +65,7 @@ namespace MANAGER.Pages
                     var estimate2 = new Estimate(ListMerchandise2) {TotalPrice = totalPrice, date = date};
                     ComboBoxEstimate.Items.Add(new ComboboxItemEstimate
                     {
-                        Text = string.Format(Localisation.Localisation.DC_ComboBoxCustomer, nbEstimate, date.ToShortDateString(), totalPrice),
+                        Text = Transharp.GetTranslation("DC_ComboBoxCustomer", nbEstimate, date.ToShortDateString(), totalPrice),
                         Value = estimate2
                     });
                     nbEstimate++;
@@ -75,7 +75,7 @@ namespace MANAGER.Pages
             }
             catch
             {
-                MessageBox.Show(Localisation.Localisation.Box_DBFail, Localisation.Localisation.Box_Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
             {
@@ -104,7 +104,7 @@ namespace MANAGER.Pages
             }
             catch
             {
-                MessageBox.Show(Localisation.Localisation.Box_DBFail, Localisation.Localisation.Box_Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -157,7 +157,7 @@ namespace MANAGER.Pages
                 // Quantity
                 panelMarchandise.Children.Add(new TextBlock
                 {
-                    Text = string.Format(Localisation.Localisation.DC_Command, qte.ToString(CultureInfo.InvariantCulture)),
+                    Text = Transharp.GetTranslation("DC_Command", qte.ToString(CultureInfo.InvariantCulture)),
                     Margin = thick,
                     Height = 16
                 });
@@ -175,7 +175,7 @@ namespace MANAGER.Pages
                 estimate.GetList.Add(item);
             }
 
-            TotalTextBlock.Text = string.Format("{0} : {1}€", Localisation.Localisation.All_Total,
+            TotalTextBlock.Text = string.Format("{0} : {1}€", Transharp.GetTranslation("All_Total"),
                 ((ComboboxItemEstimate)ComboBoxEstimate.SelectedItem).Value.TotalPrice);
         }
 
@@ -226,7 +226,7 @@ namespace MANAGER.Pages
             }
             catch
             {
-                MessageBox.Show(Localisation.Localisation.Box_DBFail, Localisation.Localisation.Box_Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             ComboBoxCustomer.Items.Clear();

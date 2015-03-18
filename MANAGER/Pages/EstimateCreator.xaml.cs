@@ -61,7 +61,7 @@ namespace MANAGER.Pages
             }
             catch
             {
-                MessageBox.Show(Localisation.Localisation.Box_DBFail, Localisation.Localisation.Box_Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -91,13 +91,13 @@ namespace MANAGER.Pages
             }
             catch
             {
-                MessageBox.Show(Localisation.Localisation.Box_DBFail, Localisation.Localisation.Box_Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         private void ComboBoxProduct_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            BtnAdd.Content = Localisation.Localisation.BTN_Add;
+            BtnAdd.Content = Transharp.GetTranslation("BTN_Add");
 
             try
             {
@@ -114,7 +114,7 @@ namespace MANAGER.Pages
                         {
                             if(estimate[i].id == ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.id)
                             {
-                                BtnAdd.Content = Localisation.Localisation.BTN_Modify;
+                                BtnAdd.Content = Transharp.GetTranslation("BTN_Modify");
                             }
                         }
                         break;
@@ -147,7 +147,7 @@ namespace MANAGER.Pages
             }
             catch
             {
-                MessageBox.Show(Localisation.Localisation.Box_DBFail, Localisation.Localisation.Box_Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -187,7 +187,7 @@ namespace MANAGER.Pages
                 ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.categoryID);
             AjouterEstimate.IsEnabled = true;
 
-            BtnAdd.Content = Localisation.Localisation.BTN_Modify;
+            BtnAdd.Content = Transharp.GetTranslation("BTN_Modify");
         }
 
         private void BTNAddEstimate_click(object sender, RoutedEventArgs e)
@@ -206,7 +206,7 @@ namespace MANAGER.Pages
                     for(var i = 0; i < sizeList; i++)
                     {
                         var Insert = ConnectionOracle.OracleCommandStored("INSERTDEVIS");
-                        Insert.Parameters.Add(new OracleParameter(":1", OracleDbType.Int32) { Value = estimate.Customer.id });
+                        Insert.Parameters.Add(new OracleParameter(":1", OracleDbType.Int32) {Value = estimate.Customer.id});
                         Insert.Parameters.Add(new OracleParameter(":2", OracleDbType.Int32) {Value = estimate[i].id});
                         Insert.Parameters.Add(new OracleParameter(":3", OracleDbType.Int32) {Value = ((idEstimate) + i)});
                         Insert.Parameters.Add(new OracleParameter(":4", OracleDbType.Int32) {Value = estimate[i].quantity});
@@ -217,13 +217,12 @@ namespace MANAGER.Pages
                     }
                 }
                 result.Close();
-                BtnAdd.Content = Localisation.Localisation.BTN_Add;
-                var message = string.Format(Localisation.Localisation.Box_SuccessAdd, numberEstimate, TotalCost);
-                MessageBox.Show(message, Localisation.Localisation.Box_Success, MessageBoxButton.OK, MessageBoxImage.Information);
+                BtnAdd.Content = Transharp.GetTranslation("BTN_Add");
+                MessageBox.Show(Transharp.GetTranslation("Box_SuccessAdd", numberEstimate, TotalCost), Transharp.GetTranslation("Box_CE_Success"), MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch
             {
-                MessageBox.Show(Localisation.Localisation.Box_DBFail, Localisation.Localisation.Box_Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
             {
@@ -284,7 +283,7 @@ namespace MANAGER.Pages
             // Quantity
             panelMerchandise.Children.Add(new TextBlock
             {
-                Text = string.Format("{0} : {1}", Localisation.Localisation.EC_Quantity, quantity.ToString(CultureInfo.InvariantCulture)),
+                Text = string.Format("{0} : {1}", Transharp.GetTranslation("EC_Quantity"), quantity.ToString(CultureInfo.InvariantCulture)),
                 HorizontalAlignment = HorizontalAlignment.Left,
                 Margin = thick,
                 Height = 16
@@ -293,7 +292,7 @@ namespace MANAGER.Pages
             var BTN_Delete = new Button
             {
                 HorizontalAlignment = HorizontalAlignment.Right,
-                Content = Localisation.Localisation.EC_DeleteMerchandise,
+                Content = Transharp.GetTranslation("EC_DeleteMerchandise"),
                 Margin = new Thickness(9, -30, 67, 50),
                 BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00)),
                 Tag = newMerchandise
@@ -306,12 +305,12 @@ namespace MANAGER.Pages
             PanelEstimate.Children.Add(border);
             estimate.GetList.Add(newMerchandise);
             TotalCost += price;
-            LabelTotalPrix.Text = string.Format("{0} : {1}€", Localisation.Localisation.All_Total, TotalCost);
+            LabelTotalPrix.Text = string.Format("{0} : {1}€", Transharp.GetTranslation("All_Total"), TotalCost);
         }
 
         private void ErrorCost()
         {
-            LabelPrice.Content = Localisation.Localisation.Box_Error;
+            LabelPrice.Content = Transharp.GetTranslation("Box_Error");
             BtnAdd.IsEnabled = false;
             LabelPrice.Foreground =
                 TextBoxEstimateQte.CaretBrush =
@@ -362,7 +361,7 @@ namespace MANAGER.Pages
 
         private void UpdateEstimate(int? merchandise, int? id)
         {
-            BtnAdd.Content = Localisation.Localisation.BTN_Add;
+            BtnAdd.Content = Transharp.GetTranslation("BTN_Add");
             TotalCost = 0;
             LabelTotalPrix.Text = "";
 
@@ -400,7 +399,7 @@ namespace MANAGER.Pages
             {
                 if(ListMerchandiseN2[i].id == ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.id)
                 {
-                    BtnAdd.Content = Localisation.Localisation.BTN_Modify;
+                    BtnAdd.Content = Transharp.GetTranslation("BTN_Modify");
                 }
             }
 
