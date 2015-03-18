@@ -17,6 +17,7 @@ Box_SuccessAdd=Le devis numéro "%x" a été ajouté a la base de données avec 
 BTN_Add=Ajouter 
 BTN_Create=Créer 
 BTN_Modify=Mettre à jour
+Curl_Fail_MOTD=Erreur lors de la recuperation du message du jour.
 DC_ChooseCustomer=Choisir un client : 
 DC_ComboBoxCustomer=Devis n° %x - Date : %x - Total : %x€ 
 DC_Command=Quantité Commandée : %x 

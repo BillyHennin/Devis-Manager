@@ -17,6 +17,7 @@ Box_SuccessAdd=The cost estimate number "%x" was successfully added to the datab
 BTN_Add=Add 
 BTN_Create=Create 
 BTN_Modify=Update 
+Curl_Fail_MOTD=Error getting message of the day.
 DC_ChooseCustomer=Choose a customer : 
 DC_ComboBoxCustomer=Cost estimate n° %x - Date : %x - Total : %x€ 
 DC_Command=Quantity Commanded : %x 
@@ -47,3 +48,4 @@ Link_Merchandise=Merchandise
 Link_Param=Parameters 
 PM_SelectionLanguage=Select the language : 
 PM_LanguageSelected=Text now in English.
+

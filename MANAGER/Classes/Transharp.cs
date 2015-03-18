@@ -15,7 +15,7 @@ namespace MANAGER.Classes
 			Deutsch
 		}
 
-		private static LangsEnum _currentLanguage = LangsEnum.English; //Default
+	    private static LangsEnum _currentLanguage = LangsEnum.English; //Default
 		private const String LangsFolder = "Language"; // langs folder
 		private const String LangFileExt = ".lang"; // File extension
 		private const char Separator = '=';
@@ -25,6 +25,11 @@ namespace MANAGER.Classes
 		{
 			_currentLanguage = lang;
 		}
+
+	    public static string getCurrentLanguage()
+	    {
+            return _currentLanguage.ToString();
+	    }
 
 		public static String GetTranslation(String key)
 		{
