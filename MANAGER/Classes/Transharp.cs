@@ -14,7 +14,7 @@ namespace MANAGER.Classes
     public class Transharp
     {
         public enum LangsEnum
-        {   
+        {
             Deutsch,
             English,
             French,

@@ -22,6 +22,8 @@ namespace MANAGER.Classes
         public string name { get; set; }
         public string cellphone { get; set; }
         public string email { get; set; }
+        //TODO : Create a code for each customer (looks as real as possible)
+        //public string code { get; set; }
         public List<Estimate> listEstimate { get; set; }
     }
 }

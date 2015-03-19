@@ -15,6 +15,7 @@ namespace MANAGER.Classes
 {
     public class Merchandise
     {
+        //From sql : 0,1,3,2,5
         public Merchandise(int id, string name, int quantity, double price, int categoryID)
         {
             this.id = id;

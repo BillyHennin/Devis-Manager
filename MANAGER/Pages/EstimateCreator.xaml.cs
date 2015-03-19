@@ -295,7 +295,7 @@ namespace MANAGER.Pages
                 HorizontalAlignment = HorizontalAlignment.Right,
                 Content = Transharp.GetTranslation("EC_DeleteMerchandise"),
                 Margin = new Thickness(9, -30, 67, 50),
-                BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00)),
+                BorderBrush = Brushes.Red,
                 Tag = newMerchandise
             };
 
@@ -313,9 +313,7 @@ namespace MANAGER.Pages
         {
             LabelPrice.Content = Transharp.GetTranslation("Box_Error");
             BtnAdd.IsEnabled = false;
-            LabelPrice.Foreground =
-                TextBoxEstimateQte.CaretBrush =
-                    TextBoxEstimateQte.SelectionBrush = TextBoxEstimateQte.BorderBrush = new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00));
+            LabelPrice.Foreground = TextBoxEstimateQte.CaretBrush = TextBoxEstimateQte.SelectionBrush = TextBoxEstimateQte.BorderBrush = Brushes.Red;
         }
 
         private void quantityChanged()
@@ -335,7 +333,7 @@ namespace MANAGER.Pages
                     if(ComboBoxProduct.Items.Count != 0)
                     {
                         quantity = newQuantity;
-                        LabelPrice.Foreground = new SolidColorBrush(Color.FromRgb(0xC1, 0xC1, 0xC1));
+                        LabelPrice.Foreground = Brushes.GhostWhite;
                         LabelPrice.Content = string.Format("{0}€", (((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.price * quantity));
                         TextBoxEstimateQte.BorderBrush =
                             TextBoxEstimateQte.CaretBrush =

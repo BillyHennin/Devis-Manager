@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -48,7 +49,9 @@ namespace MANAGER.Pages
             var nbMerchandise = ListMerchandiseN2.Count;
             for(var i = 0; i < nbMerchandise; i++)
             {
-                if(!ListMerchandiseN2[i].name.ToLower().Contains(merchandise.ToLower()))
+                if(!ListMerchandiseN2[i].name.ToLower().Contains(merchandise.ToLower())
+                   && !ListMerchandiseN2[i].price.ToString(CultureInfo.InvariantCulture).Contains(merchandise)
+                   && !ListMerchandiseN2[i].quantity.ToString(CultureInfo.InvariantCulture).Contains(merchandise))
                 {
                     continue;
                 }
@@ -60,6 +63,31 @@ namespace MANAGER.Pages
                 };
 
                 Display(text, newMerchandise);
+            }
+            if(ListMerchandise.Count == 0)
+            {
+                var panelMerchandise = new StackPanel();
+                // New border
+                var border = new Border
+                {
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    Margin = new Thickness(2, 2, 1, 0),
+                    BorderThickness = new Thickness(1),
+                    Width = BorderEstimate.Width - 5,
+                    Child = panelMerchandise,
+                    Height = 100
+                };
+
+                PanelMerchandise.Children.Add(border);
+
+                // Merchandise's name
+                panelMerchandise.Children.Add(new TextBlock
+                {
+                    Text = Transharp.GetTranslation("DM_SearchNull"),
+                    Margin = new Thickness(5, 2, 0, 0),
+                    Height = 40,
+                    TextAlignment = TextAlignment.Center
+                });
             }
         }
 
@@ -93,7 +121,7 @@ namespace MANAGER.Pages
             // Quantity
             panelMerchandise.Children.Add(new TextBlock
             {
-                Text = Transharp.GetTranslation("DM_Stock", newMerchandise.price),
+                Text = Transharp.GetTranslation("DM_Stock", newMerchandise.quantity),
                 Margin = new Thickness(5, 2, 0, 0),
                 Height = 16
             });
@@ -106,9 +134,8 @@ namespace MANAGER.Pages
                 HorizontalAlignment = HorizontalAlignment.Right,
                 Content = newMerchandise.onSale ? Transharp.GetTranslation("DM_OnSale") : Transharp.GetTranslation("DM_NotOnSale"),
                 Margin = new Thickness(9, -30, 67, 50),
-                BorderBrush =
-                    newMerchandise.onSale ? new SolidColorBrush(Color.FromRgb(0x7c, 0xfc, 0x00)) : new SolidColorBrush(Color.FromRgb(0xff, 0x00, 0x00)),
-                Tag = newMerchandise.id
+                BorderBrush = newMerchandise.onSale ? Brushes.Lime : Brushes.Red,
+                Tag = newMerchandise
             };
 
             // Delete button

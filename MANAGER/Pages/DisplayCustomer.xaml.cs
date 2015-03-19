@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 using MANAGER.Classes;
 using MANAGER.ComboBox;
@@ -26,9 +27,35 @@ namespace MANAGER.Pages
         private static readonly List<Merchandise> ListMerchandise = new List<Merchandise>();
         private readonly Estimate estimate = new Estimate(ListMerchandise);
 
-        private void ComboBoxCustomer_OnInitialized(object sender, EventArgs e)
+        private void ComboBoxCustomer_Loaded(object sender, EventArgs e)
         {
-            InitComboClient();
+            //Traduction
+            DC_ChooseCustomer.Text = Transharp.GetTranslation("DC_ChooseCustomer");
+            LabelEstimate.Text = Transharp.GetTranslation("DC_CustomerCE");
+            LabelCommand.Text = Transharp.GetTranslation("DC_CustomerCM");
+            LabelPhone.Text = Transharp.GetTranslation("DC_LabelPhone");
+            LabelMail.Text = Transharp.GetTranslation("DC_labelMail");
+            BTN_Delete.Content = Transharp.GetTranslation("DC_DeleteCustomer");
+
+            //Default Visibility 
+            PanelClientEstimate.Visibility = Visibility.Hidden;
+            BTN_Delete.Visibility = Visibility.Hidden;
+            PanelDevis.Children.Clear();
+            BorderDevis.Visibility = Visibility.Hidden;
+            LabelPhone.Visibility = Visibility.Hidden;
+            LabelMail.Visibility = Visibility.Hidden;
+            TextPhone.Visibility = Visibility.Hidden;
+            TextMail.Visibility = Visibility.Hidden;
+            try
+            {
+                ComboBoxCustomer.Items.Clear();
+                InitComboClient();
+            }
+            catch(Exception caught)
+            {
+                Console.WriteLine(caught.Message);
+                //potatoe
+            }
         }
 
         private void ComboBoxCustomer_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -77,14 +104,26 @@ namespace MANAGER.Pages
                     totalPrice = 0;
                 }
                 resultCommand.Close();
+                TextMail.Text = ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.email;
+                TextPhone.Text = ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.cellphone;
             }
-            catch
+            catch(Exception caught)
             {
-                MessageBox.Show(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
+                Console.WriteLine(caught.Message);
+                //This show up when leaving the page, need to figure out why.
+
+                //MessageBox.Show(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
+                //MessageBox.Show("YIH");
             }
             finally
             {
                 PanelClientEstimate.Visibility = Visibility.Visible;
+
+                LabelPhone.Visibility = Visibility.Visible;
+                LabelMail.Visibility = Visibility.Visible;
+
+                TextPhone.Visibility = Visibility.Visible;
+                TextMail.Visibility = Visibility.Visible;
                 BTN_Delete.Visibility = Visibility.Visible;
                 PanelDevis.Children.Clear();
             }
@@ -102,7 +141,7 @@ namespace MANAGER.Pages
                     ComboBoxCustomer.Items.Add(new ComboboxItemCustomer
                     {
                         Text = resultat[2].ToString(),
-                        Value = new Customer(Convert.ToInt32(resultat[0]), resultat[2].ToString(), resultat[1].ToString(), resultat[3].ToString())
+                        Value = new Customer(Convert.ToInt32(resultat[0]), resultat[2].ToString(), resultat[3].ToString(), resultat[1].ToString())
                     });
                 }
                 resultat.Close();
@@ -116,7 +155,7 @@ namespace MANAGER.Pages
         private void ComboBoxEstimate_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             PanelDevis.Children.Clear();
-
+            BorderDevis.Visibility = Visibility.Visible;
             if(ComboBoxEstimate.Items.Count == 0)
             {
                 return;
@@ -180,13 +219,25 @@ namespace MANAGER.Pages
                 estimate.GetList.Add(item);
             }
 
-            TotalTextBlock.Text = string.Format("{0} : {1}€", Transharp.GetTranslation("All_Total"),
-                ((ComboboxItemEstimate) ComboBoxEstimate.SelectedItem).Value.TotalPrice);
+            //colorChange(Brushes.LimeGreen);
+
+            //TotalTextBlock.Text = string.Format("{0} : {1}€", Transharp.GetTranslation("All_Total"),
+            //((ComboboxItemEstimate) ComboBoxEstimate.SelectedItem).Value.TotalPrice);
+        }
+
+        private void colorChange(Brush newColour)
+        {
+            BorderDevis.BorderBrush = newColour;
+            var nbMarchandise = estimate.GetList.Count;
+            for(var i = 0; i < nbMarchandise; i++)
+            {
+                ListMerchandise[i].Border.BorderBrush = newColour;
+            }
         }
 
         private void MenuCustomer_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            BorderDevis.Width = MenuCustomer.ActualWidth - 40;
+            BorderDevis.Width = MenuCustomer.ActualWidth - 400;
             BorderDevis.Height = MenuCustomer.ActualHeight - 100;
             try
             {
@@ -237,5 +288,7 @@ namespace MANAGER.Pages
             ComboBoxCustomer.Items.Clear();
             InitComboClient();
         }
+
+        private void ComboBoxCommands_SelectionChanged(object sender, SelectionChangedEventArgs e) {}
     }
 }
