@@ -306,7 +306,7 @@ namespace MANAGER.Pages
             PanelEstimate.Children.Add(border);
             estimate.GetList.Add(newMerchandise);
             TotalCost += price;
-            LabelTotalPrix.Text = string.Format("{0} : {1}€", Transharp.GetTranslation("All_Total"), TotalCost);
+            LabelTotalPrix.Text = Transharp.GetTranslation("All_Total", TotalCost);
         }
 
         private void ErrorCost()

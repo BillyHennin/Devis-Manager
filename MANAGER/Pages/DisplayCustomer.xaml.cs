@@ -225,6 +225,7 @@ namespace MANAGER.Pages
             //((ComboboxItemEstimate) ComboBoxEstimate.SelectedItem).Value.TotalPrice);
         }
 
+/*
         private void colorChange(Brush newColour)
         {
             BorderDevis.BorderBrush = newColour;
@@ -234,6 +235,7 @@ namespace MANAGER.Pages
                 ListMerchandise[i].Border.BorderBrush = newColour;
             }
         }
+*/
 
         private void MenuCustomer_SizeChanged(object sender, SizeChangedEventArgs e)
         {
