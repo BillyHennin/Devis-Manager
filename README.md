@@ -4,7 +4,21 @@ Devis manager
 Français
 ======
 
+Ceci est le fichier "readme" du git de l'application manager. Depuis ici vous pouvez voir comment fonctionne l'application.
 
+=====
+
+Si vous voulez juste l'application compilée, allez ici : https://github.com/BillyHennin/Devis-Manager/tree/release
+
+Mais si vous voulez voir le code source, et bien, vous êtes au bon endroit.
+
+=====
+
+Vous pouvez forker le code, le lire, le telecharger ou le cloner.
+
+Vous êtes libre de l'ameliorer, de tenter de le comprendre ou bien d'en avoir un usage personnel.
+
+=====
 English
 ======
 
