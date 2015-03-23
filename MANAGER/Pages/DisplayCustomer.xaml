@@ -14,12 +14,12 @@
         <Grid Width="333" HorizontalAlignment="Left">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0" />
-                <ColumnDefinition Width="152" />
-                <ColumnDefinition Width="9" />
-                <ColumnDefinition Width="71" />
+                <ColumnDefinition Width="178" />
+                <ColumnDefinition Width="7" />
+                <ColumnDefinition Width="47" />
                 <ColumnDefinition Width="0*" />
-                <ColumnDefinition />
-                <ColumnDefinition />
+                <ColumnDefinition Width="51*" />
+                <ColumnDefinition Width="50*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="8*" />
@@ -30,8 +30,8 @@
             </Grid.RowDefinitions>
             <TextBlock x:Name="DC_ChooseCustomer"
                        Grid.Column="0"
-                       Grid.ColumnSpan="4"
-                       Margin="0,10,61,0"
+                       Grid.ColumnSpan="3"
+                       Margin="0,10,0,0"
                        Style="{StaticResource Heading2}"
                        Text="#DC_ChooseCustomer"
                        TextWrapping="Wrap" />
@@ -46,7 +46,8 @@
             <TextBlock x:Name="LabelPhone"
                        Grid.Row="1"
                        Grid.Column="0"
-                       Margin="0,50,-138,0"
+                       Grid.ColumnSpan="2"
+                       Margin="0,50,1,0"
                        Style="{StaticResource Heading2}"
                        Text="#LabelPhone"
                        TextWrapping="Wrap"
@@ -61,7 +62,8 @@
             <TextBlock x:Name="LabelMail"
                        Grid.Row="2"
                        Grid.Column="0"
-                       Margin="0,15,-138,0"
+                       Grid.ColumnSpan="2"
+                       Margin="0,15,14,0"
                        Style="{StaticResource Heading2}"
                        Text="#LabelMail"
                        TextWrapping="Wrap"

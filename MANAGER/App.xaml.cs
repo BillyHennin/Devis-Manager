@@ -12,6 +12,7 @@ using System.Windows.Media;
 
 using FirstFloor.ModernUI.Presentation;
 
+using MANAGER.Classes;
 using MANAGER.Properties;
 
 #endregion
@@ -29,6 +30,18 @@ namespace MANAGER
             AppearanceManager.Current.AccentColor = (Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor);
             AppearanceManager.Current.FontSize = Settings.Default.FontSize == "Large" ? FontSize.Large : FontSize.Small;
             AppearanceManager.Current.ThemeSource = new Uri(Settings.Default.Theme, UriKind.Relative);
+            switch (Settings.Default.Lang)
+            {
+                case "French":
+                    Transharp.SetCurrentLanguage(Transharp.LangsEnum.French);
+                    break;
+                case "English":
+                    Transharp.SetCurrentLanguage(Transharp.LangsEnum.English);
+                    break;
+                default:
+                    Transharp.SetCurrentLanguage(Transharp.LangsEnum.English);
+                    break;
+            }
             //var x = MANAGER.Properties.Resources.SettingsData;
         }
     }

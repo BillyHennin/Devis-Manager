@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 
 using MANAGER.Classes;
+using MANAGER.Properties;
 
 namespace MANAGER.Pages
 {
@@ -19,11 +20,6 @@ namespace MANAGER.Pages
     /// </summary>
     public partial class Parametre
     {
-        public Parametre()
-        {
-            InitializeComponent();
-        }
-
         private void ComboBoxLang_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             switch(ComboBoxLang.SelectedItem.ToString())
@@ -39,9 +35,11 @@ namespace MANAGER.Pages
                     break;
             }
             SelectionTextBlock.Text = Transharp.GetTranslation("PM_SelectionLanguage");
-            MessageBox.Show(Transharp.GetTranslation("PM_LanguageSelected"), Transharp.GetTranslation("Box_Lang_Success"), MessageBoxButton.OK,
-                MessageBoxImage.Information);
+            /*MessageBox.Show(Transharp.GetTranslation("PM_LanguageSelected"), Transharp.GetTranslation("Box_Lang_Success"), MessageBoxButton.OK,
+                MessageBoxImage.Information);*/
+            Settings.Default.Lang = ComboBoxLang.SelectedItem.ToString();
         }
+
 
         private void ComboBoxLang_Initialized(object sender, EventArgs e)
         {

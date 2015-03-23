@@ -64,31 +64,32 @@ namespace MANAGER.Pages
 
                 Display(text, newMerchandise);
             }
-            if(ListMerchandise.Count == 0)
+            if(ListMerchandise.Count != 0)
             {
-                var panelMerchandise = new StackPanel();
-                // New border
-                var border = new Border
-                {
-                    HorizontalAlignment = HorizontalAlignment.Left,
-                    Margin = new Thickness(2, 2, 1, 0),
-                    BorderThickness = new Thickness(1),
-                    Width = BorderEstimate.Width - 5,
-                    Child = panelMerchandise,
-                    Height = 100
-                };
-
-                PanelMerchandise.Children.Add(border);
-
-                // Merchandise's name
-                panelMerchandise.Children.Add(new TextBlock
-                {
-                    Text = Transharp.GetTranslation("DM_SearchNull"),
-                    Margin = new Thickness(5, 2, 0, 0),
-                    Height = 40,
-                    TextAlignment = TextAlignment.Center
-                });
+                return;
             }
+            var panelMerchandise = new StackPanel();
+            // New border
+            var border = new Border
+            {
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Margin = new Thickness(2, 2, 1, 0),
+                BorderThickness = new Thickness(1),
+                Width = BorderEstimate.Width - 5,
+                Child = panelMerchandise,
+                Height = 100
+            };
+
+            PanelMerchandise.Children.Add(border);
+
+            // Merchandise's name
+            panelMerchandise.Children.Add(new TextBlock
+            {
+                Text = Transharp.GetTranslation("DM_SearchNull"),
+                Margin = new Thickness(5, 2, 0, 0),
+                Height = 40,
+                TextAlignment = TextAlignment.Center
+            });
         }
 
         private void TextBoxEstimateQte_TextChanged(object sender, TextChangedEventArgs e)
@@ -149,6 +150,8 @@ namespace MANAGER.Pages
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            DM_Merchandise.Text = Transharp.GetTranslation("DM_Merchandise");
+
             PanelMerchandise.Children.Clear();
             ListMerchandise.Clear();
             ListMerchandiseN2.Clear();

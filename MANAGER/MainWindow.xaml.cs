@@ -9,6 +9,7 @@
 using System;
 
 //using System.Windows;
+using MANAGER.Classes;
 
 #endregion
 
@@ -27,6 +28,22 @@ namespace MANAGER
             if(Properties.Connection.Default.IsDatabaseSet) {}
             //ContentSource = new Uri(@"/Pages/Parametre.xaml", UriKind.Relative);
             //MessageBox.Show(Localisation.Localisation.Box_DBFail, Localisation.Localisation.Box_Error, MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        private void ModernWindow_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        {
+            Link_About.DisplayName = Transharp.GetTranslation("Link_About");
+            Link_Apparence.DisplayName = Transharp.GetTranslation("Link_Apparence");
+            Link_Param.DisplayName = Transharp.GetTranslation("Link_Param");
+            Link_CE.DisplayName = Transharp.GetTranslation("Link_CE");
+            Link_CreateCE.DisplayName = Transharp.GetTranslation("Link_CreateCE");
+            Link_DisplayCE.DisplayName = Transharp.GetTranslation("Link_DisplayCE");
+            Link_Customer.DisplayName = Transharp.GetTranslation("Link_Customer");
+            Link_DisplayCustomer.DisplayName = Transharp.GetTranslation("Link_DisplayCustomer");
+            Link_CreateCustomer.DisplayName = Transharp.GetTranslation("Link_CreateCustomer");
+            Link_Merchandise.DisplayName = Transharp.GetTranslation("Link_Merchandise");
+            Link_DisplayMerchandise.DisplayName = Transharp.GetTranslation("Link_DisplayMerchandise");
+            Link_CreateMerchandise.DisplayName = Transharp.GetTranslation("Link_CreateMerchandise");
         }
     }
 }

@@ -34,6 +34,7 @@ namespace MANAGER.Pages
 
         private void EstimateCreator_Loaded(object sender, RoutedEventArgs e)
         {
+            UpdateText();
             var nbMerchandise = estimate.GetList.Count;
             for(var i = 0; i < nbMerchandise; i++)
             {
@@ -333,7 +334,7 @@ namespace MANAGER.Pages
                     if(ComboBoxProduct.Items.Count != 0)
                     {
                         quantity = newQuantity;
-                        LabelPrice.Foreground = Brushes.GhostWhite;
+                        LabelPrice.Foreground = Brushes.DarkGray;
                         LabelPrice.Content = string.Format("{0}€", (((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.price * quantity));
                         TextBoxEstimateQte.BorderBrush =
                             TextBoxEstimateQte.CaretBrush =
@@ -415,6 +416,18 @@ namespace MANAGER.Pages
             {
                 AjouterEstimate.IsEnabled = false;
             }
+        }
+
+        private void UpdateText()
+        {
+            EC_Title.Text = Transharp.GetTranslation("EC_Title");
+            EC_ChooseCategory.Text = Transharp.GetTranslation("EC_ChooseCategory");
+            EC_AddMerchandise.Text = Transharp.GetTranslation("EC_AddMerchandise");
+            All_QTE.Text = Transharp.GetTranslation("All_QTE");
+            All_Price.Text = Transharp.GetTranslation("All_Price");
+            EC_Customer.Text = Transharp.GetTranslation("EC_Customer");
+            BtnAdd.Content = Transharp.GetTranslation("BTN_Add");
+            AjouterEstimate.Content = Transharp.GetTranslation("BTN_Create");
         }
     }
 }
