@@ -24,4 +24,4 @@ Feel free to improve it, to see how it works or even take it for a personnal use
 
 =====
 
-For further information about how to use the app, please check the app's website : http://billyhennin.github.io/Devis-Manager. 
+For further information about how to use the app, please check the app's website : http://billyhennin.github.io/Devis-Manager. or check the Trello : https://trello.com/b/nddovpsu/manager
