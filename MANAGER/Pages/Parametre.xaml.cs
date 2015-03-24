@@ -37,7 +37,7 @@ namespace MANAGER.Pages
             SelectionTextBlock.Text = Transharp.GetTranslation("PM_SelectionLanguage");
             /*MessageBox.Show(Transharp.GetTranslation("PM_LanguageSelected"), Transharp.GetTranslation("Box_Lang_Success"), MessageBoxButton.OK,
                 MessageBoxImage.Information);*/
-            Settings.Default.Lang = ComboBoxLang.SelectedItem.ToString();
+            //Settings.Default.Lang = ComboBoxLang.SelectedItem.ToString();
         }
 
 

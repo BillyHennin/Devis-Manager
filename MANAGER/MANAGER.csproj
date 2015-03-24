@@ -79,6 +79,7 @@
     <Compile Include="Classes\Estimate.cs" />
     <Compile Include="Classes\Print.cs" />
     <Compile Include="Classes\Transharp.cs" />
+    <Compile Include="Classes\xml.cs" />
     <Compile Include="ComboBox\ComboboxItemCategory.cs" />
     <Compile Include="Classes\Merchandise.cs" />
     <Compile Include="ComboBox\ComboboxItemCustomer.cs" />
@@ -248,7 +249,11 @@
   <ItemGroup>
     <Resource Include="Asset\ico.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Config.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

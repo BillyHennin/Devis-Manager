@@ -11,8 +11,5 @@
     <Setting Name="Theme" Type="System.String" Scope="User">
       <Value Profile="(Default)">/FirstFloor.ModernUI;component/Assets/ModernUI.Dark.xaml</Value>
     </Setting>
-    <Setting Name="Lang" Type="System.String" Scope="User">
-      <Value Profile="(Default)">French</Value>
-    </Setting>
   </Settings>
 </SettingsFile>
