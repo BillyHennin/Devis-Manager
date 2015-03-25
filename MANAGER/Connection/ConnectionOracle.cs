@@ -4,46 +4,57 @@
 //  
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
-#region
-
-using System;
 using System.Data;
 
 using Oracle.ManagedDataAccess.Client;
 
-#endregion
-
 namespace MANAGER.Connection
 {
-    public class ConnectionOracle
+    public class ConnectionOracle : ConnectionFactory
     {
-        private static OracleConnection Connection;
-        private static Boolean ConnectionIsStarted;
-
-        private ConnectionOracle()
+        public override IDbConnection CreateConnection()
         {
-            Connection = new OracleConnection(Properties.Connection.Default.DatabaseConnectionString);
-            Connection.Open();
-            ConnectionIsStarted = true;
+            return new OracleConnection(connectionString);
         }
 
-        public static OracleCommand OracleCommand(string query)
+        public override IDbCommand CreateCommand()
         {
-            return new OracleCommand {Connection = GetConnection(), CommandText = query};
+            return new OracleCommand();
         }
 
-        public static OracleCommand OracleCommandStored(string query)
+        public override IDbConnection CreateOpenConnection()
         {
-            return new OracleCommand {CommandType = CommandType.StoredProcedure, Connection = GetConnection(), CommandText = query};
+            var connection = (OracleConnection)CreateConnection();
+            connection.Open();
+
+            return connection;
         }
 
-        private static OracleConnection GetConnection()
+        public override IDbCommand CreateCommand(string commandText, IDbConnection connection)
         {
-            if(!ConnectionIsStarted)
-            {
-                new ConnectionOracle();
-            }
-            return Connection;
+            var command = (OracleCommand)CreateCommand();
+
+            command.CommandText = commandText;
+            command.Connection = (OracleConnection)connection;
+            command.CommandType = CommandType.Text;
+
+            return command;
+        }
+
+        public override IDbCommand CreateStoredProcCommand(string procName, IDbConnection connection)
+        {
+            var command = (OracleCommand)CreateCommand();
+
+            command.CommandText = procName;
+            command.Connection = (OracleConnection)connection;
+            command.CommandType = CommandType.StoredProcedure;
+
+            return command;
+        }
+
+        public override IDataParameter CreateParameter(string parameterName, object parameterValue)
+        {
+            return new OracleParameter(parameterName, parameterValue);
         }
     }
 }

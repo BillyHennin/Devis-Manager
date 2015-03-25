@@ -10,7 +10,7 @@ using System.Data.SqlClient;
 
 namespace MANAGER.Connection
 {
-    internal class ConnectionSql
+    public class ConnectionSql
     {
         private static SqlConnection Connection;
         private static Boolean ConnectionIsStarted;
