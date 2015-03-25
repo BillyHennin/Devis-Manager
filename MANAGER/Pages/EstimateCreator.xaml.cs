@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
@@ -48,7 +49,11 @@ namespace MANAGER.Pages
             const string query = "SELECT * FROM CATEGORIE";
             try
             {
-                var oCommand = ConnectionOracle.OracleCommand(query);
+                var factory = DbProviderFactories.GetFactory("Oracle");
+                var connection = factory.CreateConnection();
+                var command = factory.CreateCommand();
+
+                var oCommand = command.CreateCommand(query);
                 var resultat = oCommand.ExecuteReader();
                 while(resultat.Read())
                 {
