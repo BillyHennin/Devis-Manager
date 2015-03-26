@@ -12,7 +12,6 @@ using System.Windows.Controls;
 
 using MANAGER.Classes;
 using MANAGER.ComboBox;
-using MANAGER.Connection;
 
 using Oracle.ManagedDataAccess.Client;
 
@@ -224,7 +223,7 @@ namespace MANAGER.Pages
             //((ComboboxItemEstimate) ComboBoxEstimate.SelectedItem).Value.TotalPrice);
         }
 
-/*
+        /*
         private void colorChange(Brush newColour)
         {
             BorderDevis.BorderBrush = newColour;

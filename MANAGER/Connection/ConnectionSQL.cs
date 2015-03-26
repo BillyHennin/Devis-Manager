@@ -6,7 +6,6 @@
 
 using System;
 using System.Data;
-
 using System.Data.SqlClient;
 
 namespace MANAGER.Connection
@@ -25,7 +24,7 @@ namespace MANAGER.Connection
 
         private static SqlConnection GetConnection()
         {
-            if (!ConnectionIsStarted)
+            if(!ConnectionIsStarted)
             {
                 new ConnectionSql();
             }

@@ -12,7 +12,6 @@ using System.Windows.Media;
 
 using FirstFloor.ModernUI.Presentation;
 
-using MANAGER.Classes;
 using MANAGER.Properties;
 
 #endregion

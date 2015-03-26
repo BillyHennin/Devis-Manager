@@ -14,7 +14,6 @@ using System.Windows.Controls;
 using System.Windows.Media;
 
 using MANAGER.Classes;
-using MANAGER.Connection;
 
 using Oracle.ManagedDataAccess.Client;
 

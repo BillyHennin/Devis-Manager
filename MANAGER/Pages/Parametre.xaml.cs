@@ -11,7 +11,6 @@ using System.Windows;
 using System.Windows.Controls;
 
 using MANAGER.Classes;
-using MANAGER.Properties;
 
 namespace MANAGER.Pages
 {
@@ -39,7 +38,6 @@ namespace MANAGER.Pages
                 MessageBoxImage.Information);*/
             //Settings.Default.Lang = ComboBoxLang.SelectedItem.ToString();
         }
-
 
         private void ComboBoxLang_Initialized(object sender, EventArgs e)
         {

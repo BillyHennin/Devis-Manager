@@ -25,7 +25,7 @@ namespace MANAGER.Connection
 
         private static OracleConnection GetConnection()
         {
-            if (!ConnectionIsStarted)
+            if(!ConnectionIsStarted)
             {
                 new ConnectionOracle();
             }
@@ -34,12 +34,12 @@ namespace MANAGER.Connection
 
         public static IDbCommand Command(string query)
         {
-            return new OracleCommand { Connection = GetConnection(), CommandText = query };
+            return new OracleCommand {Connection = GetConnection(), CommandText = query};
         }
 
         public static IDbCommand CommandStored(string query)
         {
-            return new OracleCommand { CommandType = CommandType.StoredProcedure, Connection = GetConnection(), CommandText = query };
+            return new OracleCommand {CommandType = CommandType.StoredProcedure, Connection = GetConnection(), CommandText = query};
         }
     }
 }

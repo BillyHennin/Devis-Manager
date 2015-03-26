@@ -6,9 +6,10 @@
 
 #region
 
-using System;
-
 //using System.Windows;
+using System;
+using System.Windows;
+
 using MANAGER.Classes;
 
 #endregion
@@ -30,7 +31,7 @@ namespace MANAGER
             //MessageBox.Show(Localisation.Localisation.Box_DBFail, Localisation.Localisation.Box_Error, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        private void ModernWindow_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        private void ModernWindow_Loaded(object sender, RoutedEventArgs e)
         {
             Link_About.DisplayName = Transharp.GetTranslation("Link_About");
             Link_Apparence.DisplayName = Transharp.GetTranslation("Link_Apparence");

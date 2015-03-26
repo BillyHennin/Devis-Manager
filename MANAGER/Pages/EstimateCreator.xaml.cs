@@ -70,7 +70,8 @@ namespace MANAGER.Pages
             {
                 ComboBoxProduct.Items.Clear();
                 var Command = Connection.Connection.GetAll("MARCHANDISE WHERE ENVENTE = 1 AND QUANTITE > 0 AND ID_CATEGORIE=:CATEGORIE");
-                Connection.Connection.parameterAdd(":ID_CLIENT", "Int32", ((ComboboxItemCategory)ComboBoxCategory.SelectedItem).Value.ID.ToString(CultureInfo.InvariantCulture), Command);
+                Connection.Connection.parameterAdd(":ID_CLIENT", "Int32",
+                    ((ComboboxItemCategory) ComboBoxCategory.SelectedItem).Value.ID.ToString(CultureInfo.InvariantCulture), Command);
                 //Command.Parameters.Add(new OracleParameter(":ID_CLIENT", OracleDbType.Int32)
                 //{
                 //    Value = ((ComboboxItemCategory) ComboBoxCategory.SelectedItem).Value.ID
