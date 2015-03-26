@@ -85,7 +85,7 @@
     <Compile Include="ComboBox\ComboboxItemCustomer.cs" />
     <Compile Include="ComboBox\ComboboxItemEstimate.cs" />
     <Compile Include="ComboBox\ComboboxItemMerchandise.cs" />
-    <Compile Include="Connection\ConnectionFactory.cs" />
+    <Compile Include="Connection\Connection.cs" />
     <Compile Include="Pages\AddCustomer.xaml.cs">
       <DependentUpon>AddCustomer.xaml</DependentUpon>
     </Compile>

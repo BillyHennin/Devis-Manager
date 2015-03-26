@@ -25,7 +25,7 @@ namespace MANAGER
             //Initialisation de la bdd
             Properties.Connection.Default.DatabaseConnectionString = "user id=SLAM3;password=pw;data source=localhost:1521/xe";
 
-            if(Properties.Connection.Default.IsDatabaseSet) {}
+            //if(Properties.Connection.Default.IsDatabaseSet) {}
             //ContentSource = new Uri(@"/Pages/Parametre.xaml", UriKind.Relative);
             //MessageBox.Show(Localisation.Localisation.Box_DBFail, Localisation.Localisation.Box_Error, MessageBoxButton.OK, MessageBoxImage.Error);
         }

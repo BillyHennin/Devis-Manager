@@ -30,7 +30,8 @@ namespace MANAGER
             AppearanceManager.Current.AccentColor = (Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor);
             AppearanceManager.Current.FontSize = Settings.Default.FontSize == "Large" ? FontSize.Large : FontSize.Small;
             AppearanceManager.Current.ThemeSource = new Uri(Settings.Default.Theme, UriKind.Relative);
-            xml.getLang();
+            Connection.Connection.Database = MANAGER.Properties.Connection.Default.Database;
+            //xml.getLang();
             //Transharp.SetCurrentLanguage(xml.getLang());
             //var x = MANAGER.Properties.Resources.SettingsData;
         }

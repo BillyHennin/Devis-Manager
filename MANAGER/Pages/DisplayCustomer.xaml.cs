@@ -67,7 +67,7 @@ namespace MANAGER.Pages
             var date = DateTime.Now;
             try
             {
-                var Command = ConnectionOracle.OracleCommand("SELECT DISTINCT NUMERODEVIS FROM DEVIS WHERE ID_CLIENT = :ID_CLIENT ORDER BY NUMERODEVIS");
+                var Command = Connection.Connection.Command("SELECT DISTINCT NUMERODEVIS FROM DEVIS WHERE ID_CLIENT = :ID_CLIENT ORDER BY NUMERODEVIS");
                 Command.Parameters.Add(new OracleParameter(":ID_CLIENT", OracleDbType.Int32)
                 {
                     Value = ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.id
@@ -77,7 +77,7 @@ namespace MANAGER.Pages
                 while(resultCommand.Read())
                 {
                     var Command2 =
-                        ConnectionOracle.OracleCommand(
+                        Connection.Connection.Command(
                             "SELECT MARCHANDISE.ID_MARCHANDISE, MARCHANDISE.NOM, DEVIS.PRIXMARCHANDISE, DEVIS.QUANTITE, DEVIS.JOUR, MARCHANDISE.ID_CATEGORIE "
                             + "FROM MARCHANDISE, DEVIS WHERE DEVIS.ID_MARCHANDISE=MARCHANDISE.ID_MARCHANDISE AND DEVIS.NUMERODEVIS= :NUMERODEVIS");
                     Command2.Parameters.Add(new OracleParameter(":NUMERODEVIS", OracleDbType.Int32) {Value = resultCommand[0]});
@@ -133,7 +133,7 @@ namespace MANAGER.Pages
             const string query = "SELECT ID_CLIENT, EMAIL, DENOMINATION, TELEPHONE FROM CLIENT";
             try
             {
-                var oCommand = ConnectionOracle.OracleCommand(query);
+                var oCommand = Connection.Connection.Command(query);
                 var resultat = oCommand.ExecuteReader();
                 while(resultat.Read())
                 {
@@ -165,7 +165,7 @@ namespace MANAGER.Pages
             for(var i = 0; i < taille; i++)
             {
                 var categoryString = string.Empty;
-                var CommandCategory = ConnectionOracle.OracleCommand("SELECT LIBELLE FROM CATEGORIE WHERE ID_CATEGORIE=:ID_CATEGORIE");
+                var CommandCategory = Connection.Connection.Command("SELECT LIBELLE FROM CATEGORIE WHERE ID_CATEGORIE=:ID_CATEGORIE");
                 CommandCategory.Parameters.Add(new OracleParameter(":ID_CATEGORIE", OracleDbType.Int32) {Value = Convert.ToInt32(listMarchandise[i].categoryID)});
                 var resultatCategory = CommandCategory.ExecuteReader();
                 while(resultatCategory.Read())
@@ -276,7 +276,7 @@ namespace MANAGER.Pages
         {
             try
             {
-                var commandeModif = ConnectionOracle.OracleCommandStored("DELETECLIENT");
+                var commandeModif = Connection.Connection.Command("DELETECLIENT");
                 var CustomerId = new OracleParameter(":1", OracleDbType.Int32) {Value = ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.id};
                 commandeModif.Parameters.Add(CustomerId);
                 commandeModif.ExecuteNonQuery();

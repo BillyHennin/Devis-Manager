@@ -155,16 +155,14 @@ namespace MANAGER.Pages
             PanelMerchandise.Children.Clear();
             ListMerchandise.Clear();
             ListMerchandiseN2.Clear();
-
-            const string query = "SELECT * FROM MARCHANDISE";
             try
             {
-                var oCommand = ConnectionOracle.OracleCommand(query);
+                var oCommand = Connection.Connection.GetAll("MARCHANDISE");
                 var resultat = oCommand.ExecuteReader();
                 while(resultat.Read())
                 {
                     var category = string.Empty;
-                    var CommandCategory = ConnectionOracle.OracleCommand("SELECT LIBELLE FROM CATEGORIE WHERE ID_CATEGORIE=:ID_CATEGORIE");
+                    var CommandCategory = Connection.Connection.Command("SELECT LIBELLE FROM CATEGORIE WHERE ID_CATEGORIE=:ID_CATEGORIE");
                     CommandCategory.Parameters.Add(new OracleParameter(":ID_CATEGORIE", OracleDbType.Int32) {Value = Convert.ToInt32(resultat[5])});
                     var resultatCategory = CommandCategory.ExecuteReader();
                     while(resultatCategory.Read())
@@ -202,7 +200,7 @@ namespace MANAGER.Pages
             var id = ((Button) sender).Tag.ToString();
             try
             {
-                var commandeModif = new OracleCommand("UPDATE MARCHANDISE SET ENVENTE=0 WHERE ID_MARCHANDISE=:ID_MARCHANDISE");
+                var commandeModif = Connection.Connection.Command("UPDATE MARCHANDISE SET ENVENTE=0 WHERE ID_MARCHANDISE=:ID_MARCHANDISE");
                 commandeModif.Parameters.Add(new OracleParameter(":ID_MARCHANDISE", OracleDbType.Int32) {Value = Convert.ToInt32(id)});
                 //TODO : Make this works
                 //commandeModif.ExecuteNonQuery();

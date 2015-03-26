@@ -6,11 +6,12 @@
 
 using System;
 using System.Data;
+
 using System.Data.SqlClient;
 
 namespace MANAGER.Connection
 {
-    public class ConnectionSql
+    public class ConnectionSql : Connection
     {
         private static SqlConnection Connection;
         private static Boolean ConnectionIsStarted;
@@ -22,23 +23,23 @@ namespace MANAGER.Connection
             ConnectionIsStarted = true;
         }
 
-        public static SqlCommand SqlCommand(string query)
-        {
-            return new SqlCommand {Connection = GetConnection(), CommandText = query};
-        }
-
-        public static SqlCommand SqlCommandStored(string query)
-        {
-            return new SqlCommand {CommandType = CommandType.StoredProcedure, Connection = GetConnection(), CommandText = query};
-        }
-
         private static SqlConnection GetConnection()
         {
-            if(!ConnectionIsStarted)
+            if (!ConnectionIsStarted)
             {
                 new ConnectionSql();
             }
             return Connection;
+        }
+
+        public static IDbCommand Command(string query)
+        {
+            return new SqlCommand {Connection = GetConnection(), CommandText = query};
+        }
+
+        public static IDbCommand CommandStored(string query)
+        {
+            return new SqlCommand {CommandType = CommandType.StoredProcedure, Connection = GetConnection(), CommandText = query};
         }
     }
 }

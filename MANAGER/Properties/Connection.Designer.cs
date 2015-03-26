@@ -73,13 +73,13 @@ namespace MANAGER.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool IsDatabaseSet {
+        [global::System.Configuration.DefaultSettingValueAttribute("Oracle")]
+        public string Database {
             get {
-                return ((bool)(this["IsDatabaseSet"]));
+                return ((string)(this["Database"]));
             }
             set {
-                this["IsDatabaseSet"] = value;
+                this["Database"] = value;
             }
         }
     }

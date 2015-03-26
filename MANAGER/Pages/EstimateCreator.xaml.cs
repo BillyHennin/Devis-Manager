@@ -8,7 +8,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,7 +15,6 @@ using System.Windows.Media;
 
 using MANAGER.Classes;
 using MANAGER.ComboBox;
-using MANAGER.Connection;
 using MANAGER.Properties;
 
 using Oracle.ManagedDataAccess.Client;
@@ -46,14 +44,9 @@ namespace MANAGER.Pages
 
         private void ComboBoxCategory_Initialized(object sender, EventArgs e)
         {
-            const string query = "SELECT * FROM CATEGORIE";
             try
             {
-                var factory = DbProviderFactories.GetFactory("Oracle");
-                var connection = factory.CreateConnection();
-                var command = factory.CreateCommand();
-
-                var oCommand = command.CreateCommand(query);
+                var oCommand = Connection.Connection.GetAll("CATEGORIE");
                 var resultat = oCommand.ExecuteReader();
                 while(resultat.Read())
                 {
@@ -76,11 +69,12 @@ namespace MANAGER.Pages
             try
             {
                 ComboBoxProduct.Items.Clear();
-                var Command = ConnectionOracle.OracleCommand("SELECT * FROM MARCHANDISE WHERE ENVENTE = 1 AND QUANTITE > 0 AND ID_CATEGORIE=:CATEGORIE");
-                Command.Parameters.Add(new OracleParameter(":ID_CLIENT", OracleDbType.Int32)
-                {
-                    Value = ((ComboboxItemCategory) ComboBoxCategory.SelectedItem).Value.ID
-                });
+                var Command = Connection.Connection.GetAll("MARCHANDISE WHERE ENVENTE = 1 AND QUANTITE > 0 AND ID_CATEGORIE=:CATEGORIE");
+                Connection.Connection.parameterAdd(":ID_CLIENT", "Int32", ((ComboboxItemCategory)ComboBoxCategory.SelectedItem).Value.ID.ToString(CultureInfo.InvariantCulture), Command);
+                //Command.Parameters.Add(new OracleParameter(":ID_CLIENT", OracleDbType.Int32)
+                //{
+                //    Value = ((ComboboxItemCategory) ComboBoxCategory.SelectedItem).Value.ID
+                //});
                 var resultat = Command.ExecuteReader();
                 while(resultat.Read())
                 {
@@ -138,7 +132,7 @@ namespace MANAGER.Pages
             const string query = "SELECT ID_CLIENT, EMAIL, DENOMINATION, TELEPHONE FROM CLIENT";
             try
             {
-                var Command = ConnectionOracle.OracleCommand(query);
+                var Command = Connection.Connection.Command(query);
                 var resultat = Command.ExecuteReader();
                 while(resultat.Read())
                 {
@@ -202,7 +196,7 @@ namespace MANAGER.Pages
             try
             {
                 const string querySelect = "SELECT max(ID_DEVIS), max(NUMERODEVIS) FROM DEVIS";
-                var OracleCommand = ConnectionOracle.OracleCommand(querySelect);
+                var OracleCommand = Connection.Connection.Command(querySelect);
                 var result = OracleCommand.ExecuteReader();
                 var sizeList = ListMerchandise.Count;
                 while(result.Read())
@@ -211,7 +205,8 @@ namespace MANAGER.Pages
                     numberEstimate = result[1].ToString() == "" ? 1 : Convert.ToInt32(result[1]) + 1;
                     for(var i = 0; i < sizeList; i++)
                     {
-                        var Insert = ConnectionOracle.OracleCommandStored("INSERTDEVIS");
+                        //TODO : Fix
+                        var Insert = Connection.Connection.CommandStored("INSERTDEVIS");
                         Insert.Parameters.Add(new OracleParameter(":1", OracleDbType.Int32) {Value = estimate.Customer.id});
                         Insert.Parameters.Add(new OracleParameter(":2", OracleDbType.Int32) {Value = estimate[i].id});
                         Insert.Parameters.Add(new OracleParameter(":3", OracleDbType.Int32) {Value = ((idEstimate) + i)});
