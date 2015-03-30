@@ -76,17 +76,15 @@
                      Margin="0,15,0,0"
                      Text="#TextBoxMail"
                      Visibility="Hidden" />
-
             <Button x:Name="BTN_Update"
                     Grid.Row="4"
                     Grid.Column="1"
                     Grid.ColumnSpan="3"
                     Margin="0,10,-100,-26"
                     BorderBrush="Lime"
-                    Click="ButtonDelete_Click"
+                    Click="ButtonUpdate_Click"
                     Content="#BTN_Update"
                     Visibility="Hidden" />
-
             <Button x:Name="BTN_Delete"
                     Grid.Row="5"
                     Grid.Column="1"

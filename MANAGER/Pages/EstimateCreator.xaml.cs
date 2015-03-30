@@ -17,8 +17,6 @@ using MANAGER.Classes;
 using MANAGER.ComboBox;
 using MANAGER.Properties;
 
-using Oracle.ManagedDataAccess.Client;
-
 #endregion
 
 namespace MANAGER.Pages
@@ -202,17 +200,8 @@ namespace MANAGER.Pages
                     numberEstimate = result[1].ToString() == "" ? 1 : Convert.ToInt32(result[1]) + 1;
                     for(var i = 0; i < sizeList; i++)
                     {
-                        //TODO : Fix
-                        Connection.Connection.Insert("DEVIS", estimate.Customer.id, estimate[i].id, ((idEstimate) + i), estimate[i].quantity, DateTime.Now.ToString("dd/MM/yy"), estimate[i].price, (numberEstimate));
-                        var Insert = Connection.Connection.CommandStored("INSERTDEVIS");
-                        Insert.Parameters.Add(new OracleParameter(":1", OracleDbType.Int32) {Value = estimate.Customer.id});
-                        Insert.Parameters.Add(new OracleParameter(":2", OracleDbType.Int32) {Value = estimate[i].id});
-                        Insert.Parameters.Add(new OracleParameter(":3", OracleDbType.Int32) {Value = ((idEstimate) + i)});
-                        Insert.Parameters.Add(new OracleParameter(":4", OracleDbType.Int32) {Value = estimate[i].quantity});
-                        MessageBox.Show(DateTime.Now.ToString("dd/MM/yy"));
-                        Insert.Parameters.Add(new OracleParameter(":6", OracleDbType.Varchar2) {Value = estimate[i].price});
-                        Insert.Parameters.Add(new OracleParameter(":7", OracleDbType.Varchar2) {Value = (numberEstimate)});
-                        //Insert.ExecuteNonQuery();
+                        Connection.Connection.Insert("DEVIS", estimate.Customer.id, estimate[i].id, ((idEstimate) + i), estimate[i].quantity,
+                            DateTime.Now.ToString("dd/MM/yy"), estimate[i].price, (numberEstimate));
                     }
                 }
                 result.Close();
@@ -220,10 +209,9 @@ namespace MANAGER.Pages
                 MessageBox.Show(Transharp.GetTranslation("Box_SuccessAdd", numberEstimate, TotalCost), Transharp.GetTranslation("Box_CE_Success"),
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }
-            catch(Exception exception)
+            catch
             {
-                MessageBox.Show(exception.Message);
-                //MessageBox.Show(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
             {
@@ -334,7 +322,7 @@ namespace MANAGER.Pages
                     if(ComboBoxProduct.Items.Count != 0)
                     {
                         quantity = newQuantity;
-                        ItemSelectedPrice = (((ComboboxItemMerchandise)ComboBoxProduct.SelectedItem).Value.price * newQuantity);
+                        ItemSelectedPrice = (((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.price * newQuantity);
                         All_Price.Foreground = Brushes.DarkGray;
                         All_Price.Text = string.Format("{0} {1}€", Transharp.GetTranslation("All_Price"), ItemSelectedPrice);
                         TextBoxEstimateQte.BorderBrush =

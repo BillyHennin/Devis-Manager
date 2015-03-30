@@ -6,39 +6,40 @@
 
 using System;
 using System.Data;
-using System.Data.SqlClient;
+
+using MySql.Data.MySqlClient;
 
 namespace MANAGER.Connection
 {
-    public class ConnectionSql : Connection
+    public class ConnectionMySql : Connection
     {
-        private static SqlConnection Connection;
+        private static MySqlConnection Connection;
         private static Boolean ConnectionIsStarted;
 
-        private ConnectionSql()
+        private ConnectionMySql()
         {
-            Connection = new SqlConnection(Properties.Connection.Default.DatabaseConnectionString);
+            Connection = new MySqlConnection(Properties.Connection.Default.DatabaseConnectionString);
             Connection.Open();
             ConnectionIsStarted = true;
         }
 
-        private static SqlConnection GetConnection()
+        private static MySqlConnection GetConnection()
         {
             if(!ConnectionIsStarted)
             {
-                new ConnectionSql();
+                new ConnectionMySql();
             }
             return Connection;
         }
 
         public new static IDbCommand Command(string query)
         {
-            return new SqlCommand {Connection = GetConnection(), CommandText = query};
+            return new MySqlCommand {Connection = GetConnection(), CommandText = query};
         }
 
         public new static IDbCommand CommandStored(string query)
         {
-            return new SqlCommand {CommandType = CommandType.StoredProcedure, Connection = GetConnection(), CommandText = query};
+            return new MySqlCommand {CommandType = CommandType.StoredProcedure, Connection = GetConnection(), CommandText = query};
         }
     }
 }

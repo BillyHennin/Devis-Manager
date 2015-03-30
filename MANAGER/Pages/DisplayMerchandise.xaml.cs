@@ -15,7 +15,6 @@ using System.Windows.Media;
 
 using MANAGER.Classes;
 
-
 #endregion
 
 namespace MANAGER.Pages
@@ -200,7 +199,7 @@ namespace MANAGER.Pages
             var onSale = !ListMerchandiseN2[num].onSale ? 1 : 0;
             try
             {
-                var query = String.Format("UPDATE MARCHANDISE SET ENVENTE={0} WHERE ID_MARCHANDISE={1}", onSale,id);
+                var query = String.Format("UPDATE MARCHANDISE SET ENVENTE={0} WHERE ID_MARCHANDISE={1}", onSale, id);
                 var commandeModif = Connection.Connection.Command(query);
                 commandeModif.ExecuteNonQuery();
             }

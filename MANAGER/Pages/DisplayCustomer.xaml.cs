@@ -13,8 +13,6 @@ using System.Windows.Controls;
 using MANAGER.Classes;
 using MANAGER.ComboBox;
 
-using Oracle.ManagedDataAccess.Client;
-
 namespace MANAGER.Pages
 {
     /// <summary>
@@ -68,17 +66,19 @@ namespace MANAGER.Pages
             var date = DateTime.Now;
             try
             {
-                var query = String.Format("SELECT DISTINCT NUMERODEVIS FROM DEVIS WHERE ID_CLIENT = {0} ORDER BY NUMERODEVIS", ((ComboboxItemCustomer)ComboBoxCustomer.SelectedItem).Value.id);
+                var query = String.Format("SELECT DISTINCT NUMERODEVIS FROM DEVIS WHERE ID_CLIENT = {0} ORDER BY NUMERODEVIS",
+                    ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.id);
                 var Command = Connection.Connection.Command(query);
 
                 var resultCommand = Command.ExecuteReader();
 
                 while(resultCommand.Read())
                 {
-                    var query2 = String.Format("SELECT MARCHANDISE.ID_MARCHANDISE, MARCHANDISE.NOM, DEVIS.PRIXMARCHANDISE, DEVIS.QUANTITE, DEVIS.JOUR, MARCHANDISE.ID_CATEGORIE "
+                    var query2 =
+                        String.Format(
+                            "SELECT MARCHANDISE.ID_MARCHANDISE, MARCHANDISE.NOM, DEVIS.PRIXMARCHANDISE, DEVIS.QUANTITE, DEVIS.JOUR, MARCHANDISE.ID_CATEGORIE "
                             + "FROM MARCHANDISE, DEVIS WHERE DEVIS.ID_MARCHANDISE=MARCHANDISE.ID_MARCHANDISE AND DEVIS.NUMERODEVIS= {0}", resultCommand[0]);
-                    var Command2 =
-                        Connection.Connection.Command(query2);
+                    var Command2 = Connection.Connection.Command(query2);
                     var resultatMerchandise = Command2.ExecuteReader();
                     var ListMerchandise2 = new List<Merchandise>();
                     while(resultatMerchandise.Read())
@@ -215,11 +215,6 @@ namespace MANAGER.Pages
                 PanelDevis.Children.Add(bordure);
                 estimate.GetList.Add(item);
             }
-
-            //colorChange(Brushes.LimeGreen);
-
-            //TotalTextBlock.Text = string.Format("{0} : {1}€", Transharp.GetTranslation("All_Total"),
-            //((ComboboxItemEstimate) ComboBoxEstimate.SelectedItem).Value.TotalPrice);
         }
 
         /*
@@ -232,7 +227,7 @@ namespace MANAGER.Pages
                 ListMerchandise[i].Border.BorderBrush = newColour;
             }
         }
-*/
+        */
 
         private void MenuCustomer_SizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -274,18 +269,37 @@ namespace MANAGER.Pages
         {
             try
             {
-                var commandeModif = Connection.Connection.CommandStored("DELETECLIENT");
-                var CustomerId = new OracleParameter(":1", OracleDbType.Int32) {Value = ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.id};
-                commandeModif.Parameters.Add(CustomerId);
-                commandeModif.ExecuteNonQuery();
+                Connection.Connection.Delete("DEVIS", ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.id, "CLIENT");
+                Connection.Connection.Delete("CLIENT", ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.id);
+            }
+            catch(Exception exception)
+            {
+                Console.WriteLine(exception.Message);
+            }
+
+            ComboBoxCustomer.Items.Clear();
+            InitComboClient();
+        }
+
+        private void ButtonUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            var customer = ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value;
+            try
+            {
+                var set = new[,] {{"TELEPHONE", TextPhone.Text}, {"EMAIL", TextMail.Text}};
+                Connection.Connection.Update("CLIENT", customer.id, set);
             }
             catch
             {
                 MessageBox.Show(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
-
-            ComboBoxCustomer.Items.Clear();
-            InitComboClient();
+            finally
+            {
+                customer.cellphone = TextPhone.Text;
+                customer.email = TextMail.Text;
+                MessageBox.Show(Transharp.GetTranslation("Box_SuccessUpdate", customer.id, customer.name), Transharp.GetTranslation("Box_Update_Success_Title"),
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
         private void ComboBoxCommands_SelectionChanged(object sender, SelectionChangedEventArgs e) {}

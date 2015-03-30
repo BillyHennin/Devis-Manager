@@ -55,6 +55,9 @@
     <StartupObject>MANAGER.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MySql.Data">
+      <HintPath>..\packages\MySql.Data.6.9.6\lib\net45\MySql.Data.dll</HintPath>
+    </Reference>
     <Reference Include="Oracle.ManagedDataAccess">
       <HintPath>..\packages\odp.net.managed.121.1.2\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
     </Reference>
@@ -86,6 +89,7 @@
     <Compile Include="ComboBox\ComboboxItemEstimate.cs" />
     <Compile Include="ComboBox\ComboboxItemMerchandise.cs" />
     <Compile Include="Connection\Connection.cs" />
+    <Compile Include="Connection\ConnectionMySql.cs" />
     <Compile Include="Pages\AddCustomer.xaml.cs">
       <DependentUpon>AddCustomer.xaml</DependentUpon>
     </Compile>
@@ -104,7 +108,7 @@
       <DependentUpon>Connection.settings</DependentUpon>
     </Compile>
     <Compile Include="Connection\ConnectionOracle.cs" />
-    <Compile Include="Connection\ConnectionSQL.cs" />
+    <Compile Include="Connection\ConnectionSQLSERVER.cs" />
     <Compile Include="Pages\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
@@ -203,6 +207,7 @@
     <None Include="Language\English.lang">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="packages.config" />
     <None Include="Properties\Connection.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Connection.Designer.cs</LastGenOutput>

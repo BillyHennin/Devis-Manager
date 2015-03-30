@@ -4,12 +4,11 @@
 //  
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
+//using System.Collections.Specialized;
+
+//using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Data;
-using System.Windows;
-using System.Windows.Documents;
-
-using Oracle.ManagedDataAccess.Client;
 
 namespace MANAGER.Connection
 {
@@ -25,8 +24,11 @@ namespace MANAGER.Connection
                 case ("Oracle"):
                     command = ConnectionOracle.Command(query);
                     break;
-                case ("SQL"):
-                    command = ConnectionSql.Command(query);
+                case ("SqlServer"):
+                    command = ConnectionSqlServer.Command(query);
+                    break;
+                case ("MySql"):
+                    command = ConnectionMySql.Command(query);
                     break;
                 default:
                     command = ConnectionOracle.Command(query);
@@ -43,8 +45,11 @@ namespace MANAGER.Connection
                 case ("Oracle"):
                     command = ConnectionOracle.CommandStored(query);
                     break;
-                case ("SQL"):
-                    command = ConnectionSql.CommandStored(query);
+                case ("SqlServer"):
+                    command = ConnectionSqlServer.CommandStored(query);
+                    break;
+                case ("MySql"):
+                    command = ConnectionMySql.CommandStored(query);
                     break;
                 default:
                     command = ConnectionOracle.CommandStored(query);
@@ -63,15 +68,38 @@ namespace MANAGER.Connection
             var query = String.Empty;
             foreach(var field in value)
             {
-                query += field+",";
+                query += "'" + field + "',";
             }
             query = query.Substring(0, query.Length - 1);
             var queryInsert = String.Format("INSERT INTO {0} VALUES ({1})", tableQuery, query);
             var Command = Connection.Command(queryInsert);
-            //Command.ExecuteNonQuery();
+            Command.ExecuteNonQuery();
+        }
+
+        public static void Delete(string tableQuery, object ID, string param = null)
+        {
+            var Id_Table = String.Empty;
+            Id_Table = param ?? tableQuery;
+            var query = String.Format("DELETE FROM {0} WHERE ID_{1} = {2}", tableQuery, Id_Table, ID);
+            var Command = Connection.Command(query);
+            Command.ExecuteNonQuery();
+        }
+
+        public static void Update(string tableQuery, int ID, String[,] value)
+        {
+            var set = String.Empty;
+            for(var i = 0; i < value.Length / 2; i++)
+            {
+                set += String.Format("{0}='{1}' ,", value[i, 0], value[i, 1]);
+            }
+            set = set.Substring(0, set.Length - 1);
+            var query = String.Format("UPDATE {0} SET {2} WHERE ID_{0} = {1}", tableQuery, ID, set);
+            var Command = Connection.Command(query);
+            Command.ExecuteNonQuery();
         }
 
         //Make this works one day.
+        /*
         public static void parameterAdd(string param, string type, Object value, IDbCommand command)
         {
             switch (Database)
@@ -122,6 +150,6 @@ namespace MANAGER.Connection
             TimeStampTZ,
             Varchar2,
             XmlType
-        }
+        }*/
     }
 }
