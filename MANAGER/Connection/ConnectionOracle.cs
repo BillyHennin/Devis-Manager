@@ -32,14 +32,14 @@ namespace MANAGER.Connection
             return Connection;
         }
 
-        public static IDbCommand Command(string query)
+        public new static IDbCommand Command(string query)
         {
-            return new OracleCommand {Connection = GetConnection(), CommandText = query};
+            return new OracleCommand {Connection = GetConnection(), CommandText = query, BindByName = true};
         }
 
-        public static IDbCommand CommandStored(string query)
+        public new static IDbCommand CommandStored(string query)
         {
-            return new OracleCommand {CommandType = CommandType.StoredProcedure, Connection = GetConnection(), CommandText = query};
+            return new OracleCommand {CommandType = CommandType.StoredProcedure, Connection = GetConnection(), CommandText = query, BindByName = true};
         }
     }
 }

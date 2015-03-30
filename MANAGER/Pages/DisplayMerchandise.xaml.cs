@@ -15,7 +15,6 @@ using System.Windows.Media;
 
 using MANAGER.Classes;
 
-using Oracle.ManagedDataAccess.Client;
 
 #endregion
 
@@ -161,8 +160,8 @@ namespace MANAGER.Pages
                 while(resultat.Read())
                 {
                     var category = string.Empty;
-                    var CommandCategory = Connection.Connection.Command("SELECT LIBELLE FROM CATEGORIE WHERE ID_CATEGORIE=:ID_CATEGORIE");
-                    CommandCategory.Parameters.Add(new OracleParameter(":ID_CATEGORIE", OracleDbType.Int32) {Value = Convert.ToInt32(resultat[5])});
+                    var query = String.Format("SELECT LIBELLE FROM CATEGORIE WHERE ID_CATEGORIE={0}", resultat[5]);
+                    var CommandCategory = Connection.Connection.Command(query);
                     var resultatCategory = CommandCategory.ExecuteReader();
                     while(resultatCategory.Read())
                     {
@@ -197,12 +196,13 @@ namespace MANAGER.Pages
         private void BTN_Sale_Click(object sender, EventArgs e)
         {
             var id = ((Button) sender).Tag.ToString();
+            var num = Convert.ToInt32(id) - 1;
+            var onSale = !ListMerchandiseN2[num].onSale ? 1 : 0;
             try
             {
-                var commandeModif = Connection.Connection.Command("UPDATE MARCHANDISE SET ENVENTE=0 WHERE ID_MARCHANDISE=:ID_MARCHANDISE");
-                commandeModif.Parameters.Add(new OracleParameter(":ID_MARCHANDISE", OracleDbType.Int32) {Value = Convert.ToInt32(id)});
-                //TODO : Make this works
-                //commandeModif.ExecuteNonQuery();
+                var query = String.Format("UPDATE MARCHANDISE SET ENVENTE={0} WHERE ID_MARCHANDISE={1}", onSale,id);
+                var commandeModif = Connection.Connection.Command(query);
+                commandeModif.ExecuteNonQuery();
             }
             catch
             {
@@ -211,7 +211,6 @@ namespace MANAGER.Pages
             finally
             {
                 var nbMerchandise = ListMerchandiseN2.Count;
-
                 for(var i = 0; i < nbMerchandise; i++)
                 {
                     if(ListMerchandiseN2[i].ToString() != id)
@@ -219,9 +218,6 @@ namespace MANAGER.Pages
                         continue;
                     }
                     ListMerchandiseN2[i].onSale = !ListMerchandiseN2[i].onSale;
-                    /*
-                    ListMerchandiseN2.Remove(ListMerchandiseN2[i]);
-                    nbMerchandise -= 1;*/
                 }
                 SelectMarchandiseLike("");
             }

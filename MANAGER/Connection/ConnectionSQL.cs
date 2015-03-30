@@ -31,12 +31,12 @@ namespace MANAGER.Connection
             return Connection;
         }
 
-        public static IDbCommand Command(string query)
+        public new static IDbCommand Command(string query)
         {
             return new SqlCommand {Connection = GetConnection(), CommandText = query};
         }
 
-        public static IDbCommand CommandStored(string query)
+        public new static IDbCommand CommandStored(string query)
         {
             return new SqlCommand {CommandType = CommandType.StoredProcedure, Connection = GetConnection(), CommandText = query};
         }

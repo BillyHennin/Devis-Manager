@@ -6,6 +6,7 @@
 
 using System;
 using System.Data;
+using System.Windows;
 
 using Oracle.ManagedDataAccess.Client;
 
@@ -51,23 +52,44 @@ namespace MANAGER.Connection
             return command;
         }
 
-        public static IDbCommand GetAll(string table)
+        public static IDbCommand GetAll(string tableQuery)
         {
-            return Command(String.Format("SELECT * FROM {0}", table));
+            return Command(String.Format("SELECT * FROM {0}", tableQuery));
         }
 
-        public static void parameterAdd(string param, string type, string value, IDbCommand command)
+        public static void Insert(string tableQuery, params Object[] value)
         {
-            switch(Database)
+            var query = String.Format("{0} WHERE 1 = 2", tableQuery);
+            var CommandColumns = GetAll(query);
+            using (var reader = CommandColumns.ExecuteReader())
+            {
+                // This will return false - we don't care, we just want to make sure the schema table is there.
+                reader.Read();
+
+                var table = reader.GetSchemaTable();
+                foreach (DataColumn column in table.Columns)
+                {
+                    MessageBox.Show(column.ToString());
+                }
+            }
+
+            var Command = Connection.Command("");
+            //Command.ExecuteNonQuery();
+        }
+
+        //Make this works one day.
+        public static void parameterAdd(string param, string type, Object value, IDbCommand command)
+        {
+            switch (Database)
             {
                 case ("Oracle"):
-                    command.Parameters.Add(new OracleParameter(param, ParseEnum<OracleDbType>(type)) {Value = value});
+                    command.Parameters.Add(new OracleParameter(param, OracleDbType.Int32) { Value = value });
                     break;
                 case ("SQL"):
                     //command = ConnectionSql.SqlCommand(query);
                     break;
                 default:
-                    command.Parameters.Add(new OracleParameter(param, ParseEnum<OracleDbType>(type)) {Value = value});
+                    command.Parameters.Add(new OracleParameter(param, ParseEnum<OracleDbType>(type)) { Value = value });
                     break;
             }
         }

@@ -30,6 +30,7 @@ DM_NotOnSale=Non en vente
 DM_OnSale=En vente
 DM_SearchNull=Aucun resultat trouvé
 DM_Stock=Quantité en stock : %x 
+DC_UpdateCustomer=Mettre à jours les informations
 EC_AddMerchandise=Ajouter une marchandise : 
 EC_ChooseCategory=Choisir une catégorie : 
 EC_CreateCE=Créer un devis 

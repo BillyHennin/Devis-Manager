@@ -74,9 +74,9 @@
                         <RowDefinition />
                     </Grid.RowDefinitions>
                     <TextBlock x:Name="EC_AddMerchandise"
-                               Grid.ColumnSpan="2"
+                               Grid.ColumnSpan="3"
                                Height="16"
-                               Margin="0,3,0,7"
+                               Margin="0,0,64,10"
                                VerticalAlignment="Center"
                                Text="#EC_AddMerchandise" />
                     <ComboBox x:Name="ComboBoxCategory"
@@ -96,7 +96,7 @@
                                Grid.Column="0"
                                Grid.ColumnSpan="2"
                                Height="16"
-                               Margin="0,-23,0,33"
+                               Margin="0,-28,0,38"
                                VerticalAlignment="Center"
                                Text="#EC_ChooseCategory" />
                     <ComboBox x:Name="ComboBoxProduct"
@@ -173,15 +173,6 @@
                                Margin="0,36,0,-9"
                                VerticalAlignment="Center"
                                Text="#All_Price" />
-
-                    <Label x:Name="LabelPrice"
-                           Grid.Row="1"
-                           Grid.Column="0"
-                           Grid.ColumnSpan="2"
-                           Height="16"
-                           Margin="46,36,0,-9"
-                           VerticalAlignment="Center"
-                           Content="" />
                 </Grid>
                 <Grid>
                     <Border x:Name="BorderEstimate"

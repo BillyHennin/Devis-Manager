@@ -28,6 +28,7 @@ namespace MANAGER.Pages
         private static readonly List<Merchandise> ListMerchandise = new List<Merchandise>();
         private static readonly List<Merchandise> ListMerchandiseN2 = new List<Merchandise>();
         private readonly Estimate estimate = new Estimate(ListMerchandise);
+        private double ItemSelectedPrice;
         private double TotalCost;
         private int quantity;
 
@@ -69,13 +70,9 @@ namespace MANAGER.Pages
             try
             {
                 ComboBoxProduct.Items.Clear();
-                var Command = Connection.Connection.GetAll("MARCHANDISE WHERE ENVENTE = 1 AND QUANTITE > 0 AND ID_CATEGORIE=:CATEGORIE");
-                Connection.Connection.parameterAdd(":ID_CLIENT", "Int32",
-                    ((ComboboxItemCategory) ComboBoxCategory.SelectedItem).Value.ID.ToString(CultureInfo.InvariantCulture), Command);
-                //Command.Parameters.Add(new OracleParameter(":ID_CLIENT", OracleDbType.Int32)
-                //{
-                //    Value = ((ComboboxItemCategory) ComboBoxCategory.SelectedItem).Value.ID
-                //});
+                var query = String.Format("MARCHANDISE WHERE ENVENTE = 1 AND QUANTITE > 0 AND ID_CATEGORIE={0}",
+                    ((ComboboxItemCategory) ComboBoxCategory.SelectedItem).Value.ID);
+                var Command = Connection.Connection.GetAll(query);
                 var resultat = Command.ExecuteReader();
                 while(resultat.Read())
                 {
@@ -108,8 +105,8 @@ namespace MANAGER.Pages
                         ErrorCost();
                         break;
                     default:
-                        LabelPrice.Content = string.Format("{0}€",
-                            ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.price * Convert.ToInt32(TextBoxEstimateQte.Text));
+                        ItemSelectedPrice = ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.price * Convert.ToInt32(TextBoxEstimateQte.Text);
+                        All_Price.Text = String.Format("{0} {1}€", Transharp.GetTranslation("All_Price"), ItemSelectedPrice);
                         var nbMerchandise = estimate.GetList.Count;
                         for(var i = 0; i < nbMerchandise; i++)
                         {
@@ -130,10 +127,9 @@ namespace MANAGER.Pages
 
         private void ComboBoxClient_OnInitialized(object sender, EventArgs e)
         {
-            const string query = "SELECT ID_CLIENT, EMAIL, DENOMINATION, TELEPHONE FROM CLIENT";
             try
             {
-                var Command = Connection.Connection.Command(query);
+                var Command = Connection.Connection.GetAll("CLIENT");
                 var resultat = Command.ExecuteReader();
                 while(resultat.Read())
                 {
@@ -173,7 +169,7 @@ namespace MANAGER.Pages
         private void BTNAddFeed_click(object sender, RoutedEventArgs e)
         {
             var Text = string.Format("{0} - {1}", ComboBoxCategory.Text, ComboBoxProduct.Text);
-            var merchandiseCost = Convert.ToInt32(LabelPrice.Content.ToString().Substring(0, LabelPrice.Content.ToString().Length - 1));
+            var merchandiseCost = ItemSelectedPrice;
             var nbMerchandise = estimate.GetList.Count;
             for(var i = 0; i < nbMerchandise; i++)
             {
@@ -207,6 +203,7 @@ namespace MANAGER.Pages
                     for(var i = 0; i < sizeList; i++)
                     {
                         //TODO : Fix
+                        Connection.Connection.Insert("DEVIS", estimate.Customer.id, estimate[i].id, ((idEstimate) + i), estimate[i].quantity, DateTime.Now.ToString("dd/MM/yy"), estimate[i].price, (numberEstimate));
                         var Insert = Connection.Connection.CommandStored("INSERTDEVIS");
                         Insert.Parameters.Add(new OracleParameter(":1", OracleDbType.Int32) {Value = estimate.Customer.id});
                         Insert.Parameters.Add(new OracleParameter(":2", OracleDbType.Int32) {Value = estimate[i].id});
@@ -215,7 +212,7 @@ namespace MANAGER.Pages
                         Insert.Parameters.Add(new OracleParameter(":5", OracleDbType.Varchar2) {Value = DateTime.Now.ToString("dd/MM/yy")});
                         Insert.Parameters.Add(new OracleParameter(":6", OracleDbType.Varchar2) {Value = estimate[i].price});
                         Insert.Parameters.Add(new OracleParameter(":7", OracleDbType.Varchar2) {Value = (numberEstimate)});
-                        Insert.ExecuteNonQuery();
+                        //Insert.ExecuteNonQuery();
                     }
                 }
                 result.Close();
@@ -223,9 +220,10 @@ namespace MANAGER.Pages
                 MessageBox.Show(Transharp.GetTranslation("Box_SuccessAdd", numberEstimate, TotalCost), Transharp.GetTranslation("Box_CE_Success"),
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }
-            catch
+            catch(Exception exception)
             {
-                MessageBox.Show(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(exception.Message);
+                //MessageBox.Show(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
             {
@@ -313,9 +311,10 @@ namespace MANAGER.Pages
 
         private void ErrorCost()
         {
-            LabelPrice.Content = Transharp.GetTranslation("Box_Error");
+            All_Price.Text = String.Format("{0} {1}", Transharp.GetTranslation("All_Price"), Transharp.GetTranslation("Box_Error"));
+            //LabelPrice.Content = Transharp.GetTranslation("Box_Error");
             BtnAdd.IsEnabled = false;
-            LabelPrice.Foreground = TextBoxEstimateQte.CaretBrush = TextBoxEstimateQte.SelectionBrush = TextBoxEstimateQte.BorderBrush = Brushes.Red;
+            All_Price.Foreground = TextBoxEstimateQte.CaretBrush = TextBoxEstimateQte.SelectionBrush = TextBoxEstimateQte.BorderBrush = Brushes.Red;
         }
 
         private void quantityChanged()
@@ -335,8 +334,9 @@ namespace MANAGER.Pages
                     if(ComboBoxProduct.Items.Count != 0)
                     {
                         quantity = newQuantity;
-                        LabelPrice.Foreground = Brushes.DarkGray;
-                        LabelPrice.Content = string.Format("{0}€", (((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.price * quantity));
+                        ItemSelectedPrice = (((ComboboxItemMerchandise)ComboBoxProduct.SelectedItem).Value.price * newQuantity);
+                        All_Price.Foreground = Brushes.DarkGray;
+                        All_Price.Text = string.Format("{0} {1}€", Transharp.GetTranslation("All_Price"), ItemSelectedPrice);
                         TextBoxEstimateQte.BorderBrush =
                             TextBoxEstimateQte.CaretBrush =
                                 TextBoxEstimateQte.SelectionBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
@@ -374,7 +374,7 @@ namespace MANAGER.Pages
                     if(i == merchandise.Value)
                     {
                         var Text = string.Format("{0} - {1}", ComboBoxCategory.Text, ComboBoxProduct.Text);
-                        var merchandiseCost = Convert.ToInt32(LabelPrice.Content.ToString().Substring(0, LabelPrice.Content.ToString().Length - 1));
+                        var merchandiseCost = ItemSelectedPrice;
                         ListMerchandiseN2.Add(new Merchandise(((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.id, Text, quantity, merchandiseCost,
                             ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.categoryID));
                     }

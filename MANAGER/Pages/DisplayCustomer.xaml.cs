@@ -34,10 +34,12 @@ namespace MANAGER.Pages
             LabelPhone.Text = Transharp.GetTranslation("DC_LabelPhone");
             LabelMail.Text = Transharp.GetTranslation("DC_labelMail");
             BTN_Delete.Content = Transharp.GetTranslation("DC_DeleteCustomer");
+            BTN_Update.Content = Transharp.GetTranslation("DC_UpdateCustomer");
 
             //Default Visibility 
             PanelClientEstimate.Visibility = Visibility.Hidden;
             BTN_Delete.Visibility = Visibility.Hidden;
+            BTN_Update.Visibility = Visibility.Hidden;
             PanelDevis.Children.Clear();
             BorderDevis.Visibility = Visibility.Hidden;
             LabelPhone.Visibility = Visibility.Hidden;
@@ -66,20 +68,17 @@ namespace MANAGER.Pages
             var date = DateTime.Now;
             try
             {
-                var Command = Connection.Connection.Command("SELECT DISTINCT NUMERODEVIS FROM DEVIS WHERE ID_CLIENT = :ID_CLIENT ORDER BY NUMERODEVIS");
-                Command.Parameters.Add(new OracleParameter(":ID_CLIENT", OracleDbType.Int32)
-                {
-                    Value = ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.id
-                });
+                var query = String.Format("SELECT DISTINCT NUMERODEVIS FROM DEVIS WHERE ID_CLIENT = {0} ORDER BY NUMERODEVIS", ((ComboboxItemCustomer)ComboBoxCustomer.SelectedItem).Value.id);
+                var Command = Connection.Connection.Command(query);
+
                 var resultCommand = Command.ExecuteReader();
 
                 while(resultCommand.Read())
                 {
+                    var query2 = String.Format("SELECT MARCHANDISE.ID_MARCHANDISE, MARCHANDISE.NOM, DEVIS.PRIXMARCHANDISE, DEVIS.QUANTITE, DEVIS.JOUR, MARCHANDISE.ID_CATEGORIE "
+                            + "FROM MARCHANDISE, DEVIS WHERE DEVIS.ID_MARCHANDISE=MARCHANDISE.ID_MARCHANDISE AND DEVIS.NUMERODEVIS= {0}", resultCommand[0]);
                     var Command2 =
-                        Connection.Connection.Command(
-                            "SELECT MARCHANDISE.ID_MARCHANDISE, MARCHANDISE.NOM, DEVIS.PRIXMARCHANDISE, DEVIS.QUANTITE, DEVIS.JOUR, MARCHANDISE.ID_CATEGORIE "
-                            + "FROM MARCHANDISE, DEVIS WHERE DEVIS.ID_MARCHANDISE=MARCHANDISE.ID_MARCHANDISE AND DEVIS.NUMERODEVIS= :NUMERODEVIS");
-                    Command2.Parameters.Add(new OracleParameter(":NUMERODEVIS", OracleDbType.Int32) {Value = resultCommand[0]});
+                        Connection.Connection.Command(query2);
                     var resultatMerchandise = Command2.ExecuteReader();
                     var ListMerchandise2 = new List<Merchandise>();
                     while(resultatMerchandise.Read())
@@ -123,16 +122,16 @@ namespace MANAGER.Pages
                 TextPhone.Visibility = Visibility.Visible;
                 TextMail.Visibility = Visibility.Visible;
                 BTN_Delete.Visibility = Visibility.Visible;
+                BTN_Update.Visibility = Visibility.Visible;
                 PanelDevis.Children.Clear();
             }
         }
 
         private void InitComboClient()
         {
-            const string query = "SELECT ID_CLIENT, EMAIL, DENOMINATION, TELEPHONE FROM CLIENT";
             try
             {
-                var oCommand = Connection.Connection.Command(query);
+                var oCommand = Connection.Connection.GetAll("CLIENT");
                 var resultat = oCommand.ExecuteReader();
                 while(resultat.Read())
                 {
@@ -164,8 +163,8 @@ namespace MANAGER.Pages
             for(var i = 0; i < taille; i++)
             {
                 var categoryString = string.Empty;
-                var CommandCategory = Connection.Connection.Command("SELECT LIBELLE FROM CATEGORIE WHERE ID_CATEGORIE=:ID_CATEGORIE");
-                CommandCategory.Parameters.Add(new OracleParameter(":ID_CATEGORIE", OracleDbType.Int32) {Value = Convert.ToInt32(listMarchandise[i].categoryID)});
+                var query = String.Format("SELECT LIBELLE FROM CATEGORIE WHERE ID_CATEGORIE={0}", listMarchandise[i].categoryID);
+                var CommandCategory = Connection.Connection.Command(query);
                 var resultatCategory = CommandCategory.ExecuteReader();
                 while(resultatCategory.Read())
                 {
@@ -275,7 +274,7 @@ namespace MANAGER.Pages
         {
             try
             {
-                var commandeModif = Connection.Connection.Command("DELETECLIENT");
+                var commandeModif = Connection.Connection.CommandStored("DELETECLIENT");
                 var CustomerId = new OracleParameter(":1", OracleDbType.Int32) {Value = ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.id};
                 commandeModif.Parameters.Add(CustomerId);
                 commandeModif.ExecuteNonQuery();
