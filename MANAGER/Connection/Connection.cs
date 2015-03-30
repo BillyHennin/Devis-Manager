@@ -7,6 +7,7 @@
 using System;
 using System.Data;
 using System.Windows;
+using System.Windows.Documents;
 
 using Oracle.ManagedDataAccess.Client;
 
@@ -59,21 +60,14 @@ namespace MANAGER.Connection
 
         public static void Insert(string tableQuery, params Object[] value)
         {
-            var query = String.Format("{0} WHERE 1 = 2", tableQuery);
-            var CommandColumns = GetAll(query);
-            using (var reader = CommandColumns.ExecuteReader())
+            var query = String.Empty;
+            foreach(var field in value)
             {
-                // This will return false - we don't care, we just want to make sure the schema table is there.
-                reader.Read();
-
-                var table = reader.GetSchemaTable();
-                foreach (DataColumn column in table.Columns)
-                {
-                    MessageBox.Show(column.ToString());
-                }
+                query += field+",";
             }
-
-            var Command = Connection.Command("");
+            query = query.Substring(0, query.Length - 1);
+            var queryInsert = String.Format("INSERT INTO {0} VALUES ({1})", tableQuery, query);
+            var Command = Connection.Command(queryInsert);
             //Command.ExecuteNonQuery();
         }
 

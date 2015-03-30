@@ -209,7 +209,7 @@ namespace MANAGER.Pages
                         Insert.Parameters.Add(new OracleParameter(":2", OracleDbType.Int32) {Value = estimate[i].id});
                         Insert.Parameters.Add(new OracleParameter(":3", OracleDbType.Int32) {Value = ((idEstimate) + i)});
                         Insert.Parameters.Add(new OracleParameter(":4", OracleDbType.Int32) {Value = estimate[i].quantity});
-                        Insert.Parameters.Add(new OracleParameter(":5", OracleDbType.Varchar2) {Value = DateTime.Now.ToString("dd/MM/yy")});
+                        MessageBox.Show(DateTime.Now.ToString("dd/MM/yy"));
                         Insert.Parameters.Add(new OracleParameter(":6", OracleDbType.Varchar2) {Value = estimate[i].price});
                         Insert.Parameters.Add(new OracleParameter(":7", OracleDbType.Varchar2) {Value = (numberEstimate)});
                         //Insert.ExecuteNonQuery();

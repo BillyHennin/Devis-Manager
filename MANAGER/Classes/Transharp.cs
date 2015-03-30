@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 
 namespace MANAGER.Classes
 {
-    public class Transharp
+    public static class Transharp
     {
         public enum LangsEnum
         {
