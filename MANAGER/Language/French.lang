@@ -58,3 +58,5 @@ THM_Dark=Sombre
 THM_Light=Clair
 THM_Small=Petit
 THM_Large=Large
+THM_Theme=Theme :
+THM_TextSize=Taille du texte :

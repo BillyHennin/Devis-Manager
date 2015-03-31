@@ -36,6 +36,52 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
+                <Grid HorizontalAlignment="Left">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="65" />
+                        <ColumnDefinition Width="35" />
+                        <ColumnDefinition MinWidth="120" />
+                        <ColumnDefinition Width="0*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock x:Name="TextBlockTheme"
+                               Grid.ColumnSpan="2"
+                               Height="16"
+                               Margin="0,3,16,7"
+                               VerticalAlignment="Center"
+                               Text="#Theme" />
+                    <ComboBox Grid.Row="0"
+                              Grid.Column="2"
+                              Height="22"
+                              Margin="0,0,0,4"
+                              VerticalAlignment="Center"
+                              BorderBrush="{DynamicResource Accent}"
+                              DisplayMemberPath="DisplayName"
+                              ItemsSource="{Binding Themes}"
+                              SelectedItem="{Binding SelectedTheme,
+                                                     Mode=TwoWay}" />
+
+                    <TextBlock x:Name="TextBlockTextSize"
+                               Grid.Row="1"
+                               Grid.Column="0"
+                               Grid.ColumnSpan="2"
+                               Height="16"
+                               Margin="0,3,16,3"
+                               VerticalAlignment="Center"
+                               Text="#TextSize" />
+                    <ComboBox Grid.Row="1"
+                              Grid.Column="2"
+                              Height="22"
+                              VerticalAlignment="Center"
+                              BorderBrush="{DynamicResource Accent}"
+                              ItemsSource="{Binding FontSizes}"
+                              SelectedItem="{Binding SelectedFontSize,
+                                                     Mode=TwoWay}" />
+                </Grid>
             </StackPanel>
         </ScrollViewer>
     </Grid>

@@ -27,6 +27,8 @@ namespace MANAGER.Pages
         private void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
             TextBlockApparence.Text = Transharp.GetTranslation("Link_Apparence");
+            TextBlockTheme.Text = Transharp.GetTranslation("THM_Theme");
+            TextBlockTextSize.Text = Transharp.GetTranslation("THM_TextSize");
         }
     }
 }

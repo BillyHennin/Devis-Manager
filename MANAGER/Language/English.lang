@@ -55,7 +55,9 @@ Link_Param=Parameters
 PM_SelectionLanguage=Select the language : 
 PM_LanguageSelected=Text now in English.
 THM_Dark=Dark
-THM=Light=Light
+THM_Light=Light
 THM_Small=Small
 THM_Large=Large
+THM_Theme=Theme :
+THM_TextSize=Text size :
 
