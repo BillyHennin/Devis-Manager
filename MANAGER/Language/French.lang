@@ -54,3 +54,7 @@ Link_Merchandise=Marchandise
 Link_Param=Parametres 
 PM_SelectionLanguage=Selectionner la langue : 	
 PM_LanguageSelected=Texte à present en Français.
+THM_Dark=Sombre
+THM_Light=Clair
+THM_Small=Petit
+THM_Large=Large

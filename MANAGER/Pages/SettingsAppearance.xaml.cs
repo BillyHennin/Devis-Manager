@@ -6,6 +6,7 @@
 
 #region
 
+using MANAGER.Classes;
 using MANAGER.ViewModels;
 
 #endregion
@@ -21,6 +22,11 @@ namespace MANAGER.Pages
         {
             InitializeComponent();
             DataContext = new SettingsAppearanceViewModel();
+        }
+
+        private void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        {
+            TextBlockApparence.Text = Transharp.GetTranslation("Link_Apparence");
         }
     }
 }

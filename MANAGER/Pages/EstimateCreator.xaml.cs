@@ -166,7 +166,7 @@ namespace MANAGER.Pages
 
         private void BTNAddFeed_click(object sender, RoutedEventArgs e)
         {
-            var Text = string.Format("{0} - {1}", ComboBoxCategory.Text, ComboBoxProduct.Text);
+            var Text = String.Format("{0} - {1}", ComboBoxCategory.Text, ComboBoxProduct.Text);
             var merchandiseCost = ItemSelectedPrice;
             var nbMerchandise = estimate.GetList.Count;
             for(var i = 0; i < nbMerchandise; i++)
@@ -263,7 +263,7 @@ namespace MANAGER.Pages
             // Price
             panelMerchandise.Children.Add(new TextBlock
             {
-                Text = string.Format("{0}€", price),
+                Text = String.Format("{0}€", price),
                 HorizontalAlignment = HorizontalAlignment.Left,
                 Margin = thick,
                 Height = 16
@@ -272,7 +272,7 @@ namespace MANAGER.Pages
             // Quantity
             panelMerchandise.Children.Add(new TextBlock
             {
-                Text = string.Format("{0} : {1}", Transharp.GetTranslation("EC_Quantity"), quantity.ToString(CultureInfo.InvariantCulture)),
+                Text = String.Format("{0} : {1}", Transharp.GetTranslation("EC_Quantity"), quantity.ToString(CultureInfo.InvariantCulture)),
                 HorizontalAlignment = HorizontalAlignment.Left,
                 Margin = thick,
                 Height = 16
@@ -324,7 +324,7 @@ namespace MANAGER.Pages
                         ItemSelectedQuantity = newQuantity;
                         ItemSelectedPrice = (((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.price * newQuantity);
                         All_Price.Foreground = Brushes.DarkGray;
-                        All_Price.Text = string.Format("{0} {1}€", Transharp.GetTranslation("All_Price"), ItemSelectedPrice);
+                        All_Price.Text = String.Format("{0} {1}€", Transharp.GetTranslation("All_Price"), ItemSelectedPrice);
                         TextBoxEstimateQte.BorderBrush =
                             TextBoxEstimateQte.CaretBrush =
                                 TextBoxEstimateQte.SelectionBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
@@ -362,7 +362,7 @@ namespace MANAGER.Pages
                 {
                     if(i == merchandise.Value)
                     {
-                        var Text = string.Format("{0} - {1}", ComboBoxCategory.Text, ComboBoxProduct.Text);
+                        var Text = String.Format("{0} - {1}", ComboBoxCategory.Text, ComboBoxProduct.Text);
                         var merchandiseCost = ItemSelectedPrice;
                         ListMerchandiseN2.Add(new Merchandise(((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.id, Text, ItemSelectedQuantity,
                             merchandiseCost, ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.categoryID));

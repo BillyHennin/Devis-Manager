@@ -12,6 +12,7 @@ using System.Windows.Media;
 
 using FirstFloor.ModernUI.Presentation;
 
+using MANAGER.Classes;
 using MANAGER.Properties;
 
 #endregion
@@ -20,8 +21,8 @@ namespace MANAGER.ViewModels
 {
     public class SettingsAppearanceViewModel : NotifyPropertyChanged
     {
-        private const string FontSmall = "Petit";
-        private const string FontLarge = "Large";
+        private readonly string FontSmall = Transharp.GetTranslation("THM_Small");
+        private readonly string FontLarge = Transharp.GetTranslation("THM_Large");
         private readonly Color[] accentColors =
         {
             Color.FromRgb(0xff, 0xff, 0xff), Color.FromRgb(0x64, 0x76, 0x87), Color.FromRgb(0x00, 0x00, 0x00),
@@ -39,8 +40,8 @@ namespace MANAGER.ViewModels
 
         public SettingsAppearanceViewModel()
         {
-            themes.Add(new Link {DisplayName = "Sombre", Source = AppearanceManager.DarkThemeSource});
-            themes.Add(new Link {DisplayName = "Clair", Source = AppearanceManager.LightThemeSource});
+            themes.Add(new Link { DisplayName = Transharp.GetTranslation("THM_Dark"), Source = AppearanceManager.DarkThemeSource });
+            themes.Add(new Link { DisplayName = Transharp.GetTranslation("THM_Light"), Source = AppearanceManager.LightThemeSource });
 
             SelectedFontSize = AppearanceManager.Current.FontSize == FontSize.Large ? FontLarge : FontSmall;
             SyncThemeAndColor();
@@ -49,8 +50,11 @@ namespace MANAGER.ViewModels
         }
 
         public LinkCollection Themes { get { return themes; } }
+
         public string[] FontSizes { get { return new[] {FontSmall, FontLarge}; } }
+
         public Color[] AccentColors { get { return accentColors; } }
+
         public Link SelectedTheme
         {
             get { return selectedTheme; }

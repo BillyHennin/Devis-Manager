@@ -217,7 +217,7 @@ namespace MANAGER.Pages
                 // Price
                 panelMarchandise.Children.Add(new TextBlock
                 {
-                    Text = string.Format("{0}€", prixMarchandise.ToString(CultureInfo.InvariantCulture)),
+                    Text = String.Format("{0}€", prixMarchandise.ToString(CultureInfo.InvariantCulture)),
                     Margin = thick,
                     Height = 16
                 });
@@ -283,9 +283,9 @@ namespace MANAGER.Pages
                 Connection.Connection.Delete(Table.Estimate.TableName, ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.id, Customer.TableName);
                 Connection.Connection.Delete(Customer.TableName, ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.id);
             }
-            catch(Exception exception)
+            catch
             {
-                Console.WriteLine(exception.Message);
+                MessageBox.Show(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             ComboBoxCustomer.Items.Clear();
