@@ -40,7 +40,6 @@ namespace MANAGER.Pages
             //Default Visibility 
 
             PanelDevis.Children.Clear();
-            BorderDevis.Visibility = Visibility.Hidden;
             ChangeVisibility(false);
             try
             {
@@ -115,6 +114,28 @@ namespace MANAGER.Pages
             {
                 ChangeVisibility(true);
                 PanelDevis.Children.Clear();
+                var panelMerchandise = new StackPanel();
+                // New border
+                var border = new Border
+                {
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    Margin = new Thickness(2, 2, 1, 0),
+                    BorderThickness = new Thickness(1),
+                    Width = BorderDevis.Width - 5,
+                    Child = panelMerchandise,
+                    Height = 100
+                };
+
+                PanelDevis.Children.Add(border);
+
+                // Merchandise's name
+                panelMerchandise.Children.Add(new TextBlock
+                {
+                    Text = Transharp.GetTranslation("DM_SearchNull"),
+                    Margin = new Thickness(5, 2, 0, 0),
+                    Height = 40,
+                    TextAlignment = TextAlignment.Center
+                });
             }
         }
 
@@ -143,7 +164,6 @@ namespace MANAGER.Pages
         private void ComboBoxEstimate_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             PanelDevis.Children.Clear();
-            BorderDevis.Visibility = Visibility.Visible;
             if(ComboBoxEstimate.Items.Count == 0)
             {
                 return;
@@ -300,7 +320,7 @@ namespace MANAGER.Pages
             if(visibility)
             {
                 PanelClientEstimate.Visibility = Visibility.Visible;
-
+                BorderDevis.Visibility = Visibility.Visible;
                 LabelPhone.Visibility = Visibility.Visible;
                 LabelMail.Visibility = Visibility.Visible;
 
@@ -313,6 +333,7 @@ namespace MANAGER.Pages
             else
             {
                 PanelClientEstimate.Visibility = Visibility.Hidden;
+                BorderDevis.Visibility = Visibility.Hidden;
 
                 LabelPhone.Visibility = Visibility.Hidden;
                 LabelMail.Visibility = Visibility.Hidden;

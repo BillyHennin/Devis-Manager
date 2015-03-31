@@ -31,6 +31,7 @@ namespace MANAGER.Connection
                     command = ConnectionOracle.Command(query);
                     break;
             }
+            command.Prepare();
             return command;
         }
 
@@ -52,6 +53,7 @@ namespace MANAGER.Connection
                     command = ConnectionOracle.CommandStored(query);
                     break;
             }
+            command.Prepare();
             return command;
         }
 
@@ -70,6 +72,7 @@ namespace MANAGER.Connection
             query = query.Substring(0, query.Length - 1);
             var queryInsert = String.Format("INSERT INTO {0} VALUES ({1})", tableQuery, query);
             var Command = Connection.Command(queryInsert);
+            Command.Prepare();
             Command.ExecuteNonQuery();
         }
 
@@ -79,19 +82,21 @@ namespace MANAGER.Connection
             Id_Table = param ?? tableQuery;
             var query = String.Format("DELETE FROM {0} WHERE ID_{1} = {2}", tableQuery, Id_Table, ID);
             var Command = Connection.Command(query);
+            Command.Prepare();
             Command.ExecuteNonQuery();
         }
 
         public static void Update(string tableQuery, int ID, String[,] value)
         {
-            var set = String.Empty;
-            for(var i = 0; i < value.Length / 2; i++)
+            var query = String.Empty;
+            var size = value.Length / 2;
+            for(var i = 0; i < size; i++)
             {
-                set += String.Format("{0}='{1}' ,", value[i, 0], value[i, 1]);
+                query += String.Format("{0} = '{1}' ,", value[i, 0], value[i, 1]);
             }
-            set = set.Substring(0, set.Length - 1);
-            var query = String.Format("UPDATE {0} SET {2} WHERE ID_{0} = {1}", tableQuery, ID, set);
+            query = String.Format("UPDATE {0} SET {2} WHERE ID_{0} = {1}", tableQuery, ID, query.Substring(0, query.Length - 1));
             var Command = Connection.Command(query);
+            Command.Prepare();
             Command.ExecuteNonQuery();
         }
     }

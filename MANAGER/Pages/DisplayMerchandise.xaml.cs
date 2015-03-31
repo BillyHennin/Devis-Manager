@@ -113,7 +113,7 @@ namespace MANAGER.Pages
             });
 
             // Price
-            panelMerchandise.Children.Add(new TextBlock {Text = string.Format("{0}€", newMerchandise.price), Margin = thick, Height = 16});
+            panelMerchandise.Children.Add(new TextBlock {Text = String.Format("{0}€", newMerchandise.price), Margin = thick, Height = 16});
 
             var BTN_Sale = new Button
             {
@@ -154,7 +154,7 @@ namespace MANAGER.Pages
                     {
                         category = resultatCategory[0].ToString();
                     }
-                    var text = string.Format("{0} - {1}", category, resultat[1]);
+                    var text = String.Format("{0} - {1}", category, resultat[1]);
                     var newMerchandise = new Merchandise(Convert.ToInt32(resultat[0]), text, Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]),
                         Convert.ToInt32(resultat[5])) {onSale = Convert.ToBoolean(resultat[4])};
                     Display(text, newMerchandise);
