@@ -9,7 +9,6 @@ namespace MANAGER.Classes
     public class xml
     {
         private string lang;
-
         //private static xml Read()
         //{
         //    var reader = new System.Xml.Serialization.XmlSerializer(typeof(xml));

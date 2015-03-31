@@ -350,7 +350,6 @@ namespace MANAGER.Properties
 
         [UsedImplicitly]
         public ImplicitUseKindFlags UseKindFlags { get; private set; }
-
         [UsedImplicitly]
         public ImplicitUseTargetFlags TargetFlags { get; private set; }
     }

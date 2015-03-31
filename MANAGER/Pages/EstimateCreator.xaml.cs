@@ -17,6 +17,8 @@ using MANAGER.Classes;
 using MANAGER.ComboBox;
 using MANAGER.Properties;
 
+using Category = MANAGER.Table.Category;
+
 #endregion
 
 namespace MANAGER.Pages
@@ -24,11 +26,10 @@ namespace MANAGER.Pages
     public partial class EstimatePage
     {
         private static readonly List<Merchandise> ListMerchandise = new List<Merchandise>();
-        private static readonly List<Merchandise> ListMerchandiseN2 = new List<Merchandise>();
         private readonly Estimate estimate = new Estimate(ListMerchandise);
         private double ItemSelectedPrice;
+        private int ItemSelectedQuantity;
         private double TotalCost;
-        private int quantity;
 
         private void EstimateCreator_Loaded(object sender, RoutedEventArgs e)
         {
@@ -38,21 +39,21 @@ namespace MANAGER.Pages
             {
                 estimate[i].Border.BorderBrush = BtnAdd.BorderBrush;
             }
-            quantityChanged();
+            QuantityChanged();
         }
 
         private void ComboBoxCategory_Initialized(object sender, EventArgs e)
         {
             try
             {
-                var oCommand = Connection.Connection.GetAll("CATEGORIE");
-                var resultat = oCommand.ExecuteReader();
+                var Command = Connection.Connection.GetAll(Category.TableName);
+                var resultat = Command.ExecuteReader();
                 while(resultat.Read())
                 {
                     ComboBoxCategory.Items.Add(new ComboboxItemCategory
                     {
                         Text = resultat[1].ToString(),
-                        Value = new Category(Convert.ToInt32(resultat[0]), resultat[1].ToString())
+                        Value = new Classes.Category(Convert.ToInt32(resultat[0]), resultat[1].ToString())
                     });
                 }
                 resultat.Close();
@@ -68,8 +69,8 @@ namespace MANAGER.Pages
             try
             {
                 ComboBoxProduct.Items.Clear();
-                var query = String.Format("MARCHANDISE WHERE ENVENTE = 1 AND QUANTITE > 0 AND ID_CATEGORIE={0}",
-                    ((ComboboxItemCategory) ComboBoxCategory.SelectedItem).Value.ID);
+                var query = String.Format("{0} WHERE {1} = 1 AND {2} > 0 AND ID_{3}={4}", Table.Merchandise.TableName, Table.Merchandise.OnSale,
+                    Table.Merchandise.Quantity, Category.TableName, ((ComboboxItemCategory) ComboBoxCategory.SelectedItem).Value.ID);
                 var Command = Connection.Connection.GetAll(query);
                 var resultat = Command.ExecuteReader();
                 while(resultat.Read())
@@ -94,10 +95,9 @@ namespace MANAGER.Pages
         private void ComboBoxProduct_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             BtnAdd.Content = Transharp.GetTranslation("BTN_Add");
-
             try
             {
-                switch(quantity)
+                switch(ItemSelectedQuantity)
                 {
                     case 0:
                         ErrorCost();
@@ -127,7 +127,7 @@ namespace MANAGER.Pages
         {
             try
             {
-                var Command = Connection.Connection.GetAll("CLIENT");
+                var Command = Connection.Connection.GetAll(Table.Customer.TableName);
                 var resultat = Command.ExecuteReader();
                 while(resultat.Read())
                 {
@@ -155,7 +155,7 @@ namespace MANAGER.Pages
         {
             try
             {
-                quantityChanged();
+                QuantityChanged();
             }
             catch(Exception caught)
             {
@@ -178,7 +178,7 @@ namespace MANAGER.Pages
                 UpdateEstimate(i, null);
                 return;
             }
-            AddMerchandise(((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.id, Text, quantity, merchandiseCost,
+            AddMerchandise(((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.id, Text, ItemSelectedQuantity, merchandiseCost,
                 ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.categoryID);
             AjouterEstimate.IsEnabled = true;
 
@@ -190,17 +190,17 @@ namespace MANAGER.Pages
             var numberEstimate = 0;
             try
             {
-                const string querySelect = "SELECT max(ID_DEVIS), max(NUMERODEVIS) FROM DEVIS";
+                var querySelect = String.Format("SELECT max(ID_{0}), max({1}) FROM {0}", Table.Estimate.TableName, Table.Estimate.NumberDevis);
                 var OracleCommand = Connection.Connection.Command(querySelect);
                 var result = OracleCommand.ExecuteReader();
                 var sizeList = ListMerchandise.Count;
                 while(result.Read())
                 {
-                    var idEstimate = result[0].ToString() == "" ? 1 : Convert.ToInt32(result[0]) + 1;
-                    numberEstimate = result[1].ToString() == "" ? 1 : Convert.ToInt32(result[1]) + 1;
+                    var idEstimate = result[0].ToString() == String.Empty ? 1 : Convert.ToInt32(result[0]) + 1;
+                    numberEstimate = result[1].ToString() == String.Empty ? 1 : Convert.ToInt32(result[1]) + 1;
                     for(var i = 0; i < sizeList; i++)
                     {
-                        Connection.Connection.Insert("DEVIS", estimate.Customer.id, estimate[i].id, ((idEstimate) + i), estimate[i].quantity,
+                        Connection.Connection.Insert(Table.Estimate.TableName, estimate.Customer.id, estimate[i].id, ((idEstimate) + i), estimate[i].quantity,
                             DateTime.Now.ToString("dd/MM/yy"), estimate[i].price, (numberEstimate));
                     }
                 }
@@ -218,7 +218,7 @@ namespace MANAGER.Pages
                 PanelEstimate.Children.Clear();
                 ListMerchandise.Clear();
                 TotalCost = 0;
-                LabelTotalPrix.Text = "";
+                LabelTotalPrix.Text = String.Empty;
                 AjouterEstimate.IsEnabled = false;
             }
         }
@@ -278,6 +278,7 @@ namespace MANAGER.Pages
                 Height = 16
             });
 
+            // Button
             var BTN_Delete = new Button
             {
                 HorizontalAlignment = HorizontalAlignment.Right,
@@ -300,14 +301,13 @@ namespace MANAGER.Pages
         private void ErrorCost()
         {
             All_Price.Text = String.Format("{0} {1}", Transharp.GetTranslation("All_Price"), Transharp.GetTranslation("Box_Error"));
-            //LabelPrice.Content = Transharp.GetTranslation("Box_Error");
             BtnAdd.IsEnabled = false;
             All_Price.Foreground = TextBoxEstimateQte.CaretBrush = TextBoxEstimateQte.SelectionBrush = TextBoxEstimateQte.BorderBrush = Brushes.Red;
         }
 
-        private void quantityChanged()
+        private void QuantityChanged()
         {
-            quantity = 0;
+            ItemSelectedQuantity = 0;
 
             if(IsInt(TextBoxEstimateQte.Text))
             {
@@ -321,7 +321,7 @@ namespace MANAGER.Pages
                 {
                     if(ComboBoxProduct.Items.Count != 0)
                     {
-                        quantity = newQuantity;
+                        ItemSelectedQuantity = newQuantity;
                         ItemSelectedPrice = (((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.price * newQuantity);
                         All_Price.Foreground = Brushes.DarkGray;
                         All_Price.Text = string.Format("{0} {1}€", Transharp.GetTranslation("All_Price"), ItemSelectedPrice);
@@ -350,9 +350,10 @@ namespace MANAGER.Pages
 
         private void UpdateEstimate(int? merchandise, int? id)
         {
+            var ListMerchandiseN2 = new List<Merchandise>();
             BtnAdd.Content = Transharp.GetTranslation("BTN_Add");
             TotalCost = 0;
-            LabelTotalPrix.Text = "";
+            LabelTotalPrix.Text = String.Empty;
 
             var nbMerchandise = estimate.GetList.Count;
             for(var i = 0; i < nbMerchandise; i++)
@@ -363,8 +364,8 @@ namespace MANAGER.Pages
                     {
                         var Text = string.Format("{0} - {1}", ComboBoxCategory.Text, ComboBoxProduct.Text);
                         var merchandiseCost = ItemSelectedPrice;
-                        ListMerchandiseN2.Add(new Merchandise(((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.id, Text, quantity, merchandiseCost,
-                            ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.categoryID));
+                        ListMerchandiseN2.Add(new Merchandise(((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.id, Text, ItemSelectedQuantity,
+                            merchandiseCost, ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.categoryID));
                     }
                     else
                     {

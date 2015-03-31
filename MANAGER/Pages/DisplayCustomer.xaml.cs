@@ -13,6 +13,9 @@ using System.Windows.Controls;
 using MANAGER.Classes;
 using MANAGER.ComboBox;
 
+using Category = MANAGER.Table.Category;
+using Customer = MANAGER.Table.Customer;
+
 namespace MANAGER.Pages
 {
     /// <summary>
@@ -35,15 +38,10 @@ namespace MANAGER.Pages
             BTN_Update.Content = Transharp.GetTranslation("DC_UpdateCustomer");
 
             //Default Visibility 
-            PanelClientEstimate.Visibility = Visibility.Hidden;
-            BTN_Delete.Visibility = Visibility.Hidden;
-            BTN_Update.Visibility = Visibility.Hidden;
+
             PanelDevis.Children.Clear();
             BorderDevis.Visibility = Visibility.Hidden;
-            LabelPhone.Visibility = Visibility.Hidden;
-            LabelMail.Visibility = Visibility.Hidden;
-            TextPhone.Visibility = Visibility.Hidden;
-            TextMail.Visibility = Visibility.Hidden;
+            ChangeVisibility(false);
             try
             {
                 ComboBoxCustomer.Items.Clear();
@@ -66,8 +64,8 @@ namespace MANAGER.Pages
             var date = DateTime.Now;
             try
             {
-                var query = String.Format("SELECT DISTINCT NUMERODEVIS FROM DEVIS WHERE ID_CLIENT = {0} ORDER BY NUMERODEVIS",
-                    ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.id);
+                var query = String.Format("SELECT DISTINCT {0} FROM {1} WHERE ID_{2} = {3} ORDER BY {0}", Table.Estimate.NumberDevis, Table.Estimate.TableName,
+                    Customer.TableName, ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.id);
                 var Command = Connection.Connection.Command(query);
 
                 var resultCommand = Command.ExecuteReader();
@@ -76,8 +74,9 @@ namespace MANAGER.Pages
                 {
                     var query2 =
                         String.Format(
-                            "SELECT MARCHANDISE.ID_MARCHANDISE, MARCHANDISE.NOM, DEVIS.PRIXMARCHANDISE, DEVIS.QUANTITE, DEVIS.JOUR, MARCHANDISE.ID_CATEGORIE "
-                            + "FROM MARCHANDISE, DEVIS WHERE DEVIS.ID_MARCHANDISE=MARCHANDISE.ID_MARCHANDISE AND DEVIS.NUMERODEVIS= {0}", resultCommand[0]);
+                            "SELECT {0}.ID_{0}, {0}.{1}, {2}.{3}, {2}.{4}, {2}.{5}, {0}.ID_{7} FROM {0}, {2} WHERE {2}.ID_{0} = {0}.ID_{0} AND {2}.{6} = {8}",
+                            Table.Merchandise.TableName, Table.Merchandise.Name, Table.Estimate.TableName, Table.Estimate.PriceMerchandise,
+                            Table.Estimate.Quantity, Table.Estimate.Day, Table.Estimate.NumberDevis, Category.TableName, resultCommand[0]);
                     var Command2 = Connection.Connection.Command(query2);
                     var resultatMerchandise = Command2.ExecuteReader();
                     var ListMerchandise2 = new List<Merchandise>();
@@ -102,7 +101,7 @@ namespace MANAGER.Pages
                 }
                 resultCommand.Close();
                 TextMail.Text = ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.email;
-                TextPhone.Text = ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.cellphone;
+                TextPhone.Text = ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.Phone;
             }
             catch(Exception caught)
             {
@@ -114,15 +113,7 @@ namespace MANAGER.Pages
             }
             finally
             {
-                PanelClientEstimate.Visibility = Visibility.Visible;
-
-                LabelPhone.Visibility = Visibility.Visible;
-                LabelMail.Visibility = Visibility.Visible;
-
-                TextPhone.Visibility = Visibility.Visible;
-                TextMail.Visibility = Visibility.Visible;
-                BTN_Delete.Visibility = Visibility.Visible;
-                BTN_Update.Visibility = Visibility.Visible;
+                ChangeVisibility(true);
                 PanelDevis.Children.Clear();
             }
         }
@@ -131,14 +122,14 @@ namespace MANAGER.Pages
         {
             try
             {
-                var oCommand = Connection.Connection.GetAll("CLIENT");
+                var oCommand = Connection.Connection.GetAll(Customer.TableName);
                 var resultat = oCommand.ExecuteReader();
                 while(resultat.Read())
                 {
                     ComboBoxCustomer.Items.Add(new ComboboxItemCustomer
                     {
                         Text = resultat[2].ToString(),
-                        Value = new Customer(Convert.ToInt32(resultat[0]), resultat[2].ToString(), resultat[3].ToString(), resultat[1].ToString())
+                        Value = new Classes.Customer(Convert.ToInt32(resultat[0]), resultat[2].ToString(), resultat[3].ToString(), resultat[1].ToString())
                     });
                 }
                 resultat.Close();
@@ -163,7 +154,7 @@ namespace MANAGER.Pages
             for(var i = 0; i < taille; i++)
             {
                 var categoryString = string.Empty;
-                var query = String.Format("SELECT LIBELLE FROM CATEGORIE WHERE ID_CATEGORIE={0}", listMarchandise[i].categoryID);
+                var query = String.Format("SELECT {1} FROM {0} WHERE ID_{0} = {2}", Category.TableName, Category.Title, listMarchandise[i].categoryID);
                 var CommandCategory = Connection.Connection.Command(query);
                 var resultatCategory = CommandCategory.ExecuteReader();
                 while(resultatCategory.Read())
@@ -269,8 +260,8 @@ namespace MANAGER.Pages
         {
             try
             {
-                Connection.Connection.Delete("DEVIS", ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.id, "CLIENT");
-                Connection.Connection.Delete("CLIENT", ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.id);
+                Connection.Connection.Delete(Table.Estimate.TableName, ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.id, Customer.TableName);
+                Connection.Connection.Delete(Customer.TableName, ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.id);
             }
             catch(Exception exception)
             {
@@ -286,8 +277,8 @@ namespace MANAGER.Pages
             var customer = ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value;
             try
             {
-                var set = new[,] {{"TELEPHONE", TextPhone.Text}, {"EMAIL", TextMail.Text}};
-                Connection.Connection.Update("CLIENT", customer.id, set);
+                var set = new[,] {{Customer.Phone, TextPhone.Text}, {Customer.Email, TextMail.Text}};
+                Connection.Connection.Update(Customer.TableName, customer.id, set);
             }
             catch
             {
@@ -295,7 +286,7 @@ namespace MANAGER.Pages
             }
             finally
             {
-                customer.cellphone = TextPhone.Text;
+                customer.Phone = TextPhone.Text;
                 customer.email = TextMail.Text;
                 MessageBox.Show(Transharp.GetTranslation("Box_SuccessUpdate", customer.id, customer.name), Transharp.GetTranslation("Box_Update_Success_Title"),
                     MessageBoxButton.OK, MessageBoxImage.Information);
@@ -303,5 +294,35 @@ namespace MANAGER.Pages
         }
 
         private void ComboBoxCommands_SelectionChanged(object sender, SelectionChangedEventArgs e) {}
+
+        private void ChangeVisibility(bool visibility)
+        {
+            if(visibility)
+            {
+                PanelClientEstimate.Visibility = Visibility.Visible;
+
+                LabelPhone.Visibility = Visibility.Visible;
+                LabelMail.Visibility = Visibility.Visible;
+
+                TextPhone.Visibility = Visibility.Visible;
+                TextMail.Visibility = Visibility.Visible;
+
+                BTN_Delete.Visibility = Visibility.Visible;
+                BTN_Update.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                PanelClientEstimate.Visibility = Visibility.Hidden;
+
+                LabelPhone.Visibility = Visibility.Hidden;
+                LabelMail.Visibility = Visibility.Hidden;
+
+                TextPhone.Visibility = Visibility.Hidden;
+                TextMail.Visibility = Visibility.Hidden;
+
+                BTN_Delete.Visibility = Visibility.Hidden;
+                BTN_Update.Visibility = Visibility.Hidden;
+            }
+        }
     }
 }

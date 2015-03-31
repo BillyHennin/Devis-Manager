@@ -10,17 +10,17 @@ namespace MANAGER.Classes
 {
     public class Customer
     {
-        public Customer(int id, string name, string cellphone, string email)
+        public Customer(int id, string name, string Phone, string email)
         {
             this.id = id;
             this.name = name;
-            this.cellphone = cellphone;
+            this.Phone = Phone;
             this.email = email;
         }
 
         public int id { get; set; }
         public string name { get; set; }
-        public string cellphone { get; set; }
+        public string Phone { get; set; }
         public string email { get; set; }
         //TODO : Create a code for each customer (looks as real as possible)
         //public string code { get; set; }

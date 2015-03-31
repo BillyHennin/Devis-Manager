@@ -15,48 +15,36 @@ using System.Windows.Media;
 
 using MANAGER.Classes;
 
+using Category = MANAGER.Table.Category;
+
 #endregion
 
 namespace MANAGER.Pages
 {
-    /// <summary>
-    ///   Logique d'interaction pour DisplayMerchandise.xaml
-    /// </summary>
     public partial class DisplayMerchandise
     {
-        /// <summary>
-        ///   A list of all merchandise that are buyable
-        /// </summary>
         private static readonly List<Merchandise> ListMerchandise = new List<Merchandise>();
+        private static readonly List<Merchandise> SecondListMerchandise = new List<Merchandise>();
 
-        /// <summary>
-        ///   A second list, for future use.
-        /// </summary>
-        private static readonly List<Merchandise> ListMerchandiseN2 = new List<Merchandise>();
-
-        /// <summary>
-        ///   When a user select a specific marchandise clear everything, then recreate it with what the user wants to see.
-        /// </summary>
-        /// <param name="merchandise"></param>
         private void SelectMarchandiseLike(string merchandise)
         {
             PanelMerchandise.Children.Clear();
             ListMerchandise.Clear();
 
-            var nbMerchandise = ListMerchandiseN2.Count;
+            var nbMerchandise = SecondListMerchandise.Count;
             for(var i = 0; i < nbMerchandise; i++)
             {
-                if(!ListMerchandiseN2[i].name.ToLower().Contains(merchandise.ToLower())
-                   && !ListMerchandiseN2[i].price.ToString(CultureInfo.InvariantCulture).Contains(merchandise)
-                   && !ListMerchandiseN2[i].quantity.ToString(CultureInfo.InvariantCulture).Contains(merchandise))
+                if(!SecondListMerchandise[i].name.ToLower().Contains(merchandise.ToLower())
+                   && !SecondListMerchandise[i].price.ToString(CultureInfo.InvariantCulture).Contains(merchandise)
+                   && !SecondListMerchandise[i].quantity.ToString(CultureInfo.InvariantCulture).Contains(merchandise))
                 {
                     continue;
                 }
-                var id = ListMerchandiseN2[i].id;
-                var text = ListMerchandiseN2[i].name;
-                var newMerchandise = new Merchandise(id, text, ListMerchandiseN2[i].quantity, ListMerchandiseN2[i].price, ListMerchandiseN2[i].categoryID)
+                var id = SecondListMerchandise[i].id;
+                var text = SecondListMerchandise[i].name;
+                var newMerchandise = new Merchandise(id, text, SecondListMerchandise[i].quantity, SecondListMerchandise[i].price, SecondListMerchandise[i].categoryID)
                 {
-                    onSale = ListMerchandiseN2[i].onSale
+                    onSale = SecondListMerchandise[i].onSale
                 };
 
                 Display(text, newMerchandise);
@@ -91,7 +79,7 @@ namespace MANAGER.Pages
 
         private void TextBoxEstimateQte_TextChanged(object sender, TextChangedEventArgs e)
         {
-            SelectMarchandiseLike(TextBoxEstimateQte.Text == "" ? "" : TextBoxEstimateQte.Text);
+            SelectMarchandiseLike(TextBoxEstimateQte.Text == String.Empty ? String.Empty : TextBoxEstimateQte.Text);
         }
 
         private void Display(string text, Merchandise newMerchandise)
@@ -151,26 +139,26 @@ namespace MANAGER.Pages
 
             PanelMerchandise.Children.Clear();
             ListMerchandise.Clear();
-            ListMerchandiseN2.Clear();
+            SecondListMerchandise.Clear();
             try
             {
-                var oCommand = Connection.Connection.GetAll("MARCHANDISE");
+                var oCommand = Connection.Connection.GetAll(Table.Merchandise.TableName);
                 var resultat = oCommand.ExecuteReader();
                 while(resultat.Read())
                 {
                     var category = string.Empty;
-                    var query = String.Format("SELECT LIBELLE FROM CATEGORIE WHERE ID_CATEGORIE={0}", resultat[5]);
+                    var query = String.Format("SELECT {0} FROM {1} WHERE ID_{1}={2}", Category.Title, Category.TableName, resultat[5]);
                     var CommandCategory = Connection.Connection.Command(query);
                     var resultatCategory = CommandCategory.ExecuteReader();
                     while(resultatCategory.Read())
                     {
                         category = resultatCategory[0].ToString();
                     }
-                    var text = string.Format("{0} - {1}", category, resultat[1].ToString());
+                    var text = string.Format("{0} - {1}", category, resultat[1]);
                     var newMerchandise = new Merchandise(Convert.ToInt32(resultat[0]), text, Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]),
                         Convert.ToInt32(resultat[5])) {onSale = Convert.ToBoolean(resultat[4])};
                     Display(text, newMerchandise);
-                    ListMerchandiseN2.Add(newMerchandise);
+                    SecondListMerchandise.Add(newMerchandise);
                 }
                 resultat.Close();
             }
@@ -196,10 +184,10 @@ namespace MANAGER.Pages
         {
             var id = ((Button) sender).Tag.ToString();
             var num = Convert.ToInt32(id) - 1;
-            var onSale = !ListMerchandiseN2[num].onSale ? 1 : 0;
+            var onSale = !SecondListMerchandise[num].onSale ? 1 : 0;
             try
             {
-                var query = String.Format("UPDATE MARCHANDISE SET ENVENTE={0} WHERE ID_MARCHANDISE={1}", onSale, id);
+                var query = String.Format("UPDATE {0} SET {1}={2} WHERE ID_{0}={3}", Table.Merchandise.TableName, Table.Merchandise.OnSale, onSale, id);
                 var commandeModif = Connection.Connection.Command(query);
                 commandeModif.ExecuteNonQuery();
             }
@@ -209,16 +197,16 @@ namespace MANAGER.Pages
             }
             finally
             {
-                var nbMerchandise = ListMerchandiseN2.Count;
+                var nbMerchandise = SecondListMerchandise.Count;
                 for(var i = 0; i < nbMerchandise; i++)
                 {
-                    if(ListMerchandiseN2[i].ToString() != id)
+                    if(SecondListMerchandise[i].ToString() != id)
                     {
                         continue;
                     }
-                    ListMerchandiseN2[i].onSale = !ListMerchandiseN2[i].onSale;
+                    SecondListMerchandise[i].onSale = !SecondListMerchandise[i].onSale;
                 }
-                SelectMarchandiseLike("");
+                SelectMarchandiseLike(String.Empty);
             }
         }
     }

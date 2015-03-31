@@ -22,7 +22,6 @@ namespace MANAGER.ViewModels
     {
         private const string FontSmall = "Petit";
         private const string FontLarge = "Large";
-
         private readonly Color[] accentColors =
         {
             Color.FromRgb(0xff, 0xff, 0xff), Color.FromRgb(0x64, 0x76, 0x87), Color.FromRgb(0x00, 0x00, 0x00),
@@ -33,7 +32,6 @@ namespace MANAGER.ViewModels
             Color.FromRgb(0xfa, 0x68, 0x00), Color.FromRgb(0xf0, 0xa3, 0x0a), Color.FromRgb(0xe3, 0xc8, 0x00), Color.FromRgb(0xa4, 0xc4, 0x00),
             Color.FromRgb(0x60, 0xa9, 0x17), Color.FromRgb(0x00, 0xb5, 0x00), Color.FromRgb(0x00, 0xff, 0x00), Color.FromRgb(0x10, 0x44, 0x10)
         };
-
         private readonly LinkCollection themes = new LinkCollection();
         private Color selectedAccentColor;
         private string selectedFontSize;
@@ -51,11 +49,8 @@ namespace MANAGER.ViewModels
         }
 
         public LinkCollection Themes { get { return themes; } }
-
         public string[] FontSizes { get { return new[] {FontSmall, FontLarge}; } }
-
         public Color[] AccentColors { get { return accentColors; } }
-
         public Link SelectedTheme
         {
             get { return selectedTheme; }
@@ -71,7 +66,6 @@ namespace MANAGER.ViewModels
                 AppearanceManager.Current.ThemeSource = value.Source;
             }
         }
-
         public string SelectedFontSize
         {
             get { return selectedFontSize; }
@@ -87,7 +81,6 @@ namespace MANAGER.ViewModels
                 AppearanceManager.Current.FontSize = value == FontLarge ? FontSize.Large : FontSize.Small;
             }
         }
-
         public Color SelectedAccentColor
         {
             get { return selectedAccentColor; }

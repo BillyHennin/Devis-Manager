@@ -161,7 +161,6 @@
                              MaxLength="8"
                              MaxLines="1"
                              TabIndex="2"
-                             Text="0"
                              TextAlignment="Right"
                              TextChanged="TextBoxEstimateQte_TextChanged"
                              TextWrapping="Wrap" />
@@ -211,7 +210,6 @@
                                HorizontalAlignment="Left"
                                VerticalAlignment="Bottom"
                                Style="{StaticResource Heading2}"
-                               Text=""
                                TextWrapping="Wrap" />
                     <Button x:Name="AjouterEstimate"
                             Grid.Row="0"

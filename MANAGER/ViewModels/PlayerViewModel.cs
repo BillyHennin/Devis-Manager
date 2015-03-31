@@ -40,7 +40,6 @@ namespace MANAGER.ViewModels
                 OnPropertyChanged("ImageSource");
             }
         }
-
         public string TitleSource
         {
             get { return titleSource; }
@@ -54,7 +53,6 @@ namespace MANAGER.ViewModels
                 OnPropertyChanged("TitleSource");
             }
         }
-
         public string DescSource
         {
             get { return descSource; }
@@ -68,7 +66,6 @@ namespace MANAGER.ViewModels
                 OnPropertyChanged("DescSource");
             }
         }
-
         public string InfoSource
         {
             get { return infoSource; }
@@ -82,7 +79,6 @@ namespace MANAGER.ViewModels
                 OnPropertyChanged("InfoSource");
             }
         }
-
         public string InstallSource
         {
             get { return installSource; }

@@ -122,6 +122,10 @@
       <DependentUpon>Parametre.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Table\Category.cs" />
+    <Compile Include="Table\Customer.cs" />
+    <Compile Include="Table\Estimate.cs" />
+    <Compile Include="Table\Merchandise.cs" />
     <Compile Include="ViewModels\PlayerViewModel.cs" />
     <Compile Include="ViewModels\SettingsAppearanceViewModel.cs" />
     <Page Include="MainWindow.xaml">
@@ -200,6 +204,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Language\French.lang">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

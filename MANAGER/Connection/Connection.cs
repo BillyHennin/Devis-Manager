@@ -4,9 +4,6 @@
 //  
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
-//using System.Collections.Specialized;
-
-//using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Data;
 
@@ -97,59 +94,5 @@ namespace MANAGER.Connection
             var Command = Connection.Command(query);
             Command.ExecuteNonQuery();
         }
-
-        //Make this works one day.
-        /*
-        public static void parameterAdd(string param, string type, Object value, IDbCommand command)
-        {
-            switch (Database)
-            {
-                case ("Oracle"):
-                    command.Parameters.Add(new OracleParameter(param, OracleDbType.Int32) { Value = value });
-                    break;
-                case ("SQL"):
-                    //command = ConnectionSql.SqlCommand(query);
-                    break;
-                default:
-                    command.Parameters.Add(new OracleParameter(param, ParseEnum<OracleDbType>(type)) { Value = value });
-                    break;
-            }
-        }
-
-        private static OracleDbType ParseEnum<T>(string value)
-        {
-            return (OracleDbType) Enum.Parse(typeof(T), value, true);
-        }
-
-        private enum OracleDbType
-        {
-            // ReSharper disable UnusedMember.Local
-            Bfile,
-            Blob,
-            Byte,
-            Char,
-            Clob,
-            Date,
-            Decimal,
-            Double,
-            Int16,
-            Int32,
-            Int64,
-            IntevalDS,
-            IntervalYM,
-            Long,
-            Longraw,
-            Nchar,
-            Nclob,
-            NVarchar2,
-            raw,
-            RefCursor,
-            Single,
-            TimeStamp,
-            TimeStampLTZ,
-            TimeStampTZ,
-            Varchar2,
-            XmlType
-        }*/
     }
 }
