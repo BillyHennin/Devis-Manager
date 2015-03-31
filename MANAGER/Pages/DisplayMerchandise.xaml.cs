@@ -42,10 +42,8 @@ namespace MANAGER.Pages
                 }
                 var id = SecondListMerchandise[i].id;
                 var text = SecondListMerchandise[i].name;
-                var newMerchandise = new Merchandise(id, text, SecondListMerchandise[i].quantity, SecondListMerchandise[i].price, SecondListMerchandise[i].categoryID)
-                {
-                    onSale = SecondListMerchandise[i].onSale
-                };
+                var newMerchandise = new Merchandise(id, text, SecondListMerchandise[i].quantity, SecondListMerchandise[i].price,
+                    SecondListMerchandise[i].categoryID) {onSale = SecondListMerchandise[i].onSale};
 
                 Display(text, newMerchandise);
             }

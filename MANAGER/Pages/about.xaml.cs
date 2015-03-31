@@ -28,8 +28,7 @@ namespace MANAGER.Pages
             try
             {
                 //var TestJson = new WebClient().DownloadJ
-                JsonMOTD = 
-                    new WebClient().DownloadString(String.Format("http://billyhennin.github.io/Devis-Manager/MOTD.json", Transharp.getCurrentLanguage()));
+                JsonMOTD = new WebClient().DownloadString(String.Format("http://billyhennin.github.io/Devis-Manager/MOTD.json", Transharp.getCurrentLanguage()));
             }
             catch
             {

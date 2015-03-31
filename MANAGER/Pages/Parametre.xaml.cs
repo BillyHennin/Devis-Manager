@@ -10,7 +10,10 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
+using FirstFloor.ModernUI.Presentation;
+
 using MANAGER.Classes;
+using MANAGER.Properties;
 
 namespace MANAGER.Pages
 {
@@ -21,7 +24,8 @@ namespace MANAGER.Pages
     {
         private void ComboBoxLang_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            switch(ComboBoxLang.SelectedItem.ToString())
+            var newLang = ComboBoxLang.SelectedItem.ToString();
+            switch (newLang)
             {
                 case "French":
                     Transharp.SetCurrentLanguage(Transharp.LangsEnum.French);
@@ -31,12 +35,12 @@ namespace MANAGER.Pages
                     break;
                 default:
                     Transharp.SetCurrentLanguage(Transharp.LangsEnum.English);
+                    newLang = "English";
                     break;
             }
             SelectionTextBlock.Text = Transharp.GetTranslation("PM_SelectionLanguage");
-            /*MessageBox.Show(Transharp.GetTranslation("PM_LanguageSelected"), Transharp.GetTranslation("Box_Lang_Success"), MessageBoxButton.OK,
-                MessageBoxImage.Information);*/
-            //Settings.Default.Lang = ComboBoxLang.SelectedItem.ToString();
+
+            Settings.Default.Language = newLang;
         }
 
         private void ComboBoxLang_Initialized(object sender, EventArgs e)

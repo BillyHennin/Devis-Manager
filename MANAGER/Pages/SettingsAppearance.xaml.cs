@@ -6,6 +6,8 @@
 
 #region
 
+using System.Windows;
+
 using MANAGER.Classes;
 using MANAGER.ViewModels;
 
@@ -24,7 +26,7 @@ namespace MANAGER.Pages
             DataContext = new SettingsAppearanceViewModel();
         }
 
-        private void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             TextBlockApparence.Text = Transharp.GetTranslation("Link_Apparence");
             TextBlockTheme.Text = Transharp.GetTranslation("THM_Theme");
