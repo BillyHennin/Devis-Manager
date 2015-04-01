@@ -10,6 +10,8 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 
+using FirstFloor.ModernUI.Windows.Controls;
+
 using MANAGER.Classes;
 using MANAGER.ComboBox;
 
@@ -107,7 +109,7 @@ namespace MANAGER.Pages
                 Console.WriteLine(caught.Message);
                 //This show up when leaving the page, need to figure out why.
 
-                //MessageBox.Show(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
+                //ModernDialog.ShowMessage(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK);
                 //MessageBox.Show("YIH");
             }
             finally
@@ -157,7 +159,7 @@ namespace MANAGER.Pages
             }
             catch
             {
-                MessageBox.Show(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernDialog.ShowMessage(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK);
             }
         }
 
@@ -285,7 +287,7 @@ namespace MANAGER.Pages
             }
             catch
             {
-                MessageBox.Show(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernDialog.ShowMessage(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK);
             }
 
             ComboBoxCustomer.Items.Clear();
@@ -302,14 +304,13 @@ namespace MANAGER.Pages
             }
             catch
             {
-                MessageBox.Show(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernDialog.ShowMessage(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK);
             }
             finally
             {
                 customer.Phone = TextPhone.Text;
                 customer.email = TextMail.Text;
-                MessageBox.Show(Transharp.GetTranslation("Box_SuccessUpdate", customer.id, customer.name), Transharp.GetTranslation("Box_Update_Success_Title"),
-                    MessageBoxButton.OK, MessageBoxImage.Information);
+                ModernDialog.ShowMessage(Transharp.GetTranslation("Box_SuccessUpdate", customer.id, customer.name), Transharp.GetTranslation("Box_Update_Success_Title"), MessageBoxButton.OK);
             }
         }
 

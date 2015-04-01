@@ -6,6 +6,7 @@
 
 using System;
 using System.Data;
+using System.Linq;
 
 namespace MANAGER.Connection
 {
@@ -64,11 +65,7 @@ namespace MANAGER.Connection
 
         public static void Insert(string tableQuery, params Object[] value)
         {
-            var query = String.Empty;
-            foreach(var field in value)
-            {
-                query += "'" + field + "',";
-            }
+            var query = value.Aggregate(String.Empty, (current, field) => current + ("'" + field + "',"));
             query = query.Substring(0, query.Length - 1);
             var queryInsert = String.Format("INSERT INTO {0} VALUES ({1})", tableQuery, query);
             var Command = Connection.Command(queryInsert);

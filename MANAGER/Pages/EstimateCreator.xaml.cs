@@ -13,6 +13,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
+using FirstFloor.ModernUI.Windows.Controls;
+
 using MANAGER.Classes;
 using MANAGER.ComboBox;
 using MANAGER.Properties;
@@ -60,7 +62,7 @@ namespace MANAGER.Pages
             }
             catch
             {
-                MessageBox.Show(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernDialog.ShowMessage(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK);
             }
         }
 
@@ -88,7 +90,7 @@ namespace MANAGER.Pages
             }
             catch
             {
-                MessageBox.Show(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernDialog.ShowMessage(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK);
             }
         }
 
@@ -142,7 +144,7 @@ namespace MANAGER.Pages
             }
             catch
             {
-                MessageBox.Show(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernDialog.ShowMessage(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK);
             }
         }
 
@@ -206,12 +208,11 @@ namespace MANAGER.Pages
                 }
                 result.Close();
                 BtnAdd.Content = Transharp.GetTranslation("BTN_Add");
-                MessageBox.Show(Transharp.GetTranslation("Box_SuccessAdd", numberEstimate, TotalCost), Transharp.GetTranslation("Box_CE_Success"),
-                    MessageBoxButton.OK, MessageBoxImage.Information);
+                ModernDialog.ShowMessage(Transharp.GetTranslation("Box_SuccessAdd", numberEstimate, TotalCost), Transharp.GetTranslation("Box_CE_Success"),MessageBoxButton.OK);
             }
             catch
             {
-                MessageBox.Show(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernDialog.ShowMessage(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK);
             }
             finally
             {
@@ -323,7 +324,7 @@ namespace MANAGER.Pages
                     {
                         ItemSelectedQuantity = newQuantity;
                         ItemSelectedPrice = (((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.price * newQuantity);
-                        All_Price.Foreground = Brushes.DarkGray;
+                        All_Price.Foreground = LabelTotalPrix.Foreground;
                         All_Price.Text = String.Format("{0} {1}€", Transharp.GetTranslation("All_Price"), ItemSelectedPrice);
                         TextBoxEstimateQte.BorderBrush =
                             TextBoxEstimateQte.CaretBrush =

@@ -52,7 +52,7 @@ namespace MANAGER.Classes
             var strToFormat = GetTranslation(key, lang);
             if(strToFormat == null)
             {
-                return null; // Translation not found for the given key and lang
+                return String.Format("#{0} not found", key); // Translation not found for the given key and lang
             }
             var index = 0;
             //Replacing <Placeholder> by {0}, {1} etc

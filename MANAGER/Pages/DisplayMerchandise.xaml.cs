@@ -13,6 +13,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
+using FirstFloor.ModernUI.Windows.Controls;
+
 using MANAGER.Classes;
 
 using Category = MANAGER.Table.Category;
@@ -145,7 +147,7 @@ namespace MANAGER.Pages
                 while(resultat.Read())
                 {
                     var category = string.Empty;
-                    var query = String.Format("SELECT {0} FROM {1} WHERE ID_{1}={2}", Category.Title, Category.TableName, resultat[5]);
+                    var query = String.Format("SELECT {0} FROM {1} WHERE ID_{1} = {2}", Category.Title, Category.TableName, resultat[5]);
                     var CommandCategory = Connection.Connection.Command(query);
                     var resultatCategory = CommandCategory.ExecuteReader();
                     while(resultatCategory.Read())
@@ -162,7 +164,7 @@ namespace MANAGER.Pages
             }
             catch
             {
-                MessageBox.Show(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernDialog.ShowMessage(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK);
             }
         }
 
@@ -185,13 +187,13 @@ namespace MANAGER.Pages
             var onSale = !SecondListMerchandise[num].onSale ? 1 : 0;
             try
             {
-                var query = String.Format("UPDATE {0} SET {1}={2} WHERE ID_{0}={3}", Table.Merchandise.TableName, Table.Merchandise.OnSale, onSale, id);
+                var query = String.Format("UPDATE {0} SET {1} = {2} WHERE ID_{0} = {3}", Table.Merchandise.TableName, Table.Merchandise.OnSale, onSale, id);
                 var commandeModif = Connection.Connection.Command(query);
                 commandeModif.ExecuteNonQuery();
             }
             catch
             {
-                MessageBox.Show(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernDialog.ShowMessage(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK);
             }
             finally
             {

@@ -87,7 +87,7 @@ namespace FirstFloor.ModernUI.Windows.Controls
                 IsDefault = isDefault,
                 IsCancel = isCancel,
                 MinHeight = 21,
-                MinWidth = 65,
+                MinWidth = 135,
                 Margin = new Thickness(4, 0, 0, 0)
             };
         }
