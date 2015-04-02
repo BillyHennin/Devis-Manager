@@ -8,9 +8,11 @@ namespace MANAGER.Table
 {
     public static class Customer
     {
+        public static string ID { get; set; }
         public static string TableName { get; set; }
         public static string Email { get; set; }
         public static string Name { get; set; }
         public static string Phone { get; set; }
+        public static string Code { get; set; }
     }
 }

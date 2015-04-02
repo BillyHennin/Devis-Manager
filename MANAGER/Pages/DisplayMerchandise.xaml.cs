@@ -147,16 +147,17 @@ namespace MANAGER.Pages
                 while(resultat.Read())
                 {
                     var category = string.Empty;
-                    var query = String.Format("SELECT {0} FROM {1} WHERE ID_{1} = {2}", Category.Title, Category.TableName, resultat[5]);
+                    var query = String.Format("SELECT {0} FROM {1} WHERE ID_{1} = {2}", Category.Title, Category.TableName, resultat[Category.ID]);
                     var CommandCategory = Connection.Connection.Command(query);
                     var resultatCategory = CommandCategory.ExecuteReader();
                     while(resultatCategory.Read())
                     {
-                        category = resultatCategory[0].ToString();
+                        category = resultatCategory[Category.Title].ToString();
                     }
-                    var text = String.Format("{0} - {1}", category, resultat[1]);
-                    var newMerchandise = new Merchandise(Convert.ToInt32(resultat[0]), text, Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]),
-                        Convert.ToInt32(resultat[5])) {onSale = Convert.ToBoolean(resultat[4])};
+                    var text = String.Format("{0} - {1}", category, resultat[Table.Merchandise.Name]);
+                    var newMerchandise = new Merchandise(Convert.ToInt32(resultat[Table.Merchandise.ID]), text,
+                        Convert.ToInt32(resultat[Table.Merchandise.Quantity]), Convert.ToInt32(resultat[Table.Merchandise.Price]),
+                        Convert.ToInt32(resultat[Category.ID])) { onSale = Convert.ToBoolean(resultat[Table.Merchandise.OnSale]) };
                     Display(text, newMerchandise);
                     SecondListMerchandise.Add(newMerchandise);
                 }

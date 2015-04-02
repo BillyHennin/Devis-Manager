@@ -63,6 +63,19 @@ namespace MANAGER.Connection
             return Command(String.Format("SELECT * FROM {0}", tableQuery));
         }
 
+        public static string GetFirst(string query)
+        {
+            var result = String.Empty;
+            var command = Command(query);
+            var reader = command.ExecuteReader();
+            while(reader.Read())
+            {
+             
+   
+            }
+            return result;
+        }
+
         public static void Insert(string tableQuery, params Object[] value)
         {
             var query = value.Aggregate(String.Empty, (current, field) => current + ("'" + field + "',"));

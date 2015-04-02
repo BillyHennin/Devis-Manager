@@ -8,6 +8,7 @@ namespace MANAGER.Table
 {
     public static class Category
     {
+        public static string ID { get; set; }
         public static string TableName { get; set; }
         public static string Title { get; set; }
     }

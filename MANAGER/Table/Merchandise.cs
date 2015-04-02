@@ -8,6 +8,7 @@ namespace MANAGER.Table
 {
     public static class Merchandise
     {
+        public static string ID { get; set; }
         public static string TableName { get; set; }
         public static string Price { get; set; }
         public static string Name { get; set; }

@@ -54,18 +54,22 @@ namespace MANAGER
             //
 
             Category.TableName = "CATEGORIE";
+            Category.ID = String.Format("ID_{0}", Category.TableName);
             Category.Title = "LIBELLE";
 
             Merchandise.TableName = "MARCHANDISE";
+            Merchandise.ID = String.Format("ID_{0}",Merchandise.TableName);
             Merchandise.Name = "NOM";
             Merchandise.OnSale = "ENVENTE";
             Merchandise.Price = "PRIX";
             Merchandise.Quantity = "QUANTITE";
 
             Customer.TableName = "CLIENT";
+            Customer.ID = String.Format("ID_{0}", Customer.TableName);
             Customer.Email = "EMAIL";
             Customer.Name = "DENOMINATION";
             Customer.Phone = "TELEPHONE";
+            Customer.Code = "CODE";
 
             Estimate.TableName = "DEVIS";
             Estimate.Day = "JOUR";

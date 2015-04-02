@@ -9,6 +9,7 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Resources;
 
 #endregion
 
@@ -59,5 +60,6 @@ using System.Windows;
 // en utilisant '*', comme indiqué ci-dessous :
 // [assembly: AssemblyVersion("1.0.*")]
 
-[assembly: AssemblyVersion("1.3.37")]
-[assembly: AssemblyFileVersion("1.3.37")]
+[assembly: AssemblyVersion("1.3.3.3")]
+[assembly: AssemblyFileVersion("1.3.3.7")]
+[assembly: NeutralResourcesLanguageAttribute("en")]

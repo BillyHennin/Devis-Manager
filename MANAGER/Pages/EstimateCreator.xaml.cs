@@ -54,8 +54,8 @@ namespace MANAGER.Pages
                 {
                     ComboBoxCategory.Items.Add(new ComboboxItemCategory
                     {
-                        Text = resultat[1].ToString(),
-                        Value = new Classes.Category(Convert.ToInt32(resultat[0]), resultat[1].ToString())
+                        Text = resultat[Category.Title].ToString(),
+                        Value = new Classes.Category(Convert.ToInt32(resultat[Category.ID]), resultat[Category.Title].ToString())
                     });
                 }
                 resultat.Close();
@@ -79,9 +79,10 @@ namespace MANAGER.Pages
                 {
                     ComboBoxProduct.Items.Add(new ComboboxItemMerchandise
                     {
-                        Text = resultat[1].ToString(),
+                        Text = resultat[Table.Merchandise.Name].ToString(),
                         Value =
-                            new Merchandise(Convert.ToInt32(resultat[0]), resultat[1].ToString(), Convert.ToInt32(resultat[3]), Convert.ToInt32(resultat[2]),
+                            new Merchandise(Convert.ToInt32(resultat[Table.Merchandise.ID]), resultat[Table.Merchandise.Name].ToString(),
+                                Convert.ToInt32(resultat[Table.Merchandise.Price]), Convert.ToInt32(resultat[Table.Merchandise.Quantity]),
                                 ((ComboboxItemCategory) ComboBoxCategory.SelectedItem).Value.ID)
                     });
                 }
@@ -135,8 +136,9 @@ namespace MANAGER.Pages
                 {
                     ComboBoxClient.Items.Add(new ComboboxItemCustomer
                     {
-                        Text = resultat[2].ToString(),
-                        Value = new Customer(Convert.ToInt32(resultat[0]), resultat[2].ToString(), resultat[1].ToString(), resultat[3].ToString())
+                        Text = resultat[Table.Customer.Name].ToString(),
+                        Value = new Customer(Convert.ToInt32(resultat[Table.Customer.ID]), resultat[Table.Customer.Name].ToString(),
+                            resultat[Table.Customer.Phone].ToString(), resultat[Table.Customer.Email].ToString())
                     });
                 }
                 resultat.Close();
