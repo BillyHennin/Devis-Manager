@@ -53,10 +53,6 @@ namespace MANAGER
 
             //
 
-            Category.TableName = "CATEGORIE";
-            Category.ID = String.Format("ID_{0}", Category.TableName);
-            Category.Title = "LIBELLE";
-
             Merchandise.TableName = "MARCHANDISE";
             Merchandise.ID = String.Format("ID_{0}",Merchandise.TableName);
             Merchandise.Name = "NOM";
