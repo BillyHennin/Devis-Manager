@@ -4,14 +4,12 @@
 //  
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
-using System.Windows.Controls;
-
 namespace MANAGER.Pages
 {
     /// <summary>
     ///   Logique d'interaction pour AddMerchandise.xaml
     /// </summary>
-    public partial class AddMerchandise : Page
+    public partial class AddMerchandise
     {
         public AddMerchandise()
         {

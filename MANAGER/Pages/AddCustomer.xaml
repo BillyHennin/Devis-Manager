@@ -91,7 +91,7 @@
                              BorderBrush="{DynamicResource Accent}"
                              Grid.IsSharedSizeScope="True"
                              TabIndex="2"
-                             TextChanged="TextBoxMail_TextChanged" />
+                             TextChanged="TextBoxName_TextChanged" />
                     <TextBlock x:Name="AC_AddName"
                                Grid.Row="0"
                                Grid.Column="0"
@@ -110,7 +110,7 @@
                              BorderBrush="{DynamicResource Accent}"
                              Grid.IsSharedSizeScope="True"
                              TabIndex="2"
-                             TextChanged="TextBoxName_TextChanged" />
+                             TextChanged="TextBoxMail_TextChanged" />
                     <Button x:Name="BtnAdd"
                             Grid.Row="1"
                             Grid.Column="2"

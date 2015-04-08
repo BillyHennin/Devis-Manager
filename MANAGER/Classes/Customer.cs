@@ -5,6 +5,7 @@
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
 using System.Collections.Generic;
+using System.Windows.Controls;
 
 namespace MANAGER.Classes
 {
@@ -18,12 +19,11 @@ namespace MANAGER.Classes
             this.email = email;
         }
 
+        public Border Border { get; set; }
         public int id { get; set; }
         public string name { get; set; }
         public string Phone { get; set; }
         public string email { get; set; }
-        //TODO : Create a code for each customer (looks as real as possible)
-        //public string code { get; set; }
         public List<Estimate> listEstimate { get; set; }
     }
 }
