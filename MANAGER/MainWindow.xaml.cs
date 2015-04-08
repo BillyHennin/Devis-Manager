@@ -50,28 +50,6 @@ namespace MANAGER
             Link_Merchandise.DisplayName = Transharp.GetTranslation("Link_Merchandise");
             Link_DisplayMerchandise.DisplayName = Transharp.GetTranslation("Link_DisplayMerchandise");
             Link_CreateMerchandise.DisplayName = Transharp.GetTranslation("Link_CreateMerchandise");
-
-            //
-
-            Merchandise.TableName = "MARCHANDISE";
-            Merchandise.ID = String.Format("ID_{0}",Merchandise.TableName);
-            Merchandise.Name = "NOM";
-            Merchandise.OnSale = "ENVENTE";
-            Merchandise.Price = "PRIX";
-            Merchandise.Quantity = "QUANTITE";
-
-            Customer.TableName = "CLIENT";
-            Customer.ID = String.Format("ID_{0}", Customer.TableName);
-            Customer.Email = "EMAIL";
-            Customer.Name = "DENOMINATION";
-            Customer.Phone = "TELEPHONE";
-            Customer.Code = "CODE";
-
-            Estimate.TableName = "DEVIS";
-            Estimate.Day = "JOUR";
-            Estimate.NumberDevis = "NUMERODEVIS";
-            Estimate.PriceMerchandise = "PRIXMARCHANDISE";
-            Estimate.Quantity = "QUANTITE";
         }
     }
 }
