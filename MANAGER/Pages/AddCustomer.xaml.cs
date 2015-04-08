@@ -5,6 +5,8 @@
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
 using System;
+using System.Collections.Generic;
+using System.Net.Mail;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -17,16 +19,18 @@ namespace MANAGER.Pages
 {
     public partial class AddCustomer
     {
+        private static readonly List<Customer> ListCustomer = new List<Customer>();
+
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             BorderCustomer.Width = CustomerCreator.ActualWidth - 340;
             BorderCustomer.Height = CustomerCreator.ActualHeight - 70;
 
-            /*var nbMerchandise = estimate.GetList.Count;
-            for (var i = 0; i < nbMerchandise; i++)
+            var nbCustomer = ListCustomer.Count;
+            for (var i = 0; i < nbCustomer; i++)
             {
-                estimate[i].Border.Width = BorderEstimate.Width - 6;
-            }*/
+                ListCustomer[i].Border.Width = BorderCustomer.Width - 6;
+            }
         }
 
         private void CustomerCreator_Loaded(object sender, RoutedEventArgs e)
@@ -41,9 +45,15 @@ namespace MANAGER.Pages
 
             //
             PanelCustomer.Children.Clear();
+            DisplayAll();
+            
+        }
+
+        private void DisplayAll()
+        {
             var command = Connection.Connection.GetAll(Table.Customer.TableName);
             var resultat = command.ExecuteReader();
-            while(resultat.Read())
+            while (resultat.Read())
             {
                 showCustomer(Convert.ToInt32(resultat[Table.Customer.ID]), resultat[Table.Customer.Name].ToString(),
                     resultat[Table.Customer.Phone].ToString(), resultat[Table.Customer.Email].ToString());
@@ -71,9 +81,22 @@ namespace MANAGER.Pages
             return (str.Trim() != string.Empty) && int.TryParse(str, out value);
         }
 
+        private static bool validMail(string mailString)
+        {
+            try
+            {
+                new MailAddress(mailString);
+                return true;
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
+        }
+
         private void TextChanged()
         {
-            BtnAdd.IsEnabled = TextBoxMail.Text != String.Empty && TextBoxName.Text != String.Empty && isInt(TextBoxPhone.Text);
+            BtnAdd.IsEnabled = TextBoxMail.Text != String.Empty && validMail(TextBoxMail.Text) && TextBoxName.Text != String.Empty && isInt(TextBoxPhone.Text);
         }
 
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
@@ -111,7 +134,7 @@ namespace MANAGER.Pages
             var thick = new Thickness(5, 2, 0, 0);
 
             // New border
-            var bordure = new Border
+            var border = new Border
             {
                 BorderBrush = BtnAdd.BorderBrush,
                 HorizontalAlignment = HorizontalAlignment.Left,
@@ -154,21 +177,25 @@ namespace MANAGER.Pages
 
             panelCustomer.Children.Add(BTN_Delete);
             BTN_Delete.Click += BTN_Delete_Click;
-
-            PanelCustomer.Children.Add(bordure);
+            var newCustomer = new Customer(ID, Name, Phone, Mail);
+            PanelCustomer.Children.Add(border);
+            newCustomer.Border = border;
+            ListCustomer.Add(newCustomer);
         }
 
-        private static void BTN_Delete_Click(object sender, EventArgs e)
+        private void BTN_Delete_Click(object sender, EventArgs e)
         {
-            var query = String.Format("SELECT {0} FROM {1} WHERE ID_{1} = {2}",Table.Customer.Name , Table.Customer.TableName, ((Button)sender).Tag);
+            var query = String.Format("SELECT {0} FROM {1} WHERE ID_{1} = {2}", Table.Customer.Name, Table.Customer.TableName, ((Button)sender).Tag);
             var name = Connection.Connection.GetFirst(query);
-            if(ModernDialog.ShowMessage(Transharp.GetTranslation("Box_DeleteCustomer", name), Transharp.GetTranslation("Box_AskDelete"), MessageBoxButton.YesNo)
+            if (ModernDialog.ShowMessage(Transharp.GetTranslation("Box_DeleteCustomer", name.ToString()), Transharp.GetTranslation("Box_AskDelete"), MessageBoxButton.YesNo)
                != MessageBoxResult.Yes)
             {
                 return;
             }
             Connection.Connection.Delete(Table.Estimate.TableName, ((Button)sender).Tag.ToString(), Table.Customer.TableName);
             Connection.Connection.Delete(Table.Customer.TableName, ((Button)sender).Tag.ToString());
+            PanelCustomer.Children.Clear();
+            DisplayAll();
         }
     }
 }
