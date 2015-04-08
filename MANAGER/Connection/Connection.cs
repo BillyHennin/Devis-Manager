@@ -63,7 +63,7 @@ namespace MANAGER.Connection
             return Command(String.Format("SELECT * FROM {0}", tableQuery));
         }
 
-        public static object GetFirst(string query)
+        public static object GetUniqueCell(string query)
         {
             var command = Command(query);
             return command.ExecuteScalar();
@@ -75,7 +75,6 @@ namespace MANAGER.Connection
             query = query.Substring(0, query.Length - 1);
             var queryInsert = String.Format("INSERT INTO {0} VALUES ({1})", tableQuery, query);
             var Command = Connection.Command(queryInsert);
-            Command.Prepare();
             Command.ExecuteNonQuery();
         }
 
@@ -85,7 +84,6 @@ namespace MANAGER.Connection
             Id_Table = param ?? tableQuery;
             var query = String.Format("DELETE FROM {0} WHERE ID_{1} = {2}", tableQuery, Id_Table, ID);
             var Command = Connection.Command(query);
-            Command.Prepare();
             Command.ExecuteNonQuery();
         }
 
@@ -99,7 +97,6 @@ namespace MANAGER.Connection
             }
             query = String.Format("UPDATE {0} SET {2} WHERE ID_{0} = {1}", tableQuery, ID, query.Substring(0, query.Length - 1));
             var Command = Connection.Command(query);
-            Command.Prepare();
             Command.ExecuteNonQuery();
         }
     }

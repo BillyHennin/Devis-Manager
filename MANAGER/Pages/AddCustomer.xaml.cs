@@ -185,15 +185,16 @@ namespace MANAGER.Pages
 
         private void BTN_Delete_Click(object sender, EventArgs e)
         {
-            var query = String.Format("SELECT {0} FROM {1} WHERE ID_{1} = {2}", Table.Customer.Name, Table.Customer.TableName, ((Button)sender).Tag);
-            var name = Connection.Connection.GetFirst(query);
+            var ID = ((Button)sender).Tag.ToString();
+            var query = String.Format("SELECT {0} FROM {1} WHERE ID_{1} = {2}", Table.Customer.Name, Table.Customer.TableName, ID);
+            var name = Connection.Connection.GetUniqueCell(query);
             if (ModernDialog.ShowMessage(Transharp.GetTranslation("Box_DeleteCustomer", name.ToString()), Transharp.GetTranslation("Box_AskDelete"), MessageBoxButton.YesNo)
                != MessageBoxResult.Yes)
             {
                 return;
             }
-            Connection.Connection.Delete(Table.Estimate.TableName, ((Button)sender).Tag.ToString(), Table.Customer.TableName);
-            Connection.Connection.Delete(Table.Customer.TableName, ((Button)sender).Tag.ToString());
+            Connection.Connection.Delete(Table.Estimate.TableName, ID, Table.Customer.TableName);
+            Connection.Connection.Delete(Table.Customer.TableName, ID);
             PanelCustomer.Children.Clear();
             DisplayAll();
         }

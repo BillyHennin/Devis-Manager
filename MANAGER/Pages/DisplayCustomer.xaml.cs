@@ -310,7 +310,7 @@ namespace MANAGER.Pages
             {
                 customer.Phone = TextPhone.Text;
                 customer.email = TextMail.Text;
-                ModernDialog.ShowMessage(Transharp.GetTranslation("Box_SuccessUpdate", customer.id, customer.name), Transharp.GetTranslation("Box_Update_Success_Title"), MessageBoxButton.OK);
+                ModernDialog.ShowMessage(Transharp.GetTranslation("Box_SuccessUpdate", customer.name), Transharp.GetTranslation("Box_Update_Success_Title"), MessageBoxButton.OK);
             }
         }
 
