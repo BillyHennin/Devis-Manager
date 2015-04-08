@@ -17,6 +17,7 @@ Box_AskDelete=Voulez vous vraiment supprimer ?
 Box_DBFail=Impossible de se connecter à la base de donnée
 Box_DeleteCustomer=Êtes-vous sur de vouloir supprimer le client "%x" ?
 Box_Error=Erreur 
+Box_CustomerAlreadyExist=Ce client existe deja
 Box_Lang_Success=Langue changé avec succès
 Box_CE_Success=Devis ajouté avec succès
 Box_AC_Success=Client ajouté avec succès

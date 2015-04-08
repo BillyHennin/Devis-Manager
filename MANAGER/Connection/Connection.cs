@@ -12,7 +12,7 @@ namespace MANAGER.Connection
 {
     public class Connection
     {
-        public static string Database { private get; set; }
+        public static String Database { private get; set; }
 
         public static IDbCommand Command(string query)
         {
@@ -63,7 +63,7 @@ namespace MANAGER.Connection
             return Command(String.Format("SELECT * FROM {0}", tableQuery));
         }
 
-        public static object GetUniqueCell(string query)
+        public static Object GetUniqueCell(string query)
         {
             var command = Command(query);
             return command.ExecuteScalar();
@@ -80,8 +80,7 @@ namespace MANAGER.Connection
 
         public static void Delete(string tableQuery, object ID, string param = null)
         {
-            var Id_Table = String.Empty;
-            Id_Table = param ?? tableQuery;
+            var Id_Table = param ?? tableQuery;
             var query = String.Format("DELETE FROM {0} WHERE ID_{1} = {2}", tableQuery, Id_Table, ID);
             var Command = Connection.Command(query);
             Command.ExecuteNonQuery();

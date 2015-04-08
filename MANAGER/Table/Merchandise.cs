@@ -10,13 +10,6 @@ namespace MANAGER.Table
 {
     public class Merchandise
     {
-        public static string ID { get; set; }
-        public static string TableName { get; set; }
-        public static string Price { get; set; }
-        public static string Name { get; set; }
-        public static string Quantity { get; set; }
-        public static string OnSale { get; set; }
-
         static Merchandise()
         {
             TableName = "MARCHANDISE";
@@ -27,10 +20,17 @@ namespace MANAGER.Table
             Quantity = "QUANTITE";
         }
 
+        public static string ID { get; set; }
+        public static string TableName { get; set; }
+        public static string Price { get; set; }
+        public static string Name { get; set; }
+        public static string Quantity { get; set; }
+        public static string OnSale { get; set; }
+
         public void Construction(string TableName, string Name, string OnSale, string Price, string Quantity)
         {
             Merchandise.TableName = TableName;
-            Merchandise.ID = String.Format("ID_{0}", Merchandise.TableName);
+            ID = String.Format("ID_{0}", Merchandise.TableName);
             Merchandise.Name = Name;
             Merchandise.OnSale = OnSale;
             Merchandise.Price = Price;

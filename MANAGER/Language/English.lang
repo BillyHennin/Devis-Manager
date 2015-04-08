@@ -17,6 +17,7 @@ Box_AskDelete=Want to delete ?
 Box_DBFail=Unable to connect to the database 
 Box_DeleteCustomer=Are you sure you want to delete the customer "%x" ?
 Box_Error=Error
+Box_CustomerAlreadyExist=This customer already exist
 Box_Lang_Success=Language successfully changed 
 Box_CE_Success=Cost estimate successfully added 
 Box_AC_Success=Customer successfully added

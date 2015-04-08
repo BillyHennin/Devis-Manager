@@ -157,7 +157,7 @@ namespace MANAGER.Pages
                     var text = String.Format("{0} - {1}", category, resultat[Table.Merchandise.Name]);
                     var newMerchandise = new Merchandise(Convert.ToInt32(resultat[Table.Merchandise.ID]), text,
                         Convert.ToInt32(resultat[Table.Merchandise.Quantity]), Convert.ToInt32(resultat[Table.Merchandise.Price]),
-                        Convert.ToInt32(resultat[Category.ID])) { onSale = Convert.ToBoolean(resultat[Table.Merchandise.OnSale]) };
+                        Convert.ToInt32(resultat[Category.ID])) {onSale = Convert.ToBoolean(resultat[Table.Merchandise.OnSale])};
                     Display(text, newMerchandise);
                     SecondListMerchandise.Add(newMerchandise);
                 }

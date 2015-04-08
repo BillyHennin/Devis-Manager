@@ -12,7 +12,6 @@ using System.Windows;
 
 using MANAGER.Classes;
 
-using Category = MANAGER.Table.Category;
 using Customer = MANAGER.Table.Customer;
 using Estimate = MANAGER.Table.Estimate;
 using Merchandise = MANAGER.Table.Merchandise;
@@ -54,7 +53,7 @@ namespace MANAGER
             //
 
             Merchandise.TableName = "MARCHANDISE";
-            Merchandise.ID = String.Format("ID_{0}",Merchandise.TableName);
+            Merchandise.ID = String.Format("ID_{0}", Merchandise.TableName);
             Merchandise.Name = "NOM";
             Merchandise.OnSale = "ENVENTE";
             Merchandise.Price = "PRIX";

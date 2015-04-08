@@ -15,6 +15,8 @@ using FirstFloor.ModernUI.Windows.Controls;
 
 using MANAGER.Classes;
 
+using Estimate = MANAGER.Table.Estimate;
+
 namespace MANAGER.Pages
 {
     public partial class AddCustomer
@@ -27,7 +29,7 @@ namespace MANAGER.Pages
             BorderCustomer.Height = CustomerCreator.ActualHeight - 70;
 
             var nbCustomer = ListCustomer.Count;
-            for (var i = 0; i < nbCustomer; i++)
+            for(var i = 0; i < nbCustomer; i++)
             {
                 ListCustomer[i].Border.Width = BorderCustomer.Width - 6;
             }
@@ -44,19 +46,18 @@ namespace MANAGER.Pages
             BtnAdd.Content = Transharp.GetTranslation("BTN_Add");
 
             //
-            PanelCustomer.Children.Clear();
             DisplayAll();
-            
         }
 
         private void DisplayAll()
         {
+            PanelCustomer.Children.Clear();
             var command = Connection.Connection.GetAll(Table.Customer.TableName);
             var resultat = command.ExecuteReader();
-            while (resultat.Read())
+            while(resultat.Read())
             {
-                showCustomer(Convert.ToInt32(resultat[Table.Customer.ID]), resultat[Table.Customer.Name].ToString(),
-                    resultat[Table.Customer.Phone].ToString(), resultat[Table.Customer.Email].ToString());
+                showCustomer(Convert.ToInt32(resultat[Table.Customer.ID]), resultat[Table.Customer.Name].ToString(), resultat[Table.Customer.Phone].ToString(),
+                    resultat[Table.Customer.Email].ToString());
             }
         }
 
@@ -75,20 +76,20 @@ namespace MANAGER.Pages
             TextChanged();
         }
 
-        private static bool isInt(string str)
+        private static Boolean isInt(string str)
         {
             int value;
             return (str.Trim() != string.Empty) && int.TryParse(str, out value);
         }
 
-        private static bool validMail(string mailString)
+        private static Boolean validMail(string mailString)
         {
             try
             {
                 new MailAddress(mailString);
                 return true;
             }
-            catch (FormatException)
+            catch(FormatException)
             {
                 return false;
             }
@@ -101,35 +102,34 @@ namespace MANAGER.Pages
 
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
-            var idCustomer = 0;   
             try
             {
-                var querySelect = String.Format("SELECT max(ID_{0}) FROM {0}", Table.Customer.TableName);
-                var OracleCommand = Connection.Connection.Command(querySelect);
-                var result = OracleCommand.ExecuteReader();
-                while(result.Read())
+                var queryVerify = String.Format("SELECT COUNT(*) FROM {0} WHERE {1}='{2}' OR {3}='{4}'", Table.Customer.TableName, Table.Customer.Phone,
+                    TextBoxPhone.Text, Table.Customer.Email, TextBoxMail.Text);
+                if(Convert.ToInt32(Connection.Connection.GetUniqueCell(queryVerify)) == 0)
                 {
-                    idCustomer = result[0].ToString() == String.Empty ? 1 : Convert.ToInt32(result[0]) + 1;
+                    var querySelect = String.Format("SELECT max(ID_{0}) FROM {0}", Table.Customer.TableName);
+                    var Command = Connection.Connection.GetUniqueCell(querySelect);
+                    var idCustomer = Command.ToString() == String.Empty ? 1 : Convert.ToInt32(Command) + 1;
+                    Connection.Connection.Insert(Table.Customer.TableName, idCustomer, TextBoxMail.Text, TextBoxName.Text, TextBoxPhone.Text);
+                    ModernDialog.ShowMessage(Transharp.GetTranslation("Box_SuccessAddCustomer", TextBoxName.Text), Transharp.GetTranslation("Box_AC_Success"),
+                        MessageBoxButton.OK);
+                    showCustomer(idCustomer, TextBoxMail.Text, TextBoxName.Text, TextBoxPhone.Text);
+                    TextBoxMail.Text = TextBoxPhone.Text = TextBoxName.Text = String.Empty;
                 }
-                Connection.Connection.Insert(Table.Customer.TableName, idCustomer , TextBoxMail.Text, TextBoxName.Text, TextBoxPhone.Text);
-                ModernDialog.ShowMessage(Transharp.GetTranslation("Box_SuccessAddCustomer", TextBoxName.Text), Transharp.GetTranslation("Box_AC_Success"),
-                    MessageBoxButton.OK);
+                else
+                {
+                    ModernDialog.ShowMessage(Transharp.GetTranslation("Box_CustomerAlreadyExist"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK);
+                }
             }
             catch
             {
                 ModernDialog.ShowMessage(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK);
             }
-            finally
-            {
-                showCustomer(idCustomer, TextBoxMail.Text, TextBoxName.Text, TextBoxPhone.Text);
-                TextBoxMail.Text = TextBoxPhone.Text = TextBoxName.Text = String.Empty;
-            }
         }
 
         private void showCustomer(int ID, string Mail, string Name, string Phone)
         {
-
-            
             var panelCustomer = new StackPanel();
             var thick = new Thickness(5, 2, 0, 0);
 
@@ -147,23 +147,13 @@ namespace MANAGER.Pages
             };
 
             // Customer's name
-            panelCustomer.Children.Add(new TextBlock { Margin = thick, Text = Name, Height = 16 });
+            panelCustomer.Children.Add(new TextBlock {Margin = thick, Text = Name, Height = 16});
 
             // Mail
-            panelCustomer.Children.Add(new TextBlock
-            {
-                Text = Mail,
-                Margin = thick,
-                Height = 16
-            });
+            panelCustomer.Children.Add(new TextBlock {Text = Mail, Margin = thick, Height = 16});
 
             // Phone
-            panelCustomer.Children.Add(new TextBlock
-            {
-                Text = Phone,
-                Margin = thick,
-                Height = 16
-            });
+            panelCustomer.Children.Add(new TextBlock {Text = Phone, Margin = thick, Height = 16});
 
             // Button
             var BTN_Delete = new Button
@@ -185,17 +175,16 @@ namespace MANAGER.Pages
 
         private void BTN_Delete_Click(object sender, EventArgs e)
         {
-            var ID = ((Button)sender).Tag.ToString();
+            var ID = ((Button) sender).Tag.ToString();
             var query = String.Format("SELECT {0} FROM {1} WHERE ID_{1} = {2}", Table.Customer.Name, Table.Customer.TableName, ID);
             var name = Connection.Connection.GetUniqueCell(query);
-            if (ModernDialog.ShowMessage(Transharp.GetTranslation("Box_DeleteCustomer", name.ToString()), Transharp.GetTranslation("Box_AskDelete"), MessageBoxButton.YesNo)
+            if(ModernDialog.ShowMessage(Transharp.GetTranslation("Box_DeleteCustomer", name), Transharp.GetTranslation("Box_AskDelete"), MessageBoxButton.YesNo)
                != MessageBoxResult.Yes)
             {
                 return;
             }
-            Connection.Connection.Delete(Table.Estimate.TableName, ID, Table.Customer.TableName);
+            Connection.Connection.Delete(Estimate.TableName, ID, Table.Customer.TableName);
             Connection.Connection.Delete(Table.Customer.TableName, ID);
-            PanelCustomer.Children.Clear();
             DisplayAll();
         }
     }

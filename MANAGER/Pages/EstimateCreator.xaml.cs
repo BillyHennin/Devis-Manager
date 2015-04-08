@@ -137,8 +137,9 @@ namespace MANAGER.Pages
                     ComboBoxClient.Items.Add(new ComboboxItemCustomer
                     {
                         Text = resultat[Table.Customer.Name].ToString(),
-                        Value = new Customer(Convert.ToInt32(resultat[Table.Customer.ID]), resultat[Table.Customer.Name].ToString(),
-                            resultat[Table.Customer.Phone].ToString(), resultat[Table.Customer.Email].ToString())
+                        Value =
+                            new Customer(Convert.ToInt32(resultat[Table.Customer.ID]), resultat[Table.Customer.Name].ToString(),
+                                resultat[Table.Customer.Phone].ToString(), resultat[Table.Customer.Email].ToString())
                     });
                 }
                 resultat.Close();
@@ -210,7 +211,8 @@ namespace MANAGER.Pages
                 }
                 result.Close();
                 BtnAdd.Content = Transharp.GetTranslation("BTN_Add");
-                ModernDialog.ShowMessage(Transharp.GetTranslation("Box_SuccessAdd", numberEstimate, TotalCost), Transharp.GetTranslation("Box_CE_Success"),MessageBoxButton.OK);
+                ModernDialog.ShowMessage(Transharp.GetTranslation("Box_SuccessAdd", numberEstimate, TotalCost), Transharp.GetTranslation("Box_CE_Success"),
+                    MessageBoxButton.OK);
             }
             catch
             {
@@ -345,7 +347,7 @@ namespace MANAGER.Pages
             }
         }
 
-        private static bool IsInt(string str)
+        private static Boolean IsInt(string str)
         {
             int value;
             return (str.Trim() != string.Empty) && int.TryParse(str, out value);
