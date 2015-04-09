@@ -7,7 +7,6 @@
 using System;
 using System.Data;
 using System.Linq;
-using System.Windows;
 
 namespace MANAGER.Connection
 {
@@ -64,14 +63,14 @@ namespace MANAGER.Connection
             return Command(String.Format("SELECT * FROM {0}", tableQuery));
         }
 
-        public static Int32 sizeOf(IDbCommand query)
+        public static Int32 sizeOf(IDbCommand command)
         {
-            return query.ExecuteReader(CommandBehavior.SingleRow);
+            return Convert.ToInt32(command.ExecuteScalar());
         }
 
         public static Int32 sizeOf(string query)
         {
-            return sizeOf(Command(String.Format("SELECT COUNT(*) FROM {0}", GetFirst(query))));
+            return sizeOf(Command(String.Format("SELECT COUNT(*) FROM {0}", query)));
         }
 
         public static Object GetUniqueCell(string query)
