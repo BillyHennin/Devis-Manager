@@ -15,7 +15,6 @@ namespace MANAGER.Table
         public static string Email { get; set; }
         public static string Name { get; set; }
         public static string Phone { get; set; }
-        public static string Code { get; set; }
 
         static Customer()
         {
@@ -24,17 +23,15 @@ namespace MANAGER.Table
             Email = "EMAIL";
             Name = "DENOMINATION";
             Phone = "TELEPHONE";
-            Code = "CODE";
         }
 
-        public void Construction(string TableName, string Email, string Name, string Phone, string Code)
+        public void Construction(string TableName, string Email, string Name, string Phone)
         {
             Customer.TableName = TableName;
             ID = String.Format("ID_{0}", TableName);
             Customer.Email = Email;
             Customer.Name = Name;
             Customer.Phone = Phone;
-            Customer.Code = Code;
         }
     }
 }

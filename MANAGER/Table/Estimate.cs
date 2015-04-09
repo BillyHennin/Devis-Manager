@@ -8,13 +8,12 @@ namespace MANAGER.Table
 {
     public class Estimate
     {
+
         public static string TableName { get; set; }
         public static string Quantity { get; set; }
         public static string Day { get; set; }
         public static string PriceMerchandise { get; set; }
         public static string NumberDevis { get; set; }
-
-        
 
         static Estimate()
         {
@@ -24,7 +23,7 @@ namespace MANAGER.Table
             PriceMerchandise = "PRIXMARCHANDISE";
             Quantity = "QUANTITE";
         }
-
+        
         public void Construction(string TableName, string Day, string NumberDevis, string PriceMerchandise, string Quantity)
         {
             Estimate.TableName = TableName;

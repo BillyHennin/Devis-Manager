@@ -7,6 +7,7 @@
 using System;
 using System.Data;
 using System.Linq;
+using System.Windows;
 
 namespace MANAGER.Connection
 {
@@ -63,10 +64,26 @@ namespace MANAGER.Connection
             return Command(String.Format("SELECT * FROM {0}", tableQuery));
         }
 
+        public static Int32 sizeOf(IDbCommand command)
+        {
+            using (var result = command.ExecuteReader())
+            {
+                
+                MessageBox.Show(result.GetSchemaTable().Select().Length.ToString());
+                return result.GetSchemaTable().Rows.Count;
+            }
+        }
+
         public static Object GetUniqueCell(string query)
         {
             var command = Command(query);
             return command.ExecuteScalar();
+        }
+
+        public static IDataReader GetFirst(string query)
+        {
+            var command = Command(query);
+            return command.ExecuteReader(CommandBehavior.SingleRow);
         }
 
         public static void Insert(string tableQuery, params Object[] value)
