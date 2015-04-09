@@ -64,14 +64,14 @@ namespace MANAGER.Connection
             return Command(String.Format("SELECT * FROM {0}", tableQuery));
         }
 
-        public static Int32 sizeOf(IDbCommand command)
+        public static Int32 sizeOf(IDbCommand query)
         {
-            using (var result = command.ExecuteReader())
-            {
-                
-                MessageBox.Show(result.GetSchemaTable().Select().Length.ToString());
-                return result.GetSchemaTable().Rows.Count;
-            }
+            return query.ExecuteReader(CommandBehavior.SingleRow);
+        }
+
+        public static Int32 sizeOf(string query)
+        {
+            return sizeOf(Command(String.Format("SELECT COUNT(*) FROM {0}", GetFirst(query))));
         }
 
         public static Object GetUniqueCell(string query)
