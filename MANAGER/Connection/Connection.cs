@@ -70,7 +70,7 @@ namespace MANAGER.Connection
 
         public static Int32 sizeOf(string query)
         {
-            return sizeOf(Command(String.Format("SELECT COUNT(*) FROM {0}", query)));
+            return sizeOf(Command(String.Format("SELECT COUNT(*) FROM ({0})", query)));
         }
 
         public static Object GetUniqueCell(string query)
