@@ -129,12 +129,14 @@
                                Margin="-550,0,-50,0"
                                Style="{StaticResource Heading2}"
                                Text="#LabelCommands"
-                               TextWrapping="Wrap" />
+                               TextWrapping="Wrap"
+                               Visibility="Hidden" />
                     <ComboBox x:Name="ComboBoxCommands"
                               Height="22"
                               Margin="-400,-20,239,0"
                               BorderBrush="{DynamicResource Accent}"
-                              SelectionChanged="ComboBoxCommands_SelectionChanged" />
+                              SelectionChanged="ComboBoxCommands_SelectionChanged"
+                              Visibility="Hidden" />
                 </StackPanel>
             </Border>
 

@@ -84,7 +84,7 @@
                               Grid.Column="2"
                               Grid.ColumnSpan="4"
                               Height="23"
-                              Margin="25,-28,-57,31"
+                              Margin="25,-28,-67,31"
                               VerticalAlignment="Bottom"
                               BorderBrush="{DynamicResource Accent}"
                               Grid.IsSharedSizeScope="True"
@@ -104,7 +104,7 @@
                               Grid.Column="2"
                               Grid.ColumnSpan="4"
                               Height="23"
-                              Margin="25,0,-57,3"
+                              Margin="25,0,-67,3"
                               VerticalAlignment="Bottom"
                               BorderBrush="{DynamicResource Accent}"
                               Grid.IsSharedSizeScope="True"
@@ -114,9 +114,9 @@
                             Grid.Row="1"
                             Grid.Column="2"
                             Grid.ColumnSpan="4"
-                            Width="120"
+                            Width="130"
                             Height="26"
-                            Margin="25,32,-57,-15"
+                            Margin="25,32,-67,-15"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Top"
                             BorderBrush="{DynamicResource Accent}"
@@ -137,7 +137,7 @@
                               Grid.Row="1"
                               Grid.Column="2"
                               Grid.ColumnSpan="4"
-                              Margin="25,68,-57,-51"
+                              Margin="25,68,-67,-51"
                               BorderBrush="{DynamicResource Accent}"
                               Initialized="ComboBoxClient_OnInitialized"
                               SelectionChanged="comboBoxClient_SelectionChanged" />
@@ -154,7 +154,7 @@
                              Grid.Column="2"
                              Grid.ColumnSpan="4"
                              Height="23"
-                             Margin="25,0,-57,17"
+                             Margin="25,0,-67,17"
                              VerticalAlignment="Bottom"
                              BorderBrush="{DynamicResource Accent}"
                              Grid.IsSharedSizeScope="True"
@@ -184,7 +184,9 @@
                             BorderBrush="{DynamicResource Accent}"
                             BorderThickness="1">
                         <ScrollViewer Margin="0,0,-94,0">
-                            <StackPanel x:Name="PanelEstimate" MinWidth="150" />
+                            <StackPanel x:Name="PanelEstimate"
+                                        Width="537"
+                                        MinWidth="150" />
                         </ScrollViewer>
                     </Border>
                 </Grid>
