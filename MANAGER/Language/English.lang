@@ -1,7 +1,7 @@
 ﻿AB_MOTD1=Welcome to the MANAGER application for the creation and viewing of estimates. 
 AB_MOTD2=About this app : 
 AB_MOTD3=This application was created as part of a school project. 
-AB_MOTD4=potatoe. 
+AB_MOTD4=
 AB_MOTD5=The source code can be found on %x.
 AB_MOTD6=Message of the day : 
 AC_Title=Add a new customer to the database :
