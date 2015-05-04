@@ -31,9 +31,6 @@
                 <mui:Link x:Name="Link_CreateCE"
                           DisplayName="#Link_CreateCE"
                           Source="/Pages/EstimateCreator.xaml" />
-                <mui:Link x:Name="Link_DisplayCE"
-                          DisplayName="#Link_DisplayCE"
-                          Source="/Pages/DisplayEstimate.xaml" />
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
 

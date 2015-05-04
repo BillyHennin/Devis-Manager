@@ -42,7 +42,6 @@ namespace MANAGER
             Link_Param.DisplayName = Transharp.GetTranslation("Link_Param");
             Link_CE.DisplayName = Transharp.GetTranslation("Link_CE");
             Link_CreateCE.DisplayName = Transharp.GetTranslation("Link_CreateCE");
-            Link_DisplayCE.DisplayName = Transharp.GetTranslation("Link_DisplayCE");
             Link_Customer.DisplayName = Transharp.GetTranslation("Link_Customer");
             Link_DisplayCustomer.DisplayName = Transharp.GetTranslation("Link_DisplayCustomer");
             Link_CreateCustomer.DisplayName = Transharp.GetTranslation("Link_CreateCustomer");
