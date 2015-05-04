@@ -12,10 +12,6 @@ using System.Windows;
 
 using MANAGER.Classes;
 
-using Customer = MANAGER.Table.Customer;
-using Estimate = MANAGER.Table.Estimate;
-using Merchandise = MANAGER.Table.Merchandise;
-
 #endregion
 
 namespace MANAGER
@@ -47,8 +43,6 @@ namespace MANAGER
             Link_CreateCustomer.DisplayName = Transharp.GetTranslation("Link_CreateCustomer");
             Link_Merchandise.DisplayName = Transharp.GetTranslation("Link_Merchandise");
             Link_DisplayMerchandise.DisplayName = Transharp.GetTranslation("Link_DisplayMerchandise");
-            Link_CreateMerchandise.DisplayName = Transharp.GetTranslation("Link_CreateMerchandise");
-
         }
     }
 }

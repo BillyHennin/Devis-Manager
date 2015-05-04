@@ -49,9 +49,6 @@
                 <mui:Link x:Name="Link_DisplayMerchandise"
                           DisplayName="#Link_DisplayMerchandise"
                           Source="/Pages/DisplayMerchandise.xaml" />
-                <mui:Link x:Name="Link_CreateMerchandise"
-                          DisplayName="#Link_CreateMerchandise"
-                          Source="/Pages/AddMerchandise.xaml" />
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
     </mui:ModernWindow.MenuLinkGroups>

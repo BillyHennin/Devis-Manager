@@ -104,8 +104,8 @@ namespace MANAGER.Pages
         {
             try
             {
-                var queryVerify = String.Format("{0} WHERE {1}='{2}' OR {3}='{4}'", Table.Customer.TableName, Table.Customer.Phone,
-                    TextBoxPhone.Text, Table.Customer.Email, TextBoxMail.Text);
+                var queryVerify = String.Format("{0} WHERE {1}='{2}' OR {3}='{4}'", Table.Customer.TableName, Table.Customer.Phone, TextBoxPhone.Text,
+                    Table.Customer.Email, TextBoxMail.Text);
                 if(Connection.Connection.sizeOf(Connection.Connection.GetAll(queryVerify)) == 0)
                 {
                     var querySelect = String.Format("SELECT max(ID_{0}) FROM {0}", Table.Customer.TableName);

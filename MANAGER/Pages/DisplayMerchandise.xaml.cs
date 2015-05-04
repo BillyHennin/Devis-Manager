@@ -26,30 +26,29 @@ namespace MANAGER.Pages
     public partial class DisplayMerchandise
     {
         private static readonly List<Merchandise> ListMerchandise = new List<Merchandise>();
-        private static readonly List<Merchandise> SecondListMerchandise = new List<Merchandise>();
 
         private void SelectMarchandiseLike(string merchandise)
         {
+            var result = false;
             PanelMerchandise.Children.Clear();
-            ListMerchandise.Clear();
 
-            var nbMerchandise = SecondListMerchandise.Count;
+            var nbMerchandise = ListMerchandise.Count;
             for(var i = 0; i < nbMerchandise; i++)
             {
-                if(!SecondListMerchandise[i].name.ToLower().Contains(merchandise.ToLower())
-                   && !SecondListMerchandise[i].price.ToString(CultureInfo.InvariantCulture).Contains(merchandise)
-                   && !SecondListMerchandise[i].quantity.ToString(CultureInfo.InvariantCulture).Contains(merchandise))
+                if(!ListMerchandise[i].name.ToLower().Contains(merchandise.ToLower())
+                   && !ListMerchandise[i].price.ToString(CultureInfo.InvariantCulture).Contains(merchandise)
+                   && !ListMerchandise[i].quantity.ToString(CultureInfo.InvariantCulture).Contains(merchandise))
                 {
                     continue;
                 }
-                var id = SecondListMerchandise[i].id;
-                var text = SecondListMerchandise[i].name;
-                var newMerchandise = new Merchandise(id, text, SecondListMerchandise[i].quantity, SecondListMerchandise[i].price,
-                    SecondListMerchandise[i].categoryID) {onSale = SecondListMerchandise[i].onSale};
-
+                var id = ListMerchandise[i].id;
+                var text = ListMerchandise[i].name;
+                var newMerchandise = new Merchandise(id, text, ListMerchandise[i].quantity, ListMerchandise[i].price,
+                    ListMerchandise[i].categoryID) {onSale =ListMerchandise[i].onSale};
+                result = true;
                 Display(text, newMerchandise);
             }
-            if(ListMerchandise.Count != 0)
+            if(result)
             {
                 return;
             }
@@ -130,7 +129,6 @@ namespace MANAGER.Pages
             BTN_Sale.Click += BTN_Sale_Click;
 
             newMerchandise.Border = border;
-            ListMerchandise.Add(newMerchandise);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -139,7 +137,6 @@ namespace MANAGER.Pages
 
             PanelMerchandise.Children.Clear();
             ListMerchandise.Clear();
-            SecondListMerchandise.Clear();
             try
             {
                 var oCommand = Connection.Connection.GetAll(Table.Merchandise.TableName);
@@ -159,7 +156,7 @@ namespace MANAGER.Pages
                         Convert.ToInt32(resultat[Table.Merchandise.Quantity]), Convert.ToInt32(resultat[Table.Merchandise.Price]),
                         Convert.ToInt32(resultat[Category.ID])) {onSale = Convert.ToBoolean(resultat[Table.Merchandise.OnSale])};
                     Display(text, newMerchandise);
-                    SecondListMerchandise.Add(newMerchandise);
+                    ListMerchandise.Add(newMerchandise);
                 }
                 resultat.Close();
             }
@@ -185,7 +182,7 @@ namespace MANAGER.Pages
         {
             var id = ((Button) sender).Tag.ToString();
             var num = Convert.ToInt32(id) - 1;
-            var onSale = !SecondListMerchandise[num].onSale ? 1 : 0;
+            var onSale = !ListMerchandise[num].onSale ? 1 : 0;
             try
             {
                 var query = String.Format("UPDATE {0} SET {1} = {2} WHERE ID_{0} = {3}", Table.Merchandise.TableName, Table.Merchandise.OnSale, onSale, id);
@@ -198,14 +195,14 @@ namespace MANAGER.Pages
             }
             finally
             {
-                var nbMerchandise = SecondListMerchandise.Count;
+                var nbMerchandise =  ListMerchandise.Count;
                 for(var i = 0; i < nbMerchandise; i++)
                 {
-                    if(SecondListMerchandise[i].ToString() != id)
+                    if(ListMerchandise[i].ToString() != id)
                     {
                         continue;
                     }
-                    SecondListMerchandise[i].onSale = !SecondListMerchandise[i].onSale;
+                    ListMerchandise[i].onSale = !ListMerchandise[i].onSale;
                 }
                 SelectMarchandiseLike(String.Empty);
             }

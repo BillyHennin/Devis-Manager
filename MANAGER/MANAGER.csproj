@@ -108,9 +108,6 @@
     <Compile Include="Pages\AddCustomer.xaml.cs">
       <DependentUpon>AddCustomer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\AddMerchandise.xaml.cs">
-      <DependentUpon>AddMerchandise.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\DisplayCustomer.xaml.cs">
       <DependentUpon>DisplayCustomer.xaml</DependentUpon>
     </Compile>
@@ -157,10 +154,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\AddCustomer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\AddMerchandise.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
