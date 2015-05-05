@@ -26,7 +26,7 @@ namespace MANAGER.Pages
     public partial class DisplayCustomer
     {
         private static readonly List<Merchandise> ListMerchandise = new List<Merchandise>();
-        private readonly Estimate estimate = new Estimate(ListMerchandise);
+        private readonly Estimate _estimate = new Estimate(ListMerchandise);
 
         private void ComboBoxCustomer_Loaded(object sender, EventArgs e)
         {
@@ -66,10 +66,10 @@ namespace MANAGER.Pages
             try
             {
                 var query = String.Format("SELECT DISTINCT {0} FROM {1} WHERE ID_{2} = {3} ORDER BY {0}", Table.Estimate.NumberDevis, Table.Estimate.TableName,
-                    Customer.TableName, ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.id);
-                var Command = Connection.Connection.Command(query);
+                    Customer.TableName, ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.Id);
+                var command = Connection.Connection.Command(query);
 
-                var resultCommand = Command.ExecuteReader();
+                var resultCommand = command.ExecuteReader();
 
                 while(resultCommand.Read())
                 {
@@ -78,9 +78,9 @@ namespace MANAGER.Pages
                             "SELECT {0}.ID_{0}, {0}.{1}, {2}.{3}, {2}.{4}, {2}.{5}, {0}.ID_{7} FROM {0}, {2} WHERE {2}.ID_{0} = {0}.ID_{0} AND {2}.{6} = {8}",
                             Table.Merchandise.TableName, Table.Merchandise.Name, Table.Estimate.TableName, Table.Estimate.PriceMerchandise,
                             Table.Estimate.Quantity, Table.Estimate.Day, Table.Estimate.NumberDevis, Category.TableName, resultCommand[0]);
-                    var Command2 = Connection.Connection.Command(query2);
-                    var resultatMerchandise = Command2.ExecuteReader();
-                    var ListMerchandise2 = new List<Merchandise>();
+                    var command2 = Connection.Connection.Command(query2);
+                    var resultatMerchandise = command2.ExecuteReader();
+                    var listMerchandise2 = new List<Merchandise>();
                     while(resultatMerchandise.Read())
                     {
                         totalPrice += Convert.ToInt32(resultatMerchandise[2]);
@@ -88,10 +88,10 @@ namespace MANAGER.Pages
                         var merchandise = new Merchandise(Convert.ToInt32(resultatMerchandise[0]), resultatMerchandise[1].ToString(),
                             Convert.ToInt32(resultatMerchandise[3]), Convert.ToInt32(resultatMerchandise[2]) / Convert.ToInt32(resultatMerchandise[3]),
                             Convert.ToInt32(resultatMerchandise[5]));
-                        ListMerchandise2.Add(merchandise);
+                        listMerchandise2.Add(merchandise);
                     }
                     resultatMerchandise.Close();
-                    var estimate2 = new Estimate(ListMerchandise2) {TotalPrice = totalPrice, date = date};
+                    var estimate2 = new Estimate(listMerchandise2) {TotalPrice = totalPrice, Date = date};
                     ComboBoxEstimate.Items.Add(new ComboboxItemEstimate
                     {
                         Text = Transharp.GetTranslation("DC_ComboBoxCustomer", nbEstimate, date.ToShortDateString(), totalPrice),
@@ -101,7 +101,7 @@ namespace MANAGER.Pages
                     totalPrice = 0;
                 }
                 resultCommand.Close();
-                TextMail.Text = ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.email;
+                TextMail.Text = ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.Email;
                 TextPhone.Text = ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.Phone;
             }
             catch(Exception caught)
@@ -176,18 +176,18 @@ namespace MANAGER.Pages
             for(var i = 0; i < taille; i++)
             {
                 var categoryString = string.Empty;
-                var query = String.Format("SELECT {1} FROM {0} WHERE ID_{0} = {2}", Category.TableName, Category.Title, listMarchandise[i].categoryID);
-                var CommandCategory = Connection.Connection.Command(query);
-                var resultatCategory = CommandCategory.ExecuteReader();
+                var query = String.Format("SELECT {1} FROM {0} WHERE ID_{0} = {2}", Category.TableName, Category.Title, listMarchandise[i].CategoryId);
+                var commandCategory = Connection.Connection.Command(query);
+                var resultatCategory = commandCategory.ExecuteReader();
                 while(resultatCategory.Read())
                 {
                     categoryString = resultatCategory[0].ToString();
                 }
-                var id = listMarchandise[i].id;
-                var text = String.Format("{0} - {1}", categoryString, listMarchandise[i].name);
-                var qte = listMarchandise[i].quantity;
-                var prixMarchandise = listMarchandise[i].price;
-                var category = listMarchandise[i].categoryID;
+                var id = listMarchandise[i].Id;
+                var text = String.Format("{0} - {1}", categoryString, listMarchandise[i].Name);
+                var qte = listMarchandise[i].Quantity;
+                var prixMarchandise = listMarchandise[i].Price;
+                var category = listMarchandise[i].CategoryId;
                 var item = new Merchandise(id, text, qte, prixMarchandise, category);
                 var panelMarchandise = new StackPanel();
                 var thick = new Thickness(5, 2, 0, 0);
@@ -226,7 +226,7 @@ namespace MANAGER.Pages
 
                 item.Border = bordure;
                 PanelDevis.Children.Add(bordure);
-                estimate.GetList.Add(item);
+                _estimate.GetList.Add(item);
             }
         }
 
@@ -248,7 +248,7 @@ namespace MANAGER.Pages
             BorderDevis.Height = MenuCustomer.ActualHeight - 100;
             try
             {
-                var nbMarchandise = estimate.GetList.Count;
+                var nbMarchandise = _estimate.GetList.Count;
                 for(var i = 0; i < nbMarchandise; i++)
                 {
                     ListMerchandise[i].Border.Width = BorderDevis.Width - 5;
@@ -265,7 +265,7 @@ namespace MANAGER.Pages
 
         private void MenuCustomer_Loaded(object sender, RoutedEventArgs e)
         {
-            var nbMerchandise = estimate.GetList.Count;
+            var nbMerchandise = _estimate.GetList.Count;
 
             if(nbMerchandise == 0)
             {
@@ -274,7 +274,7 @@ namespace MANAGER.Pages
 
             for(var i = 0; i < nbMerchandise; i++)
             {
-                estimate[i].Border.BorderBrush = BorderDevis.BorderBrush;
+                _estimate[i].Border.BorderBrush = BorderDevis.BorderBrush;
             }
         }
 
@@ -282,8 +282,8 @@ namespace MANAGER.Pages
         {
             try
             {
-                Connection.Connection.Delete(Table.Estimate.TableName, ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.id, Customer.TableName);
-                Connection.Connection.Delete(Customer.TableName, ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.id);
+                Connection.Connection.Delete(Table.Estimate.TableName, ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.Id, Customer.TableName);
+                Connection.Connection.Delete(Customer.TableName, ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.Id);
             }
             catch
             {
@@ -300,7 +300,7 @@ namespace MANAGER.Pages
             try
             {
                 var set = new[,] {{Customer.Phone, TextPhone.Text}, {Customer.Email, TextMail.Text}};
-                Connection.Connection.Update(Customer.TableName, customer.id, set);
+                Connection.Connection.Update(Customer.TableName, customer.Id, set);
             }
             catch
             {
@@ -309,8 +309,8 @@ namespace MANAGER.Pages
             finally
             {
                 customer.Phone = TextPhone.Text;
-                customer.email = TextMail.Text;
-                ModernDialog.ShowMessage(Transharp.GetTranslation("Box_SuccessUpdate", customer.name), Transharp.GetTranslation("Box_Update_Success_Title"),
+                customer.Email = TextMail.Text;
+                ModernDialog.ShowMessage(Transharp.GetTranslation("Box_SuccessUpdate", customer.Name), Transharp.GetTranslation("Box_Update_Success_Title"),
                     MessageBoxButton.OK);
             }
         }

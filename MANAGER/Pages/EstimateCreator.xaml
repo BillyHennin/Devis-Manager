@@ -22,7 +22,7 @@
                       Grid.ColumnSpan="2"
                       Margin="0,0,-94,-15">
             <StackPanel x:Name="Panel" MinWidth="150">
-                <TextBlock x:Name="EC_Title"
+                <TextBlock x:Name="EcTitle"
                            Margin="0,0,0,8"
                            Style="{StaticResource Heading2}"
                            Text="#EC_Title"
@@ -73,7 +73,7 @@
                         <RowDefinition />
                         <RowDefinition />
                     </Grid.RowDefinitions>
-                    <TextBlock x:Name="EC_AddMerchandise"
+                    <TextBlock x:Name="EcAddMerchandise"
                                Grid.ColumnSpan="3"
                                Height="16"
                                Margin="0,0,64,10"
@@ -91,7 +91,7 @@
                               Initialized="ComboBoxCategory_Initialized"
                               SelectionChanged="ComboBoxCategory_SelectionChanged"
                               TabIndex="2" />
-                    <TextBlock x:Name="EC_ChooseCategory"
+                    <TextBlock x:Name="EcChooseCategory"
                                Grid.Row="0"
                                Grid.Column="0"
                                Grid.ColumnSpan="2"
@@ -123,9 +123,7 @@
                             Click="BTNAddFeed_click"
                             Content="#BTN_Add"
                             IsEnabled="False" />
-
-
-                    <TextBlock x:Name="EC_Customer"
+                    <TextBlock x:Name="EcCustomer"
                                Grid.Row="1"
                                Grid.Column="0"
                                Grid.ColumnSpan="2"
@@ -141,7 +139,7 @@
                               BorderBrush="{DynamicResource Accent}"
                               Initialized="ComboBoxClient_OnInitialized"
                               SelectionChanged="comboBoxClient_SelectionChanged" />
-                    <TextBlock x:Name="All_QTE"
+                    <TextBlock x:Name="AllQte"
                                Grid.Row="1"
                                Grid.Column="0"
                                Grid.ColumnSpan="2"
@@ -164,7 +162,7 @@
                              TextAlignment="Right"
                              TextChanged="TextBoxEstimateQte_TextChanged"
                              TextWrapping="Wrap" />
-                    <TextBlock x:Name="All_Price"
+                    <TextBlock x:Name="AllPrice"
                                Grid.Row="1"
                                Grid.Column="0"
                                Grid.ColumnSpan="2"
@@ -184,8 +182,7 @@
                             BorderBrush="{DynamicResource Accent}"
                             BorderThickness="1">
                         <ScrollViewer Margin="0,0,-94,0">
-                            <StackPanel x:Name="PanelEstimate"
-                                        MinWidth="150" />
+                            <StackPanel x:Name="PanelEstimate" MinWidth="150" />
                         </ScrollViewer>
                     </Border>
                 </Grid>

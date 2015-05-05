@@ -8,13 +8,13 @@ namespace MANAGER.Classes
 {
     public class Category
     {
-        public Category(int ID, string Description)
+        public Category(int id, string description)
         {
-            this.ID = ID;
-            this.Description = Description;
+            Id = id;
+            Description = description;
         }
 
         public string Description { get; set; }
-        public int ID { get; set; }
+        public int Id { get; set; }
     }
 }

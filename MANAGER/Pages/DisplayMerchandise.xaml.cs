@@ -35,16 +35,18 @@ namespace MANAGER.Pages
             var nbMerchandise = ListMerchandise.Count;
             for(var i = 0; i < nbMerchandise; i++)
             {
-                if(!ListMerchandise[i].name.ToLower().Contains(merchandise.ToLower())
-                   && !ListMerchandise[i].price.ToString(CultureInfo.InvariantCulture).Contains(merchandise)
-                   && !ListMerchandise[i].quantity.ToString(CultureInfo.InvariantCulture).Contains(merchandise))
+                if(!ListMerchandise[i].Name.ToLower().Contains(merchandise.ToLower())
+                   && !ListMerchandise[i].Price.ToString(CultureInfo.InvariantCulture).Contains(merchandise)
+                   && !ListMerchandise[i].Quantity.ToString(CultureInfo.InvariantCulture).Contains(merchandise))
                 {
                     continue;
                 }
-                var id = ListMerchandise[i].id;
-                var text = ListMerchandise[i].name;
-                var newMerchandise = new Merchandise(id, text, ListMerchandise[i].quantity, ListMerchandise[i].price,
-                    ListMerchandise[i].categoryID) {onSale =ListMerchandise[i].onSale};
+                var id = ListMerchandise[i].Id;
+                var text = ListMerchandise[i].Name;
+                var newMerchandise = new Merchandise(id, text, ListMerchandise[i].Quantity, ListMerchandise[i].Price, ListMerchandise[i].CategoryId)
+                {
+                    OnSale = ListMerchandise[i].OnSale
+                };
                 result = true;
                 Display(text, newMerchandise);
             }
@@ -106,27 +108,27 @@ namespace MANAGER.Pages
             // Quantity
             panelMerchandise.Children.Add(new TextBlock
             {
-                Text = Transharp.GetTranslation("DM_Stock", newMerchandise.quantity),
+                Text = Transharp.GetTranslation("DM_Stock", newMerchandise.Quantity),
                 Margin = new Thickness(5, 2, 0, 0),
                 Height = 16
             });
 
             // Price
-            panelMerchandise.Children.Add(new TextBlock {Text = String.Format("{0}€", newMerchandise.price), Margin = thick, Height = 16});
+            panelMerchandise.Children.Add(new TextBlock {Text = String.Format("{0}€", newMerchandise.Price), Margin = thick, Height = 16});
 
-            var BTN_Sale = new Button
+            var btnSale = new Button
             {
                 HorizontalAlignment = HorizontalAlignment.Right,
-                Content = newMerchandise.onSale ? Transharp.GetTranslation("DM_OnSale") : Transharp.GetTranslation("DM_NotOnSale"),
+                Content = newMerchandise.OnSale ? Transharp.GetTranslation("DM_OnSale") : Transharp.GetTranslation("DM_NotOnSale"),
                 Margin = new Thickness(9, -30, 67, 50),
-                BorderBrush = newMerchandise.onSale ? Brushes.Lime : Brushes.Red,
+                BorderBrush = newMerchandise.OnSale ? Brushes.Lime : Brushes.Red,
                 Tag = newMerchandise
             };
 
             // Delete button
-            panelMerchandise.Children.Add(BTN_Sale);
+            panelMerchandise.Children.Add(btnSale);
 
-            BTN_Sale.Click += BTN_Sale_Click;
+            btnSale.Click += BTN_Sale_Click;
 
             newMerchandise.Border = border;
         }
@@ -145,8 +147,8 @@ namespace MANAGER.Pages
                 {
                     var category = string.Empty;
                     var query = String.Format("SELECT {0} FROM {1} WHERE ID_{1} = {2}", Category.Title, Category.TableName, resultat[Category.ID]);
-                    var CommandCategory = Connection.Connection.Command(query);
-                    var resultatCategory = CommandCategory.ExecuteReader();
+                    var commandCategory = Connection.Connection.Command(query);
+                    var resultatCategory = commandCategory.ExecuteReader();
                     while(resultatCategory.Read())
                     {
                         category = resultatCategory[Category.Title].ToString();
@@ -154,7 +156,7 @@ namespace MANAGER.Pages
                     var text = String.Format("{0} - {1}", category, resultat[Table.Merchandise.Name]);
                     var newMerchandise = new Merchandise(Convert.ToInt32(resultat[Table.Merchandise.ID]), text,
                         Convert.ToInt32(resultat[Table.Merchandise.Quantity]), Convert.ToInt32(resultat[Table.Merchandise.Price]),
-                        Convert.ToInt32(resultat[Category.ID])) {onSale = Convert.ToBoolean(resultat[Table.Merchandise.OnSale])};
+                        Convert.ToInt32(resultat[Category.ID])) {OnSale = Convert.ToBoolean(resultat[Table.Merchandise.OnSale])};
                     Display(text, newMerchandise);
                     ListMerchandise.Add(newMerchandise);
                 }
@@ -182,7 +184,7 @@ namespace MANAGER.Pages
         {
             var id = ((Button) sender).Tag.ToString();
             var num = Convert.ToInt32(id) - 1;
-            var onSale = !ListMerchandise[num].onSale ? 1 : 0;
+            var onSale = !ListMerchandise[num].OnSale ? 1 : 0;
             try
             {
                 var query = String.Format("UPDATE {0} SET {1} = {2} WHERE ID_{0} = {3}", Table.Merchandise.TableName, Table.Merchandise.OnSale, onSale, id);
@@ -195,14 +197,14 @@ namespace MANAGER.Pages
             }
             finally
             {
-                var nbMerchandise =  ListMerchandise.Count;
+                var nbMerchandise = ListMerchandise.Count;
                 for(var i = 0; i < nbMerchandise; i++)
                 {
                     if(ListMerchandise[i].ToString() != id)
                     {
                         continue;
                     }
-                    ListMerchandise[i].onSale = !ListMerchandise[i].onSale;
+                    ListMerchandise[i].OnSale = !ListMerchandise[i].OnSale;
                 }
                 SelectMarchandiseLike(String.Empty);
             }

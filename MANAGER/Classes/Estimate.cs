@@ -21,12 +21,12 @@ namespace MANAGER.Classes
         {
             _listMerchandise = list;
             TotalPrice = 0;
-            date = DateTime.Now;
+            Date = DateTime.Now;
         }
 
         public double TotalPrice { get; set; }
         public Customer Customer { get; set; }
-        public DateTime date { get; set; }
+        public DateTime Date { get; set; }
         public List<Merchandise> GetList { get { return _listMerchandise; } }
         public Merchandise this[int i] { get { return GetList[i]; } }
     }

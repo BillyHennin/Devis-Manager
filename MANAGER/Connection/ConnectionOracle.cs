@@ -13,23 +13,23 @@ namespace MANAGER.Connection
 {
     public class ConnectionOracle : Connection
     {
-        private static OracleConnection Connection;
-        private static Boolean ConnectionIsStarted;
+        private static OracleConnection _connection;
+        private static Boolean _connectionIsStarted;
 
         private ConnectionOracle()
         {
-            Connection = new OracleConnection(Properties.Connection.Default.DatabaseConnectionString);
-            Connection.Open();
-            ConnectionIsStarted = true;
+            _connection = new OracleConnection(Properties.Connection.Default.DatabaseConnectionString);
+            _connection.Open();
+            _connectionIsStarted = true;
         }
 
         private static OracleConnection GetConnection()
         {
-            if(!ConnectionIsStarted)
+            if(!_connectionIsStarted)
             {
                 new ConnectionOracle();
             }
-            return Connection;
+            return _connection;
         }
 
         public new static IDbCommand Command(string query)

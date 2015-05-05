@@ -28,18 +28,18 @@ namespace MANAGER.Pages
     public partial class EstimatePage
     {
         private static readonly List<Merchandise> ListMerchandise = new List<Merchandise>();
-        private readonly Estimate estimate = new Estimate(ListMerchandise);
-        private double ItemSelectedPrice;
-        private int ItemSelectedQuantity;
-        private double TotalCost;
+        private readonly Estimate _estimate = new Estimate(ListMerchandise);
+        private double _itemSelectedPrice;
+        private int _itemSelectedQuantity;
+        private double _totalCost;
 
         private void EstimateCreator_Loaded(object sender, RoutedEventArgs e)
         {
             UpdateText();
-            var nbMerchandise = estimate.GetList.Count;
+            var nbMerchandise = _estimate.GetList.Count;
             for(var i = 0; i < nbMerchandise; i++)
             {
-                estimate[i].Border.BorderBrush = BtnAdd.BorderBrush;
+                _estimate[i].Border.BorderBrush = BtnAdd.BorderBrush;
             }
             QuantityChanged();
         }
@@ -48,8 +48,8 @@ namespace MANAGER.Pages
         {
             try
             {
-                var Command = Connection.Connection.GetAll(Category.TableName);
-                var resultat = Command.ExecuteReader();
+                var command = Connection.Connection.GetAll(Category.TableName);
+                var resultat = command.ExecuteReader();
                 while(resultat.Read())
                 {
                     ComboBoxCategory.Items.Add(new ComboboxItemCategory
@@ -72,9 +72,9 @@ namespace MANAGER.Pages
             {
                 ComboBoxProduct.Items.Clear();
                 var query = String.Format("{0} WHERE {1} = 1 AND {2} > 0 AND ID_{3}={4}", Table.Merchandise.TableName, Table.Merchandise.OnSale,
-                    Table.Merchandise.Quantity, Category.TableName, ((ComboboxItemCategory) ComboBoxCategory.SelectedItem).Value.ID);
-                var Command = Connection.Connection.GetAll(query);
-                var resultat = Command.ExecuteReader();
+                    Table.Merchandise.Quantity, Category.TableName, ((ComboboxItemCategory) ComboBoxCategory.SelectedItem).Value.Id);
+                var command = Connection.Connection.GetAll(query);
+                var resultat = command.ExecuteReader();
                 while(resultat.Read())
                 {
                     ComboBoxProduct.Items.Add(new ComboboxItemMerchandise
@@ -83,7 +83,7 @@ namespace MANAGER.Pages
                         Value =
                             new Merchandise(Convert.ToInt32(resultat[Table.Merchandise.ID]), resultat[Table.Merchandise.Name].ToString(),
                                 Convert.ToInt32(resultat[Table.Merchandise.Price]), Convert.ToInt32(resultat[Table.Merchandise.Quantity]),
-                                ((ComboboxItemCategory) ComboBoxCategory.SelectedItem).Value.ID)
+                                ((ComboboxItemCategory) ComboBoxCategory.SelectedItem).Value.Id)
                     });
                 }
                 resultat.Close();
@@ -100,18 +100,18 @@ namespace MANAGER.Pages
             BtnAdd.Content = Transharp.GetTranslation("BTN_Add");
             try
             {
-                switch(ItemSelectedQuantity)
+                switch(_itemSelectedQuantity)
                 {
                     case 0:
                         ErrorCost();
                         break;
                     default:
-                        ItemSelectedPrice = ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.price * Convert.ToInt32(TextBoxEstimateQte.Text);
-                        All_Price.Text = String.Format("{0} {1}€", Transharp.GetTranslation("All_Price"), ItemSelectedPrice);
-                        var nbMerchandise = estimate.GetList.Count;
+                        _itemSelectedPrice = ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.Price * Convert.ToInt32(TextBoxEstimateQte.Text);
+                        AllPrice.Text = String.Format("{0} {1}€", Transharp.GetTranslation("All_Price"), _itemSelectedPrice);
+                        var nbMerchandise = _estimate.GetList.Count;
                         for(var i = 0; i < nbMerchandise; i++)
                         {
-                            if(estimate[i].id == ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.id)
+                            if(_estimate[i].Id == ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.Id)
                             {
                                 BtnAdd.Content = Transharp.GetTranslation("BTN_Modify");
                             }
@@ -130,8 +130,8 @@ namespace MANAGER.Pages
         {
             try
             {
-                var Command = Connection.Connection.GetAll(Table.Customer.TableName);
-                var resultat = Command.ExecuteReader();
+                var command = Connection.Connection.GetAll(Table.Customer.TableName);
+                var resultat = command.ExecuteReader();
                 while(resultat.Read())
                 {
                     ComboBoxClient.Items.Add(new ComboboxItemCustomer
@@ -153,7 +153,7 @@ namespace MANAGER.Pages
 
         private void comboBoxClient_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            estimate.Customer = ((ComboboxItemCustomer) ComboBoxClient.SelectedItem).Value;
+            _estimate.Customer = ((ComboboxItemCustomer) ComboBoxClient.SelectedItem).Value;
         }
 
         private void TextBoxEstimateQte_TextChanged(object sender, TextChangedEventArgs e)
@@ -171,20 +171,20 @@ namespace MANAGER.Pages
 
         private void BTNAddFeed_click(object sender, RoutedEventArgs e)
         {
-            var Text = String.Format("{0} - {1}", ComboBoxCategory.Text, ComboBoxProduct.Text);
-            var merchandiseCost = ItemSelectedPrice;
-            var nbMerchandise = estimate.GetList.Count;
+            var text = String.Format("{0} - {1}", ComboBoxCategory.Text, ComboBoxProduct.Text);
+            var merchandiseCost = _itemSelectedPrice;
+            var nbMerchandise = _estimate.GetList.Count;
             for(var i = 0; i < nbMerchandise; i++)
             {
-                if(estimate[i].name != Text)
+                if(_estimate[i].Name != text)
                 {
                     continue;
                 }
                 UpdateEstimate(i, null);
                 return;
             }
-            AddMerchandise(((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.id, Text, ItemSelectedQuantity, merchandiseCost,
-                ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.categoryID);
+            AddMerchandise(((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.Id, text, _itemSelectedQuantity, merchandiseCost,
+                ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.CategoryId);
             AjouterEstimate.IsEnabled = true;
 
             BtnAdd.Content = Transharp.GetTranslation("BTN_Modify");
@@ -196,8 +196,8 @@ namespace MANAGER.Pages
             try
             {
                 var querySelect = String.Format("SELECT max(ID_{0}), max({1}) FROM {0}", Table.Estimate.TableName, Table.Estimate.NumberDevis);
-                var OracleCommand = Connection.Connection.Command(querySelect);
-                var result = OracleCommand.ExecuteReader();
+                var oracleCommand = Connection.Connection.Command(querySelect);
+                var result = oracleCommand.ExecuteReader();
                 var sizeList = ListMerchandise.Count;
                 while(result.Read())
                 {
@@ -205,13 +205,13 @@ namespace MANAGER.Pages
                     numberEstimate = result[1].ToString() == String.Empty ? 1 : Convert.ToInt32(result[1]) + 1;
                     for(var i = 0; i < sizeList; i++)
                     {
-                        Connection.Connection.Insert(Table.Estimate.TableName, estimate.Customer.id, estimate[i].id, ((idEstimate) + i), estimate[i].quantity,
-                            DateTime.Now.ToString("dd/MM/yy"), estimate[i].price, (numberEstimate));
+                        Connection.Connection.Insert(Table.Estimate.TableName, _estimate.Customer.Id, _estimate[i].Id, ((idEstimate) + i), _estimate[i].Quantity,
+                            DateTime.Now.ToString("dd/MM/yy"), _estimate[i].Price, (numberEstimate));
                     }
                 }
                 result.Close();
                 BtnAdd.Content = Transharp.GetTranslation("BTN_Add");
-                ModernDialog.ShowMessage(Transharp.GetTranslation("Box_SuccessAdd", numberEstimate, TotalCost), Transharp.GetTranslation("Box_CE_Success"),
+                ModernDialog.ShowMessage(Transharp.GetTranslation("Box_SuccessAdd", numberEstimate, _totalCost), Transharp.GetTranslation("Box_CE_Success"),
                     MessageBoxButton.OK);
             }
             catch
@@ -222,7 +222,7 @@ namespace MANAGER.Pages
             {
                 PanelEstimate.Children.Clear();
                 ListMerchandise.Clear();
-                TotalCost = 0;
+                _totalCost = 0;
                 LabelTotalPrix.Text = String.Empty;
                 AjouterEstimate.IsEnabled = false;
             }
@@ -233,10 +233,10 @@ namespace MANAGER.Pages
             BorderEstimate.Width = EstimateCreator.ActualWidth - 340;
             BorderEstimate.Height = EstimateCreator.ActualHeight - 70;
 
-            var nbMerchandise = estimate.GetList.Count;
+            var nbMerchandise = _estimate.GetList.Count;
             for(var i = 0; i < nbMerchandise; i++)
             {
-                estimate[i].Border.Width = BorderEstimate.Width - 6;
+                _estimate[i].Border.Width = BorderEstimate.Width - 6;
             }
         }
 
@@ -251,68 +251,71 @@ namespace MANAGER.Pages
             var newMerchandise = new Merchandise(id, name, quantity, price, category);
             var thick = new Thickness(5, 2, 0, 0);
 
-            var border = new Border
-            {
-                BorderBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor)),
-                HorizontalAlignment = HorizontalAlignment.Left,
-                Margin = new Thickness(2, 2, 1, 0),
-                BorderThickness = new Thickness(1),
-                Width = BorderEstimate.Width - 6,
-                Child = panelMerchandise,
-                Height = 70
-            };
+            var convertFromString = ColorConverter.ConvertFromString(Settings.Default.AccentColor);
+            if(convertFromString != null) {
+                var border = new Border
+                {
+                    BorderBrush = new SolidColorBrush((Color) convertFromString),
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    Margin = new Thickness(2, 2, 1, 0),
+                    BorderThickness = new Thickness(1),
+                    Width = BorderEstimate.Width - 6,
+                    Child = panelMerchandise,
+                    Height = 70
+                };
 
-            // Name
-            panelMerchandise.Children.Add(new TextBlock {HorizontalAlignment = HorizontalAlignment.Left, Margin = thick, Text = name, Height = 16});
+                // Name
+                panelMerchandise.Children.Add(new TextBlock {HorizontalAlignment = HorizontalAlignment.Left, Margin = thick, Text = name, Height = 16});
 
-            // Price
-            panelMerchandise.Children.Add(new TextBlock
-            {
-                Text = String.Format("{0}€", price),
-                HorizontalAlignment = HorizontalAlignment.Left,
-                Margin = thick,
-                Height = 16
-            });
+                // Price
+                panelMerchandise.Children.Add(new TextBlock
+                {
+                    Text = String.Format("{0}€", price),
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    Margin = thick,
+                    Height = 16
+                });
 
-            // Quantity
-            panelMerchandise.Children.Add(new TextBlock
-            {
-                Text = String.Format("{0} : {1}", Transharp.GetTranslation("EC_Quantity"), quantity.ToString(CultureInfo.InvariantCulture)),
-                HorizontalAlignment = HorizontalAlignment.Left,
-                Margin = thick,
-                Height = 16
-            });
+                // Quantity
+                panelMerchandise.Children.Add(new TextBlock
+                {
+                    Text = String.Format("{0} : {1}", Transharp.GetTranslation("EC_Quantity"), quantity.ToString(CultureInfo.InvariantCulture)),
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    Margin = thick,
+                    Height = 16
+                });
 
-            // Button
-            var BTN_Delete = new Button
-            {
-                HorizontalAlignment = HorizontalAlignment.Right,
-                Content = Transharp.GetTranslation("EC_DeleteMerchandise"),
-                Margin = new Thickness(9, -30, 67, 50),
-                BorderBrush = Brushes.Red,
-                Tag = newMerchandise
-            };
+                // Button
+                var btnDelete = new Button
+                {
+                    HorizontalAlignment = HorizontalAlignment.Right,
+                    Content = Transharp.GetTranslation("EC_DeleteMerchandise"),
+                    Margin = new Thickness(9, -30, 67, 50),
+                    BorderBrush = Brushes.Red,
+                    Tag = newMerchandise
+                };
 
-            panelMerchandise.Children.Add(BTN_Delete);
-            BTN_Delete.Click += BTN_Delete_Click;
+                panelMerchandise.Children.Add(btnDelete);
+                btnDelete.Click += BTN_Delete_Click;
 
-            newMerchandise.Border = border;
-            PanelEstimate.Children.Add(border);
-            estimate.GetList.Add(newMerchandise);
-            TotalCost += price;
-            LabelTotalPrix.Text = Transharp.GetTranslation("All_Total", TotalCost);
+                newMerchandise.Border = border;
+                PanelEstimate.Children.Add(border);
+            }
+            _estimate.GetList.Add(newMerchandise);
+            _totalCost += price;
+            LabelTotalPrix.Text = Transharp.GetTranslation("All_Total", _totalCost);
         }
 
         private void ErrorCost()
         {
-            All_Price.Text = String.Format("{0} {1}", Transharp.GetTranslation("All_Price"), Transharp.GetTranslation("Box_Error"));
+            AllPrice.Text = String.Format("{0} {1}", Transharp.GetTranslation("All_Price"), Transharp.GetTranslation("Box_Error"));
             BtnAdd.IsEnabled = false;
-            All_Price.Foreground = TextBoxEstimateQte.CaretBrush = TextBoxEstimateQte.SelectionBrush = TextBoxEstimateQte.BorderBrush = Brushes.Red;
+            AllPrice.Foreground = TextBoxEstimateQte.CaretBrush = TextBoxEstimateQte.SelectionBrush = TextBoxEstimateQte.BorderBrush = Brushes.Red;
         }
 
         private void QuantityChanged()
         {
-            ItemSelectedQuantity = 0;
+            _itemSelectedQuantity = 0;
 
             if(IsInt(TextBoxEstimateQte.Text))
             {
@@ -326,13 +329,17 @@ namespace MANAGER.Pages
                 {
                     if(ComboBoxProduct.Items.Count != 0)
                     {
-                        ItemSelectedQuantity = newQuantity;
-                        ItemSelectedPrice = (((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.price * newQuantity);
-                        All_Price.Foreground = LabelTotalPrix.Foreground;
-                        All_Price.Text = String.Format("{0} {1}€", Transharp.GetTranslation("All_Price"), ItemSelectedPrice);
-                        TextBoxEstimateQte.BorderBrush =
-                            TextBoxEstimateQte.CaretBrush =
-                                TextBoxEstimateQte.SelectionBrush = new SolidColorBrush((Color) ColorConverter.ConvertFromString(Settings.Default.AccentColor));
+                        _itemSelectedQuantity = newQuantity;
+                        _itemSelectedPrice = (((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.Price * newQuantity);
+                        AllPrice.Foreground = LabelTotalPrix.Foreground;
+                        AllPrice.Text = String.Format("{0} {1}€", Transharp.GetTranslation("All_Price"), _itemSelectedPrice);
+                        var convertFromString = ColorConverter.ConvertFromString(Settings.Default.AccentColor);
+                        if(convertFromString != null)
+                        {
+                            TextBoxEstimateQte.BorderBrush =
+                                TextBoxEstimateQte.CaretBrush =
+                                    TextBoxEstimateQte.SelectionBrush = new SolidColorBrush((Color) convertFromString);
+                        }
                         BtnAdd.IsEnabled = true;
                     }
                     else
@@ -355,33 +362,33 @@ namespace MANAGER.Pages
 
         private void UpdateEstimate(int? merchandise, int? id)
         {
-            var ListMerchandiseN2 = new List<Merchandise>();
+            var listMerchandiseN2 = new List<Merchandise>();
             BtnAdd.Content = Transharp.GetTranslation("BTN_Add");
-            TotalCost = 0;
+            _totalCost = 0;
             LabelTotalPrix.Text = String.Empty;
 
-            var nbMerchandise = estimate.GetList.Count;
+            var nbMerchandise = _estimate.GetList.Count;
             for(var i = 0; i < nbMerchandise; i++)
             {
                 if(merchandise.HasValue)
                 {
                     if(i == merchandise.Value)
                     {
-                        var Text = String.Format("{0} - {1}", ComboBoxCategory.Text, ComboBoxProduct.Text);
-                        var merchandiseCost = ItemSelectedPrice;
-                        ListMerchandiseN2.Add(new Merchandise(((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.id, Text, ItemSelectedQuantity,
-                            merchandiseCost, ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.categoryID));
+                        var text = String.Format("{0} - {1}", ComboBoxCategory.Text, ComboBoxProduct.Text);
+                        var merchandiseCost = _itemSelectedPrice;
+                        listMerchandiseN2.Add(new Merchandise(((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.Id, text, _itemSelectedQuantity,
+                            merchandiseCost, ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.CategoryId));
                     }
                     else
                     {
-                        ListMerchandiseN2.Add(ListMerchandise[i]);
+                        listMerchandiseN2.Add(ListMerchandise[i]);
                     }
                 }
                 else
                 {
                     if(ListMerchandise[i].ToString() != id.ToString())
                     {
-                        ListMerchandiseN2.Add(ListMerchandise[i]);
+                        listMerchandiseN2.Add(ListMerchandise[i]);
                     }
                 }
             }
@@ -392,22 +399,22 @@ namespace MANAGER.Pages
 
             for(var i = 0; i < nbMerchandise; i++)
             {
-                if(ListMerchandiseN2[i].id == ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.id)
+                if(listMerchandiseN2[i].Id == ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.Id)
                 {
                     BtnAdd.Content = Transharp.GetTranslation("BTN_Modify");
                 }
             }
 
             PanelEstimate.Children.Clear();
-            estimate.GetList.Clear();
+            _estimate.GetList.Clear();
 
             for(var i = 0; i < nbMerchandise; i++)
             {
-                AddMerchandise(ListMerchandiseN2[i].id, ListMerchandiseN2[i].name, ListMerchandiseN2[i].quantity, ListMerchandiseN2[i].price,
-                    ListMerchandiseN2[i].categoryID);
+                AddMerchandise(listMerchandiseN2[i].Id, listMerchandiseN2[i].Name, listMerchandiseN2[i].Quantity, listMerchandiseN2[i].Price,
+                    listMerchandiseN2[i].CategoryId);
             }
-            ListMerchandiseN2.Clear();
-            if(estimate.GetList.Count == 0)
+            listMerchandiseN2.Clear();
+            if(_estimate.GetList.Count == 0)
             {
                 AjouterEstimate.IsEnabled = false;
             }
@@ -415,12 +422,12 @@ namespace MANAGER.Pages
 
         private void UpdateText()
         {
-            EC_Title.Text = Transharp.GetTranslation("EC_Title");
-            EC_ChooseCategory.Text = Transharp.GetTranslation("EC_ChooseCategory");
-            EC_AddMerchandise.Text = Transharp.GetTranslation("EC_AddMerchandise");
-            All_QTE.Text = Transharp.GetTranslation("All_QTE");
-            All_Price.Text = Transharp.GetTranslation("All_Price");
-            EC_Customer.Text = Transharp.GetTranslation("EC_Customer");
+            EcTitle.Text = Transharp.GetTranslation("EC_Title");
+            EcChooseCategory.Text = Transharp.GetTranslation("EC_ChooseCategory");
+            EcAddMerchandise.Text = Transharp.GetTranslation("EC_AddMerchandise");
+            AllQte.Text = Transharp.GetTranslation("All_QTE");
+            AllPrice.Text = Transharp.GetTranslation("All_Price");
+            EcCustomer.Text = Transharp.GetTranslation("EC_Customer");
             BtnAdd.Content = Transharp.GetTranslation("BTN_Add");
             AjouterEstimate.Content = Transharp.GetTranslation("BTN_Create");
         }

@@ -13,23 +13,23 @@ namespace MANAGER.Connection
 {
     public class ConnectionMySql : Connection
     {
-        private static MySqlConnection Connection;
-        private static Boolean ConnectionIsStarted;
+        private static MySqlConnection _connection;
+        private static Boolean _connectionIsStarted;
 
         private ConnectionMySql()
         {
-            Connection = new MySqlConnection(Properties.Connection.Default.DatabaseConnectionString);
-            Connection.Open();
-            ConnectionIsStarted = true;
+            _connection = new MySqlConnection(Properties.Connection.Default.DatabaseConnectionString);
+            _connection.Open();
+            _connectionIsStarted = true;
         }
 
         private static MySqlConnection GetConnection()
         {
-            if(!ConnectionIsStarted)
+            if(!_connectionIsStarted)
             {
                 new ConnectionMySql();
             }
-            return Connection;
+            return _connection;
         }
 
         public new static IDbCommand Command(string query)

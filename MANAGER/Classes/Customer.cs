@@ -11,19 +11,19 @@ namespace MANAGER.Classes
 {
     public class Customer
     {
-        public Customer(int id, string name, string Phone, string email)
+        public Customer(int id, string name, string phone, string email)
         {
-            this.id = id;
-            this.name = name;
-            this.Phone = Phone;
-            this.email = email;
+            Id = id;
+            Name = name;
+            Phone = phone;
+            Email = email;
         }
 
         public Border Border { get; set; }
-        public int id { get; set; }
-        public string name { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
         public string Phone { get; set; }
-        public string email { get; set; }
+        public string Email { get; set; }
         public List<Estimate> listEstimate { get; set; }
     }
 }

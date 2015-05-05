@@ -16,26 +16,26 @@ namespace MANAGER.Classes
     public class Merchandise
     {
         //From sql : 0,1,3,2,5
-        public Merchandise(int id, string name, int quantity, double price, int categoryID)
+        public Merchandise(int id, string name, int quantity, double price, int categoryId)
         {
-            this.id = id;
-            this.name = name;
-            this.quantity = quantity;
-            this.price = price;
-            this.categoryID = categoryID;
+            Id = id;
+            Name = name;
+            Quantity = quantity;
+            Price = price;
+            CategoryId = categoryId;
         }
 
         public Border Border { get; set; }
-        public string name { get; set; }
-        public double price { get; set; }
-        public int quantity { get; set; }
-        public int id { get; set; }
-        public int categoryID { get; set; }
-        public bool onSale { get; set; }
+        public string Name { get; set; }
+        public double Price { get; set; }
+        public int Quantity { get; set; }
+        public int Id { get; set; }
+        public int CategoryId { get; set; }
+        public bool OnSale { get; set; }
 
         public override string ToString()
         {
-            return id.ToString(CultureInfo.InvariantCulture);
+            return Id.ToString(CultureInfo.InvariantCulture);
         }
     }
 }

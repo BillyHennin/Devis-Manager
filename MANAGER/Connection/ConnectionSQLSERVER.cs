@@ -12,23 +12,23 @@ namespace MANAGER.Connection
 {
     public class ConnectionSqlServer : Connection
     {
-        private static SqlConnection Connection;
-        private static Boolean ConnectionIsStarted;
+        private static SqlConnection _connection;
+        private static Boolean _connectionIsStarted;
 
         private ConnectionSqlServer()
         {
-            Connection = new SqlConnection(Properties.Connection.Default.DatabaseConnectionString);
-            Connection.Open();
-            ConnectionIsStarted = true;
+            _connection = new SqlConnection(Properties.Connection.Default.DatabaseConnectionString);
+            _connection.Open();
+            _connectionIsStarted = true;
         }
 
         private static SqlConnection GetConnection()
         {
-            if(!ConnectionIsStarted)
+            if(!_connectionIsStarted)
             {
                 new ConnectionSqlServer();
             }
-            return Connection;
+            return _connection;
         }
 
         public new static IDbCommand Command(string query)
