@@ -264,9 +264,11 @@ namespace MANAGER.Pages
         /// <param name="e"></param>
         private void BTNAddEstimate_click(object sender, RoutedEventArgs e)
         {
+            //Initialising this var
             var numberEstimate = 0;
             try
             {
+                //As there isn't auto inc in oracle so here's an "auto inc" like
                 var querySelect = string.Format("SELECT max(ID_{0}), max({1}) FROM {0}", Table.Estimate.TableName, Table.Estimate.NumberDevis);
                 var oracleCommand = Connection.Connection.Command(querySelect);
                 var result = oracleCommand.ExecuteReader();
@@ -275,6 +277,7 @@ namespace MANAGER.Pages
                 {
                     var idEstimate = result[0].ToString() == string.Empty ? 1 : Convert.ToInt32(result[0]) + 1;
                     numberEstimate = result[1].ToString() == string.Empty ? 1 : Convert.ToInt32(result[1]) + 1;
+                    //For each product in the estimate, add it to the database
                     for(var i = 0; i < sizeList; i++)
                     {
                         Connection.Connection.Insert(Table.Estimate.TableName, _estimate.Customer.Id, _estimate[i].Id, ((idEstimate) + i), _estimate[i].Quantity,
@@ -282,27 +285,33 @@ namespace MANAGER.Pages
                     }
                 }
                 result.Close();
-                BtnAdd.Content = Transharp.GetTranslation("BTN_Add");
+                
+                //Show success message
                 ModernDialog.ShowMessage(Transharp.GetTranslation("Box_SuccessAdd", numberEstimate, _totalCost), Transharp.GetTranslation("Box_CE_Success"),
                     MessageBoxButton.OK);
-            }
-            catch
-            {
-                ModernDialog.ShowMessage(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK);
-            }
-            //At the end of the try/catch, do :
-            finally
-            {
+
+                //Reset the page
+                BtnAdd.Content = Transharp.GetTranslation("BTN_Add");
                 PanelEstimate.Children.Clear();
                 ListMerchandise.Clear();
                 _totalCost = 0;
                 LabelTotalPrix.Text = string.Empty;
                 AjouterEstimate.IsEnabled = false;
             }
+            catch
+            {
+                ModernDialog.ShowMessage(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK);
+            }
         }
 
+        /// <summary>
+        /// When the user change the page's size
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
+            //Adjust the border size
             BorderEstimate.Width = EstimateCreator.ActualWidth - 340;
             BorderEstimate.Height = EstimateCreator.ActualHeight - 70;
 
@@ -313,19 +322,38 @@ namespace MANAGER.Pages
             }
         }
 
+        /// <summary>
+        /// Dynamicly created button, this method is called when the user click on it
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BTN_Delete_Click(object sender, EventArgs e)
         {
+            //Update the estimate by suppressing one merchandise
             UpdateEstimate(null, Convert.ToInt32(((Button) sender).Tag.ToString()));
         }
 
+        /// <summary>
+        /// Method which show a merchandise on the grid
+        /// </summary>
+        /// <param name="id">merchandise's id</param>
+        /// <param name="name">merchandise's name</param>
+        /// <param name="quantity">quantity of the merchandise the user wants</param>
+        /// <param name="price">merchandise's price</param>
+        /// <param name="category">merchandise's category</param>
         private void AddMerchandise(int id, string name, int quantity, double price, int category)
         {
+            //Create a new panel
             var panelMerchandise = new StackPanel();
             var newMerchandise = new Merchandise(id, name, quantity, price, category);
+            //Init default thick
             var thick = new Thickness(5, 2, 0, 0);
 
+            //Get default color
             var convertFromString = ColorConverter.ConvertFromString(Settings.Default.AccentColor);
             if(convertFromString != null) {
+
+                //Create a graphical border
                 var border = new Border
                 {
                     BorderBrush = new SolidColorBrush((Color) convertFromString),
@@ -337,19 +365,19 @@ namespace MANAGER.Pages
                     Height = 70
                 };
 
-                // Name
+                // Merchandise's name textblock
                 panelMerchandise.Children.Add(new TextBlock {HorizontalAlignment = HorizontalAlignment.Left, Margin = thick, Text = name, Height = 16});
 
-                // Price
+                // Merchandise's price textblock
                 panelMerchandise.Children.Add(new TextBlock
                 {
-                    Text = String.Format("{0}€", price),
+                    Text = string.Format("{0}€", price),
                     HorizontalAlignment = HorizontalAlignment.Left,
                     Margin = thick,
                     Height = 16
                 });
 
-                // Quantity
+                // Merchandise's quantity textblock
                 panelMerchandise.Children.Add(new TextBlock
                 {
                     Text = string.Format("{0} : {1}", Transharp.GetTranslation("EC_Quantity"), quantity.ToString(CultureInfo.InvariantCulture)),
@@ -358,7 +386,7 @@ namespace MANAGER.Pages
                     Height = 16
                 });
 
-                // Button
+                // Delete button
                 var btnDelete = new Button
                 {
                     HorizontalAlignment = HorizontalAlignment.Right,
@@ -368,6 +396,7 @@ namespace MANAGER.Pages
                     Tag = newMerchandise
                 };
 
+                //Add to the panel
                 panelMerchandise.Children.Add(btnDelete);
                 btnDelete.Click += BTN_Delete_Click;
 
@@ -379,29 +408,47 @@ namespace MANAGER.Pages
             LabelTotalPrix.Text = Transharp.GetTranslation("All_Total", _totalCost);
         }
 
+        /// <summary>
+        /// Method is called when the quantity is wrong (negative, decimal, string,  ....)
+        /// </summary>
         private void ErrorCost()
         {
+            //Change textblock by an error message
             AllPrice.Text = string.Format("{0} {1}", Transharp.GetTranslation("All_Price"), Transharp.GetTranslation("Box_Error"));
+            //Disable the add button
             BtnAdd.IsEnabled = false;
+            //Put textblock and textbox in red
             AllPrice.Foreground = TextBoxEstimateQte.CaretBrush = TextBoxEstimateQte.SelectionBrush = TextBoxEstimateQte.BorderBrush = Brushes.Red;
         }
 
+        /// <summary>
+        /// Method is called when the quantity changed and when the page is loaded
+        /// </summary>
         private void QuantityChanged()
         {
+            //init quantity
             _itemSelectedQuantity = 0;
 
+            //If the text in the TextBoxEstimateQte is a valid int, if not, call ErrorCost()
             if(IsInt(TextBoxEstimateQte.Text))
             {
+                //Convert it to a int
                 var newQuantity = Convert.ToInt32(TextBoxEstimateQte.Text);
 
+                //If it's less or equals to 0 call the method ErrorCost()
                 if(newQuantity <= 0)
                 {
                     ErrorCost();
                 }
                 else
                 {
-                    if(ComboBoxProduct.Items.Count != 0)
+                    //If there isn't product selected call the method ErrorCost()
+                    if(ComboBoxProduct.Items.Count == 0)
                     {
+                        ErrorCost();
+                    }
+                    else
+                    { 
                         _itemSelectedQuantity = newQuantity;
                         _itemSelectedPrice = (((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.Price * newQuantity);
                         AllPrice.Foreground = LabelTotalPrix.Foreground;
@@ -410,14 +457,9 @@ namespace MANAGER.Pages
                         if(convertFromString != null)
                         {
                             TextBoxEstimateQte.BorderBrush =
-                                TextBoxEstimateQte.CaretBrush =
-                                    TextBoxEstimateQte.SelectionBrush = new SolidColorBrush((Color) convertFromString);
+                                TextBoxEstimateQte.CaretBrush = TextBoxEstimateQte.SelectionBrush = new SolidColorBrush((Color) convertFromString);
                         }
                         BtnAdd.IsEnabled = true;
-                    }
-                    else
-                    {
-                        ErrorCost();
                     }
                 }
             }
@@ -427,9 +469,16 @@ namespace MANAGER.Pages
             }
         }
 
+        /// <summary>
+        /// Methode that verify if a string is a int or not 
+        ///     (check from textbox, ...)
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
         private static bool IsInt(string str)
         {
             int value;
+            //Return true if int
             return (str.Trim() != string.Empty) && int.TryParse(str, out value);
         }
 
@@ -493,6 +542,9 @@ namespace MANAGER.Pages
             }
         }
 
+        /// <summary>
+        /// Method that update the text language
+        /// </summary>
         private void UpdateText()
         {
             EcTitle.Text = Transharp.GetTranslation("EC_Title");
