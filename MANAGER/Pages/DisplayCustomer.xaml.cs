@@ -51,7 +51,6 @@ namespace MANAGER.Pages
             catch(Exception caught)
             {
                 Console.WriteLine(caught.Message);
-                //potatoe
             }
         }
 
@@ -65,7 +64,7 @@ namespace MANAGER.Pages
             var date = DateTime.Now;
             try
             {
-                var query = String.Format("SELECT DISTINCT {0} FROM {1} WHERE ID_{2} = {3} ORDER BY {0}", Table.Estimate.NumberDevis, Table.Estimate.TableName,
+                var query = string.Format("SELECT DISTINCT {0} FROM {1} WHERE ID_{2} = {3} ORDER BY {0}", Table.Estimate.NumberDevis, Table.Estimate.TableName,
                     Customer.TableName, ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.Id);
                 var command = Connection.Connection.Command(query);
 
@@ -74,7 +73,7 @@ namespace MANAGER.Pages
                 while(resultCommand.Read())
                 {
                     var query2 =
-                        String.Format(
+                        string.Format(
                             "SELECT {0}.ID_{0}, {0}.{1}, {2}.{3}, {2}.{4}, {2}.{5}, {0}.ID_{7} FROM {0}, {2} WHERE {2}.ID_{0} = {0}.ID_{0} AND {2}.{6} = {8}",
                             Table.Merchandise.TableName, Table.Merchandise.Name, Table.Estimate.TableName, Table.Estimate.PriceMerchandise,
                             Table.Estimate.Quantity, Table.Estimate.Day, Table.Estimate.NumberDevis, Category.TableName, resultCommand[0]);
@@ -86,8 +85,7 @@ namespace MANAGER.Pages
                         totalPrice += Convert.ToInt32(resultatMerchandise[2]);
                         date = Convert.ToDateTime(resultatMerchandise[4]);
                         var merchandise = new Merchandise(Convert.ToInt32(resultatMerchandise[0]), resultatMerchandise[1].ToString(),
-                            Convert.ToInt32(resultatMerchandise[3]), Convert.ToInt32(resultatMerchandise[2]) / Convert.ToInt32(resultatMerchandise[3]),
-                            Convert.ToInt32(resultatMerchandise[5]));
+                            Convert.ToInt32(resultatMerchandise[3]), price: Convert.ToInt32(resultatMerchandise[2]) / Convert.ToInt32(resultatMerchandise[3]), categoryId: Convert.ToInt32(resultatMerchandise[5]));
                         listMerchandise2.Add(merchandise);
                     }
                     resultatMerchandise.Close();

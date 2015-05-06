@@ -187,7 +187,7 @@ namespace MANAGER.Pages
             var onSale = !ListMerchandise[num].OnSale ? 1 : 0;
             try
             {
-                var query = String.Format("UPDATE {0} SET {1} = {2} WHERE ID_{0} = {3}", Table.Merchandise.TableName, Table.Merchandise.OnSale, onSale, id);
+                var query = string.Format("UPDATE {0} SET {1} = {2} WHERE ID_{0} = {3}", Table.Merchandise.TableName, Table.Merchandise.OnSale, onSale, id);
                 var commandeModif = Connection.Connection.Command(query);
                 commandeModif.ExecuteNonQuery();
             }
@@ -206,7 +206,7 @@ namespace MANAGER.Pages
                     }
                     ListMerchandise[i].OnSale = !ListMerchandise[i].OnSale;
                 }
-                SelectMarchandiseLike(String.Empty);
+                SelectMarchandiseLike(string.Empty);
             }
         }
     }

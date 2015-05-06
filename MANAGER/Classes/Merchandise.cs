@@ -26,11 +26,11 @@ namespace MANAGER.Classes
         }
 
         public Border Border { get; set; }
-        public string Name { get; set; }
-        public double Price { get; set; }
-        public int Quantity { get; set; }
-        public int Id { get; set; }
-        public int CategoryId { get; set; }
+        public string Name { get; private set; }
+        public double Price { get; private set; }
+        public int Quantity { get; private set; }
+        public int Id { get; private set; }
+        public int CategoryId { get; private set; }
         public bool OnSale { get; set; }
 
         public override string ToString()

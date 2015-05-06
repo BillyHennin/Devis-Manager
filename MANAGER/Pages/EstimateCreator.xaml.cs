@@ -33,21 +33,36 @@ namespace MANAGER.Pages
         private int _itemSelectedQuantity;
         private double _totalCost;
 
+        /// <summary>
+        /// Method is called when the page is loaded
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void EstimateCreator_Loaded(object sender, RoutedEventArgs e)
         {
+            //the function UpdateText is called to apply new traduction
             UpdateText();
+            //Apply new border brush to every grid
             var nbMerchandise = _estimate.GetList.Count;
             for(var i = 0; i < nbMerchandise; i++)
             {
                 _estimate[i].Border.BorderBrush = BtnAdd.BorderBrush;
             }
+            //Update textblock
             QuantityChanged();
         }
 
+        /// <summary>
+        /// Methode is called when the page is initialized (so it's only called once)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ComboBoxCategory_Initialized(object sender, EventArgs e)
         {
+            //Try to initialized, if can't, show a messagebox
             try
             {
+                //Insert into the value into the combobox (every category found in the database)
                 var command = Connection.Connection.GetAll(Category.TableName);
                 var resultat = command.ExecuteReader();
                 while(resultat.Read())
@@ -66,27 +81,38 @@ namespace MANAGER.Pages
             }
         }
 
+        /// <summary>
+        /// When the user select another item in the ComboBoxCatergory, this method is called
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ComboBoxCategory_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            //Try to initialized, if can't, show a messagebox
             try
             {
+                //Clearthe ComboBoxProduct
                 ComboBoxProduct.Items.Clear();
-                var query = String.Format("{0} WHERE {1} = 1 AND {2} > 0 AND ID_{3}={4}", Table.Merchandise.TableName, Table.Merchandise.OnSale,
+                //Select every product that are 'onSale' and those who are in the selected category
+                var query = string.Format("{0} WHERE {1} = 1 AND {2} > 0 AND ID_{3}={4}", Table.Merchandise.TableName, Table.Merchandise.OnSale,
                     Table.Merchandise.Quantity, Category.TableName, ((ComboboxItemCategory) ComboBoxCategory.SelectedItem).Value.Id);
                 var command = Connection.Connection.GetAll(query);
-                var resultat = command.ExecuteReader();
-                while(resultat.Read())
+                var result = command.ExecuteReader();
+                while(result.Read())
                 {
+                    //Insert into the value into the combobox (every product returned with the query)
                     ComboBoxProduct.Items.Add(new ComboboxItemMerchandise
                     {
-                        Text = resultat[Table.Merchandise.Name].ToString(),
+                        Text = result[Table.Merchandise.Name].ToString(),
                         Value =
-                            new Merchandise(Convert.ToInt32(resultat[Table.Merchandise.ID]), resultat[Table.Merchandise.Name].ToString(),
-                                Convert.ToInt32(resultat[Table.Merchandise.Price]), Convert.ToInt32(resultat[Table.Merchandise.Quantity]),
+                            new Merchandise(Convert.ToInt32(result[Table.Merchandise.ID]), result[Table.Merchandise.Name].ToString(),
+                                Convert.ToInt32(result[Table.Merchandise.Price]), Convert.ToInt32(result[Table.Merchandise.Quantity]),
                                 ((ComboboxItemCategory) ComboBoxCategory.SelectedItem).Value.Id)
                     });
                 }
-                resultat.Close();
+                //Close the query
+                result.Close();
+                //Select the first product
                 ComboBoxProduct.SelectedIndex = 0;
             }
             catch
@@ -95,19 +121,32 @@ namespace MANAGER.Pages
             }
         }
 
+        /// <summary>
+        /// When the user select another item in the ComboBoxProduct, this method is called
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ComboBoxProduct_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            //Change by default the text of the button
             BtnAdd.Content = Transharp.GetTranslation("BTN_Add");
             try
             {
+                //Switch the value of _itemSelectedQuantity (quantity of item the user wants)
                 switch(_itemSelectedQuantity)
                 {
+                    //If it's 0, then call ErrorCost()
                     case 0:
                         ErrorCost();
                         break;
+                    //If the value is correct :
                     default:
+                        //Multiply the price of the selected item by the quantity
                         _itemSelectedPrice = ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.Price * Convert.ToInt32(TextBoxEstimateQte.Text);
-                        AllPrice.Text = String.Format("{0} {1}€", Transharp.GetTranslation("All_Price"), _itemSelectedPrice);
+                        //Show it
+                        AllPrice.Text = string.Format("{0} {1}€", Transharp.GetTranslation("All_Price"), _itemSelectedPrice);
+
+                        //If the selected product is already in the estimate, show "modify" instead of "add" in the button
                         var nbMerchandise = _estimate.GetList.Count;
                         for(var i = 0; i < nbMerchandise; i++)
                         {
@@ -126,14 +165,22 @@ namespace MANAGER.Pages
             }
         }
 
+        /// <summary>
+        /// Methode is called when the page is initialized (so it's only called once)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ComboBoxClient_OnInitialized(object sender, EventArgs e)
         {
+            //Try to initialized, if can't, show a messagebox
             try
             {
+                //Get all customer in the database
                 var command = Connection.Connection.GetAll(Table.Customer.TableName);
                 var resultat = command.ExecuteReader();
                 while(resultat.Read())
                 {
+                    //Insert into the value into the combobox (every customer found in the database)
                     ComboBoxClient.Items.Add(new ComboboxItemCustomer
                     {
                         Text = resultat[Table.Customer.Name].ToString(),
@@ -151,15 +198,28 @@ namespace MANAGER.Pages
             }
         }
 
-        private void comboBoxClient_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        /// <summary>
+        /// When the user select another item in the ComboBoxClient, this method is called
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ComboBoxClient_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            //Change the customer by the one selected
             _estimate.Customer = ((ComboboxItemCustomer) ComboBoxClient.SelectedItem).Value;
         }
 
+        /// <summary>
+        /// When the user change the text in the TextBoxEstimateQte
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TextBoxEstimateQte_TextChanged(object sender, TextChangedEventArgs e)
         {
+            //If there isn't a try/catch, the app crash, don't know why
             try
             {
+                //Call the QuantityChanged method
                 QuantityChanged();
             }
             catch(Exception caught)
@@ -169,13 +229,19 @@ namespace MANAGER.Pages
             }
         }
 
+        /// <summary>
+        /// When the user click on the BTNAddFeed button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BTNAddFeed_click(object sender, RoutedEventArgs e)
         {
-            var text = String.Format("{0} - {1}", ComboBoxCategory.Text, ComboBoxProduct.Text);
-            var merchandiseCost = _itemSelectedPrice;
+
+            var text = string.Format("{0} - {1}", ComboBoxCategory.Text, ComboBoxProduct.Text);
             var nbMerchandise = _estimate.GetList.Count;
             for(var i = 0; i < nbMerchandise; i++)
             {
+                //If the product is already in the estimate call UpdateEstimate with its key on the estimate and with 'null' as id
                 if(_estimate[i].Name != text)
                 {
                     continue;
@@ -183,26 +249,32 @@ namespace MANAGER.Pages
                 UpdateEstimate(i, null);
                 return;
             }
-            AddMerchandise(((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.Id, text, _itemSelectedQuantity, merchandiseCost,
+            //call the method AddMerchandise
+            AddMerchandise(((ComboboxItemMerchandise)ComboBoxProduct.SelectedItem).Value.Id, text, _itemSelectedQuantity, _itemSelectedPrice,
                 ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.CategoryId);
             AjouterEstimate.IsEnabled = true;
-
+            //Change the button to 'Modify'
             BtnAdd.Content = Transharp.GetTranslation("BTN_Modify");
         }
 
+        /// <summary>
+        /// When the user click on BTNAddEstimate, this method is called
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BTNAddEstimate_click(object sender, RoutedEventArgs e)
         {
             var numberEstimate = 0;
             try
             {
-                var querySelect = String.Format("SELECT max(ID_{0}), max({1}) FROM {0}", Table.Estimate.TableName, Table.Estimate.NumberDevis);
+                var querySelect = string.Format("SELECT max(ID_{0}), max({1}) FROM {0}", Table.Estimate.TableName, Table.Estimate.NumberDevis);
                 var oracleCommand = Connection.Connection.Command(querySelect);
                 var result = oracleCommand.ExecuteReader();
                 var sizeList = ListMerchandise.Count;
                 while(result.Read())
                 {
-                    var idEstimate = result[0].ToString() == String.Empty ? 1 : Convert.ToInt32(result[0]) + 1;
-                    numberEstimate = result[1].ToString() == String.Empty ? 1 : Convert.ToInt32(result[1]) + 1;
+                    var idEstimate = result[0].ToString() == string.Empty ? 1 : Convert.ToInt32(result[0]) + 1;
+                    numberEstimate = result[1].ToString() == string.Empty ? 1 : Convert.ToInt32(result[1]) + 1;
                     for(var i = 0; i < sizeList; i++)
                     {
                         Connection.Connection.Insert(Table.Estimate.TableName, _estimate.Customer.Id, _estimate[i].Id, ((idEstimate) + i), _estimate[i].Quantity,
@@ -218,12 +290,13 @@ namespace MANAGER.Pages
             {
                 ModernDialog.ShowMessage(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK);
             }
+            //At the end of the try/catch, do :
             finally
             {
                 PanelEstimate.Children.Clear();
                 ListMerchandise.Clear();
                 _totalCost = 0;
-                LabelTotalPrix.Text = String.Empty;
+                LabelTotalPrix.Text = string.Empty;
                 AjouterEstimate.IsEnabled = false;
             }
         }
@@ -279,7 +352,7 @@ namespace MANAGER.Pages
                 // Quantity
                 panelMerchandise.Children.Add(new TextBlock
                 {
-                    Text = String.Format("{0} : {1}", Transharp.GetTranslation("EC_Quantity"), quantity.ToString(CultureInfo.InvariantCulture)),
+                    Text = string.Format("{0} : {1}", Transharp.GetTranslation("EC_Quantity"), quantity.ToString(CultureInfo.InvariantCulture)),
                     HorizontalAlignment = HorizontalAlignment.Left,
                     Margin = thick,
                     Height = 16
@@ -308,7 +381,7 @@ namespace MANAGER.Pages
 
         private void ErrorCost()
         {
-            AllPrice.Text = String.Format("{0} {1}", Transharp.GetTranslation("All_Price"), Transharp.GetTranslation("Box_Error"));
+            AllPrice.Text = string.Format("{0} {1}", Transharp.GetTranslation("All_Price"), Transharp.GetTranslation("Box_Error"));
             BtnAdd.IsEnabled = false;
             AllPrice.Foreground = TextBoxEstimateQte.CaretBrush = TextBoxEstimateQte.SelectionBrush = TextBoxEstimateQte.BorderBrush = Brushes.Red;
         }
@@ -332,7 +405,7 @@ namespace MANAGER.Pages
                         _itemSelectedQuantity = newQuantity;
                         _itemSelectedPrice = (((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.Price * newQuantity);
                         AllPrice.Foreground = LabelTotalPrix.Foreground;
-                        AllPrice.Text = String.Format("{0} {1}€", Transharp.GetTranslation("All_Price"), _itemSelectedPrice);
+                        AllPrice.Text = string.Format("{0} {1}€", Transharp.GetTranslation("All_Price"), _itemSelectedPrice);
                         var convertFromString = ColorConverter.ConvertFromString(Settings.Default.AccentColor);
                         if(convertFromString != null)
                         {
@@ -354,7 +427,7 @@ namespace MANAGER.Pages
             }
         }
 
-        private static Boolean IsInt(string str)
+        private static bool IsInt(string str)
         {
             int value;
             return (str.Trim() != string.Empty) && int.TryParse(str, out value);
@@ -365,7 +438,7 @@ namespace MANAGER.Pages
             var listMerchandiseN2 = new List<Merchandise>();
             BtnAdd.Content = Transharp.GetTranslation("BTN_Add");
             _totalCost = 0;
-            LabelTotalPrix.Text = String.Empty;
+            LabelTotalPrix.Text = string.Empty;
 
             var nbMerchandise = _estimate.GetList.Count;
             for(var i = 0; i < nbMerchandise; i++)
@@ -374,7 +447,7 @@ namespace MANAGER.Pages
                 {
                     if(i == merchandise.Value)
                     {
-                        var text = String.Format("{0} - {1}", ComboBoxCategory.Text, ComboBoxProduct.Text);
+                        var text = string.Format("{0} - {1}", ComboBoxCategory.Text, ComboBoxProduct.Text);
                         var merchandiseCost = _itemSelectedPrice;
                         listMerchandiseN2.Add(new Merchandise(((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.Id, text, _itemSelectedQuantity,
                             merchandiseCost, ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.CategoryId));

@@ -14,7 +14,7 @@ namespace MANAGER.Connection
     public class ConnectionOracle : Connection
     {
         private static OracleConnection _connection;
-        private static Boolean _connectionIsStarted;
+        private static bool _connectionIsStarted;
 
         private ConnectionOracle()
         {

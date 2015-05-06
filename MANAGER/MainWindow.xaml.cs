@@ -23,16 +23,13 @@ namespace MANAGER
     {
         private void ModernWindow_Initialized(object sender, EventArgs e)
         {
-            //Initialisation de la bdd
+            //Connection string
             Properties.Connection.Default.DatabaseConnectionString = "user id=SLAM3;password=pw;data source=localhost:1521/xe";
-
-            //if(Properties.Connection.Default.IsDatabaseSet) {}
-            //ContentSource = new Uri(@"/Pages/Parametre.xaml", UriKind.Relative);
-            //MessageBox.Show(Localisation.Localisation.Box_DBFail, Localisation.Localisation.Box_Error, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         private void ModernWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            //Load every traduction for links
             Link_About.DisplayName = Transharp.GetTranslation("Link_About");
             Link_Apparence.DisplayName = Transharp.GetTranslation("Link_Apparence");
             Link_Param.DisplayName = Transharp.GetTranslation("Link_Param");

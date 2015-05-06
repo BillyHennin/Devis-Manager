@@ -37,7 +37,7 @@ namespace MANAGER.Pages
 
         private void CustomerCreator_Loaded(object sender, RoutedEventArgs e)
         {
-            //Trad
+            //Traduction
             AC_Title.Text = Transharp.GetTranslation("AC_Title");
             AC_AddCustomer.Text = Transharp.GetTranslation("AC_AddCustomer");
             AC_AddMail.Text = Transharp.GetTranslation("AC_AddMail");
@@ -76,13 +76,13 @@ namespace MANAGER.Pages
             TextChanged();
         }
 
-        private static Boolean IsInt(string str)
+        private static bool IsInt(string str)
         {
             int value;
             return (str.Trim() != string.Empty) && int.TryParse(str, out value);
         }
 
-        private static Boolean ValidMail(string mailString)
+        private static bool ValidMail(string mailString)
         {
             try
             {
@@ -98,25 +98,25 @@ namespace MANAGER.Pages
 
         private void TextChanged()
         {
-            BtnAdd.IsEnabled = TextBoxMail.Text != String.Empty && ValidMail(TextBoxMail.Text) && TextBoxName.Text != String.Empty && IsInt(TextBoxPhone.Text);
+            BtnAdd.IsEnabled = TextBoxMail.Text != string.Empty && ValidMail(TextBoxMail.Text) && TextBoxName.Text != String.Empty && IsInt(TextBoxPhone.Text);
         }
 
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                var queryVerify = String.Format("{0} WHERE {1}='{2}' OR {3}='{4}'", Table.Customer.TableName, Table.Customer.Phone, TextBoxPhone.Text,
+                var queryVerify = string.Format("{0} WHERE {1}='{2}' OR {3}='{4}'", Table.Customer.TableName, Table.Customer.Phone, TextBoxPhone.Text,
                     Table.Customer.Email, TextBoxMail.Text);
                 if(Connection.Connection.SizeOf(Connection.Connection.GetAll(queryVerify)) == 0)
                 {
-                    var querySelect = String.Format("SELECT max(ID_{0}) FROM {0}", Table.Customer.TableName);
+                    var querySelect = string.Format("SELECT max(ID_{0}) FROM {0}", Table.Customer.TableName);
                     var command = Connection.Connection.GetUniqueCell(querySelect);
-                    var idCustomer = command.ToString() == String.Empty ? 1 : Convert.ToInt32(command) + 1;
+                    var idCustomer = command.ToString() == string.Empty ? 1 : Convert.ToInt32(command) + 1;
                     Connection.Connection.Insert(Table.Customer.TableName, idCustomer, TextBoxMail.Text, TextBoxName.Text, TextBoxPhone.Text);
                     ModernDialog.ShowMessage(Transharp.GetTranslation("Box_SuccessAddCustomer", TextBoxName.Text), Transharp.GetTranslation("Box_AC_Success"),
                         MessageBoxButton.OK);
                     ShowCustomer(idCustomer, TextBoxMail.Text, TextBoxName.Text, TextBoxPhone.Text);
-                    TextBoxMail.Text = TextBoxPhone.Text = TextBoxName.Text = String.Empty;
+                    TextBoxMail.Text = TextBoxPhone.Text = TextBoxName.Text = string.Empty;
                 }
                 else
                 {
@@ -177,7 +177,7 @@ namespace MANAGER.Pages
         private void BTN_Delete_Click(object sender, EventArgs e)
         {
             var id = ((Button) sender).Tag.ToString();
-            var query = String.Format("SELECT {0} FROM {1} WHERE ID_{1} = {2}", Table.Customer.Name, Table.Customer.TableName, id);
+            var query = string.Format("SELECT {0} FROM {1} WHERE ID_{1} = {2}", Table.Customer.Name, Table.Customer.TableName, id);
             var name = Connection.Connection.GetUniqueCell(query);
             if(ModernDialog.ShowMessage(Transharp.GetTranslation("Box_DeleteCustomer", name), Transharp.GetTranslation("Box_AskDelete"), MessageBoxButton.YesNo)
                != MessageBoxResult.Yes)

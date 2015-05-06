@@ -20,8 +20,8 @@ namespace MANAGER.Classes
         }
 
         public Border Border { get; set; }
-        public int Id { get; set; }
-        public string Name { get; set; }
+        public int Id { get; private set; }
+        public string Name { get; private set; }
         public string Phone { get; set; }
         public string Email { get; set; }
         public List<Estimate> listEstimate { get; set; }

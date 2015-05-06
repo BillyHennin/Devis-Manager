@@ -21,10 +21,10 @@ namespace MANAGER.Classes
             Spanish
         }
 
-        private const String LangsFolder = "Language"; // langs folder
-        private const String LangFileExt = ".lang"; // File extension
+        private const string LangsFolder = "Language"; // langs folder
+        private const string LangFileExt = ".lang"; // File extension
         private const char Separator = '=';
-        private const String Placeholder = "%x";
+        private const string Placeholder = "%x";
         private static LangsEnum _currentLanguage = LangsEnum.English; //Default
 
         public static void SetCurrentLanguage(LangsEnum lang)
@@ -37,38 +37,38 @@ namespace MANAGER.Classes
             return _currentLanguage.ToString();
         }
 
-        public static String GetTranslation(String key)
+        public static string GetTranslation(string key)
         {
             return GetTranslation(key, _currentLanguage);
         }
 
-        public static String GetTranslation(String key, params Object[] values)
+        public static string GetTranslation(string key, params object[] values)
         {
             return GetTranslation(key, _currentLanguage, values);
         }
 
-        public static String GetTranslation(String key, LangsEnum lang, params Object[] values)
+        public static string GetTranslation(string key, LangsEnum lang, params object[] values)
         {
             var strToFormat = GetTranslation(key, lang);
             if(strToFormat == null)
             {
-                return String.Format("#{0} not found", key); // Translation not found for the given key and lang
+                return string.Format("#{0} not found", key); // Translation not found for the given key and lang
             }
             var index = 0;
             //Replacing <Placeholder> by {0}, {1} etc
             strToFormat = Regex.Replace(strToFormat, @Placeholder, delegate { return "{" + index++ + "}"; });
-            return String.Format(strToFormat, values); // Format and return the translation
+            return string.Format(strToFormat, values); // Format and return the translation
         }
 
-        public static String GetTranslation(String key, LangsEnum lang)
+        public static string GetTranslation(string key, LangsEnum lang)
         {
             var filePath = GetLangFilePath(lang);
-            const Int32 bufferSize = 1024;
+            const int bufferSize = 1024;
             using(var fileStream = File.OpenRead(filePath))
             {
                 using(var streamReader = new StreamReader(fileStream, Encoding.UTF8, true, bufferSize))
                 {
-                    String line;
+                    string line;
                     while((line = streamReader.ReadLine()) != null)
                     {
                         var parts = line.Split(new[] {Separator}, 2); // Split only on 1st occurence (we want 2 parts max)
@@ -84,7 +84,7 @@ namespace MANAGER.Classes
             return null; // Translation not found for the given key and lang
         }
 
-        private static String GetLangFilePath(LangsEnum lang)
+        private static string GetLangFilePath(LangsEnum lang)
         {
             var str = new StringBuilder();
             str.Append(LangsFolder).Append("/").Append(lang.ToString().ToLower()).Append(LangFileExt);

@@ -14,7 +14,7 @@ namespace MANAGER.Connection
     public class ConnectionMySql : Connection
     {
         private static MySqlConnection _connection;
-        private static Boolean _connectionIsStarted;
+        private static bool _connectionIsStarted;
 
         private ConnectionMySql()
         {

@@ -13,7 +13,7 @@ namespace MANAGER.Connection
     public class ConnectionSqlServer : Connection
     {
         private static SqlConnection _connection;
-        private static Boolean _connectionIsStarted;
+        private static bool _connectionIsStarted;
 
         private ConnectionSqlServer()
         {

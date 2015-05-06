@@ -15,6 +15,6 @@ namespace MANAGER.Classes
         }
 
         public string Description { get; set; }
-        public int Id { get; set; }
+        public int Id { get; private set; }
     }
 }
