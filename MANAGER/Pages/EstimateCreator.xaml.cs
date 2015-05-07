@@ -482,8 +482,14 @@ namespace MANAGER.Pages
             return (str.Trim() != string.Empty) && int.TryParse(str, out value);
         }
 
-        private void UpdateEstimate(int? merchandise, int? id)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="idUpdate">Null if delete</param>
+        /// <param name="idDelete">Null if update</param>
+        private void UpdateEstimate(int? idUpdate, int? idDelete)
         {
+            //Initialising vars
             var listMerchandiseN2 = new List<Merchandise>();
             BtnAdd.Content = Transharp.GetTranslation("BTN_Add");
             _totalCost = 0;
@@ -492,9 +498,9 @@ namespace MANAGER.Pages
             var nbMerchandise = _estimate.GetList.Count;
             for(var i = 0; i < nbMerchandise; i++)
             {
-                if(merchandise.HasValue)
+                if (idUpdate.HasValue)
                 {
-                    if(i == merchandise.Value)
+                    if (i == idUpdate.Value)
                     {
                         var text = string.Format("{0} - {1}", ComboBoxCategory.Text, ComboBoxProduct.Text);
                         var merchandiseCost = _itemSelectedPrice;
@@ -508,13 +514,13 @@ namespace MANAGER.Pages
                 }
                 else
                 {
-                    if(ListMerchandise[i].ToString() != id.ToString())
+                    if (ListMerchandise[i].ToString() != idDelete.ToString())
                     {
                         listMerchandiseN2.Add(ListMerchandise[i]);
                     }
                 }
             }
-            if(id.HasValue)
+            if (idDelete.HasValue)
             {
                 nbMerchandise -= 1;
             }
