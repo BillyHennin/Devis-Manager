@@ -8,12 +8,12 @@ using System;
 
 namespace MANAGER.Table
 {
-    public class Customer
+    public class SQL_Customer
     {
-        static Customer()
+        static SQL_Customer()
         {
             TableName = "CLIENT";
-            ID = String.Format("ID_{0}", TableName);
+            ID = $"ID_{TableName}";
             Email = "EMAIL";
             Name = "DENOMINATION";
             Phone = "TELEPHONE";
@@ -25,13 +25,13 @@ namespace MANAGER.Table
         public static string Name { get; set; }
         public static string Phone { get; set; }
 
-        public void Construction(string TableName, string Email, string Name, string Phone)
+        public void Construction(string tableName, string email, string name, string phone)
         {
-            Customer.TableName = TableName;
-            ID = String.Format("ID_{0}", TableName);
-            Customer.Email = Email;
-            Customer.Name = Name;
-            Customer.Phone = Phone;
+            TableName = tableName;
+            ID = $"ID_{tableName}";
+            Email = email;
+            Name = name;
+            Phone = phone;
         }
     }
 }

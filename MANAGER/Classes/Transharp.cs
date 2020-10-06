@@ -32,27 +32,18 @@ namespace MANAGER.Classes
             _currentLanguage = lang;
         }
 
-        public static string getCurrentLanguage()
-        {
-            return _currentLanguage.ToString();
-        }
+        public static string getCurrentLanguage() => _currentLanguage.ToString();
 
-        public static string GetTranslation(string key)
-        {
-            return GetTranslation(key, _currentLanguage);
-        }
+        public static string GetTranslation(string key) => GetTranslation(key, _currentLanguage);
 
-        public static string GetTranslation(string key, params object[] values)
-        {
-            return GetTranslation(key, _currentLanguage, values);
-        }
+        public static string GetTranslation(string key, params object[] values) => GetTranslation(key, _currentLanguage, values);
 
         public static string GetTranslation(string key, LangsEnum lang, params object[] values)
         {
             var strToFormat = GetTranslation(key, lang);
             if(strToFormat == null)
             {
-                return string.Format("#{0} not found", key); // Translation not found for the given key and lang
+                return $"#{key} not found"; // Translation not found for the given key and lang
             }
             var index = 0;
             //Replacing <Placeholder> by {0}, {1} etc

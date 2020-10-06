@@ -15,11 +15,9 @@ namespace MANAGER.Classes
 {
     public class Estimate
     {
-        private readonly List<Merchandise> _listMerchandise;
-
         public Estimate(List<Merchandise> list)
         {
-            _listMerchandise = list;
+            GetList = list;
             TotalPrice = 0;
             Date = DateTime.Now;
         }
@@ -27,7 +25,7 @@ namespace MANAGER.Classes
         public double TotalPrice { get; set; }
         public Customer Customer { get; set; }
         public DateTime Date { get; set; }
-        public List<Merchandise> GetList { get { return _listMerchandise; } }
-        public Merchandise this[int i] { get { return GetList[i]; } }
+        public List<Merchandise> GetList { get; }
+        public Merchandise this[int i] => GetList[i];
     }
 }

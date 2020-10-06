@@ -4,13 +4,12 @@
 //  
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
-using System;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace MANAGER.Connection
+namespace MANAGER.Classes.Connection
 {
-    public class ConnectionSqlServer : Connection
+    public class ConnectionSqlServer : Classes.Connection.Connection
     {
         private static SqlConnection _connection;
         private static bool _connectionIsStarted;
@@ -32,13 +31,9 @@ namespace MANAGER.Connection
         }
 
         public new static IDbCommand Command(string query)
-        {
-            return new SqlCommand {Connection = GetConnection(), CommandText = query};
-        }
+            => new SqlCommand {Connection = GetConnection(), CommandText = query};
 
-        public new static IDbCommand CommandStored(string query)
-        {
-            return new SqlCommand {CommandType = CommandType.StoredProcedure, Connection = GetConnection(), CommandText = query};
-        }
+        public new static IDbCommand CommandStored(string query) 
+            => new SqlCommand {CommandType = CommandType.StoredProcedure, Connection = GetConnection(), CommandText = query};
     }
 }

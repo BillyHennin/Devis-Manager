@@ -6,15 +6,13 @@
 
 #region
 
-//using System.Windows;
 using System;
 using System.Windows;
-
 using MANAGER.Classes;
 
 #endregion
 
-namespace MANAGER
+namespace MANAGER.Pages
 {
     /// <summary>
     ///   Logique d'interaction pour MainWindow.xaml
@@ -24,7 +22,8 @@ namespace MANAGER
         private void ModernWindow_Initialized(object sender, EventArgs e)
         {
             //Connection string
-            Properties.Connection.Default.DatabaseConnectionString = "user id=SLAM3;password=pw;data source=localhost:1521/xe";
+            //Properties.Connection.Default.DatabaseConnectionString = "user id=SLAM3;password=pw;data source=localhost:1521/xe";
+            //Properties.Connection.Default.Datasource = "Oracle";
         }
 
         private void ModernWindow_Loaded(object sender, RoutedEventArgs e)

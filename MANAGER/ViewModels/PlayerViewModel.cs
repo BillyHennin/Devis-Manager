@@ -29,7 +29,7 @@ namespace MANAGER.ViewModels
 
         public string ImageSource
         {
-            get { return imageSource; }
+            get => imageSource;
             set
             {
                 if(imageSource == value)
@@ -42,7 +42,7 @@ namespace MANAGER.ViewModels
         }
         public string TitleSource
         {
-            get { return titleSource; }
+            get => titleSource;
             set
             {
                 if(titleSource == value)
@@ -55,7 +55,7 @@ namespace MANAGER.ViewModels
         }
         public string DescSource
         {
-            get { return descSource; }
+            get => descSource;
             set
             {
                 if(descSource == value)
@@ -68,7 +68,7 @@ namespace MANAGER.ViewModels
         }
         public string InfoSource
         {
-            get { return infoSource; }
+            get => infoSource;
             set
             {
                 if(infoSource == value)
@@ -81,7 +81,7 @@ namespace MANAGER.ViewModels
         }
         public string InstallSource
         {
-            get { return installSource; }
+            get => installSource;
             set
             {
                 if(installSource == value)

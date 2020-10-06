@@ -9,11 +9,10 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-
 using MANAGER.Classes;
 using MANAGER.Properties;
 
-namespace MANAGER.Pages
+namespace MANAGER.Pages.Params
 {
     /// <summary>
     ///   Logique d'interaction pour Parametre.xaml

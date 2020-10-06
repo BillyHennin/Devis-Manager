@@ -21,8 +21,8 @@ namespace MANAGER.ViewModels
 {
     public class SettingsAppearanceViewModel : NotifyPropertyChanged
     {
-        private readonly string FontLarge = Transharp.GetTranslation("THM_Large");
-        private readonly string FontSmall = Transharp.GetTranslation("THM_Small");
+        private readonly string _fontLarge = Transharp.GetTranslation("THM_Large");
+        private readonly string _fontSmall = Transharp.GetTranslation("THM_Small");
         private readonly Color[] accentColors =
         {
             Color.FromRgb(0xff, 0xff, 0xff), Color.FromRgb(0x64, 0x76, 0x87), Color.FromRgb(0x00, 0x00, 0x00),
@@ -43,18 +43,19 @@ namespace MANAGER.ViewModels
             themes.Add(new Link {DisplayName = Transharp.GetTranslation("THM_Dark"), Source = AppearanceManager.DarkThemeSource});
             themes.Add(new Link {DisplayName = Transharp.GetTranslation("THM_Light"), Source = AppearanceManager.LightThemeSource});
 
-            SelectedFontSize = AppearanceManager.Current.FontSize == FontSize.Large ? FontLarge : FontSmall;
+            SelectedFontSize = AppearanceManager.Current.FontSize == FontSize.Large ? _fontLarge : _fontSmall;
             SyncThemeAndColor();
 
             AppearanceManager.Current.PropertyChanged += OnAppearanceManagerPropertyChanged;
         }
 
-        public LinkCollection Themes { get { return themes; } }
-        public string[] FontSizes { get { return new[] {FontSmall, FontLarge}; } }
-        public Color[] AccentColors { get { return accentColors; } }
+        public LinkCollection Themes => themes;
+        public string[] FontSizes { get { return new[] {_fontSmall, _fontLarge}; } }
+        public Color[] AccentColors => accentColors;
+
         public Link SelectedTheme
         {
-            get { return selectedTheme; }
+            get => selectedTheme;
             set
             {
                 if(selectedTheme == value)
@@ -69,7 +70,7 @@ namespace MANAGER.ViewModels
         }
         public string SelectedFontSize
         {
-            get { return selectedFontSize; }
+            get => selectedFontSize;
             set
             {
                 if(selectedFontSize == value)
@@ -79,12 +80,12 @@ namespace MANAGER.ViewModels
                 selectedFontSize = value;
                 Settings.Default.FontSize = value;
                 OnPropertyChanged("SelectedFontSize");
-                AppearanceManager.Current.FontSize = value == FontLarge ? FontSize.Large : FontSize.Small;
+                AppearanceManager.Current.FontSize = value == _fontLarge ? FontSize.Large : FontSize.Small;
             }
         }
         public Color SelectedAccentColor
         {
-            get { return selectedAccentColor; }
+            get => selectedAccentColor;
             set
             {
                 if(selectedAccentColor == value)

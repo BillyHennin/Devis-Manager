@@ -12,22 +12,20 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-
 using FirstFloor.ModernUI.Windows.Controls;
-
 using MANAGER.Classes;
+using MANAGER.Classes.Table;
 using MANAGER.ComboBox;
 using MANAGER.Properties;
-
-using Category = MANAGER.Table.Category;
+using MANAGER.Table;
 
 #endregion
 
-namespace MANAGER.Pages
+namespace MANAGER.Pages.Invoices
 {
     public partial class EstimatePage
     {
-        private static readonly List<Merchandise> ListMerchandise = new List<Merchandise>();
+        private static readonly List<Classes.Merchandise> ListMerchandise = new List<Classes.Merchandise>();
         private readonly Estimate _estimate = new Estimate(ListMerchandise);
         private double _itemSelectedPrice;
         private int _itemSelectedQuantity;
@@ -63,14 +61,14 @@ namespace MANAGER.Pages
             try
             {
                 //Insert into the value into the combobox (every category found in the database)
-                var command = Connection.Connection.GetAll(Category.TableName);
+                var command = Classes.Connection.Connection.GetAll(SQL_Category.TableName);
                 var resultat = command.ExecuteReader();
                 while(resultat.Read())
                 {
                     ComboBoxCategory.Items.Add(new ComboboxItemCategory
                     {
-                        Text = resultat[Category.Title].ToString(),
-                        Value = new Classes.Category(Convert.ToInt32(resultat[Category.ID]), resultat[Category.Title].ToString())
+                        Text = resultat[SQL_Category.Title].ToString(),
+                        Value = new Classes.Category(Convert.ToInt32(resultat[SQL_Category.ID]), resultat[SQL_Category.Title].ToString())
                     });
                 }
                 resultat.Close();
@@ -94,19 +92,19 @@ namespace MANAGER.Pages
                 //Clearthe ComboBoxProduct
                 ComboBoxProduct.Items.Clear();
                 //Select every product that are 'onSale' and those who are in the selected category
-                var query = string.Format("{0} WHERE {1} = 1 AND {2} > 0 AND ID_{3}={4}", Table.Merchandise.TableName, Table.Merchandise.OnSale,
-                    Table.Merchandise.Quantity, Category.TableName, ((ComboboxItemCategory) ComboBoxCategory.SelectedItem).Value.Id);
-                var command = Connection.Connection.GetAll(query);
+                var query =
+                        $"{SQL_Merchandise.TableName} WHERE {SQL_Merchandise.OnSale} = 1 AND {SQL_Merchandise.Quantity} > 0 AND ID_{SQL_Category.TableName}={((ComboboxItemCategory) ComboBoxCategory.SelectedItem).Value.Id}";
+                var command = Classes.Connection.Connection.GetAll(query);
                 var result = command.ExecuteReader();
                 while(result.Read())
                 {
                     //Insert into the value into the combobox (every product returned with the query)
                     ComboBoxProduct.Items.Add(new ComboboxItemMerchandise
                     {
-                        Text = result[Table.Merchandise.Name].ToString(),
+                        Text = result[SQL_Merchandise.Name].ToString(),
                         Value =
-                            new Merchandise(Convert.ToInt32(result[Table.Merchandise.ID]), result[Table.Merchandise.Name].ToString(),
-                                Convert.ToInt32(result[Table.Merchandise.Price]), Convert.ToInt32(result[Table.Merchandise.Quantity]),
+                            new Classes.Merchandise(Convert.ToInt32(result[SQL_Merchandise.ID]), result[SQL_Merchandise.Name].ToString(),
+                                Convert.ToInt32(result[SQL_Merchandise.Price]), Convert.ToInt32(result[SQL_Merchandise.Quantity]),
                                 ((ComboboxItemCategory) ComboBoxCategory.SelectedItem).Value.Id)
                     });
                 }
@@ -144,7 +142,7 @@ namespace MANAGER.Pages
                         //Multiply the price of the selected item by the quantity
                         _itemSelectedPrice = ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.Price * Convert.ToInt32(TextBoxEstimateQte.Text);
                         //Show it
-                        AllPrice.Text = string.Format("{0} {1}€", Transharp.GetTranslation("All_Price"), _itemSelectedPrice);
+                        AllPrice.Text = $"{Transharp.GetTranslation("All_Price")} {_itemSelectedPrice}€";
 
                         //If the selected product is already in the estimate, show "modify" instead of "add" in the button
                         var nbMerchandise = _estimate.GetList.Count;
@@ -176,17 +174,17 @@ namespace MANAGER.Pages
             try
             {
                 //Get all customer in the database
-                var command = Connection.Connection.GetAll(Table.Customer.TableName);
+                var command = Classes.Connection.Connection.GetAll(SQL_Customer.TableName);
                 var resultat = command.ExecuteReader();
                 while(resultat.Read())
                 {
                     //Insert into the value into the combobox (every customer found in the database)
                     ComboBoxClient.Items.Add(new ComboboxItemCustomer
                     {
-                        Text = resultat[Table.Customer.Name].ToString(),
+                        Text = resultat[SQL_Customer.Name].ToString(),
                         Value =
-                            new Customer(Convert.ToInt32(resultat[Table.Customer.ID]), resultat[Table.Customer.Name].ToString(),
-                                resultat[Table.Customer.Phone].ToString(), resultat[Table.Customer.Email].ToString())
+                            new Classes.Customer(Convert.ToInt32(resultat[SQL_Customer.ID]), resultat[SQL_Customer.Name].ToString(),
+                                resultat[SQL_Customer.Phone].ToString(), resultat[SQL_Customer.Email].ToString())
                     });
                 }
                 resultat.Close();
@@ -237,7 +235,7 @@ namespace MANAGER.Pages
         private void BTNAddFeed_click(object sender, RoutedEventArgs e)
         {
 
-            var text = string.Format("{0} - {1}", ComboBoxCategory.Text, ComboBoxProduct.Text);
+            var text = $"{ComboBoxCategory.Text} - {ComboBoxProduct.Text}";
             var nbMerchandise = _estimate.GetList.Count;
             for(var i = 0; i < nbMerchandise; i++)
             {
@@ -269,8 +267,8 @@ namespace MANAGER.Pages
             try
             {
                 //As there isn't auto inc in oracle so here's an "auto inc" like
-                var querySelect = string.Format("SELECT max(ID_{0}), max({1}) FROM {0}", Table.Estimate.TableName, Table.Estimate.NumberDevis);
-                var oracleCommand = Connection.Connection.Command(querySelect);
+                var querySelect = string.Format("SELECT max(ID_{0}), max({1}) FROM {0}", SQL_Estimate.TableName, SQL_Estimate.NumberDevis);
+                var oracleCommand = Classes.Connection.Connection.Command(querySelect);
                 var result = oracleCommand.ExecuteReader();
                 var sizeList = ListMerchandise.Count;
                 while(result.Read())
@@ -280,7 +278,7 @@ namespace MANAGER.Pages
                     //For each product in the estimate, add it to the database
                     for(var i = 0; i < sizeList; i++)
                     {
-                        Connection.Connection.Insert(Table.Estimate.TableName, _estimate.Customer.Id, _estimate[i].Id, ((idEstimate) + i), _estimate[i].Quantity,
+                        Classes.Connection.Connection.Insert(SQL_Estimate.TableName, _estimate.Customer.Id, _estimate[i].Id, ((idEstimate) + i), _estimate[i].Quantity,
                             DateTime.Now.ToString("dd/MM/yy"), _estimate[i].Price, (numberEstimate));
                     }
                 }
@@ -345,7 +343,7 @@ namespace MANAGER.Pages
         {
             //Create a new panel
             var panelMerchandise = new StackPanel();
-            var newMerchandise = new Merchandise(id, name, quantity, price, category);
+            var newMerchandise = new Classes.Merchandise(id, name, quantity, price, category);
             //Init default thick
             var thick = new Thickness(5, 2, 0, 0);
 
@@ -371,7 +369,7 @@ namespace MANAGER.Pages
                 // Merchandise's price textblock
                 panelMerchandise.Children.Add(new TextBlock
                 {
-                    Text = string.Format("{0}€", price),
+                    Text = $"{price}€",
                     HorizontalAlignment = HorizontalAlignment.Left,
                     Margin = thick,
                     Height = 16
@@ -380,7 +378,7 @@ namespace MANAGER.Pages
                 // Merchandise's quantity textblock
                 panelMerchandise.Children.Add(new TextBlock
                 {
-                    Text = string.Format("{0} : {1}", Transharp.GetTranslation("EC_Quantity"), quantity.ToString(CultureInfo.InvariantCulture)),
+                    Text = $"{Transharp.GetTranslation("EC_Quantity")} : {quantity.ToString(CultureInfo.InvariantCulture)}",
                     HorizontalAlignment = HorizontalAlignment.Left,
                     Margin = thick,
                     Height = 16
@@ -414,7 +412,7 @@ namespace MANAGER.Pages
         private void ErrorCost()
         {
             //Change textblock by an error message
-            AllPrice.Text = string.Format("{0} {1}", Transharp.GetTranslation("All_Price"), Transharp.GetTranslation("Box_Error"));
+            AllPrice.Text = $"{Transharp.GetTranslation("All_Price")} {Transharp.GetTranslation("Box_Error")}";
             //Disable the add button
             BtnAdd.IsEnabled = false;
             //Put textblock and textbox in red
@@ -452,7 +450,7 @@ namespace MANAGER.Pages
                         _itemSelectedQuantity = newQuantity;
                         _itemSelectedPrice = (((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.Price * newQuantity);
                         AllPrice.Foreground = LabelTotalPrix.Foreground;
-                        AllPrice.Text = string.Format("{0} {1}€", Transharp.GetTranslation("All_Price"), _itemSelectedPrice);
+                        AllPrice.Text = $"{Transharp.GetTranslation("All_Price")} {_itemSelectedPrice}€";
                         var convertFromString = ColorConverter.ConvertFromString(Settings.Default.AccentColor);
                         if(convertFromString != null)
                         {
@@ -475,12 +473,7 @@ namespace MANAGER.Pages
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        private static bool IsInt(string str)
-        {
-            int value;
-            //Return true if int
-            return (str.Trim() != string.Empty) && int.TryParse(str, out value);
-        }
+        private static bool IsInt(string str) => str.Trim() != string.Empty && int.TryParse(str, out _);
 
         /// <summary>
         /// 
@@ -490,7 +483,7 @@ namespace MANAGER.Pages
         private void UpdateEstimate(int? idUpdate, int? idDelete)
         {
             //Initialising vars
-            var listMerchandiseN2 = new List<Merchandise>();
+            var listMerchandiseN2 = new List<Classes.Merchandise>();
             BtnAdd.Content = Transharp.GetTranslation("BTN_Add");
             _totalCost = 0;
             LabelTotalPrix.Text = string.Empty;
@@ -502,9 +495,9 @@ namespace MANAGER.Pages
                 {
                     if (i == idUpdate.Value)
                     {
-                        var text = string.Format("{0} - {1}", ComboBoxCategory.Text, ComboBoxProduct.Text);
+                        var text = $"{ComboBoxCategory.Text} - {ComboBoxProduct.Text}";
                         var merchandiseCost = _itemSelectedPrice;
-                        listMerchandiseN2.Add(new Merchandise(((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.Id, text, _itemSelectedQuantity,
+                        listMerchandiseN2.Add(new Classes.Merchandise(((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.Id, text, _itemSelectedQuantity,
                             merchandiseCost, ((ComboboxItemMerchandise) ComboBoxProduct.SelectedItem).Value.CategoryId));
                     }
                     else

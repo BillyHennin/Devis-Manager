@@ -32,10 +32,6 @@ namespace MANAGER.Classes
         public int Id { get; private set; }
         public int CategoryId { get; private set; }
         public bool OnSale { get; set; }
-
-        public override string ToString()
-        {
-            return Id.ToString(CultureInfo.InvariantCulture);
-        }
+        public override string ToString() => Id.ToString(CultureInfo.InvariantCulture);
     }
 }

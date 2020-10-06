@@ -6,20 +6,16 @@
 
 #region
 
-using System;
 using System.Net;
 using System.Windows;
 using System.Windows.Controls;
-
 using FirstFloor.ModernUI.Windows.Controls;
-
 using MANAGER.Classes;
-
 using Newtonsoft.Json.Linq;
 
 #endregion
 
-namespace MANAGER.Pages
+namespace MANAGER.Pages.Params
 {
     public partial class About
     {
@@ -32,7 +28,7 @@ namespace MANAGER.Pages
                 //JsonMOTD = new WebClient().DownloadString(String.Format("http://billyhennin.github.io/Devis-Manager/MOTD{0}.json", Transharp.getCurrentLanguage()));
 
                 var json = JObject.Parse(new WebClient().DownloadString("http://billyhennin.github.io/Devis-Manager/MOTD.json"));
-                jsonMotd = string.Format("{0} - {1}\r\n\r\n\t\t{2}", json["date"], json["title"], json["tags"]);
+                jsonMotd = $"{json["date"]} - {json["title"]}\r\n\r\n\t\t{json["tags"]}";
                 //JsonMOTD = String.Format("{0} - {1}\r\n\r\n\t\t{2}\r\n\r\n[img]{3}[/img]", json["date"], json["title"], json["tags"], json["image"]);
             }
             catch
@@ -40,10 +36,7 @@ namespace MANAGER.Pages
                 jsonMotd = Transharp.GetTranslation("Curl_Fail_MOTD");
             }
 
-            var motd = string.Format("\r\n{0}\r\n\r\n{1}\r\n\r\n\t{2}\r\n\t{3}\r\n\t{4}\r\n\r\n{5}\r\n\r\n\t{6}", Transharp.GetTranslation("AB_MOTD1"),
-                Transharp.GetTranslation("AB_MOTD2"), Transharp.GetTranslation("AB_MOTD3"), Transharp.GetTranslation("AB_MOTD4"),
-                Transharp.GetTranslation("AB_MOTD5", "[url='https://github.com/BillyHennin/Devis-Manager']GitHub[/url]"), Transharp.GetTranslation("AB_MOTD6"),
-                jsonMotd);
+            var motd = $"\r\n{Transharp.GetTranslation("AB_MOTD1")}\r\n\r\n{Transharp.GetTranslation("AB_MOTD2")}\r\n\r\n\t{Transharp.GetTranslation("AB_MOTD3")}\r\n\t{Transharp.GetTranslation("AB_MOTD4")}\r\n\t{Transharp.GetTranslation("AB_MOTD5", "[url='https://github.com/BillyHennin/Devis-Manager']GitHub[/url]")}\r\n\r\n{Transharp.GetTranslation("AB_MOTD6")}\r\n\r\n\t{jsonMotd}";
 
             var panelMessage = new StackPanel();
             var border = new Border

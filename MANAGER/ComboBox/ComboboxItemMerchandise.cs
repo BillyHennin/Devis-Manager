@@ -20,9 +20,6 @@ namespace MANAGER.ComboBox
         public string Text { private get; set; }
         public Merchandise Value { get; set; }
 
-        public override string ToString()
-        {
-            return Text;
-        }
+        public override string ToString() => Text;
     }
 }

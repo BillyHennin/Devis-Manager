@@ -10,7 +10,7 @@ using System.Windows.Controls;
 
 #endregion
 
-namespace MANAGER.Pages
+namespace MANAGER.Pages.Params
 {
     /// <summary>
     ///   Logique d'interaction pour Appearance.xaml

@@ -56,27 +56,23 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accessibility" />
-    <Reference Include="MySql.Data">
-      <HintPath>..\packages\MySql.Data.6.9.6\lib\net45\MySql.Data.dll</HintPath>
+    <Reference Include="MySql.Data, Version=6.9.8.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.6.9.8\lib\net45\MySql.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Oracle.DataAccess, Version=4.121.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=x86" />
-    <Reference Include="Oracle.ManagedDataAccess">
-      <HintPath>..\packages\odp.net.managed.121.1.2\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.121.2.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+      <HintPath>..\packages\Oracle.ManagedDataAccess.12.1.24160719\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationUI, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="ReachFramework" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Printing" />
-    <Reference Include="System.Windows.Interactivity">
-      <HintPath>..\packages\MahApps.Metro.1.1.2.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml">
@@ -101,41 +97,45 @@
     <Compile Include="ComboBox\ComboboxItemCustomer.cs" />
     <Compile Include="ComboBox\ComboboxItemEstimate.cs" />
     <Compile Include="ComboBox\ComboboxItemMerchandise.cs" />
-    <Compile Include="Connection\Connection.cs" />
-    <Compile Include="Connection\ConnectionMySql.cs" />
-    <Compile Include="Pages\AddCustomer.xaml.cs">
+    <Compile Include="Classes\Connection\Connection.cs" />
+    <Compile Include="Classes\Connection\ConnectionLocal.cs" />
+    <Compile Include="Classes\Connection\ConnectionMySql.cs" />
+    <Compile Include="Pages\Customer\AddCustomer.xaml.cs">
       <DependentUpon>AddCustomer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\DisplayCustomer.xaml.cs">
+    <Compile Include="Pages\Customer\DisplayCustomer.xaml.cs">
       <DependentUpon>DisplayCustomer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Merchandise\AddMerchandise.xaml.cs">
+      <DependentUpon>AddMerchandise.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\Connection.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Connection.settings</DependentUpon>
     </Compile>
-    <Compile Include="Connection\ConnectionOracle.cs" />
-    <Compile Include="Connection\ConnectionSQLSERVER.cs" />
-    <Compile Include="Pages\About.xaml.cs">
+    <Compile Include="Classes\Connection\ConnectionOracle.cs" />
+    <Compile Include="Classes\Connection\ConnectionSQLSERVER.cs" />
+    <Compile Include="Pages\Params\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\DisplayMerchandise.xaml.cs">
+    <Compile Include="Pages\Merchandise\DisplayMerchandise.xaml.cs">
       <DependentUpon>DisplayMerchandise.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\EstimateCreator.xaml.cs">
+    <Compile Include="Pages\Invoices\EstimateCreator.xaml.cs">
       <DependentUpon>EstimateCreator.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Parametre.xaml.cs">
+    <Compile Include="Pages\Params\Parametre.xaml.cs">
       <DependentUpon>Parametre.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="Table\Category.cs" />
-    <Compile Include="Table\Customer.cs" />
-    <Compile Include="Table\Estimate.cs" />
-    <Compile Include="Table\Merchandise.cs" />
+    <Compile Include="Classes\Table\SQL_Category.cs" />
+    <Compile Include="Classes\Table\SQL_Customer.cs" />
+    <Compile Include="Classes\Table\SQL_Estimate.cs" />
+    <Compile Include="Classes\Table\SQL_Merchandise.cs" />
     <Compile Include="ViewModels\PlayerViewModel.cs" />
     <Compile Include="ViewModels\SettingsAppearanceViewModel.cs" />
-    <Page Include="MainWindow.xaml">
+    <Page Include="Pages\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -143,48 +143,52 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Pages\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Pages\About.xaml">
+    <Page Include="Pages\Params\About.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\AddCustomer.xaml">
+    <Page Include="Pages\Customer\AddCustomer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\DisplayCustomer.xaml">
+    <Page Include="Pages\Customer\DisplayCustomer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\DisplayMerchandise.xaml">
+    <Page Include="Pages\Merchandise\AddMerchandise.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Merchandise\DisplayMerchandise.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\EstimateCreator.xaml">
+    <Page Include="Pages\Invoices\EstimateCreator.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Appearance.xaml">
+    <Page Include="Pages\Params\Appearance.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Parametre.xaml">
+    <Page Include="Pages\Params\Parametre.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\SettingsAppearance.xaml">
+    <Page Include="Pages\Params\SettingsAppearance.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Pages\Appearance.xaml.cs">
+    <Compile Include="Pages\Params\Appearance.xaml.cs">
       <DependentUpon>Appearance.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\SettingsAppearance.xaml.cs">
+    <Compile Include="Pages\Params\SettingsAppearance.xaml.cs">
       <DependentUpon>SettingsAppearance.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -266,6 +270,16 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="DataBase\Database.mdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataBase\Database_log.ldf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DependentUpon>Database.mdf</DependentUpon>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />

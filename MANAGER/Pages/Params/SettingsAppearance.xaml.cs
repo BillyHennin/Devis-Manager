@@ -7,13 +7,12 @@
 #region
 
 using System.Windows;
-
 using MANAGER.Classes;
 using MANAGER.ViewModels;
 
 #endregion
 
-namespace MANAGER.Pages
+namespace MANAGER.Pages.Params
 {
     /// <summary>
     ///   Logique d'interaction pour SettingsAppearance.xaml

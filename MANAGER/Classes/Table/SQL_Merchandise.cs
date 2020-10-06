@@ -4,16 +4,14 @@
 //  
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
-using System;
-
-namespace MANAGER.Table
+namespace MANAGER.Classes.Table
 {
-    public class Merchandise
+    public class SQL_Merchandise
     {
-        static Merchandise()
+        static SQL_Merchandise()
         {
             TableName = "MARCHANDISE";
-            ID = String.Format("ID_{0}", TableName);
+            ID = $"ID_{TableName}";
             Name = "NOM";
             OnSale = "ENVENTE";
             Price = "PRIX";
@@ -27,14 +25,14 @@ namespace MANAGER.Table
         public static string Quantity { get; set; }
         public static string OnSale { get; set; }
 
-        public void Construction(string TableName, string Name, string OnSale, string Price, string Quantity)
+        public void Construction(string tableName, string name, string onSale, string price, string quantity)
         {
-            Merchandise.TableName = TableName;
-            ID = String.Format("ID_{0}", Merchandise.TableName);
-            Merchandise.Name = Name;
-            Merchandise.OnSale = OnSale;
-            Merchandise.Price = Price;
-            Merchandise.Quantity = Quantity;
+            TableName = tableName;
+            ID = $"ID_{tableName}";
+            Name = name;
+            OnSale = onSale;
+            Price = price;
+            Quantity = quantity;
         }
     }
 }

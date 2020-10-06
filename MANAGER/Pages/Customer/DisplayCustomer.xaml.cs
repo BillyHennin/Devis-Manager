@@ -9,23 +9,20 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
-
 using FirstFloor.ModernUI.Windows.Controls;
-
 using MANAGER.Classes;
+using MANAGER.Classes.Table;
 using MANAGER.ComboBox;
+using MANAGER.Table;
 
-using Category = MANAGER.Table.Category;
-using Customer = MANAGER.Table.Customer;
-
-namespace MANAGER.Pages
+namespace MANAGER.Pages.Customer
 {
     /// <summary>
     ///   Logique d'interaction pour DisplayCustomer.xaml
     /// </summary>
     public partial class DisplayCustomer
     {
-        private static readonly List<Merchandise> ListMerchandise = new List<Merchandise>();
+        private static readonly List<Classes.Merchandise> ListMerchandise = new List<Classes.Merchandise>();
         private readonly Estimate _estimate = new Estimate(ListMerchandise);
 
         private void ComboBoxCustomer_Loaded(object sender, EventArgs e)
@@ -50,12 +47,16 @@ namespace MANAGER.Pages
             }
             catch(Exception caught)
             {
-                Console.WriteLine(caught.Message);
+                ModernDialog.ShowMessage(caught.Message, Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK);
             }
         }
 
         private void ComboBoxCustomer_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            // Besoin d'avoir cette ligne car l'event est fire au changement de page
+            if ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem == null) { return; }
+
+            var selectedCustomer = ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value;
             ComboBoxEstimate.Items.Clear();
             PanelDevis.Children.Clear();
 
@@ -64,10 +65,9 @@ namespace MANAGER.Pages
             var date = DateTime.Now;
             try
             {
-                var query = string.Format("SELECT DISTINCT {0} FROM {1} WHERE ID_{2} = {3} ORDER BY {0}", Table.Estimate.NumberDevis, Table.Estimate.TableName,
-                    Customer.TableName, ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.Id);
-                var command = Connection.Connection.Command(query);
-
+                // Récupération de tous les devis fais par le client séléctionné
+                var param = new Dictionary<string, object> {{ "idClient", selectedCustomer.Id }};
+                var command = Classes.Connection.Connection.CommandStored("GetAllEstimateOfCustomer", param);
                 var resultCommand = command.ExecuteReader();
 
                 while(resultCommand.Read())
@@ -75,17 +75,17 @@ namespace MANAGER.Pages
                     var query2 =
                         string.Format(
                             "SELECT {0}.ID_{0}, {0}.{1}, {2}.{3}, {2}.{4}, {2}.{5}, {0}.ID_{7} FROM {0}, {2} WHERE {2}.ID_{0} = {0}.ID_{0} AND {2}.{6} = {8}",
-                            Table.Merchandise.TableName, Table.Merchandise.Name, Table.Estimate.TableName, Table.Estimate.PriceMerchandise,
-                            Table.Estimate.Quantity, Table.Estimate.Day, Table.Estimate.NumberDevis, Category.TableName, resultCommand[0]);
-                    var command2 = Connection.Connection.Command(query2);
+                            SQL_Merchandise.TableName, SQL_Merchandise.Name, SQL_Estimate.TableName, SQL_Estimate.PriceMerchandise,
+                            SQL_Estimate.Quantity, SQL_Estimate.Day, SQL_Estimate.NumberDevis, SQL_Category.TableName, resultCommand[0]);
+                    var command2 = Classes.Connection.Connection.Command(query2);
                     var resultatMerchandise = command2.ExecuteReader();
-                    var listMerchandise2 = new List<Merchandise>();
+                    var listMerchandise2 = new List<Classes.Merchandise>();
                     while(resultatMerchandise.Read())
                     {
                         totalPrice += Convert.ToInt32(resultatMerchandise[2]);
                         date = Convert.ToDateTime(resultatMerchandise[4]);
-                        var merchandise = new Merchandise(Convert.ToInt32(resultatMerchandise[0]), resultatMerchandise[1].ToString(),
-                            Convert.ToInt32(resultatMerchandise[3]), price: Convert.ToInt32(resultatMerchandise[2]) / Convert.ToInt32(resultatMerchandise[3]), categoryId: Convert.ToInt32(resultatMerchandise[5]));
+                        var merchandise = new Classes.Merchandise(Convert.ToInt32(resultatMerchandise[0]), resultatMerchandise[1].ToString(),
+                            Convert.ToInt32(resultatMerchandise[3]), Convert.ToInt32(resultatMerchandise[2]) / Convert.ToInt32(resultatMerchandise[3]), Convert.ToInt32(resultatMerchandise[5]));
                         listMerchandise2.Add(merchandise);
                     }
                     resultatMerchandise.Close();
@@ -99,16 +99,13 @@ namespace MANAGER.Pages
                     totalPrice = 0;
                 }
                 resultCommand.Close();
-                TextMail.Text = ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.Email;
-                TextPhone.Text = ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.Phone;
+                // Maj de l'interface
+                TextMail.Text = selectedCustomer.Email;
+                TextPhone.Text = selectedCustomer.Phone;
             }
             catch(Exception caught)
             {
-                Console.WriteLine(caught.Message);
-                //This show up when leaving the page, need to figure out why.
-
-                //ModernDialog.ShowMessage(Transharp.GetTranslation("Box_DBFail"), Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK);
-                //MessageBox.Show("YIH");
+                ModernDialog.ShowMessage(caught.Message, Transharp.GetTranslation("Box_Error"), MessageBoxButton.OK);
             }
             finally
             {
@@ -143,8 +140,7 @@ namespace MANAGER.Pages
         {
             try
             {
-                var oCommand = Connection.Connection.GetAll(Customer.TableName);
-                var resultat = oCommand.ExecuteReader();
+                var resultat = Classes.Connection.Connection.GetAll(SQL_Customer.TableName).ExecuteReader();
                 while(resultat.Read())
                 {
                     ComboBoxCustomer.Items.Add(new ComboboxItemCustomer
@@ -174,19 +170,18 @@ namespace MANAGER.Pages
             for(var i = 0; i < taille; i++)
             {
                 var categoryString = string.Empty;
-                var query = String.Format("SELECT {1} FROM {0} WHERE ID_{0} = {2}", Category.TableName, Category.Title, listMarchandise[i].CategoryId);
-                var commandCategory = Connection.Connection.Command(query);
+                var query = String.Format("SELECT {1} FROM {0} WHERE ID_{0} = {2}", SQL_Category.TableName, SQL_Category.Title, listMarchandise[i].CategoryId);
+                var commandCategory = Classes.Connection.Connection.Command(query);
                 var resultatCategory = commandCategory.ExecuteReader();
                 while(resultatCategory.Read())
                 {
                     categoryString = resultatCategory[0].ToString();
                 }
-                var id = listMarchandise[i].Id;
-                var text = String.Format("{0} - {1}", categoryString, listMarchandise[i].Name);
+                var text = $"{categoryString} - {listMarchandise[i].Name}";
                 var qte = listMarchandise[i].Quantity;
                 var prixMarchandise = listMarchandise[i].Price;
                 var category = listMarchandise[i].CategoryId;
-                var item = new Merchandise(id, text, qte, prixMarchandise, category);
+                var item = new Classes.Merchandise(listMarchandise[i].Id, text, qte, prixMarchandise, category);
                 var panelMarchandise = new StackPanel();
                 var thick = new Thickness(5, 2, 0, 0);
 
@@ -217,7 +212,7 @@ namespace MANAGER.Pages
                 // Price
                 panelMarchandise.Children.Add(new TextBlock
                 {
-                    Text = String.Format("{0}€", prixMarchandise.ToString(CultureInfo.InvariantCulture)),
+                    Text = $"{prixMarchandise.ToString(CultureInfo.InvariantCulture)}€",
                     Margin = thick,
                     Height = 16
                 });
@@ -280,8 +275,8 @@ namespace MANAGER.Pages
         {
             try
             {
-                Connection.Connection.Delete(Table.Estimate.TableName, ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.Id, Customer.TableName);
-                Connection.Connection.Delete(Customer.TableName, ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.Id);
+                Classes.Connection.Connection.Delete(SQL_Estimate.TableName, ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.Id, SQL_Customer.TableName);
+                Classes.Connection.Connection.Delete(SQL_Customer.TableName, ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value.Id);
             }
             catch
             {
@@ -297,8 +292,7 @@ namespace MANAGER.Pages
             var customer = ((ComboboxItemCustomer) ComboBoxCustomer.SelectedItem).Value;
             try
             {
-                var set = new[,] {{Customer.Phone, TextPhone.Text}, {Customer.Email, TextMail.Text}};
-                Connection.Connection.Update(Customer.TableName, customer.Id, set);
+                Classes.Connection.Connection.Update(SQL_Customer.TableName, customer.Id, new[,] {{ SQL_Customer.Phone, TextPhone.Text }, { SQL_Customer.Email, TextMail.Text }});
             }
             catch
             {
@@ -317,33 +311,8 @@ namespace MANAGER.Pages
 
         private void ChangeVisibility(bool visibility)
         {
-            if(visibility)
-            {
-                PanelClientEstimate.Visibility = Visibility.Visible;
-                BorderDevis.Visibility = Visibility.Visible;
-                LabelPhone.Visibility = Visibility.Visible;
-                LabelMail.Visibility = Visibility.Visible;
-
-                TextPhone.Visibility = Visibility.Visible;
-                TextMail.Visibility = Visibility.Visible;
-
-                BTN_Delete.Visibility = Visibility.Visible;
-                BTN_Update.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                PanelClientEstimate.Visibility = Visibility.Hidden;
-                BorderDevis.Visibility = Visibility.Hidden;
-
-                LabelPhone.Visibility = Visibility.Hidden;
-                LabelMail.Visibility = Visibility.Hidden;
-
-                TextPhone.Visibility = Visibility.Hidden;
-                TextMail.Visibility = Visibility.Hidden;
-
-                BTN_Delete.Visibility = Visibility.Hidden;
-                BTN_Update.Visibility = Visibility.Hidden;
-            }
+            PanelClientEstimate.Visibility = BorderDevis.Visibility = LabelPhone.Visibility = LabelMail.Visibility =
+                TextPhone.Visibility = TextMail.Visibility = BTN_Delete.Visibility = BTN_Update.Visibility = visibility ? Visibility.Visible : Visibility.Hidden;
         }
     }
 }

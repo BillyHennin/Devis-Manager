@@ -12,20 +12,17 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-
 using FirstFloor.ModernUI.Windows.Controls;
-
 using MANAGER.Classes;
-
-using Category = MANAGER.Table.Category;
-
+using MANAGER.Classes.Table;
+        
 #endregion
 
 namespace MANAGER.Pages
 {
     public partial class DisplayMerchandise
     {
-        private static readonly List<Merchandise> ListMerchandise = new List<Merchandise>();
+        private static readonly List<Classes.Merchandise> ListMerchandise = new List<Classes.Merchandise>();
 
         private void SelectMarchandiseLike(string merchandise)
         {
@@ -43,7 +40,7 @@ namespace MANAGER.Pages
                 }
                 var id = ListMerchandise[i].Id;
                 var text = ListMerchandise[i].Name;
-                var newMerchandise = new Merchandise(id, text, ListMerchandise[i].Quantity, ListMerchandise[i].Price, ListMerchandise[i].CategoryId)
+                var newMerchandise = new Classes.Merchandise(id, text, ListMerchandise[i].Quantity, ListMerchandise[i].Price, ListMerchandise[i].CategoryId)
                 {
                     OnSale = ListMerchandise[i].OnSale
                 };
@@ -80,10 +77,10 @@ namespace MANAGER.Pages
 
         private void TextBoxEstimateQte_TextChanged(object sender, TextChangedEventArgs e)
         {
-            SelectMarchandiseLike(TextBoxEstimateQte.Text == String.Empty ? String.Empty : TextBoxEstimateQte.Text);
+            SelectMarchandiseLike(TextBoxEstimateQte.Text == string.Empty ? string.Empty : TextBoxEstimateQte.Text);
         }
 
-        private void Display(string text, Merchandise newMerchandise)
+        private void Display(string text, Classes.Merchandise newMerchandise)
         {
             var panelMerchandise = new StackPanel();
             var thick = new Thickness(5, 2, 0, 0);
@@ -114,7 +111,7 @@ namespace MANAGER.Pages
             });
 
             // Price
-            panelMerchandise.Children.Add(new TextBlock {Text = String.Format("{0}€", newMerchandise.Price), Margin = thick, Height = 16});
+            panelMerchandise.Children.Add(new TextBlock {Text = $"{newMerchandise.Price}€", Margin = thick, Height = 16});
 
             var btnSale = new Button
             {
@@ -141,22 +138,22 @@ namespace MANAGER.Pages
             ListMerchandise.Clear();
             try
             {
-                var oCommand = Connection.Connection.GetAll(Table.Merchandise.TableName);
+                var oCommand = Classes.Connection.Connection.GetAll(SQL_Merchandise.TableName);
                 var resultat = oCommand.ExecuteReader();
                 while(resultat.Read())
                 {
                     var category = string.Empty;
-                    var query = String.Format("SELECT {0} FROM {1} WHERE ID_{1} = {2}", Category.Title, Category.TableName, resultat[Category.ID]);
-                    var commandCategory = Connection.Connection.Command(query);
+                    var query = String.Format("SELECT {0} FROM {1} WHERE ID_{1} = {2}", SQL_Category.Title, SQL_Category.TableName, resultat[SQL_Category.ID]);
+                    var commandCategory = Classes.Connection.Connection.Command(query);
                     var resultatCategory = commandCategory.ExecuteReader();
                     while(resultatCategory.Read())
                     {
-                        category = resultatCategory[Category.Title].ToString();
+                        category = resultatCategory[SQL_Category.Title].ToString();
                     }
-                    var text = String.Format("{0} - {1}", category, resultat[Table.Merchandise.Name]);
-                    var newMerchandise = new Merchandise(Convert.ToInt32(resultat[Table.Merchandise.ID]), text,
-                        Convert.ToInt32(resultat[Table.Merchandise.Quantity]), Convert.ToInt32(resultat[Table.Merchandise.Price]),
-                        Convert.ToInt32(resultat[Category.ID])) {OnSale = Convert.ToBoolean(resultat[Table.Merchandise.OnSale])};
+                    var text = $"{category} - {resultat[SQL_Merchandise.Name]}";
+                    var newMerchandise = new Classes.Merchandise(Convert.ToInt32(resultat[SQL_Merchandise.ID]), text,
+                        Convert.ToInt32(resultat[SQL_Merchandise.Quantity]), Convert.ToInt32(resultat[SQL_Merchandise.Price]),
+                        Convert.ToInt32(resultat[SQL_Category.ID])) {OnSale = Convert.ToBoolean(resultat[SQL_Merchandise.OnSale])};
                     Display(text, newMerchandise);
                     ListMerchandise.Add(newMerchandise);
                 }
@@ -187,8 +184,8 @@ namespace MANAGER.Pages
             var onSale = !ListMerchandise[num].OnSale ? 1 : 0;
             try
             {
-                var query = string.Format("UPDATE {0} SET {1} = {2} WHERE ID_{0} = {3}", Table.Merchandise.TableName, Table.Merchandise.OnSale, onSale, id);
-                var commandeModif = Connection.Connection.Command(query);
+                var query = string.Format("UPDATE {0} SET {1} = {2} WHERE ID_{0} = {3}", SQL_Merchandise.TableName, SQL_Merchandise.OnSale, onSale, id);
+                var commandeModif = Classes.Connection.Connection.Command(query);
                 commandeModif.ExecuteNonQuery();
             }
             catch

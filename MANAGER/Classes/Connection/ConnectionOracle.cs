@@ -4,14 +4,12 @@
 //  
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
-using System;
 using System.Data;
-
 using Oracle.ManagedDataAccess.Client;
 
-namespace MANAGER.Connection
+namespace MANAGER.Classes.Connection
 {
-    public class ConnectionOracle : Connection
+    public class ConnectionOracle : Classes.Connection.Connection
     {
         private static OracleConnection _connection;
         private static bool _connectionIsStarted;
@@ -32,14 +30,10 @@ namespace MANAGER.Connection
             return _connection;
         }
 
-        public new static IDbCommand Command(string query)
-        {
-            return new OracleCommand {Connection = GetConnection(), CommandText = query, BindByName = true};
-        }
+        public new static IDbCommand Command(string query) 
+            => new OracleCommand {Connection = GetConnection(), CommandText = query, BindByName = true};
 
-        public new static IDbCommand CommandStored(string query)
-        {
-            return new OracleCommand {CommandType = CommandType.StoredProcedure, Connection = GetConnection(), CommandText = query, BindByName = true};
-        }
+        public new static IDbCommand CommandStored(string query) 
+            => new OracleCommand {CommandType = CommandType.StoredProcedure, Connection = GetConnection(), CommandText = query, BindByName = true};
     }
 }

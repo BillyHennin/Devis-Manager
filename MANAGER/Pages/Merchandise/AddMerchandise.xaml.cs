@@ -4,34 +4,36 @@
 //  
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
+#region Using
+
 using System;
 using System.Collections.Generic;
 using System.Net.Mail;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-
 using FirstFloor.ModernUI.Windows.Controls;
-
 using MANAGER.Classes;
+using MANAGER.Classes.Table;
+using MANAGER.Table;
 
-using Estimate = MANAGER.Table.Estimate;
+#endregion
 
-namespace MANAGER.Pages
+namespace MANAGER.Pages.Merchandise
 {
-    public partial class AddCustomer
+    public partial class AddMerchandise
     {
-        private static readonly List<Customer> ListCustomer = new List<Customer>();
+        private static readonly List<Classes.Merchandise> ListMerchandise = new List<Classes.Merchandise>();
 
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             BorderCustomer.Width = CustomerCreator.ActualWidth - 340;
             BorderCustomer.Height = CustomerCreator.ActualHeight - 70;
 
-            var nbCustomer = ListCustomer.Count;
+            var nbCustomer = ListMerchandise.Count;
             for(var i = 0; i < nbCustomer; i++)
             {
-                ListCustomer[i].Border.Width = BorderCustomer.Width - 6;
+                ListMerchandise[i].Border.Width = BorderCustomer.Width - 6;
             }
         }
 
@@ -52,13 +54,13 @@ namespace MANAGER.Pages
         private void DisplayAll()
         {
             PanelCustomer.Children.Clear();
-            var command = Connection.Connection.GetAll(Table.Customer.TableName);
+            var command = Classes.Connection.Connection.GetAll(SQL_Customer.TableName);
             var resultat = command.ExecuteReader();
             while(resultat.Read())
             {
-                ShowCustomer(Convert.ToInt32(resultat[Table.Customer.ID]), resultat[Table.Customer.Name].ToString(), resultat[Table.Customer.Phone].ToString(),
-                    resultat[Table.Customer.Email].ToString());
+                ShowCustomer(Convert.ToInt32(resultat[SQL_Customer.ID]), resultat[SQL_Customer.Name].ToString(), resultat[SQL_Customer.Phone].ToString(), resultat[SQL_Customer.Email].ToString());
             }
+            resultat.Close();
         }
 
         private void TextBoxMail_TextChanged(object sender, TextChangedEventArgs e)
@@ -76,11 +78,7 @@ namespace MANAGER.Pages
             TextChanged();
         }
 
-        private static bool IsInt(string str)
-        {
-            int value;
-            return (str.Trim() != string.Empty) && int.TryParse(str, out value);
-        }
+        private static bool IsInt(string str) => str.Trim() != string.Empty && int.TryParse(str, out _);
 
         private static bool ValidMail(string mailString)
         {
@@ -105,14 +103,13 @@ namespace MANAGER.Pages
         {
             try
             {
-                var queryVerify = string.Format("{0} WHERE {1}='{2}' OR {3}='{4}'", Table.Customer.TableName, Table.Customer.Phone, TextBoxPhone.Text,
-                    Table.Customer.Email, TextBoxMail.Text);
-                if(Connection.Connection.SizeOf(Connection.Connection.GetAll(queryVerify)) == 0)
+                var queryVerify = $"{SQL_Customer.TableName} WHERE {SQL_Customer.Phone}='{TextBoxPhone.Text}' OR {SQL_Customer.Email}='{TextBoxMail.Text}'";
+                if(Classes.Connection.Connection.SizeOf(Classes.Connection.Connection.GetAll(queryVerify)) == 0)
                 {
-                    var querySelect = string.Format("SELECT max(ID_{0}) FROM {0}", Table.Customer.TableName);
-                    var command = Connection.Connection.GetUniqueCell(querySelect);
+                    var querySelect = string.Format("SELECT max(ID_{0}) FROM {0}", SQL_Customer.TableName);
+                    var command = Classes.Connection.Connection.GetUniqueCell(querySelect);
                     var idCustomer = command.ToString() == string.Empty ? 1 : Convert.ToInt32(command) + 1;
-                    Connection.Connection.Insert(Table.Customer.TableName, idCustomer, TextBoxMail.Text, TextBoxName.Text, TextBoxPhone.Text);
+                    Classes.Connection.Connection.Insert(SQL_Customer.TableName, idCustomer, TextBoxMail.Text, TextBoxName.Text, TextBoxPhone.Text);
                     ModernDialog.ShowMessage(Transharp.GetTranslation("Box_SuccessAddCustomer", TextBoxName.Text), Transharp.GetTranslation("Box_AC_Success"),
                         MessageBoxButton.OK);
                     ShowCustomer(idCustomer, TextBoxMail.Text, TextBoxName.Text, TextBoxPhone.Text);
@@ -168,24 +165,24 @@ namespace MANAGER.Pages
 
             panelCustomer.Children.Add(btnDelete);
             btnDelete.Click += BTN_Delete_Click;
-            var newCustomer = new Customer(id, name, phone, mail);
+            var newCustomer = new Classes.Customer(id, name, phone, mail);
             PanelCustomer.Children.Add(border);
             newCustomer.Border = border;
-            ListCustomer.Add(newCustomer);
+            ListMerchandise.Add(newCustomer);
         }
 
         private void BTN_Delete_Click(object sender, EventArgs e)
         {
             var id = ((Button) sender).Tag.ToString();
-            var query = string.Format("SELECT {0} FROM {1} WHERE ID_{1} = {2}", Table.Customer.Name, Table.Customer.TableName, id);
-            var name = Connection.Connection.GetUniqueCell(query);
+            var query = string.Format("SELECT {0} FROM {1} WHERE ID_{1} = {2}", SQL_Customer.Name, SQL_Customer.TableName, id);
+            var name = Classes.Connection.Connection.GetUniqueCell(query);
             if(ModernDialog.ShowMessage(Transharp.GetTranslation("Box_DeleteCustomer", name), Transharp.GetTranslation("Box_AskDelete"), MessageBoxButton.YesNo)
                != MessageBoxResult.Yes)
             {
                 return;
             }
-            Connection.Connection.Delete(Estimate.TableName, id, Table.Customer.TableName);
-            Connection.Connection.Delete(Table.Customer.TableName, id);
+            Classes.Connection.Connection.Delete(SQL_Estimate.TableName, id, SQL_Customer.TableName);
+            Classes.Connection.Connection.Delete(SQL_Customer.TableName, id);
             DisplayAll();
         }
     }

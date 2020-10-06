@@ -1,13 +1,14 @@
-﻿<UserControl x:Class="MANAGER.Pages.Apparences"
+﻿<UserControl x:Class="MANAGER.Pages.Params.Apparences"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:pages="clr-namespace:MANAGER.Pages"
+             xmlns:params="clr-namespace:MANAGER.Pages.Params"
              d:DesignHeight="500"
              d:DesignWidth="500"
              mc:Ignorable="d">
     <Grid Style="{StaticResource ContentRoot}">
-        <pages:SettingsAppearance />
+        <params:SettingsAppearance />
     </Grid>
 </UserControl>

@@ -4,16 +4,14 @@
 //  
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
-using System;
-
-namespace MANAGER.Table
+namespace MANAGER.Classes.Table
 {
-    public class Category
+    public class SQL_Category
     {
-        static Category()
+        static SQL_Category()
         {
             TableName = "CATEGORIE";
-            ID = String.Format("ID_{0}", TableName);
+            ID = $"ID_{TableName}";
             Title = "LIBELLE";
         }
 
@@ -21,11 +19,11 @@ namespace MANAGER.Table
         public static string TableName { get; set; }
         public static string Title { get; set; }
 
-        public void Construction(string ID, string TableName, string Title)
+        public void Construction(string id, string tableName, string title)
         {
-            Category.ID = ID;
-            Category.TableName = TableName;
-            Category.Title = Title;
+            ID = ID;
+            TableName = TableName;
+            Title = Title;
         }
     }
 }

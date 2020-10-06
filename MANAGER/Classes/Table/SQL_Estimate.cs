@@ -4,17 +4,18 @@
 //  
 // Copyrights (c) 2014 MANAGER INC. All rights reserved.
 
-namespace MANAGER.Table
+namespace MANAGER.Classes.Table
 {
-    public class Estimate
+    public class SQL_Estimate
     {
-        static Estimate()
+        static SQL_Estimate()
         {
             TableName = "DEVIS";
             Day = "JOUR";
             NumberDevis = "NUMERODEVIS";
             PriceMerchandise = "PRIXMARCHANDISE";
             Quantity = "QUANTITE";
+            Client = "ID_CLIENT";
         }
 
         public static string TableName { get; set; }
@@ -22,14 +23,15 @@ namespace MANAGER.Table
         public static string Day { get; set; }
         public static string PriceMerchandise { get; set; }
         public static string NumberDevis { get; set; }
+        public static string Client { get; set; }
 
-        public void Construction(string TableName, string Day, string NumberDevis, string PriceMerchandise, string Quantity)
+        public void Construction(string tableName, string day, string numberDevis, string priceMerchandise, string quantity)
         {
-            Estimate.TableName = TableName;
-            Estimate.Day = Day;
-            Estimate.NumberDevis = NumberDevis;
-            Estimate.PriceMerchandise = PriceMerchandise;
-            Estimate.Quantity = Quantity;
+            TableName = tableName;
+            Day = day;
+            NumberDevis = numberDevis;
+            PriceMerchandise = priceMerchandise;
+            Quantity = quantity;
         }
     }
 }
